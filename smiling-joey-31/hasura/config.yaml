@@ -1,0 +1,7 @@
+version: 3
+endpoint: https://smiling-joey-31.hasura.app
+admin_secret: 2En17XC0cEO7KWoaWjUCGa8YGvEz75hGDOe5Y9MTL7BUi1zagzSr7pM6bluLMm1u
+metadata_directory: metadata
+actions:
+  kind: synchronous
+  handler_webhook_baseurl: http://localhost:3000
