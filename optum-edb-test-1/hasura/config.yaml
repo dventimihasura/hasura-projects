@@ -1,0 +1,7 @@
+version: 3
+endpoint: https://optum-edb-test-1.hasura.app
+admin_secret: KGNlrvLUd5v2TV33WY9Nb3g1Sy71oVFG9HJ08K9797Icpp44ML57EvfRpxLJWvkU
+metadata_directory: metadata
+actions:
+  kind: synchronous
+  handler_webhook_baseurl: http://localhost:3000
