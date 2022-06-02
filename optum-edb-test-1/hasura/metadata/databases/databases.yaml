@@ -7,3 +7,4 @@
         from_env: PG_DATABASE_URL
       isolation_level: read-committed
   tables: "!include default/tables/tables.yaml"
+  functions: "!include default/functions/functions.yaml"
