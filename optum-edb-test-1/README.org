@@ -1,36 +1,190 @@
 * Databases
 ** Postgres
 *** Schema
-**** Table Basics
-**** Table Relationships
-**** Remote Relationships
-**** Extend with Views
-**** Extend with SQL Functions
-**** Default field values
-**** Enum type fields
-**** Computed fields
-**** Customize auto-generated fields
-**** Data validations
-**** Using an existing database
-**** Relay Schema
+**** DONE Table Basics
+- [ ] Add database
+- [ ] Add account and product tables
+- [ ] Add account and product data
+- [ ] Perform CRUD operations
+  - Read
+    #+begin_src graphql
+      query MyQuery {
+        account(order_by: {name: asc}, limit: 10) {
+          id
+          name
+          created_at
+          updated_at
+        }
+      }
+    #+end_src
+    #+begin_src graphql
+      query MyQuery {
+        product(order_by: {price: asc}, limit: 10) {
+          id
+          name
+          price
+          updated_at
+          created_at
+        }
+      }
+    #+end_src
+  - Insert
+    #+begin_src graphql
+      mutation MyMutation {
+        insert_account(objects: {name: "John Doe"}) {
+          affected_rows
+        }
+      }
+    #+end_src
+    #+begin_src graphql
+      mutation MyMutation {
+        insert_product(objects: {name: "Doughnut", price: 100}) {
+          returning {
+            id
+            name
+            price
+            updated_at
+            created_at
+          }
+        }
+      }
+    #+end_src
+  - Update
+    #+begin_src graphql
+      mutation MyMutation {
+        update_account(where: {name: {_eq: "John Doe"}}, _set: {name: "Jane Doe"}) {
+          affected_rows
+        }
+      }
+    #+end_src
+  - Delete
+    #+begin_src graphql
+      mutation MyMutation {
+        delete_product(where: {name: {_eq: "Doughnut"}}) {
+          affected_rows
+        }
+      }
+    #+end_src
+**** DONE Table Relationships
+- [ ] Add the order and order_detail tables
+- [ ] Add relationships for account, order, order_detail, and product
+- [ ] Generate order and order_detail data
+- [ ] Perform queries across relationships
+  #+begin_src graphql
+    query MyQuery {
+      account(limit: 2) {
+        id
+        name
+        created_at
+        updated_at
+        orders {
+          id
+          created_at
+          updated_at
+          order_details {
+            id
+            created_at
+            updated_at
+            units
+            product {
+              id
+              name
+              created_at
+              updated_at
+              price
+            }
+          }
+        }
+      }
+    }
+  #+end_src
+**** TODO Remote Relationships
+**** DONE Extend with Views
+- [ ] Add account_summary view and relationships
+- [ ] Query across table and view relationships
+  #+begin_src graphql
+    query MyQuery {
+      account_summary(limit: 10) {
+        id
+        sum
+        account {
+          name
+        }
+      }
+    }
+  #+end_src
+**** DONE Extend with SQL Functions
+- [ ] Add search functions
+- [ ] Query search functions
+  #+begin_src graphql
+    query MyQuery {
+      product_search(args: {search: "apple"}) {
+        name
+        price
+      }
+    }
+  #+end_src
+  #+begin_src graphql
+    query MyQuery {
+      product_fuzzy_search(args: {search: "apple"}) {
+        name
+        price
+      }
+    }
+  #+end_src
+**** TODO Default field values
+**** TODO Enum type fields
+**** DONE Computed fields
+- [ ] Add product_sku function and track it as a computed field
+- [ ] Query product table with computed field
+  #+begin_src graphql
+    query MyQuery {
+      product {
+        id
+        name
+        price
+        sku
+      }
+    }
+  #+end_src
+**** TODO Customize auto-generated fields
+**** DONE Data validations
+- [ ] Add non_negative_price check constraint
+- [ ] Attempt mutations with and without negative prices
+  #+begin_src graphql
+    mutation MyMutation {
+      update_product(where: {name: {_eq: "Chilli Paste, Sambal Oelek"}}, _set: {price: 10}) {
+        affected_rows
+      }
+    }
+  #+end_src
+  #+begin_src graphql
+    mutation MyMutation {
+      update_product(where: {name: {_eq: "Pastry - Raisin Muffin - Mini"}}, _set: {price: -10}) {
+        affected_rows
+      }
+    }
+  #+end_src
+**** TODO Using an existing database
+**** TODO Relay Schema
 *** Queries
-**** Simple object queries
-**** Nested object queries
-**** Aggregation queries
-**** Filter query results / search queries
-**** Sort query results
-**** Distinct query results
-**** Using multiple arguments
-**** Multiple queries in a request
-**** Using variables / aliases / fragments / directives
-**** Query performance
+**** TODO Simple object queries
+**** TODO Nested object queries
+**** TODO Aggregation queries
+**** TODO Filter query results / search queries
+**** TODO Sort query results
+**** TODO Distinct query results
+**** TODO Using multiple arguments
+**** TODO Multiple queries in a request
+**** TODO Using variables / aliases / fragments / directives
+**** TODO Query performance
 *** Mutations
-**** Insert
-**** Upsert
-**** Update
-**** Delete
-**** Multiple mutations in a request
+**** TODO Insert
+**** TODO Upsert
+**** TODO Update
+**** TODO Delete
+**** TODO Multiple mutations in a request
 *** Subscriptions
-**** Live queries
-**** Streaming subscriptions
+**** TODO Live queries
+**** TODO Streaming subscriptions
 *** Supported Postgres types
