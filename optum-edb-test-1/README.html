@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-06-02 Thu 16:04 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="author" content="Hasura" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgb2b322f">1. Databases</a>
+<ul>
+<li><a href="#org47c332b">1.1. Postgres</a>
+<ul>
+<li><a href="#org5fabcde">1.1.1. Schema</a></li>
+<li><a href="#org7946ece">1.1.2. Queries</a></li>
+<li><a href="#org87f8cd2">1.1.3. Mutations</a></li>
+<li><a href="#orge3e3129">1.1.4. Subscriptions</a></li>
+<li><a href="#orgf7161d6">1.1.5. Supported Postgres types</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb2b322f" class="outline-2">
+<h2 id="orgb2b322f"><span class="section-number-2">1.</span> Databases</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org47c332b" class="outline-3">
+<h3 id="org47c332b"><span class="section-number-3">1.1.</span> Postgres</h3>
+<div class="outline-text-3" id="text-1-1">
+</div>
+<div id="outline-container-org5fabcde" class="outline-4">
+<h4 id="org5fabcde"><span class="section-number-4">1.1.1.</span> Schema</h4>
+<div class="outline-text-4" id="text-1-1-1">
+</div>
+<ol class="org-ol">
+<li><a id="org089e600"></a><span class="done DONE">DONE</span> Table Basics<br />
+<div class="outline-text-5" id="text-1-1-1-1">
+<ul class="org-ul">
+<li class="off"><input type='checkbox' /> Add database</li>
+<li class="off"><input type='checkbox' /> Add account and product tables</li>
+<li class="off"><input type='checkbox' /> Add account and product data</li>
+<li class="off"><input type='checkbox' /> Perform CRUD operations
+<ul class="org-ul">
+<li><p>
+Read
+</p>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
+  account(<span style="color: #dbdb95;">order_by</span>: {<span style="color: #dbdb95;">name</span>: <span style="color: #34cae2;">asc</span>}, limit: <span style="color: #34cae2;">10</span>) {
+    id
+    name
+    created_at
+    updated_at
+  }
+}
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
+  product(<span style="color: #dbdb95;">order_by</span>: {<span style="color: #dbdb95;">price</span>: <span style="color: #34cae2;">asc</span>}, limit: <span style="color: #34cae2;">10</span>) {
+    id
+    name
+    price
+    updated_at
+    created_at
+  }
+}
+</pre>
+</div></li>
+<li><p>
+Insert
+</p>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">mutation</span> <span style="color: #00ede1; font-weight: bold;">MyMutation</span> {
+  insert_account(<span style="color: #dbdb95;">objects</span>: {<span style="color: #dbdb95;">name</span>: <span style="color: #e67128;">"John Doe"</span>}) {
+    affected_rows
+  }
+}
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">mutation</span> <span style="color: #00ede1; font-weight: bold;">MyMutation</span> {
+  insert_product(<span style="color: #dbdb95;">objects</span>: {<span style="color: #dbdb95;">name</span>: <span style="color: #e67128;">"Doughnut"</span>, price: <span style="color: #34cae2;">100</span>}) {
+    returning {
+      id
+      name
+      price
+      updated_at
+      created_at
+    }
+  }
+}
+</pre>
+</div></li>
+<li><p>
+Update
+</p>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">mutation</span> <span style="color: #00ede1; font-weight: bold;">MyMutation</span> {
+  update_account(<span style="color: #dbdb95;">where</span>: {<span style="color: #dbdb95;">name</span>: {_eq: <span style="color: #e67128;">"John Doe"</span>}}, _set: {name: <span style="color: #e67128;">"Jane Doe"</span>}) {
+    affected_rows
+  }
+}
+</pre>
+</div></li>
+<li><p>
+Delete
+</p>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">mutation</span> <span style="color: #00ede1; font-weight: bold;">MyMutation</span> {
+  delete_product(<span style="color: #dbdb95;">where</span>: {<span style="color: #dbdb95;">name</span>: {_eq: <span style="color: #e67128;">"Doughnut"</span>}}) {
+    affected_rows
+  }
+}
+</pre>
+</div></li>
+</ul></li>
+</ul>
+</div>
+</li>
+<li><a id="orgda76b3c"></a><span class="done DONE">DONE</span> Table Relationships<br />
+<div class="outline-text-5" id="text-1-1-1-2">
+<ul class="org-ul">
+<li class="off"><input type='checkbox' /> Add the order and order<sub>detail</sub> tables</li>
+<li class="off"><input type='checkbox' /> Add relationships for account, order, order<sub>detail</sub>, and product</li>
+<li class="off"><input type='checkbox' /> Generate order and order<sub>detail</sub> data</li>
+<li class="off"><input type='checkbox' /> <p>
+Perform queries across relationships
+</p>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
+  account(<span style="color: #dbdb95;">limit</span>: <span style="color: #34cae2;">2</span>) {
+    id
+    name
+    created_at
+    updated_at
+    orders {
+      id
+      created_at
+      updated_at
+      order_details {
+        id
+        created_at
+        updated_at
+        units
+        product {
+          id
+          name
+          created_at
+          updated_at
+          price
+        }
+      }
+    }
+  }
+}
+</pre>
+</div></li>
+</ul>
+</div>
+</li>
+<li><a id="orgf4d43c7"></a><span class="todo TODO">TODO</span> Remote Relationships<br /></li>
+<li><a id="org4511757"></a><span class="done DONE">DONE</span> Extend with Views<br />
+<div class="outline-text-5" id="text-1-1-1-4">
+<ul class="org-ul">
+<li class="off"><input type='checkbox' /> Add account<sub>summary</sub> view and relationships</li>
+<li class="off"><input type='checkbox' /> <p>
+Query across table and view relationships
+</p>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
+  account_summary(<span style="color: #dbdb95;">limit</span>: <span style="color: #34cae2;">10</span>) {
+    id
+    sum
+    account {
+      name
+    }
+  }
+}
+</pre>
+</div></li>
+</ul>
+</div>
+</li>
+<li><a id="orgef9eb7c"></a><span class="done DONE">DONE</span> Extend with SQL Functions<br />
+<div class="outline-text-5" id="text-1-1-1-5">
+<ul class="org-ul">
+<li class="off"><input type='checkbox' /> Add search functions</li>
+<li class="off"><input type='checkbox' /> <p>
+Query search functions
+</p>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
+  product_search(<span style="color: #dbdb95;">args</span>: {<span style="color: #dbdb95;">search</span>: <span style="color: #e67128;">"apple"</span>}) {
+    name
+    price
+  }
+}
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
+  product_fuzzy_search(<span style="color: #dbdb95;">args</span>: {<span style="color: #dbdb95;">search</span>: <span style="color: #e67128;">"apple"</span>}) {
+    name
+    price
+  }
+}
+</pre>
+</div></li>
+</ul>
+</div>
+</li>
+<li><a id="orgc87e7a3"></a><span class="todo TODO">TODO</span> Default field values<br /></li>
+<li><a id="org2dfbba9"></a><span class="todo TODO">TODO</span> Enum type fields<br /></li>
+<li><a id="org936867d"></a><span class="done DONE">DONE</span> Computed fields<br />
+<div class="outline-text-5" id="text-1-1-1-8">
+<ul class="org-ul">
+<li class="off"><input type='checkbox' /> Add product<sub>sku</sub> function and track it as a computed field</li>
+<li class="off"><input type='checkbox' /> <p>
+Query product table with computed field
+</p>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
+  product {
+    id
+    name
+    price
+    sku
+  }
+}
+</pre>
+</div></li>
+</ul>
+</div>
+</li>
+<li><a id="orgfae4d36"></a><span class="todo TODO">TODO</span> Customize auto-generated fields<br /></li>
+<li><a id="orgac044d9"></a><span class="done DONE">DONE</span> Data validations<br />
+<div class="outline-text-5" id="text-1-1-1-10">
+<ul class="org-ul">
+<li class="off"><input type='checkbox' /> Add non<sub>negative</sub><sub>price</sub> check constraint</li>
+<li class="off"><input type='checkbox' /> <p>
+Attempt mutations with and without negative prices
+</p>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">mutation</span> <span style="color: #00ede1; font-weight: bold;">MyMutation</span> {
+  update_product(<span style="color: #dbdb95;">where</span>: {<span style="color: #dbdb95;">name</span>: {_eq: <span style="color: #e67128;">"Chilli Paste, Sambal Oelek"</span>}}, _set: {price: <span style="color: #34cae2;">10</span>}) {
+    affected_rows
+  }
+}
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">mutation</span> <span style="color: #00ede1; font-weight: bold;">MyMutation</span> {
+  update_product(<span style="color: #dbdb95;">where</span>: {<span style="color: #dbdb95;">name</span>: {_eq: <span style="color: #e67128;">"Pastry - Raisin Muffin - Mini"</span>}}, _set: {price: <span style="color: #34cae2;">-10</span>}) {
+    affected_rows
+  }
+}
+</pre>
+</div></li>
+</ul>
+</div>
+</li>
+<li><a id="org1f7e552"></a><span class="todo TODO">TODO</span> Using an existing database<br /></li>
+<li><a id="org490702c"></a><span class="todo TODO">TODO</span> Relay Schema<br /></li>
+</ol>
+</div>
+<div id="outline-container-org7946ece" class="outline-4">
+<h4 id="org7946ece"><span class="section-number-4">1.1.2.</span> Queries</h4>
+<div class="outline-text-4" id="text-1-1-2">
+</div>
+<ol class="org-ol">
+<li><a id="orgad62bfc"></a><span class="todo TODO">TODO</span> Simple object queries<br /></li>
+<li><a id="orgccdd6b8"></a><span class="todo TODO">TODO</span> Nested object queries<br /></li>
+<li><a id="orgc87e9f4"></a><span class="todo TODO">TODO</span> Aggregation queries<br /></li>
+<li><a id="orgbdbdd85"></a><span class="todo TODO">TODO</span> Filter query results / search queries<br /></li>
+<li><a id="orgb7c268e"></a><span class="todo TODO">TODO</span> Sort query results<br /></li>
+<li><a id="org55df45e"></a><span class="todo TODO">TODO</span> Distinct query results<br /></li>
+<li><a id="orgcc1e2f3"></a><span class="todo TODO">TODO</span> Using multiple arguments<br /></li>
+<li><a id="org06ddf0c"></a><span class="todo TODO">TODO</span> Multiple queries in a request<br /></li>
+<li><a id="org153c825"></a><span class="todo TODO">TODO</span> Using variables / aliases / fragments / directives<br /></li>
+<li><a id="org1481419"></a><span class="todo TODO">TODO</span> Query performance<br /></li>
+</ol>
+</div>
+<div id="outline-container-org87f8cd2" class="outline-4">
+<h4 id="org87f8cd2"><span class="section-number-4">1.1.3.</span> Mutations</h4>
+<div class="outline-text-4" id="text-1-1-3">
+</div>
+<ol class="org-ol">
+<li><a id="org3d0247a"></a><span class="todo TODO">TODO</span> Insert<br /></li>
+<li><a id="orgb5af436"></a><span class="todo TODO">TODO</span> Upsert<br /></li>
+<li><a id="org662c28e"></a><span class="todo TODO">TODO</span> Update<br /></li>
+<li><a id="org0c6db12"></a><span class="todo TODO">TODO</span> Delete<br /></li>
+<li><a id="orga7690cf"></a><span class="todo TODO">TODO</span> Multiple mutations in a request<br /></li>
+</ol>
+</div>
+<div id="outline-container-orge3e3129" class="outline-4">
+<h4 id="orge3e3129"><span class="section-number-4">1.1.4.</span> Subscriptions</h4>
+<div class="outline-text-4" id="text-1-1-4">
+</div>
+<ol class="org-ol">
+<li><a id="org1ed6b49"></a><span class="todo TODO">TODO</span> Live queries<br /></li>
+<li><a id="org132ae8a"></a><span class="todo TODO">TODO</span> Streaming subscriptions<br /></li>
+</ol>
+</div>
+<div id="outline-container-orgf7161d6" class="outline-4">
+<h4 id="orgf7161d6"><span class="section-number-4">1.1.5.</span> Supported Postgres types</h4>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Hasura</p>
+<p class="date">Created: 2022-06-02 Thu 16:04</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
