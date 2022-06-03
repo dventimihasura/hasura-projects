@@ -1,9 +1,0 @@
-- name: db
-  kind: postgres
-  configuration:
-    connection_info:
-      database_url:
-        from_env: PG_DB
-      isolation_level: read-committed
-      use_prepared_statements: false
-  tables: "!include db/tables/tables.yaml"
