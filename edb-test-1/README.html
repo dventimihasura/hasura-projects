@@ -3,11 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-03 Fri 07:41 -->
+<!-- 2022-06-03 Fri 07:42 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lrm;</title>
-<meta name="author" content="Hasura" />
+<title>EDB Test Plan</title>
+<meta name="author" content="David A. Ventimiglia" />
 <meta name="generator" content="Org Mode" />
 <style>
   #content { max-width: 60em; margin: auto; }
@@ -196,19 +196,20 @@
 </head>
 <body>
 <div id="content" class="content">
+<h1 class="title">EDB Test Plan</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org8292a2f">1. Databases</a>
+<li><a href="#orgf719b52">1. Databases</a>
 <ul>
-<li><a href="#orgdfcc113">1.1. Postgres</a>
+<li><a href="#org398b393">1.1. Postgres</a>
 <ul>
-<li><a href="#org71f06aa">1.1.1. Schema</a></li>
-<li><a href="#org9f49a8d">1.1.2. Queries</a></li>
-<li><a href="#org3bb917e">1.1.3. Mutations</a></li>
-<li><a href="#org73ba545">1.1.4. Subscriptions</a></li>
-<li><a href="#orge3274b1">1.1.5. Supported Postgres types</a></li>
+<li><a href="#orge515c14">1.1.1. Schema</a></li>
+<li><a href="#org1662c27">1.1.2. Queries</a></li>
+<li><a href="#orgb9e242c">1.1.3. Mutations</a></li>
+<li><a href="#org4aec917">1.1.4. Subscriptions</a></li>
+<li><a href="#org26bd6b7">1.1.5. Supported Postgres types</a></li>
 </ul>
 </li>
 </ul>
@@ -216,20 +217,21 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org8292a2f" class="outline-2">
-<h2 id="org8292a2f"><span class="section-number-2">1.</span> Databases</h2>
+
+<div id="outline-container-orgf719b52" class="outline-2">
+<h2 id="orgf719b52"><span class="section-number-2">1.</span> Databases</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orgdfcc113" class="outline-3">
-<h3 id="orgdfcc113"><span class="section-number-3">1.1.</span> Postgres</h3>
+<div id="outline-container-org398b393" class="outline-3">
+<h3 id="org398b393"><span class="section-number-3">1.1.</span> Postgres</h3>
 <div class="outline-text-3" id="text-1-1">
 </div>
-<div id="outline-container-org71f06aa" class="outline-4">
-<h4 id="org71f06aa"><span class="section-number-4">1.1.1.</span> Schema</h4>
+<div id="outline-container-orge515c14" class="outline-4">
+<h4 id="orge515c14"><span class="section-number-4">1.1.1.</span> Schema</h4>
 <div class="outline-text-4" id="text-1-1-1">
 </div>
 <ol class="org-ol">
-<li><a id="org41ef084"></a><span class="done DONE">DONE</span> Table Basics<br />
+<li><a id="orge329a36"></a><span class="done DONE">DONE</span> Table Basics<br />
 <div class="outline-text-5" id="text-1-1-1-1">
 <ul class="org-ul">
 <li class="off"><input type='checkbox' /> Add database</li>
@@ -314,7 +316,7 @@ Delete
 </ul>
 </div>
 </li>
-<li><a id="org175b122"></a><span class="done DONE">DONE</span> Table Relationships<br />
+<li><a id="orge24e18b"></a><span class="done DONE">DONE</span> Table Relationships<br />
 <div class="outline-text-5" id="text-1-1-1-2">
 <ul class="org-ul">
 <li class="off"><input type='checkbox' /> Add the order and order detail tables</li>
@@ -355,8 +357,8 @@ Delete
 </div>
 </div>
 </li>
-<li><a id="orgd744788"></a><span class="todo TODO">TODO</span> Remote Relationships<br /></li>
-<li><a id="org8fb521c"></a><span class="done DONE">DONE</span> Extend with Views<br />
+<li><a id="orgc30fbb4"></a><span class="todo TODO">TODO</span> Remote Relationships<br /></li>
+<li><a id="org53a4e8f"></a><span class="done DONE">DONE</span> Extend with Views<br />
 <div class="outline-text-5" id="text-1-1-1-4">
 <ul class="org-ul">
 <li class="off"><input type='checkbox' /> Add account<sub>summary</sub> view and relationships</li>
@@ -378,7 +380,7 @@ Delete
 </div>
 </div>
 </li>
-<li><a id="org832d4af"></a><span class="done DONE">DONE</span> Extend with SQL Functions<br />
+<li><a id="org88a2367"></a><span class="done DONE">DONE</span> Extend with SQL Functions<br />
 <div class="outline-text-5" id="text-1-1-1-5">
 <ul class="org-ul">
 <li class="off"><input type='checkbox' /> Add search functions</li>
@@ -406,9 +408,9 @@ Delete
 </div>
 </div>
 </li>
-<li><a id="orgf49046d"></a><span class="todo TODO">TODO</span> Default field values<br /></li>
-<li><a id="org5930d51"></a><span class="todo TODO">TODO</span> Enum type fields<br /></li>
-<li><a id="orgafb15a2"></a><span class="done DONE">DONE</span> Computed fields<br />
+<li><a id="orgefaee13"></a><span class="todo TODO">TODO</span> Default field values<br /></li>
+<li><a id="orgf5ff51c"></a><span class="todo TODO">TODO</span> Enum type fields<br /></li>
+<li><a id="org370ea6b"></a><span class="done DONE">DONE</span> Computed fields<br />
 <div class="outline-text-5" id="text-1-1-1-8">
 <ul class="org-ul">
 <li class="off"><input type='checkbox' /> Add product<sub>sku</sub> function and track it as a computed field</li>
@@ -429,8 +431,8 @@ Delete
 </div>
 </div>
 </li>
-<li><a id="orgde8a6f1"></a><span class="todo TODO">TODO</span> Customize auto-generated fields<br /></li>
-<li><a id="org3e4e527"></a><span class="done DONE">DONE</span> Data validations<br />
+<li><a id="org016e5b7"></a><span class="todo TODO">TODO</span> Customize auto-generated fields<br /></li>
+<li><a id="org3f94b00"></a><span class="done DONE">DONE</span> Data validations<br />
 <div class="outline-text-5" id="text-1-1-1-10">
 <ul class="org-ul">
 <li class="off"><input type='checkbox' /> Add non<sub>negative</sub><sub>price</sub> check constraint</li>
@@ -456,57 +458,58 @@ Delete
 </div>
 </div>
 </li>
-<li><a id="orge3baa64"></a><span class="todo TODO">TODO</span> Using an existing database<br /></li>
-<li><a id="org02bdbd6"></a><span class="todo TODO">TODO</span> Relay Schema<br /></li>
+<li><a id="org7eb24c9"></a><span class="todo TODO">TODO</span> Using an existing database<br /></li>
+<li><a id="orge2993ca"></a><span class="todo TODO">TODO</span> Relay Schema<br /></li>
 </ol>
 </div>
-<div id="outline-container-org9f49a8d" class="outline-4">
-<h4 id="org9f49a8d"><span class="section-number-4">1.1.2.</span> Queries</h4>
+<div id="outline-container-org1662c27" class="outline-4">
+<h4 id="org1662c27"><span class="section-number-4">1.1.2.</span> Queries</h4>
 <div class="outline-text-4" id="text-1-1-2">
 </div>
 <ol class="org-ol">
-<li><a id="org32a13ef"></a><span class="todo TODO">TODO</span> Simple object queries<br /></li>
-<li><a id="org3492d00"></a><span class="todo TODO">TODO</span> Nested object queries<br /></li>
-<li><a id="org80f02e6"></a><span class="todo TODO">TODO</span> Aggregation queries<br /></li>
-<li><a id="orgea91768"></a><span class="todo TODO">TODO</span> Filter query results / search queries<br /></li>
-<li><a id="org639077c"></a><span class="todo TODO">TODO</span> Sort query results<br /></li>
-<li><a id="orgb95dc6c"></a><span class="todo TODO">TODO</span> Distinct query results<br /></li>
-<li><a id="org14fe725"></a><span class="todo TODO">TODO</span> Using multiple arguments<br /></li>
-<li><a id="org5cc535e"></a><span class="todo TODO">TODO</span> Multiple queries in a request<br /></li>
-<li><a id="org870d6f3"></a><span class="todo TODO">TODO</span> Using variables / aliases / fragments / directives<br /></li>
-<li><a id="org69981e5"></a><span class="todo TODO">TODO</span> Query performance<br /></li>
+<li><a id="org9ead11d"></a><span class="todo TODO">TODO</span> Simple object queries<br /></li>
+<li><a id="org348a322"></a><span class="todo TODO">TODO</span> Nested object queries<br /></li>
+<li><a id="org2872564"></a><span class="todo TODO">TODO</span> Aggregation queries<br /></li>
+<li><a id="org2f25359"></a><span class="todo TODO">TODO</span> Filter query results / search queries<br /></li>
+<li><a id="org63e111a"></a><span class="todo TODO">TODO</span> Sort query results<br /></li>
+<li><a id="orgdde0d4d"></a><span class="todo TODO">TODO</span> Distinct query results<br /></li>
+<li><a id="org573d69b"></a><span class="todo TODO">TODO</span> Using multiple arguments<br /></li>
+<li><a id="orgd9b85fd"></a><span class="todo TODO">TODO</span> Multiple queries in a request<br /></li>
+<li><a id="org0891095"></a><span class="todo TODO">TODO</span> Using variables / aliases / fragments / directives<br /></li>
+<li><a id="orgd17b8fa"></a><span class="todo TODO">TODO</span> Query performance<br /></li>
 </ol>
 </div>
-<div id="outline-container-org3bb917e" class="outline-4">
-<h4 id="org3bb917e"><span class="section-number-4">1.1.3.</span> Mutations</h4>
+<div id="outline-container-orgb9e242c" class="outline-4">
+<h4 id="orgb9e242c"><span class="section-number-4">1.1.3.</span> Mutations</h4>
 <div class="outline-text-4" id="text-1-1-3">
 </div>
 <ol class="org-ol">
-<li><a id="orgb8fdc88"></a><span class="todo TODO">TODO</span> Insert<br /></li>
-<li><a id="orgdb9e369"></a><span class="todo TODO">TODO</span> Upsert<br /></li>
-<li><a id="org3492a25"></a><span class="todo TODO">TODO</span> Update<br /></li>
-<li><a id="org73704e4"></a><span class="todo TODO">TODO</span> Delete<br /></li>
-<li><a id="org084e3ad"></a><span class="todo TODO">TODO</span> Multiple mutations in a request<br /></li>
+<li><a id="orgcc04e32"></a><span class="todo TODO">TODO</span> Insert<br /></li>
+<li><a id="orgd38d860"></a><span class="todo TODO">TODO</span> Upsert<br /></li>
+<li><a id="org3e7b5d7"></a><span class="todo TODO">TODO</span> Update<br /></li>
+<li><a id="org7c51c9f"></a><span class="todo TODO">TODO</span> Delete<br /></li>
+<li><a id="org24fe5e5"></a><span class="todo TODO">TODO</span> Multiple mutations in a request<br /></li>
 </ol>
 </div>
-<div id="outline-container-org73ba545" class="outline-4">
-<h4 id="org73ba545"><span class="section-number-4">1.1.4.</span> Subscriptions</h4>
+<div id="outline-container-org4aec917" class="outline-4">
+<h4 id="org4aec917"><span class="section-number-4">1.1.4.</span> Subscriptions</h4>
 <div class="outline-text-4" id="text-1-1-4">
 </div>
 <ol class="org-ol">
-<li><a id="orgfc02584"></a><span class="todo TODO">TODO</span> Live queries<br /></li>
-<li><a id="orgb856847"></a><span class="todo TODO">TODO</span> Streaming subscriptions<br /></li>
+<li><a id="orgae0cdf4"></a><span class="todo TODO">TODO</span> Live queries<br /></li>
+<li><a id="orga94120a"></a><span class="todo TODO">TODO</span> Streaming subscriptions<br /></li>
 </ol>
 </div>
-<div id="outline-container-orge3274b1" class="outline-4">
-<h4 id="orge3274b1"><span class="section-number-4">1.1.5.</span> Supported Postgres types</h4>
+<div id="outline-container-org26bd6b7" class="outline-4">
+<h4 id="org26bd6b7"><span class="section-number-4">1.1.5.</span> Supported Postgres types</h4>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="author">Author: Hasura</p>
-<p class="date">Created: 2022-06-03 Fri 07:41</p>
+<p class="date">Date: 2022-06-03 Fri 00:00</p>
+<p class="author">Author: David A. Ventimiglia</p>
+<p class="date">Created: 2022-06-03 Fri 07:42</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
