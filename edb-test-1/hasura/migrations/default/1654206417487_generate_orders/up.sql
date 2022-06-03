@@ -3,6 +3,7 @@ with
   account as (
     select
       account.id,
+      name,
       (random()*5)::int orders
       from account)
 insert into "order" (account_id)
