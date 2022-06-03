@@ -66,10 +66,12 @@
       }
     #+end_src
 **** DONE Table Relationships
-- [ ] Add the order and order_detail tables
-- [ ] Add relationships for account, order, order_detail, and product
-- [ ] Generate order and order_detail data
+- [ ] Add the order and order detail tables
+- [ ] Add relationships for account, order, order detail, and product
+- [ ] Generate order and order detail data
 - [ ] Perform queries across relationships
+
+  
   #+begin_src graphql
     query MyQuery {
       account(limit: 2) {
@@ -102,6 +104,8 @@
 **** DONE Extend with Views
 - [ ] Add account_summary view and relationships
 - [ ] Query across table and view relationships
+
+
   #+begin_src graphql
     query MyQuery {
       account_summary(limit: 10) {
@@ -116,6 +120,8 @@
 **** DONE Extend with SQL Functions
 - [ ] Add search functions
 - [ ] Query search functions
+
+
   #+begin_src graphql
     query MyQuery {
       product_search(args: {search: "apple"}) {
@@ -137,6 +143,8 @@
 **** DONE Computed fields
 - [ ] Add product_sku function and track it as a computed field
 - [ ] Query product table with computed field
+
+
   #+begin_src graphql
     query MyQuery {
       product {
@@ -151,6 +159,8 @@
 **** DONE Data validations
 - [ ] Add non_negative_price check constraint
 - [ ] Attempt mutations with and without negative prices
+
+
   #+begin_src graphql
     mutation MyMutation {
       update_product(where: {name: {_eq: "Chilli Paste, Sambal Oelek"}}, _set: {price: 10}) {
