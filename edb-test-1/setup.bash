@@ -1,5 +1,11 @@
 # Generate an environment file for Docker Compose
 cat <<EOF > .env
+PGHOST=localhost
+PGPORT=6432
+PGDATABASE=postgres
+PGUSER=postgres
+PGPASSWORD=postgrespassword
+HASURAPORT=6432
 HASURA_GRAPHQL_METADATA_DATABASE_URL=postgres://postgres:postgrespassword@postgres:5432/postgres
 PG_DATABASE_URL=postgres://postgres:postgrespassword@postgres:5432/postgres
 HASURA_GRAPHQL_ENABLE_CONSOLE="true"

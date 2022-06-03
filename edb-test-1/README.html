@@ -3,14 +3,14 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-03 Fri 07:42 -->
+<!-- 2022-06-03 Fri 16:11 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>EDB Test Plan</title>
+<meta name="generator" content="Org mode" />
 <meta name="author" content="David A. Ventimiglia" />
-<meta name="generator" content="Org Mode" />
-<style>
-  #content { max-width: 60em; margin: auto; }
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -31,9 +31,8 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #e6e6e6;
-    border-radius: 3px;
-    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -42,21 +41,21 @@
   pre.src {
     position: relative;
     overflow: auto;
+    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    top: -8px;
-    right: 12px;
+    background-color: white;
+    top: -10px;
+    right: 10px;
     padding: 3px;
-    color: #555;
-    background-color: #f2f2f299;
+    border: 1px solid black;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
-  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -191,60 +190,121 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
 </style>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
 </head>
 <body>
-<div id="content" class="content">
+<div id="content">
 <h1 class="title">EDB Test Plan</h1>
-<div id="table-of-contents" role="doc-toc">
+<div id="table-of-contents">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents" role="doc-toc">
+<div id="text-table-of-contents">
 <ul>
-<li><a href="#orgf719b52">1. Databases</a>
+<li><a href="#orgbf2f831">1. Databases</a>
 <ul>
-<li><a href="#org398b393">1.1. Postgres</a>
+<li><a href="#orgeccfb31">1.1. Postgres</a></li>
+<li><a href="#org46ecd5b">1.2. Schema</a>
 <ul>
-<li><a href="#orge515c14">1.1.1. Schema</a></li>
-<li><a href="#org1662c27">1.1.2. Queries</a></li>
-<li><a href="#orgb9e242c">1.1.3. Mutations</a></li>
-<li><a href="#org4aec917">1.1.4. Subscriptions</a></li>
-<li><a href="#org26bd6b7">1.1.5. Supported Postgres types</a></li>
+<li><a href="#org3f2ed71">1.2.1. <span class="done DONE">DONE</span> Table Basics</a></li>
+<li><a href="#org25167c5">1.2.2. <span class="done DONE">DONE</span> Table Relationships</a></li>
+<li><a href="#orgc38c35d">1.2.3. <span class="todo TODO">TODO</span> Remote Relationships</a></li>
+<li><a href="#org3919611">1.2.4. <span class="done DONE">DONE</span> Extend with Views</a></li>
+<li><a href="#orgfbd7307">1.2.5. <span class="done DONE">DONE</span> Extend with SQL Functions</a></li>
+<li><a href="#org300c600">1.2.6. <span class="todo TODO">TODO</span> Default field values</a></li>
+<li><a href="#orge800920">1.2.7. <span class="todo TODO">TODO</span> Enum type fields</a></li>
+<li><a href="#org8492ff8">1.2.8. <span class="done DONE">DONE</span> Computed fields</a></li>
+<li><a href="#org650cf4e">1.2.9. <span class="todo TODO">TODO</span> Customize auto-generated fields</a></li>
+<li><a href="#orgb58cff6">1.2.10. <span class="done DONE">DONE</span> Data validations</a></li>
+<li><a href="#org7cd267d">1.2.11. <span class="todo TODO">TODO</span> Using an existing database</a></li>
+<li><a href="#org211e96e">1.2.12. <span class="todo TODO">TODO</span> Relay Schema</a></li>
 </ul>
 </li>
+<li><a href="#orgdd1350f">1.3. Queries</a>
+<ul>
+<li><a href="#orga741a7f">1.3.1. <span class="todo TODO">TODO</span> Simple object queries</a></li>
+<li><a href="#orgb486a9a">1.3.2. <span class="todo TODO">TODO</span> Nested object queries</a></li>
+<li><a href="#orga7e704b">1.3.3. <span class="todo TODO">TODO</span> Aggregation queries</a></li>
+<li><a href="#org2ba2eed">1.3.4. <span class="todo TODO">TODO</span> Filter query results / search queries</a></li>
+<li><a href="#orgce5c9e9">1.3.5. <span class="todo TODO">TODO</span> Sort query results</a></li>
+<li><a href="#org31fadbe">1.3.6. <span class="todo TODO">TODO</span> Distinct query results</a></li>
+<li><a href="#org9443fa2">1.3.7. <span class="todo TODO">TODO</span> Using multiple arguments</a></li>
+<li><a href="#orgba21d01">1.3.8. <span class="todo TODO">TODO</span> Multiple queries in a request</a></li>
+<li><a href="#orgc5fde0b">1.3.9. <span class="todo TODO">TODO</span> Using variables / aliases / fragments / directives</a></li>
+<li><a href="#org2accf20">1.3.10. <span class="todo TODO">TODO</span> Query performance</a></li>
+</ul>
+</li>
+<li><a href="#org9dd37db">1.4. Mutations</a>
+<ul>
+<li><a href="#org0ce9e38">1.4.1. <span class="todo TODO">TODO</span> Insert</a></li>
+<li><a href="#org39f04c3">1.4.2. <span class="todo TODO">TODO</span> Upsert</a></li>
+<li><a href="#org9d6c06d">1.4.3. <span class="todo TODO">TODO</span> Update</a></li>
+<li><a href="#orgd5a2b6a">1.4.4. <span class="todo TODO">TODO</span> Delete</a></li>
+<li><a href="#org62992db">1.4.5. <span class="todo TODO">TODO</span> Multiple mutations in a request</a></li>
+</ul>
+</li>
+<li><a href="#orga101c86">1.5. Subscriptions</a>
+<ul>
+<li><a href="#orgf411056">1.5.1. <span class="todo TODO">TODO</span> Live queries</a></li>
+<li><a href="#orge287fb3">1.5.2. <span class="todo TODO">TODO</span> Streaming subscriptions</a></li>
+</ul>
+</li>
+<li><a href="#org0c7341c">1.6. Supported Postgres types</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgf719b52" class="outline-2">
-<h2 id="orgf719b52"><span class="section-number-2">1.</span> Databases</h2>
+<div id="outline-container-orgbf2f831" class="outline-2">
+<h2 id="orgbf2f831"><span class="section-number-2">1</span> Databases</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org398b393" class="outline-3">
-<h3 id="org398b393"><span class="section-number-3">1.1.</span> Postgres</h3>
+<div id="outline-container-orgeccfb31" class="outline-3">
+<h3 id="orgeccfb31"><span class="section-number-3">1.1</span> Postgres</h3>
 <div class="outline-text-3" id="text-1-1">
 </div>
-<div id="outline-container-orge515c14" class="outline-4">
-<h4 id="orge515c14"><span class="section-number-4">1.1.1.</span> Schema</h4>
-<div class="outline-text-4" id="text-1-1-1">
+<div id="outline-container-org46ecd5b" class="outline-3">
+<h3 id="org46ecd5b"><span class="section-number-3">1.2</span> Schema</h3>
+<div class="outline-text-3" id="text-1-2">
 </div>
-<ol class="org-ol">
-<li><a id="orge329a36"></a><span class="done DONE">DONE</span> Table Basics<br />
-<div class="outline-text-5" id="text-1-1-1-1">
+<div id="outline-container-org3f2ed71" class="outline-4">
+<h4 id="org3f2ed71"><span class="section-number-4">1.2.1</span> <span class="done DONE">DONE</span> Table Basics</h4>
+<div class="outline-text-4" id="text-1-2-1">
 <ul class="org-ul">
-<li class="off"><input type='checkbox' /> Add database</li>
-<li class="off"><input type='checkbox' /> Add account and product tables</li>
-<li class="off"><input type='checkbox' /> Add account and product data</li>
-<li class="off"><input type='checkbox' /> Perform CRUD operations
+<li class="off"><code>[&#xa0;]</code> Add database</li>
+<li class="off"><code>[&#xa0;]</code> Add account and product tables</li>
+<li class="off"><code>[&#xa0;]</code> Add account and product data</li>
+<li class="off"><code>[&#xa0;]</code> Perform CRUD operations
 <ul class="org-ul">
 <li><p>
 Read
 </p>
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
-  account(<span style="color: #dbdb95;">order_by</span>: {<span style="color: #dbdb95;">name</span>: <span style="color: #34cae2;">asc</span>}, limit: <span style="color: #34cae2;">10</span>) {
+<pre class="src src-graphql">query MyQuery {
+  account(order_by: {name: asc}, limit: 10) {
     id
     name
     created_at
@@ -254,8 +314,8 @@ Read
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
-  product(<span style="color: #dbdb95;">order_by</span>: {<span style="color: #dbdb95;">price</span>: <span style="color: #34cae2;">asc</span>}, limit: <span style="color: #34cae2;">10</span>) {
+<pre class="src src-graphql">query MyQuery {
+  product(order_by: {price: asc}, limit: 10) {
     id
     name
     price
@@ -269,16 +329,16 @@ Read
 Insert
 </p>
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">mutation</span> <span style="color: #00ede1; font-weight: bold;">MyMutation</span> {
-  insert_account(<span style="color: #dbdb95;">objects</span>: {<span style="color: #dbdb95;">name</span>: <span style="color: #e67128;">"John Doe"</span>}) {
+<pre class="src src-graphql">mutation MyMutation {
+  insert_account(objects: {name: "John Doe"}) {
     affected_rows
   }
 }
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">mutation</span> <span style="color: #00ede1; font-weight: bold;">MyMutation</span> {
-  insert_product(<span style="color: #dbdb95;">objects</span>: {<span style="color: #dbdb95;">name</span>: <span style="color: #e67128;">"Doughnut"</span>, price: <span style="color: #34cae2;">100</span>}) {
+<pre class="src src-graphql">mutation MyMutation {
+  insert_product(objects: {name: "Doughnut", price: 100}) {
     returning {
       id
       name
@@ -294,8 +354,8 @@ Insert
 Update
 </p>
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">mutation</span> <span style="color: #00ede1; font-weight: bold;">MyMutation</span> {
-  update_account(<span style="color: #dbdb95;">where</span>: {<span style="color: #dbdb95;">name</span>: {_eq: <span style="color: #e67128;">"John Doe"</span>}}, _set: {name: <span style="color: #e67128;">"Jane Doe"</span>}) {
+<pre class="src src-graphql">mutation MyMutation {
+  update_account(where: {name: {_eq: "John Doe"}}, _set: {name: "Jane Doe"}) {
     affected_rows
   }
 }
@@ -305,8 +365,8 @@ Update
 Delete
 </p>
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">mutation</span> <span style="color: #00ede1; font-weight: bold;">MyMutation</span> {
-  delete_product(<span style="color: #dbdb95;">where</span>: {<span style="color: #dbdb95;">name</span>: {_eq: <span style="color: #e67128;">"Doughnut"</span>}}) {
+<pre class="src src-graphql">mutation MyMutation {
+  delete_product(where: {name: {_eq: "Doughnut"}}) {
     affected_rows
   }
 }
@@ -315,20 +375,21 @@ Delete
 </ul></li>
 </ul>
 </div>
-</li>
-<li><a id="orge24e18b"></a><span class="done DONE">DONE</span> Table Relationships<br />
-<div class="outline-text-5" id="text-1-1-1-2">
+</div>
+<div id="outline-container-org25167c5" class="outline-4">
+<h4 id="org25167c5"><span class="section-number-4">1.2.2</span> <span class="done DONE">DONE</span> Table Relationships</h4>
+<div class="outline-text-4" id="text-1-2-2">
 <ul class="org-ul">
-<li class="off"><input type='checkbox' /> Add the order and order detail tables</li>
-<li class="off"><input type='checkbox' /> Add relationships for account, order, order detail, and product</li>
-<li class="off"><input type='checkbox' /> Generate order and order detail data</li>
-<li class="off"><input type='checkbox' /> Perform queries across relationships</li>
+<li class="off"><code>[&#xa0;]</code> Add the order and order detail tables</li>
+<li class="off"><code>[&#xa0;]</code> Add relationships for account, order, order detail, and product</li>
+<li class="off"><code>[&#xa0;]</code> Generate order and order detail data</li>
+<li class="off"><code>[&#xa0;]</code> Perform queries across relationships</li>
 </ul>
 
 
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
-  account(<span style="color: #dbdb95;">limit</span>: <span style="color: #34cae2;">2</span>) {
+<pre class="src src-graphql">query MyQuery {
+  account(limit: 2) {
     id
     name
     created_at
@@ -338,17 +399,17 @@ Delete
       created_at
       updated_at
       order_details {
-        id
-        created_at
-        updated_at
-        units
-        product {
-          id
-          name
-          created_at
-          updated_at
-          price
-        }
+	id
+	created_at
+	updated_at
+	units
+	product {
+	  id
+	  name
+	  created_at
+	  updated_at
+	  price
+	}
       }
     }
   }
@@ -356,19 +417,22 @@ Delete
 </pre>
 </div>
 </div>
-</li>
-<li><a id="orgc30fbb4"></a><span class="todo TODO">TODO</span> Remote Relationships<br /></li>
-<li><a id="org53a4e8f"></a><span class="done DONE">DONE</span> Extend with Views<br />
-<div class="outline-text-5" id="text-1-1-1-4">
+</div>
+<div id="outline-container-orgc38c35d" class="outline-4">
+<h4 id="orgc38c35d"><span class="section-number-4">1.2.3</span> <span class="todo TODO">TODO</span> Remote Relationships</h4>
+</div>
+<div id="outline-container-org3919611" class="outline-4">
+<h4 id="org3919611"><span class="section-number-4">1.2.4</span> <span class="done DONE">DONE</span> Extend with Views</h4>
+<div class="outline-text-4" id="text-1-2-4">
 <ul class="org-ul">
-<li class="off"><input type='checkbox' /> Add account<sub>summary</sub> view and relationships</li>
-<li class="off"><input type='checkbox' /> Query across table and view relationships</li>
+<li class="off"><code>[&#xa0;]</code> Add account<sub>summary</sub> view and relationships</li>
+<li class="off"><code>[&#xa0;]</code> Query across table and view relationships</li>
 </ul>
 
 
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
-  account_summary(<span style="color: #dbdb95;">limit</span>: <span style="color: #34cae2;">10</span>) {
+<pre class="src src-graphql">query MyQuery {
+  account_summary(limit: 10) {
     id
     sum
     account {
@@ -379,18 +443,19 @@ Delete
 </pre>
 </div>
 </div>
-</li>
-<li><a id="org88a2367"></a><span class="done DONE">DONE</span> Extend with SQL Functions<br />
-<div class="outline-text-5" id="text-1-1-1-5">
+</div>
+<div id="outline-container-orgfbd7307" class="outline-4">
+<h4 id="orgfbd7307"><span class="section-number-4">1.2.5</span> <span class="done DONE">DONE</span> Extend with SQL Functions</h4>
+<div class="outline-text-4" id="text-1-2-5">
 <ul class="org-ul">
-<li class="off"><input type='checkbox' /> Add search functions</li>
-<li class="off"><input type='checkbox' /> Query search functions</li>
+<li class="off"><code>[&#xa0;]</code> Add search functions</li>
+<li class="off"><code>[&#xa0;]</code> Query search functions</li>
 </ul>
 
 
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
-  product_search(<span style="color: #dbdb95;">args</span>: {<span style="color: #dbdb95;">search</span>: <span style="color: #e67128;">"apple"</span>}) {
+<pre class="src src-graphql">query MyQuery {
+  product_search(args: {search: "apple"}) {
     name
     price
   }
@@ -398,8 +463,8 @@ Delete
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
-  product_fuzzy_search(<span style="color: #dbdb95;">args</span>: {<span style="color: #dbdb95;">search</span>: <span style="color: #e67128;">"apple"</span>}) {
+<pre class="src src-graphql">query MyQuery {
+  product_fuzzy_search(args: {search: "apple"}) {
     name
     price
   }
@@ -407,19 +472,24 @@ Delete
 </pre>
 </div>
 </div>
-</li>
-<li><a id="orgefaee13"></a><span class="todo TODO">TODO</span> Default field values<br /></li>
-<li><a id="orgf5ff51c"></a><span class="todo TODO">TODO</span> Enum type fields<br /></li>
-<li><a id="org370ea6b"></a><span class="done DONE">DONE</span> Computed fields<br />
-<div class="outline-text-5" id="text-1-1-1-8">
+</div>
+<div id="outline-container-org300c600" class="outline-4">
+<h4 id="org300c600"><span class="section-number-4">1.2.6</span> <span class="todo TODO">TODO</span> Default field values</h4>
+</div>
+<div id="outline-container-orge800920" class="outline-4">
+<h4 id="orge800920"><span class="section-number-4">1.2.7</span> <span class="todo TODO">TODO</span> Enum type fields</h4>
+</div>
+<div id="outline-container-org8492ff8" class="outline-4">
+<h4 id="org8492ff8"><span class="section-number-4">1.2.8</span> <span class="done DONE">DONE</span> Computed fields</h4>
+<div class="outline-text-4" id="text-1-2-8">
 <ul class="org-ul">
-<li class="off"><input type='checkbox' /> Add product<sub>sku</sub> function and track it as a computed field</li>
-<li class="off"><input type='checkbox' /> Query product table with computed field</li>
+<li class="off"><code>[&#xa0;]</code> Add product<sub>sku</sub> function and track it as a computed field</li>
+<li class="off"><code>[&#xa0;]</code> Query product table with computed field</li>
 </ul>
 
 
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">query</span> <span style="color: #00ede1; font-weight: bold;">MyQuery</span> {
+<pre class="src src-graphql">query MyQuery {
   product {
     id
     name
@@ -430,78 +500,112 @@ Delete
 </pre>
 </div>
 </div>
-</li>
-<li><a id="org016e5b7"></a><span class="todo TODO">TODO</span> Customize auto-generated fields<br /></li>
-<li><a id="org3f94b00"></a><span class="done DONE">DONE</span> Data validations<br />
-<div class="outline-text-5" id="text-1-1-1-10">
+</div>
+<div id="outline-container-org650cf4e" class="outline-4">
+<h4 id="org650cf4e"><span class="section-number-4">1.2.9</span> <span class="todo TODO">TODO</span> Customize auto-generated fields</h4>
+</div>
+<div id="outline-container-orgb58cff6" class="outline-4">
+<h4 id="orgb58cff6"><span class="section-number-4">1.2.10</span> <span class="done DONE">DONE</span> Data validations</h4>
+<div class="outline-text-4" id="text-1-2-10">
 <ul class="org-ul">
-<li class="off"><input type='checkbox' /> Add non<sub>negative</sub><sub>price</sub> check constraint</li>
-<li class="off"><input type='checkbox' /> Attempt mutations with and without negative prices</li>
+<li class="off"><code>[&#xa0;]</code> Add non<sub>negative</sub><sub>price</sub> check constraint</li>
+<li class="off"><code>[&#xa0;]</code> Attempt mutations with and without negative prices</li>
 </ul>
 
 
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">mutation</span> <span style="color: #00ede1; font-weight: bold;">MyMutation</span> {
-  update_product(<span style="color: #dbdb95;">where</span>: {<span style="color: #dbdb95;">name</span>: {_eq: <span style="color: #e67128;">"Chilli Paste, Sambal Oelek"</span>}}, _set: {price: <span style="color: #34cae2;">10</span>}) {
+<pre class="src src-graphql">mutation MyMutation {
+  update_product(where: {name: {_eq: "Chilli Paste, Sambal Oelek"}}, _set: {price: 10}) {
     affected_rows
   }
 }
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-graphql"><span style="color: #ffad29; font-weight: bold;">mutation</span> <span style="color: #00ede1; font-weight: bold;">MyMutation</span> {
-  update_product(<span style="color: #dbdb95;">where</span>: {<span style="color: #dbdb95;">name</span>: {_eq: <span style="color: #e67128;">"Pastry - Raisin Muffin - Mini"</span>}}, _set: {price: <span style="color: #34cae2;">-10</span>}) {
+<pre class="src src-graphql">mutation MyMutation {
+  update_product(where: {name: {_eq: "Pastry - Raisin Muffin - Mini"}}, _set: {price: -10}) {
     affected_rows
   }
 }
 </pre>
 </div>
 </div>
-</li>
-<li><a id="org7eb24c9"></a><span class="todo TODO">TODO</span> Using an existing database<br /></li>
-<li><a id="orge2993ca"></a><span class="todo TODO">TODO</span> Relay Schema<br /></li>
-</ol>
 </div>
-<div id="outline-container-org1662c27" class="outline-4">
-<h4 id="org1662c27"><span class="section-number-4">1.1.2.</span> Queries</h4>
-<div class="outline-text-4" id="text-1-1-2">
+<div id="outline-container-org7cd267d" class="outline-4">
+<h4 id="org7cd267d"><span class="section-number-4">1.2.11</span> <span class="todo TODO">TODO</span> Using an existing database</h4>
 </div>
-<ol class="org-ol">
-<li><a id="org9ead11d"></a><span class="todo TODO">TODO</span> Simple object queries<br /></li>
-<li><a id="org348a322"></a><span class="todo TODO">TODO</span> Nested object queries<br /></li>
-<li><a id="org2872564"></a><span class="todo TODO">TODO</span> Aggregation queries<br /></li>
-<li><a id="org2f25359"></a><span class="todo TODO">TODO</span> Filter query results / search queries<br /></li>
-<li><a id="org63e111a"></a><span class="todo TODO">TODO</span> Sort query results<br /></li>
-<li><a id="orgdde0d4d"></a><span class="todo TODO">TODO</span> Distinct query results<br /></li>
-<li><a id="org573d69b"></a><span class="todo TODO">TODO</span> Using multiple arguments<br /></li>
-<li><a id="orgd9b85fd"></a><span class="todo TODO">TODO</span> Multiple queries in a request<br /></li>
-<li><a id="org0891095"></a><span class="todo TODO">TODO</span> Using variables / aliases / fragments / directives<br /></li>
-<li><a id="orgd17b8fa"></a><span class="todo TODO">TODO</span> Query performance<br /></li>
-</ol>
+<div id="outline-container-org211e96e" class="outline-4">
+<h4 id="org211e96e"><span class="section-number-4">1.2.12</span> <span class="todo TODO">TODO</span> Relay Schema</h4>
 </div>
-<div id="outline-container-orgb9e242c" class="outline-4">
-<h4 id="orgb9e242c"><span class="section-number-4">1.1.3.</span> Mutations</h4>
-<div class="outline-text-4" id="text-1-1-3">
 </div>
-<ol class="org-ol">
-<li><a id="orgcc04e32"></a><span class="todo TODO">TODO</span> Insert<br /></li>
-<li><a id="orgd38d860"></a><span class="todo TODO">TODO</span> Upsert<br /></li>
-<li><a id="org3e7b5d7"></a><span class="todo TODO">TODO</span> Update<br /></li>
-<li><a id="org7c51c9f"></a><span class="todo TODO">TODO</span> Delete<br /></li>
-<li><a id="org24fe5e5"></a><span class="todo TODO">TODO</span> Multiple mutations in a request<br /></li>
-</ol>
+<div id="outline-container-orgdd1350f" class="outline-3">
+<h3 id="orgdd1350f"><span class="section-number-3">1.3</span> Queries</h3>
+<div class="outline-text-3" id="text-1-3">
 </div>
-<div id="outline-container-org4aec917" class="outline-4">
-<h4 id="org4aec917"><span class="section-number-4">1.1.4.</span> Subscriptions</h4>
-<div class="outline-text-4" id="text-1-1-4">
+<div id="outline-container-orga741a7f" class="outline-4">
+<h4 id="orga741a7f"><span class="section-number-4">1.3.1</span> <span class="todo TODO">TODO</span> Simple object queries</h4>
 </div>
-<ol class="org-ol">
-<li><a id="orgae0cdf4"></a><span class="todo TODO">TODO</span> Live queries<br /></li>
-<li><a id="orga94120a"></a><span class="todo TODO">TODO</span> Streaming subscriptions<br /></li>
-</ol>
+<div id="outline-container-orgb486a9a" class="outline-4">
+<h4 id="orgb486a9a"><span class="section-number-4">1.3.2</span> <span class="todo TODO">TODO</span> Nested object queries</h4>
 </div>
-<div id="outline-container-org26bd6b7" class="outline-4">
-<h4 id="org26bd6b7"><span class="section-number-4">1.1.5.</span> Supported Postgres types</h4>
+<div id="outline-container-orga7e704b" class="outline-4">
+<h4 id="orga7e704b"><span class="section-number-4">1.3.3</span> <span class="todo TODO">TODO</span> Aggregation queries</h4>
+</div>
+<div id="outline-container-org2ba2eed" class="outline-4">
+<h4 id="org2ba2eed"><span class="section-number-4">1.3.4</span> <span class="todo TODO">TODO</span> Filter query results / search queries</h4>
+</div>
+<div id="outline-container-orgce5c9e9" class="outline-4">
+<h4 id="orgce5c9e9"><span class="section-number-4">1.3.5</span> <span class="todo TODO">TODO</span> Sort query results</h4>
+</div>
+<div id="outline-container-org31fadbe" class="outline-4">
+<h4 id="org31fadbe"><span class="section-number-4">1.3.6</span> <span class="todo TODO">TODO</span> Distinct query results</h4>
+</div>
+<div id="outline-container-org9443fa2" class="outline-4">
+<h4 id="org9443fa2"><span class="section-number-4">1.3.7</span> <span class="todo TODO">TODO</span> Using multiple arguments</h4>
+</div>
+<div id="outline-container-orgba21d01" class="outline-4">
+<h4 id="orgba21d01"><span class="section-number-4">1.3.8</span> <span class="todo TODO">TODO</span> Multiple queries in a request</h4>
+</div>
+<div id="outline-container-orgc5fde0b" class="outline-4">
+<h4 id="orgc5fde0b"><span class="section-number-4">1.3.9</span> <span class="todo TODO">TODO</span> Using variables / aliases / fragments / directives</h4>
+</div>
+<div id="outline-container-org2accf20" class="outline-4">
+<h4 id="org2accf20"><span class="section-number-4">1.3.10</span> <span class="todo TODO">TODO</span> Query performance</h4>
+</div>
+</div>
+<div id="outline-container-org9dd37db" class="outline-3">
+<h3 id="org9dd37db"><span class="section-number-3">1.4</span> Mutations</h3>
+<div class="outline-text-3" id="text-1-4">
+</div>
+<div id="outline-container-org0ce9e38" class="outline-4">
+<h4 id="org0ce9e38"><span class="section-number-4">1.4.1</span> <span class="todo TODO">TODO</span> Insert</h4>
+</div>
+<div id="outline-container-org39f04c3" class="outline-4">
+<h4 id="org39f04c3"><span class="section-number-4">1.4.2</span> <span class="todo TODO">TODO</span> Upsert</h4>
+</div>
+<div id="outline-container-org9d6c06d" class="outline-4">
+<h4 id="org9d6c06d"><span class="section-number-4">1.4.3</span> <span class="todo TODO">TODO</span> Update</h4>
+</div>
+<div id="outline-container-orgd5a2b6a" class="outline-4">
+<h4 id="orgd5a2b6a"><span class="section-number-4">1.4.4</span> <span class="todo TODO">TODO</span> Delete</h4>
+</div>
+<div id="outline-container-org62992db" class="outline-4">
+<h4 id="org62992db"><span class="section-number-4">1.4.5</span> <span class="todo TODO">TODO</span> Multiple mutations in a request</h4>
+</div>
+</div>
+<div id="outline-container-orga101c86" class="outline-3">
+<h3 id="orga101c86"><span class="section-number-3">1.5</span> Subscriptions</h3>
+<div class="outline-text-3" id="text-1-5">
+</div>
+<div id="outline-container-orgf411056" class="outline-4">
+<h4 id="orgf411056"><span class="section-number-4">1.5.1</span> <span class="todo TODO">TODO</span> Live queries</h4>
+</div>
+<div id="outline-container-orge287fb3" class="outline-4">
+<h4 id="orge287fb3"><span class="section-number-4">1.5.2</span> <span class="todo TODO">TODO</span> Streaming subscriptions</h4>
+</div>
+</div>
+<div id="outline-container-org0c7341c" class="outline-3">
+<h3 id="org0c7341c"><span class="section-number-3">1.6</span> Supported Postgres types</h3>
 </div>
 </div>
 </div>
@@ -509,7 +613,7 @@ Delete
 <div id="postamble" class="status">
 <p class="date">Date: 2022-06-03 Fri 00:00</p>
 <p class="author">Author: David A. Ventimiglia</p>
-<p class="date">Created: 2022-06-03 Fri 07:42</p>
+<p class="date">Created: 2022-06-03 Fri 16:11</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
