@@ -1,1 +1,4 @@
 /optum-edb-test-1/scratch.sql
+/edb-test-1/.env
+/edb-test-1/hasura/.env
+/edb-test-1/scratch.sql
