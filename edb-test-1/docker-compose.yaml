@@ -2,6 +2,8 @@ version: '3.6'
 services:
   postgres:
     image: postgres:14
+    ports:
+      - "6432:5432"
     restart: always
     volumes:
       - db_data:/var/lib/postgresql/data
@@ -11,6 +13,8 @@ services:
       POSTGRES_PASSWORD: postgrespassword
   postgres_2:
     image: postgres:14
+    ports:
+      - "7432:5432"
     restart: always
     volumes:
       - db_data_2:/var/lib/postgresql/data
