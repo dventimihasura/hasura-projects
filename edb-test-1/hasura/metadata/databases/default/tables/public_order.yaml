@@ -1,6 +1,13 @@
 table:
   schema: public
   name: order
+configuration:
+  custom_root_fields: {}
+  column_config:
+    status:
+      custom_name: state
+  custom_column_names:
+    status: state
 object_relationships:
   - name: account
     using:
