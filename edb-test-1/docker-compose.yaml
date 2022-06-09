@@ -9,6 +9,15 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
       POSTGRES_PASSWORD: postgrespassword
+  postgres_2:
+    image: postgres:14
+    restart: always
+    volumes:
+      - db_data_2:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
     image: hasura/graphql-engine:v2.7.0
     ports:
@@ -17,9 +26,11 @@ services:
     environment:
       HASURA_GRAPHQL_METADATA_DATABASE_URL: "postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}"
       PG_DATABASE_URL: "postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}"
+      PG_DATABASE_URL_2: "postgres://${PGUSER_2}:${PGPASSWORD_2}@${PGHOST_2}:${PGPORT_2}/${PGDATABASE_2}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
 volumes:
   db_data:
+  db_data_2:
 
