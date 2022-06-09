@@ -36,7 +36,7 @@ event_triggers:
     webhook: http://httpbin.org/post
   - name: order_updated
     definition:
-      enable_manual: false
+      enable_manual: true
       update:
         columns: '*'
     retry_conf:
