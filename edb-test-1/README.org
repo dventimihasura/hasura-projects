@@ -115,7 +115,7 @@
       }
     }
   #+end_src
-**** TODO Remote Relationships
+**** DONE Remote Relationships
 **** DONE Extend with Views
 - [ ] Add account_summary view and relationships
 - [ ] Query across table and view relationships
@@ -153,8 +153,37 @@
       }
     }
   #+end_src
-**** TODO Default field values
-**** TODO Enum type fields
+**** DONE Default field values
+**** DONE Enum type fields
+- [ ] Create a native Postgres enum type for order status.
+- [ ] Create a enum table for region and track it as order sales_region.
+
+
+#+begin_src graphql
+  query MyQuery {
+    campaign(limit: 10) {
+      id
+      name
+      created_at
+      updated_at
+      product {
+        name
+        price
+        sku
+        order_details {
+          units
+          order {
+            status
+            sales_region {
+              description
+            }
+          }
+        }
+      }
+    }
+  }
+#+end_src
+
 **** DONE Computed fields
 - [ ] Add product_sku function and track it as a computed field
 - [ ] Query product table with computed field
@@ -170,7 +199,35 @@
       }
     }
   #+end_src
-**** TODO Customize auto-generated fields
+
+**** DONE Customize auto-generated fields
+- [ ] Change order.status to order.state for the GraphQL field name
+
+
+#+begin_src graphql
+  query MyQuery {
+    campaign(limit: 10) {
+      id
+      name
+      created_at
+      updated_at
+      product {
+        name
+        price
+        sku
+        order_details {
+          units
+          order {
+            state
+            sales_region {
+              description
+            }
+          }
+        }
+      }
+    }
+  }
+#+end_src
 **** DONE Data validations
 - [ ] Add non_negative_price check constraint
 - [ ] Attempt mutations with and without negative prices
@@ -183,6 +240,7 @@
       }
     }
   #+end_src
+
   #+begin_src graphql
     mutation MyMutation {
       update_product(where: {name: {_eq: "Pastry - Raisin Muffin - Mini"}}, _set: {price: -10}) {
@@ -190,8 +248,38 @@
       }
     }
   #+end_src
-**** TODO Using an existing database
-**** TODO Relay Schema
+
+**** DONE Using an existing database
+**** DONE Relay Schema
+- [ ] Turn on the Relay API in the Console
+
+
+#+begin_src graphql
+  query MyQuery {
+    account_connection(first: 10) {
+      edges {
+        node {
+          name
+          orders {
+            id
+            sales_region {
+              description
+            }
+            order_details {
+              units
+              product {
+                name
+                price
+                sku
+              }
+            }
+          }
+        }
+        cursor
+      }
+    }
+  }
+#+end_src
 *** Queries
 **** TODO Simple object queries
 **** TODO Nested object queries
@@ -213,3 +301,49 @@
 **** TODO Live queries
 **** TODO Streaming subscriptions
 *** Supported Postgres types
+* Remote Schemas
+*** Remote relationships
+***** DONE To remote database
+***** TODO To Remote Schema
+*** Authorization in remote schemas
+***** TODO Forwarding auth context to/from remote schemas
+***** TODO Remote schema permissions
+***** TODO Bypassing Hasura's auth for remote schemas
+* Event Triggers
+*** Creating an Event Trigger
+***** DONE Create an insert trigger
+***** DONE Create an update trigger
+- [ ] Perform a mutation to update an order
+- [ ] Update an order from the Console
+
+
+#+begin_src graphql
+  mutation MyMutation {
+    update_order_by_pk(pk_columns: {id: "1564344e-e528-43de-b88e-dab9c3efa44e"}, _set: {state: "fulfilled"}) {
+      id
+      state
+    }
+  }
+#+end_src
+
+- [ ] Check the events logs
+* Scheduled Triggers
+*** Creating a chron trigger
+***** DONE Create a chron trigger
+- [ ] Allow time to pass
+- [ ] Check the events logs
+*** Creating a one-off scheduled event
+***** TODO Create a one-off scheduled event
+*** Cleaning up scheduled triggers data
+***** TODO Clear Everything
+- [ ] Cron triggers
+
+  #+begin_src sql
+  DELETE FROM hdb_catalog.hdb_cron_events;
+  #+end_src
+
+- [ ] Scheduled events
+
+  #+begin_src sql
+  DELETE FROM hdb_catalog.hdb_scheduled_events;
+  #+end_src
