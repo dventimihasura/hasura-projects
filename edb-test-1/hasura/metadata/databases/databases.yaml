@@ -8,12 +8,3 @@
       isolation_level: read-committed
   tables: "!include default/tables/tables.yaml"
   functions: "!include default/functions/functions.yaml"
-- name: secondary
-  kind: postgres
-  configuration:
-    connection_info:
-      use_prepared_statements: false
-      database_url:
-        from_env: PG_DATABASE_URL_2
-      isolation_level: read-committed
-  tables: "!include secondary/tables/tables.yaml"
