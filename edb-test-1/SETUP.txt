@@ -1,4 +1,4 @@
-1. Edit the `edb-test-1/hasura/.env` file and set `HASURA_GRAPHQL_ENDPOINT` to the address of your Hasura endpoint.
+1. Create a file `edb-test-1/hasura/.env` file and set `HASURA_GRAPHQL_ENDPOINT` to the address of your Hasura endpoint.
 
 2. Connect Hasura to your database with the data source name `default`.
 
