@@ -115,7 +115,7 @@
       }
     }
   #+end_src
-**** DONE Remote Relationships
+**** TODO Remote Relationships
 **** DONE Extend with Views
 - [ ] Add account_summary view and relationships
 - [ ] Query across table and view relationships
@@ -159,30 +159,6 @@
 - [ ] Create a enum table for region and track it as order sales_region.
 
 
-#+begin_src graphql
-  query MyQuery {
-    campaign(limit: 10) {
-      id
-      name
-      created_at
-      updated_at
-      product {
-        name
-        price
-        sku
-        order_details {
-          units
-          order {
-            status
-            sales_region {
-              description
-            }
-          }
-        }
-      }
-    }
-  }
-#+end_src
 
 **** DONE Computed fields
 - [ ] Add product_sku function and track it as a computed field
@@ -204,30 +180,6 @@
 - [ ] Change order.status to order.state for the GraphQL field name
 
 
-#+begin_src graphql
-  query MyQuery {
-    campaign(limit: 10) {
-      id
-      name
-      created_at
-      updated_at
-      product {
-        name
-        price
-        sku
-        order_details {
-          units
-          order {
-            state
-            sales_region {
-              description
-            }
-          }
-        }
-      }
-    }
-  }
-#+end_src
 **** DONE Data validations
 - [ ] Add non_negative_price check constraint
 - [ ] Attempt mutations with and without negative prices
