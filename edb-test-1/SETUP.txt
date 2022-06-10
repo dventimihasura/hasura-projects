@@ -1,0 +1,29 @@
+1. Edit the `edb-test-1/hasura/.env` file and set `HASURA_GRAPHQL_ENDPOINT` to the address of your Hasura endpoint.
+
+2. Connect Hasura to your database with the data source name `default`.
+
+3. Open an terminal and change directory to the `hasura` directory.
+
+4. In a SQL client connected to your database, or in the `SQL` tab in Hasura, run these commands:
+
+   1. `drop table if exists account cascade`
+
+   2. `drop table if exists "order" cascade`
+
+   3. `drop table if exists order_detail cascade`
+
+   4. `drop table if exists product cascade`
+
+   5. `drop table if exists region cascade`
+
+   6. `drop type if exists status cascade`
+
+5. In the terminal run `hasura metadata clear`.
+
+6. Run `hasura metadata apply`.
+
+7. Run `hasura migrate delete --all --server --database-name default`
+
+8. Run `hasura migrate apply`.
+
+9. Run `hasura metadata reload`.

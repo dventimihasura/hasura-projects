@@ -24,23 +24,3 @@ array_relationships:
           schema: public
           name: order_detail
 event_triggers:
-  - name: order_created
-    definition:
-      enable_manual: false
-      insert:
-        columns: '*'
-    retry_conf:
-      num_retries: 3
-      interval_sec: 3
-      timeout_sec: 60
-    webhook: http://httpbin.org/post
-  - name: order_updated
-    definition:
-      enable_manual: true
-      update:
-        columns: '*'
-    retry_conf:
-      num_retries: 0
-      interval_sec: 10
-      timeout_sec: 60
-    webhook: http://httpbin.org/put
