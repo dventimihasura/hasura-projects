@@ -1,1 +1,11 @@
-[]
+- name: send_account_summary
+  webhook: http://httpbin.org/post
+  schedule: '* * * * *'
+  include_in_metadata: true
+  payload: {}
+  retry_conf:
+    num_retries: 3
+    timeout_seconds: 60
+    tolerance_seconds: 21600
+    retry_interval_seconds: 3
+  comment: send account summary
