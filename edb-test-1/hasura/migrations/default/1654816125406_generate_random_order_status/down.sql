@@ -1,3 +1,1 @@
--- Could not auto-generate a down migration.
--- Please write an appropriate down migration for the SQL below:
--- update "order" set status = ((array['new', 'processing', 'fulfilled'])[floor(random()*3+1)])::status;
+select null;

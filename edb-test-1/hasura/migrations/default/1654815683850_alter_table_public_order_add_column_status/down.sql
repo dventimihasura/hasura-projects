@@ -1,4 +1,1 @@
--- Could not auto-generate a down migration.
--- Please write an appropriate down migration for the SQL below:
--- alter table "public"."order" add column "status" status
---  null;
+ alter table "public"."order" drop column "status";
