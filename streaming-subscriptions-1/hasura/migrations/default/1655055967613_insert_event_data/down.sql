@@ -1,0 +1,12 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- insert into event (asset_id, name) select id as asset_id, upper(md5((random()*10+1)::text)) as name from asset order by random() limit 1;
+-- insert into event (asset_id, name) select id as asset_id, upper(md5((random()*10+1)::text)) as name from asset order by random() limit 1;
+-- insert into event (asset_id, name) select id as asset_id, upper(md5((random()*10+1)::text)) as name from asset order by random() limit 1;
+-- insert into event (asset_id, name) select id as asset_id, upper(md5((random()*10+1)::text)) as name from asset order by random() limit 1;
+-- insert into event (asset_id, name) select id as asset_id, upper(md5((random()*10+1)::text)) as name from asset order by random() limit 1;
+-- insert into event (asset_id, name) select id as asset_id, upper(md5((random()*10+1)::text)) as name from asset order by random() limit 1;
+-- insert into event (asset_id, name) select id as asset_id, upper(md5((random()*10+1)::text)) as name from asset order by random() limit 1;
+-- insert into event (asset_id, name) select id as asset_id, upper(md5((random()*10+1)::text)) as name from asset order by random() limit 1;
+-- insert into event (asset_id, name) select id as asset_id, upper(md5((random()*10+1)::text)) as name from asset order by random() limit 1;
+-- insert into event (asset_id, name) select id as asset_id, upper(md5((random()*10+1)::text)) as name from asset order by random() limit 1;

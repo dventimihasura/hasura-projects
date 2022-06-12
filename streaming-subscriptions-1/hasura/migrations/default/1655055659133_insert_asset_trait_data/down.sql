@@ -1,0 +1,3 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- insert into asset_trait select distinct asset.id, trait.id from asset join equipment on asset.name = equipment.name join trait on trait.name = equipment.trait;
