@@ -15,3 +15,14 @@ computed_fields:
       function:
         schema: public
         name: product_sku
+event_triggers:
+  - name: product_deleted
+    definition:
+      enable_manual: true
+      delete:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: http://httpbin.org/get
