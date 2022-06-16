@@ -1,5 +1,3 @@
-alter table "public"."misc" drop column "id" cascade
-alter table "public"."misc" drop column "id";
--- Could not auto-generate a down migration.
--- Please write an appropriate down migration for the SQL below:
--- CREATE EXTENSION IF NOT EXISTS pgcrypto;
+alter table "public"."misc" drop column "id" cascade;
+
+drop extension if exists pgcrypto;
