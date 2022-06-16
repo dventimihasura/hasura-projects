@@ -157,9 +157,6 @@
 **** DONE Enum type fields
 - [ ] Create a native Postgres enum type for order status.
 - [ ] Create a enum table for region and track it as order sales_region.
-
-
-
 **** DONE Computed fields
 - [ ] Add product_sku function and track it as a computed field
 - [ ] Query product table with computed field
@@ -178,7 +175,6 @@
 
 **** DONE Customize auto-generated fields
 - [ ] Change order.status to order.state for the GraphQL field name
-
 
 **** DONE Data validations
 - [ ] Add non_negative_price check constraint
@@ -233,9 +229,33 @@
   }
 #+end_src
 *** Queries
-**** TODO Simple object queries
-**** TODO Nested object queries
-**** TODO Aggregation queries
+**** DONE Simple object queries
+**** DONE Nested object queries
+**** DONE Aggregation queries
+#+begin_src graphql
+  query MyQuery {
+    account_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+#+end_src
+#+begin_src graphql
+  query MyQuery {
+    account(limit: 10) {
+      orders {
+        order_details_aggregate {
+          aggregate {
+            sum {
+              units
+            }
+          }
+        }
+      }
+    }
+  }
+#+end_src
 **** TODO Filter query results / search queries
 **** TODO Sort query results
 **** TODO Distinct query results
