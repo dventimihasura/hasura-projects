@@ -2,3 +2,11 @@ table:
   schema: public
   name: region
 is_enum: true
+array_relationships:
+  - name: orders
+    using:
+      foreign_key_constraint_on:
+        column: region
+        table:
+          schema: public
+          name: order
