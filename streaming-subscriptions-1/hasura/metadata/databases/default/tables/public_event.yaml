@@ -11,3 +11,12 @@ object_relationships:
         insertion_order: null
         column_mapping:
           asset_id: id
+  - name: asset_2
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: asset_denormed_2
+        insertion_order: null
+        column_mapping:
+          asset_id: id

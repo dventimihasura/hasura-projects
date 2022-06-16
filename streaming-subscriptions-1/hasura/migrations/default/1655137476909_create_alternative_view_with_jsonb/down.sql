@@ -1,0 +1,7 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- create or replace view asset_denormed_2 as
+--   select
+--     *,
+--     (select array_to_json(array(select trait.name from asset_trait join trait on trait.id = trait_id where asset_id = asset.id)))::jsonb as traits
+--     from asset;

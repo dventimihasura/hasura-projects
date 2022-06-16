@@ -1,2 +1,3 @@
 - "!include public_asset_denormed.yaml"
+- "!include public_asset_denormed_2.yaml"
 - "!include public_event.yaml"
