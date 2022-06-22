@@ -1,0 +1,10 @@
+table:
+  schema: public
+  name: line_item
+object_relationships:
+  - name: invoice
+    using:
+      foreign_key_constraint_on: invoice_id
+  - name: product
+    using:
+      foreign_key_constraint_on: product_id

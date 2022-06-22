@@ -1,0 +1,4 @@
+- "!include public_account.yaml"
+- "!include public_invoice.yaml"
+- "!include public_line_item.yaml"
+- "!include public_product.yaml"
