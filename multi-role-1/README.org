@@ -1,0 +1,183 @@
+* What
+
+This is a Proof-Of-Concept (POC) of using multiple database roles with
+Hasura.
+
+* Why
+
+Databases like PostgreSQL have a rich set of features that rely on the
+ability to use multiple different database roles. In order to take
+advantage of those features, Hasura would have to allow databases to
+be added and configured with multiple database roles.  In order to be
+really useful, it would also have to offer a way to dispatch to
+database connections on different roles, based on runtime parameters
+such as HTTP headers and perhaps other factors as well.  Since Hasura
+does not currently support this, this POC was developed to illustrate
+an alternative approach to using multiple database roles.
+
+* How
+
+The approach this POC takes is to set up a Hasura graphql-engine
+server for each database role, and then to use a reverse proxy / load
+balancer to dispatch to those servers at runtime based on an HTTP
+header in incoming GraphQL requests.  It uses [[https://www.nginx.com/][nginx]] as the load
+balancer so that it provides the API endpoint, with the graphql-engine
+servers acting as back-ends.
+
+* Steps
+
+*** Launch Services
+
+Use [[https://docs.docker.com/compose/][Docker Compose]] to launch:
+
+- 1 PostgreSQL 14 database
+- 5 Hasura graphql-engine servers
+- 1 nginx load-balancer
+
+The database setup includes scripts in ~docker-entrypoint-initdb.d~
+that set up a simple data model with tables for ~account~, ~order~,
+~order_detail~, ~product~, and ~region~, to insert sample data into
+those tables, to set up 5 additional database roles ~hasurauser_1~
+through ~hasurauser_5~, and to set up [[https://www.postgresql.org/docs/current/ddl-rowsecurity.html][Row Security Policies]] on the
+~account~, ~order~, and ~order_detail~ tables.  The rows those three
+tables are distributed randomly accross roles ~hasurauser_1~ through
+~hasurause_4~ while ~hasurauser_5~ has none, according to a ~manager~
+field on each of those tables.    
+
+#+begin_src shell
+  docker-compose up -d
+#+end_src
+
+*** Generate .env Files
+
+As there are 5 graphql-engine back-ends listening on 5 mapped ports
+8081 through 8085, it is convenient to configure their endoints and
+admin secrets in local ~.env~ files.  These are generated using the
+Bash script ~setup.bash~.
+
+#+begin_src shell
+  bash setup.bash
+#+end_src
+
+*** Apply Metadata
+
+The 5 graphql-engine back-ends are configured with the same metadata.
+Ultimately, that metadata is stored in the shared PostgreSQL
+database.  At initialization, however, that metadata has not yet been
+loaded into any of the servers or into the database, and is only in
+the metadata files on disk in this repository.  Use the Hasura CLI to
+~apply~ the metadata to one of these servers.  That will suffice to
+load the metadata not only into that server but also into the shared
+database.  Consequently, it is only needed to ~reload~ the metadata
+for the other 4 servers.
+
+#+begin_src shell
+  cd hasura
+  hasura --envfile local1.env metadata apply
+  hasura --envfile local2.env metadata reload
+  hasura --envfile local3.env metadata reload
+  hasura --envfile local4.env metadata reload
+  hasura --envfile local5.env metadata reload
+#+end_src
+
+*** Test the API
+
+#+begin_src shell :exports both :results output
+  curl \
+      -s \
+      'http://localhost:8080/v1/graphql' \
+      -H 'x-hasura-admin-secret: myadminsecretkey' \
+      -H 'x-database-role: hasurauser_1' \
+      --data '{"query":"query MyQuery {account_aggregate {aggregate {count}}}","variables":{}}' | jq -r '.'
+#+end_src
+
+#+RESULTS:
+: {
+:   "data": {
+:     "account_aggregate": {
+:       "aggregate": {
+:         "count": 249
+:       }
+:     }
+:   }
+: }
+
+#+begin_src shell :exports both :results output
+  curl \
+      -s \
+      'http://localhost:8080/v1/graphql' \
+      -H 'x-hasura-admin-secret: myadminsecretkey' \
+      -H 'x-database-role: hasurauser_2' \
+      --data '{"query":"query MyQuery {account_aggregate {aggregate {count}}}","variables":{}}' | jq -r '.'
+#+end_src
+
+#+RESULTS:
+: {
+:   "data": {
+:     "account_aggregate": {
+:       "aggregate": {
+:         "count": 239
+:       }
+:     }
+:   }
+: }
+
+#+begin_src shell :exports both :results output
+  curl \
+      -s \
+      'http://localhost:8080/v1/graphql' \
+      -H 'x-hasura-admin-secret: myadminsecretkey' \
+      -H 'x-database-role: hasurauser_3' \
+      --data '{"query":"query MyQuery {account_aggregate {aggregate {count}}}","variables":{}}' | jq -r '.'
+#+end_src
+
+#+RESULTS:
+: {
+:   "data": {
+:     "account_aggregate": {
+:       "aggregate": {
+:         "count": 249
+:       }
+:     }
+:   }
+: }
+
+#+begin_src shell :exports both :results output
+  curl \
+      -s \
+      'http://localhost:8080/v1/graphql' \
+      -H 'x-hasura-admin-secret: myadminsecretkey' \
+      -H 'x-database-role: hasurauser_4' \
+      --data '{"query":"query MyQuery {account_aggregate {aggregate {count}}}","variables":{}}' | jq -r '.'
+#+end_src
+
+#+RESULTS:
+: {
+:   "data": {
+:     "account_aggregate": {
+:       "aggregate": {
+:         "count": 256
+:       }
+:     }
+:   }
+: }
+
+#+begin_src shell :exports both :results output
+  curl \
+      -s \
+      'http://localhost:8080/v1/graphql' \
+      -H 'x-hasura-admin-secret: myadminsecretkey' \
+      -H 'x-database-role: hasurauser_5' \
+      --data '{"query":"query MyQuery {account_aggregate {aggregate {count}}}","variables":{}}' | jq -r '.'
+#+end_src
+
+#+RESULTS:
+: {
+:   "data": {
+:     "account_aggregate": {
+:       "aggregate": {
+:         "count": 0
+:       }
+:     }
+:   }
+: }
