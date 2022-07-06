@@ -17,3 +17,8 @@ cat <<EOF > hasura/local4.env
 HASURA_GRAPHQL_ENDPOINT=http://localhost:8084
 HASURA_GRAPHQL_ADMIN_SECRET=myadminsecretkey
 EOF
+
+cat <<EOF > hasura/local5.env
+HASURA_GRAPHQL_ENDPOINT=http://localhost:8085
+HASURA_GRAPHQL_ADMIN_SECRET=myadminsecretkey
+EOF
