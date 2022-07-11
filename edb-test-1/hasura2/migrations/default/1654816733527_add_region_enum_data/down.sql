@@ -1,0 +1,1 @@
+delete from region cascade;
