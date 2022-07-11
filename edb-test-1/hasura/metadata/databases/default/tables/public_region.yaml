@@ -1,7 +1,6 @@
 table:
   schema: public
   name: region
-is_enum: true
 array_relationships:
   - name: orders
     using:

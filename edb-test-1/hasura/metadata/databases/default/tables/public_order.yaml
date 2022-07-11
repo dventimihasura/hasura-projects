@@ -1,18 +1,11 @@
 table:
   schema: public
   name: order
-configuration:
-  custom_root_fields: {}
-  column_config:
-    status:
-      custom_name: state
-  custom_column_names:
-    status: state
 object_relationships:
   - name: account
     using:
       foreign_key_constraint_on: account_id
-  - name: sales_region
+  - name: regionByRegion
     using:
       foreign_key_constraint_on: region
 array_relationships:
@@ -23,14 +16,3 @@ array_relationships:
         table:
           schema: public
           name: order_detail
-event_triggers:
-  - name: order_created
-    definition:
-      enable_manual: true
-      insert:
-        columns: '*'
-    retry_conf:
-      num_retries: 3
-      interval_sec: 3
-      timeout_sec: 60
-    webhook: http://httpbin.org/get

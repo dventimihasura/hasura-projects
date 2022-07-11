@@ -1,1 +1,0 @@
-delete from product cascade;
