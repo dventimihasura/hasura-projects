@@ -115,7 +115,7 @@
       }
     }
   #+end_src
-**** TODO Remote Relationships
+**** TODO Remote Relationships                       :DOES_NOT_INVOLVE_DB:
 **** DONE Extend with Views
 - [ ] Add account_summary view and relationships
 - [ ] Query across table and view relationships
@@ -259,9 +259,9 @@
 **** DONE Filter query results / search queries
 **** DONE Sort query results
 **** DONE Distinct query results
-**** TODO Using multiple arguments
-**** TODO Multiple queries in a request
-**** TODO Using variables / aliases / fragments / directives
+**** TODO Using multiple arguments                   :DOES_NOT_INVOLVE_DB:
+**** TODO Multiple queries in a request              :DOES_NOT_INVOLVE_DB:
+**** TODO Using variables / aliases / fragments / directives :DOES_NOT_INVOLVE_DB:
 **** TODO Query performance
 *** Mutations
 **** DONE Insert
@@ -365,11 +365,11 @@
 * Remote Schemas
 *** Remote relationships
 ***** TODO To remote database
-***** TODO To Remote Schema
+***** TODO To Remote Schema                         :DOES_NOT_INVOLVE_DB:
 *** Authorization in remote schemas
-***** TODO Forwarding auth context to/from remote schemas
-***** TODO Remote schema permissions
-***** TODO Bypassing Hasura's auth for remote schemas
+***** TODO Forwarding auth context to/from remote schemas :DOES_NOT_INVOLVE_DB:
+***** TODO Remote schema permissions                :DOES_NOT_INVOLVE_DB:
+***** TODO Bypassing Hasura's auth for remote schemas :DOES_NOT_INVOLVE_DB:
 * Event Triggers
 *** Creating an Event Trigger
 ***** TODO Create an insert trigger
