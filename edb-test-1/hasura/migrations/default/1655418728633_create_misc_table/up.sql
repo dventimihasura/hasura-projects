@@ -1,4 +1,5 @@
 create table if not exists misc (
+  id uuid default gen_random_uuid() primary key,
   bigint_field bigint,
   bigserial_field bigserial,
   bit_field bit(8),
