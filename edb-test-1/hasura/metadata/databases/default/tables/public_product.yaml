@@ -9,3 +9,9 @@ array_relationships:
         table:
           schema: public
           name: order_detail
+computed_fields:
+  - name: sku
+    definition:
+      function:
+        schema: public
+        name: product_sku

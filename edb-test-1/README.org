@@ -162,16 +162,16 @@
 - [ ] Query product table with computed field
 
 
-  #+begin_src graphql
-    query MyQuery {
-      product {
-        id
-        name
-        price
-        sku
-      }
+#+begin_src graphql
+  query {
+    product(limit: 10) {
+      id
+      name
+      price
+      sku
     }
-  #+end_src
+  }
+#+end_src
 
 **** DONE Customize auto-generated fields
 - [ ] Change order.status to order.state for the GraphQL field name
