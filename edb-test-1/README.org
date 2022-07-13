@@ -278,86 +278,86 @@
 #+begin_src graphql
   mutation {
     insert_misc(objects: [
-      {
-        bigint_field: 1
-        bigserial_field: 1
-        boolean_field: true
-        box_field: "((0,0),(1,1))"
-        bytea_field: "\\xDEADBEEF"
-        character_field: "foo"
-        character_varying_field: "bar"
-        cidr_field: "192.168.100.128/25"
-        circle_field: "0,0,1"
-        date_field: "2022-01-01"
-        double_precision_field: 9673143120,
-        inet_field: "192.168.0.1/24"
-        integer_field: 1
-        interval_field: "'1 month ago'"
-        json_field: {}
-        jsonb_field: {}
-        line_field: "0,0,1,1"
-        lseg_field: "0,0,1,1"
-        macaddr_field: "08:00:2b:01:02:03"
-        macaddr8_field: "08:00:2b:01:02:03:04:05"
-        money_field: 52093.89
-        numeric_field: 10
-        path_field: "0,0,1,1,2,2,3,3,3,0,2,0,0,0"
-        pg_lsn_field: "FFFFFFFF/FFFFFFFF"
-        point_field: "0,0"
-        polygon_field: "0,0,1,0,1,1,0,1"
-        real_field: 3.14159
-        serial_field: 1
-        smallint_field: 1
-        smallserial_field: 1
-        text_field: "abc"
-        time_with_time_zone_field: "04:05:06 PST"
-        time_without_time_zone_field: "04:05:06"
-        timestamp_with_time_zone_field: "2022-01-01 04:05:06 PST"
-        timestamp_without_time_zone_field: "2022-01-01 04:05:06"
-        txid_snapshot_field: "566:566:"
-        uuid_field: "61a41be6-4eb4-45a5-bfb5-b68c20e9ccde"
-        xml_field: "<?xml version=\"1.0\"?><book><title>Manual</title><chapter>...</chapter></book>"
-      }
-    ]) {
+        {
+          bigint_field: 1
+          bigserial_field: 1
+          boolean_field: true
+          box_field: "((0,0),(1,1))"
+          bytea_field: "\\xDEADBEEF"
+          character_field: "foo"
+          character_varying_field: "bar"
+          cidr_field: "192.168.100.128/25"
+          circle_field: "0,0,1"
+          date_field: "2022-01-01"
+          double_precision_field: 9673143120,
+          inet_field: "192.168.0.1/24"
+          integer_field: 1
+          interval_field: "'1 month ago'"
+          json_field: {}
+          jsonb_field: {}
+          line_field: "0,0,1,1"
+          lseg_field: "0,0,1,1"
+          macaddr_field: "08:00:2b:01:02:03"
+          macaddr8_field: "08:00:2b:01:02:03:04:05"
+          money_field: 52093.89
+          numeric_field: 10
+          path_field: "0,0,1,1,2,2,3,3,3,0,2,0,0,0"
+          pg_lsn_field: "FFFFFFFF/FFFFFFFF"
+          point_field: "0,0"
+          polygon_field: "0,0,1,0,1,1,0,1"
+          real_field: 3.14159
+          serial_field: 1
+          smallint_field: 1
+          smallserial_field: 1
+          text_field: "abc"
+          time_with_time_zone_field: "04:05:06 PST"
+          time_without_time_zone_field: "04:05:06"
+          timestamp_with_time_zone_field: "2022-01-01 04:05:06 PST"
+          timestamp_without_time_zone_field: "2022-01-01 04:05:06"
+          txid_snapshot_field: "566:566:"
+          uuid_field: "61a41be6-4eb4-45a5-bfb5-b68c20e9ccde"
+          xml_field: "<?xml version=\"1.0\"?><book><title>Manual</title><chapter>...</chapter></book>"
+        }
+      ]) {
       returning {
-                bigint_field
-          bigserial_field
-          boolean_field
-          box_field
-          bytea_field
-          character_field
-          character_varying_field
-          cidr_field
-          circle_field
-          date_field
-          double_precision_field
-          inet_field
-          integer_field
-          interval_field
-          json_field
-          jsonb_field
-          line_field
-          lseg_field
-          macaddr_field
-          macaddr8_field
-          money_field
-          numeric_field
-          path_field
-          pg_lsn_field
-          point_field
-          polygon_field
-          real_field
-          serial_field
-          smallint_field
-          smallserial_field
-          text_field
-          time_with_time_zone_field
-          time_without_time_zone_field
-          timestamp_with_time_zone_field
-          timestamp_without_time_zone_field
-          txid_snapshot_field
-          uuid_field
-          xml_field
+        bigint_field
+        bigserial_field
+        boolean_field
+        box_field
+        bytea_field
+        character_field
+        character_varying_field
+        cidr_field
+        circle_field
+        date_field
+        double_precision_field
+        inet_field
+        integer_field
+        interval_field
+        json_field
+        jsonb_field
+        line_field
+        lseg_field
+        macaddr_field
+        macaddr8_field
+        money_field
+        numeric_field
+        path_field
+        pg_lsn_field
+        point_field
+        polygon_field
+        real_field
+        serial_field
+        smallint_field
+        smallserial_field
+        text_field
+        time_with_time_zone_field
+        time_without_time_zone_field
+        timestamp_with_time_zone_field
+        timestamp_without_time_zone_field
+        txid_snapshot_field
+        uuid_field
+        xml_field
       }
     }
   }
