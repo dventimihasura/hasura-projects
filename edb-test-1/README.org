@@ -173,7 +173,7 @@
   }
 #+end_src
 
-**** DONE Customize auto-generated fields
+**** DONE Customize auto-generated fields            :DOES_NOT_INVOLVE_DB:
 - [ ] Change order.status to order.state for the GraphQL field name
 
 **** DONE Data validations
@@ -198,7 +198,7 @@
   #+end_src
 
 **** DONE Using an existing database
-**** DONE Relay Schema
+**** DONE Relay Schema                               :DOES_NOT_INVOLVE_DB:
 - [ ] Turn on the Relay API in the Console
 
 
@@ -267,7 +267,7 @@
 **** DONE Insert
 **** TODO Upsert
 **** DONE Update
-**** DONE Delete
+**** TODO Delete
 **** TODO Multiple mutations in a request
 *** Subscriptions
 **** DONE Live queries
@@ -408,3 +408,65 @@
   #+begin_src sql
   DELETE FROM hdb_catalog.hdb_scheduled_events;
   #+end_src
+* Test Matrix
+|---------------------------------------------------------+------+---------+------------------------------------------|
+| Function                                                | Test | Outcome | Comments                                 |
+|---------------------------------------------------------+------+---------+------------------------------------------|
+| Remote Relationships                                    | NO   |         | Remote Schema connect to GraphQL servers |
+| Add Database                                            | YES  | SUCCESS |                                          |
+| Add tables and relationships in Console                 | YES  | SUCCESS |                                          |
+| Perform CRUD operations in API                          | YES  | SUCCESS |                                          |
+| Set up and use table relationships                      | YES  | SUCCESS |                                          |
+| Track views                                             | YES  | SUCCESS |                                          |
+| Manually add relationships to views                     | YES  | SUCCESS |                                          |
+| Query across view/table relationships                   | YES  | SUCCESS |                                          |
+| Track a function as a table and use                     | YES  | SUCCESS |                                          |
+| Track a function as a computed field and use            | YES  | SUCCESS |                                          |
+| Use defaults for field values                           | YES  | SUCCESS |                                          |
+| Use a native enum as a Hasura enum                      | YES  | SUCCESS |                                          |
+| Use a table as a Hasura enum                            | YES  | SUCCESS |                                          |
+| Customize fieldnames in API                             | YES  | SUCCESS | Doesn't actually involve the DB          |
+| Data validation with a database constraint              | YES  | SUCCESS |                                          |
+| Test using the Relay API                                | YES  | SUCCESS | Doesn't actually involve the DB          |
+| Simple object queries                                   | YES  | SUCCESS |                                          |
+| Nested object queries (involves JOINs)                  | YES  | SUCCESS |                                          |
+| Aggregation queries (count)                             | YES  | SUCCESS | We didn't test min, max, avg, etc.       |
+| Filter queries (involves WHERE)                         | YES  | SUCCESS |                                          |
+| Sort queries (involves ORDER BY)                        | YES  | SUCCESS |                                          |
+| Distinct queries (involves DISTINCT)                    | YES  | SUCCESS |                                          |
+| Limit queries (involves LIMIT)                          | YES  | SUCCESS |                                          |
+| Using multiple arguments                                | NO   |         | Doesn't actually involve the DB          |
+| Multiple queries in a request                           | NO   |         | Doesn't actually involve the DB          |
+| Multiple variables / aliases / fragments / directives   | NO   |         | Doesn't actually involve the DB          |
+| INSERT (see "Perform CRUD operations in API" above      | YES  | SUCCESS |                                          |
+| UPDATE (see "Perform CRUD operations in API" above      | YES  | SUCCESS |                                          |
+| DELETE (see "Perform CRUD operations in API" above      | TBD  |         | We forgot to test this!                  |
+| ON CONFLICT (an "upsert")                               | TBD  |         | We forgot to test this!                  |
+| Multiple mutations in a request                         | TBD  |         | We forgot to test this!                  |
+| Subscriptions (Live Queries)                            | TBD  | SUCCESS |                                          |
+| Test all Postgres/Hasura types (mutation, query)        | TBD  | SUCCESS |                                          |
+| Remote Database                                         | TBD  |         | We forgot to test this!                  |
+| Creating event triggers                                 | YES  | FAIL    | Needs a Hasura fix                       |
+| Creating a chron trigger                                | TBD  |         | Needs a Hasura fix                       |
+| Creatig a one-off scheduled event                       | TBD  |         | Needs a Hasura fix                       |
+| Cleaning up scheduled trigger data                      | TBD  |         | Needs a Hasura fix                       |
+| CI/CD: hasura metadata (apply, clear, reload, status)   | YES  | SUCCESS |                                          |
+| CI/CD: hasura migrate (apply, apply --down all, delete) | YES  | SUCCESS |                                          |
+
+*** NOTES
+
+- Test :: do we test this (YES, NO, TBD)
+- YES :: we should test this (and have)
+- NO :: we may not need to test this
+- TBD :: we should test this (but have not yet, possibly because we
+  cannot)
+- SUCCESS :: we tested it and it passed
+- FAIL :: we tested it and it did not pass
+- "We forgot to test this!" :: either we forgot, or we suspect we may
+  not need to (e.g. "Remote Database")
+- "Doesn't actually involve the DB" :: a Hasura function which we
+  believe shouldn't work differently on BDR, since the function
+  doesn't actually interact with the database.
+- "Needs a Hasura fix" :: either we have a FAIL test or a TBD test,
+  because of an identified gap in Hasura that needs to be fixed.
+
