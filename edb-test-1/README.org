@@ -256,24 +256,23 @@
     }
   }
 #+end_src
-**** TODO Filter query results / search queries
-**** TODO Sort query results
-**** TODO Distinct query results
+**** DONE Filter query results / search queries
+**** DONE Sort query results
+**** DONE Distinct query results
 **** TODO Using multiple arguments
 **** TODO Multiple queries in a request
 **** TODO Using variables / aliases / fragments / directives
 **** TODO Query performance
 *** Mutations
-**** TODO Insert
+**** DONE Insert
 **** TODO Upsert
-**** TODO Update
-**** TODO Delete
+**** DONE Update
+**** DONE Delete
 **** TODO Multiple mutations in a request
 *** Subscriptions
-**** TODO Live queries
-**** TODO Streaming subscriptions
+**** DONE Live queries
 *** Supported Postgres types
-***** TODO Perform inserts on the ~misc~ table.
+***** DONE Perform inserts on the ~misc~ table.
 
 #+begin_src graphql
   mutation {
@@ -365,7 +364,7 @@
 
 * Remote Schemas
 *** Remote relationships
-***** DONE To remote database
+***** TODO To remote database
 ***** TODO To Remote Schema
 *** Authorization in remote schemas
 ***** TODO Forwarding auth context to/from remote schemas
@@ -373,8 +372,8 @@
 ***** TODO Bypassing Hasura's auth for remote schemas
 * Event Triggers
 *** Creating an Event Trigger
-***** DONE Create an insert trigger
-***** DONE Create an update trigger
+***** TODO Create an insert trigger
+***** TODO Create an update trigger
 - [ ] Perform a mutation to update an order
 - [ ] Update an order from the Console
 
@@ -391,7 +390,7 @@
 - [ ] Check the events logs
 * Scheduled Triggers
 *** Creating a chron trigger
-***** DONE Create a chron trigger
+***** TODO Create a chron trigger
 - [ ] Allow time to pass
 - [ ] Check the events logs
 *** Creating a one-off scheduled event
