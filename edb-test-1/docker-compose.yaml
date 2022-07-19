@@ -1,7 +1,9 @@
 version: '3.6'
 services:
   postgres:
-    image: postgres:12
+    # image: postgres:14
+    build: .
+    command: ["postgres", "-c", "wal_level=logical"]
     restart: always
     ports:
       - "5432:5432"
