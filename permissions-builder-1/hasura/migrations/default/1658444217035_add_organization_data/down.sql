@@ -1,0 +1,12 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- insert into ORGANIZATION (name) values ('Watsica and Sons');
+-- insert into ORGANIZATION (name) values ('Satterfield, Ryan and Carroll');
+-- insert into ORGANIZATION (name) values ('Sauer-Robel');
+-- insert into ORGANIZATION (name) values ('Cummerata, Kuvalis and Fritsch');
+-- insert into ORGANIZATION (name) values ('Dare, Reinger and Rosenbaum');
+-- insert into ORGANIZATION (name) values ('Schinner-Dach');
+-- insert into ORGANIZATION (name) values ('Ullrich and Sons');
+-- insert into ORGANIZATION (name) values ('Collins and Sons');
+-- insert into ORGANIZATION (name) values ('Barrows LLC');
+-- insert into ORGANIZATION (name) values ('Von, Labadie and Beer');
