@@ -16,3 +16,42 @@ array_relationships:
         table:
           schema: public
           name: order_detail
+insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+      filter: {}
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+      filter: {}
+      check: {}
+delete_permissions:
+  - role: user
+    permission:
+      backend_only: false
+      filter: {}
