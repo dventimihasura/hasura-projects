@@ -1,0 +1,3 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- with sample as (select project.id as project_id, organization.id as organization_id from project, organization order by random() limit 100) update project set organization_id = sample.organization_id from sample where project.id = sample.project_id;
