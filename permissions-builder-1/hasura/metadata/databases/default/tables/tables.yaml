@@ -2,5 +2,6 @@
 - "!include public_organization.yaml"
 - "!include public_permission.yaml"
 - "!include public_project.yaml"
+- "!include public_timesheet.yaml"
 - "!include public_user.yaml"
 - "!include public_user_permission.yaml"
