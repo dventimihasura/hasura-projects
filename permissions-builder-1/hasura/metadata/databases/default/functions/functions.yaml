@@ -1,0 +1,3 @@
+- "!include public_get_assigned_projects.yaml"
+- "!include public_get_assigned_users.yaml"
+- "!include public_get_unassigned_projects.yaml"
