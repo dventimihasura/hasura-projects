@@ -1,0 +1,167 @@
+<!-- -*- mode: markdown; -*- -->
+
+# What #
+
+We model a dynamic permissions builder where permissions can be
+granted on an as-needed basis, where different users can be allowed
+to perform different operations on resources with fine-grained control
+and where this can be managed through an application using the API
+rather than through data modeling in Hasura Console.  Essentially,
+this extends the idea of Role-Based Access Control (RBAC).
+
+# Why #
+
+Customers and potential customers have asked for guidance on how to
+implement this in Hasura.  This is a Proof-Of-Concept (POC) intended
+to explore its feasibility and to suggest possible product
+improvements. 
+
+# How #
+
+We model a simple application involving people working at
+organizations, assigned to projects at those organizations, and
+submitting timesheets recording billable hours attributed to those
+projects.  Domain-specific named permissions are defined and are given
+to or revoked from users and serve as tokens or identifiers.  The
+necessary code and/or configuration segments which implement those
+permissions are invoked according to the token or identifier for the
+permission.  The is implemented in two alternative ways.
+
+1. PostgreSQL [Row Security Policies](https://www.postgresql.org/docs/current/ddl-rowsecurity.html)
+
+2. Hasura [Authorization](https://hasura.io/docs/latest/auth/authorization/index/)
+
+# QuickStart #
+
+1. Clone this GitHub repository:  https://github.com/dventimihasura/hasura-projects
+
+2. Open a terminal in the `permissions-builder-1/hasura`
+   sub-directory.
+
+3. Launch the Docker Compose services.
+
+	```shell
+	docker-compose up -d
+	```
+
+4. Create the Hasura application.
+
+	```shell
+	hasura metadata deploy
+	```
+
+5. Launch the Hasura Console.
+
+	```shell
+	hasura console
+	```
+
+7. Connect a GraphQL Client to http://localhost:8081/v1/graphql.  Good
+   choices are:
+   
+   * [Altair](https://chrome.google.com/webstore/detail/altair-graphql-client/flnheeellpciglgpaodhkhmapeljopja)
+   * [Playground](https://chrome.google.com/webstore/detail/graphql-playground-for-ch/kjhjcgclphafojaeeickcokfbhlegecd)
+   
+8. In the Hasura Console API tab run a query to find a `user` that has
+   an `assignment` for a `project` and, save the `user.id` for one of the
+   entries in the result and note the `user.name`.
+   
+   ```graphql
+   query MyQuery {
+     user(where: {assignments: {id: {_is_null: false}}}, limit: 10) {
+	   id
+	   name
+	   assignments {
+	     project {
+           id
+           name
+		 }
+	   }
+     }
+   }
+   ```
+
+   Example:
+   
+   * `user.id`: `acadc590-1480-4cad-a21a-4da3f19405ab`
+   * `user.assignments[0].project.id`:  `d73c7ba9-aca7-402c-ad45-7126ee44ddc9`
+
+9. In Altair (for example) run a mutation to update the name of this
+   project as this user.  To assume the identity of this user, set the
+   `x-hasura-user-id` header.
+   
+   `x-hasura-user-id: acadc590-1480-4cad-a21a-4da3f19405ab`
+
+   ```graphql
+   mutation MyMutation {
+     update_project_by_pk(pk_columns: {id: "d73c7ba9-aca7-402c-ad45-7126ee44ddc9"}, _set: {name: "test"}) {
+	   name
+	   id
+     }
+   }
+   ```
+   
+   The expected result is a null response and no data updated.
+   
+   ```json
+   {
+     "data": {
+	   "update_project_by_pk": null
+     }
+   }
+   ```
+
+10. In the Hasura Console API tab run a query to find a the `id` of
+   the `permission` token with `name` `edit_assigned_projects`, and
+   save the `permission.id` value.
+
+   ```graphql
+   query MyQuery {
+     permission(where: {name: {_eq: "edit_assigned_projects"}}) {
+	   id
+	   name
+     }
+   }
+   ```
+
+	Example: 
+	
+	* `permission.id`: `4b1f263f-b7ac-44b1-9e05-836b86ce8db3`
+	
+11. In the Hasura Console API tab run a mutation to insert an entry
+    into `user_permission` giving this user that permission.
+	
+	```graphql
+	mutation MyMutation {
+	  insert_user_permission_one(object: {permission_id: "4b1f263f-b7ac-44b1-9e05-836b86ce8db3", user_id: "acadc590-1480-4cad-a21a-4da3f19405ab"}) {
+	    id
+	  }
+    }
+	```
+
+12. In Altair (for example) re-run the mutation to update the name of this
+   project as this user.
+
+   `x-hasura-user-id: acadc590-1480-4cad-a21a-4da3f19405ab`
+
+   ```graphql
+   mutation MyMutation {
+     update_project_by_pk(pk_columns: {id: "d73c7ba9-aca7-402c-ad45-7126ee44ddc9"}, _set: {name: "test"}) {
+	   name
+	   id
+     }
+   }
+   ```
+
+   The expected result is a valid response and the data updated.
+   
+   ```json
+   {
+     "data": {
+	   "update_project_by_pk": {
+	     "name": "test",
+		 "id": "d73c7ba9-aca7-402c-ad45-7126ee44ddc9"
+	   }
+     }
+   }
+   ```
