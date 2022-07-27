@@ -69,14 +69,14 @@ permission.  The is implemented in two alternative ways.
    ```graphql
    query MyQuery {
      user(where: {assignments: {id: {_is_null: false}}}, limit: 10) {
-	   id
-	   name
-	   assignments {
-	     project {
+       id
+       name
+       assignments {
+         project {
            id
            name
-		 }
-	   }
+         }
+       }
      }
    }
    ```
@@ -95,8 +95,8 @@ permission.  The is implemented in two alternative ways.
    ```graphql
    mutation MyMutation {
      update_project_by_pk(pk_columns: {id: "d73c7ba9-aca7-402c-ad45-7126ee44ddc9"}, _set: {name: "test"}) {
-	   name
-	   id
+       name
+       id
      }
    }
    ```
@@ -106,7 +106,7 @@ permission.  The is implemented in two alternative ways.
    ```json
    {
      "data": {
-	   "update_project_by_pk": null
+       "update_project_by_pk": null
      }
    }
    ```
@@ -118,8 +118,8 @@ permission.  The is implemented in two alternative ways.
    ```graphql
    query MyQuery {
      permission(where: {name: {_eq: "edit_assigned_projects"}}) {
-	   id
-	   name
+       id
+       name
      }
    }
    ```
@@ -132,10 +132,10 @@ permission.  The is implemented in two alternative ways.
     into `user_permission` giving this user that permission.
 	
 	```graphql
-	mutation MyMutation {
-	  insert_user_permission_one(object: {permission_id: "4b1f263f-b7ac-44b1-9e05-836b86ce8db3", user_id: "acadc590-1480-4cad-a21a-4da3f19405ab"}) {
-	    id
-	  }
+    mutation MyMutation {
+      insert_user_permission_one(object: {permission_id: "4b1f263f-b7ac-44b1-9e05-836b86ce8db3", user_id: "acadc590-1480-4cad-a21a-4da3f19405ab"}) {
+        id
+      }
     }
 	```
 
@@ -147,8 +147,8 @@ permission.  The is implemented in two alternative ways.
    ```graphql
    mutation MyMutation {
      update_project_by_pk(pk_columns: {id: "d73c7ba9-aca7-402c-ad45-7126ee44ddc9"}, _set: {name: "test"}) {
-	   name
-	   id
+       name
+       id
      }
    }
    ```
@@ -158,10 +158,10 @@ permission.  The is implemented in two alternative ways.
    ```json
    {
      "data": {
-	   "update_project_by_pk": {
-	     "name": "test",
-		 "id": "d73c7ba9-aca7-402c-ad45-7126ee44ddc9"
-	   }
+       "update_project_by_pk": {
+         "name": "test",
+         "id": "d73c7ba9-aca7-402c-ad45-7126ee44ddc9"
+       }
      }
    }
    ```
