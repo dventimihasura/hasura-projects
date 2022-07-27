@@ -13,3 +13,33 @@ array_relationships:
         table:
           schema: public
           name: assignment
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - name
+        - id
+        - organization_id
+      filter: {}
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - name
+      filter:
+        _and:
+          - assignments:
+              user_id:
+                _eq: X-Hasura-User-Id
+          - _exists:
+              _where:
+                _and:
+                  - user_id:
+                      _eq: X-Hasura-User-Id
+                  - permission:
+                      name:
+                        _eq: edit_assigned_projects
+              _table:
+                schema: public
+                name: user_permission
+      check: null
