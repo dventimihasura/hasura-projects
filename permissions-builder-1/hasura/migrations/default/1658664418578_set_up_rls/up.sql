@@ -38,7 +38,7 @@ create policy delete_assigned_projects on project for delete using (
 	    on true
 	    and user_permission.permission_id = permission.id
 	    and user_id = (current_setting('hasura.user')::jsonb->>'x-hasura-user-id')::uuid
-	    and permission.name = 'edit_assigned_projects'
+	    and permission.name = 'delete_assigned_projects'
   )
   and
   exists (
