@@ -67,7 +67,7 @@ query PredutPulseRate {
 
 # Further Information #
 
-PostgresML installs several example projects, with data, trained
+[PostgresML](https://postgresml.org/) installs several example projects, with data, trained
 models, and model deployments.
 
 1. **Exercise vs Physiology**: regression
@@ -80,7 +80,7 @@ Any of these are available for exploration, but this Proof-Of-Concept
 (POC) focuses on the **Exercise vs Physiology** project.  PostgresML
 installs its API functions including `pgml.train` and `pgml.predict`
 into the `pgml` schema, but these need to be wrapped with additional
-functions that satisfy Hasura's requirements for trackable functions.
+functions that satisfy Hasura's requirements for [trackable functions](https://hasura.io/docs/latest/schema/postgres/custom-functions/#pg-supported-sql-functions).
 In this POC we 
 
 ```sql
