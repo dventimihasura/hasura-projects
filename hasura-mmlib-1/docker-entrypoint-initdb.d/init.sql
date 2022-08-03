@@ -108,7 +108,11 @@ create or replace view linnerud as
     eval.*
     from eval;
 
-create function pulse_rate(chins real, situps real, jumps real)
+drop table if exists pulse;
+
+create table if not exists pulse (rate double precision);
+
+create or replace function pulse_rate(chins real, situps real, jumps real)
   returns setof pulse
   stable
 as $$
