@@ -119,4 +119,4 @@ create or replace function pulse_rate(chins real, situps real, jumps real)
   stable
 as $$
   select row((pgml.predict_joint('Exercise vs Physiology', ARRAY[chins, situps, jumps]))[3])
-  $$ language sql
+  $$ language sql;
