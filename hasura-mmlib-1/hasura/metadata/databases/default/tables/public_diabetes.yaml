@@ -1,0 +1,10 @@
+table:
+  name: diabetes
+  schema: public
+configuration:
+  column_config:
+    ?column?:
+      custom_name: _column_
+  custom_column_names:
+    ?column?: _column_
+  custom_root_fields: {}

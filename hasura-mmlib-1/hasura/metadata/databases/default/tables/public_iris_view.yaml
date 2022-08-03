@@ -1,0 +1,3 @@
+table:
+  name: iris_view
+  schema: public

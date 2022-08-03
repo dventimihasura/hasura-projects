@@ -1,1 +1,7 @@
-[]
+- "!include public_breast_cancer.yaml"
+- "!include public_diabetes.yaml"
+- "!include public_digits.yaml"
+- "!include public_iris.yaml"
+- "!include public_iris_view.yaml"
+- "!include public_linnerud.yaml"
+- "!include public_pulse.yaml"

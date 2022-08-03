@@ -1,0 +1,97 @@
+table:
+  name: breast_cancer
+  schema: public
+configuration:
+  column_config:
+    area error:
+      custom_name: area_error
+    compactness error:
+      custom_name: compactness_error
+    concave points error:
+      custom_name: concave_points_error
+    concavity error:
+      custom_name: concavity_error
+    fractal dimension error:
+      custom_name: fractal_dimension_error
+    mean area:
+      custom_name: mean_area
+    mean compactness:
+      custom_name: mean_compactness
+    mean concave points:
+      custom_name: mean_concave_points
+    mean concavity:
+      custom_name: mean_concavity
+    mean fractal dimension:
+      custom_name: mean_fractal_dimension
+    mean perimeter:
+      custom_name: mean_perimeter
+    mean radius:
+      custom_name: mean_radius
+    mean smoothness:
+      custom_name: mean_smoothness
+    mean symmetry:
+      custom_name: mean_symmetry
+    mean texture:
+      custom_name: mean_texture
+    perimeter error:
+      custom_name: perimeter_error
+    radius error:
+      custom_name: radius_error
+    smoothness error:
+      custom_name: smoothness_error
+    symmetry error:
+      custom_name: symmetry_error
+    texture error:
+      custom_name: texture_error
+    worst area:
+      custom_name: worst_area
+    worst compactness:
+      custom_name: worst_compactness
+    worst concave points:
+      custom_name: worst_concave_points
+    worst concavity:
+      custom_name: worst_concavity
+    worst fractal dimension:
+      custom_name: worst_fractal_dimension
+    worst perimeter:
+      custom_name: worst_perimeter
+    worst radius:
+      custom_name: worst_radius
+    worst smoothness:
+      custom_name: worst_smoothness
+    worst symmetry:
+      custom_name: worst_symmetry
+    worst texture:
+      custom_name: worst_texture
+  custom_column_names:
+    area error: area_error
+    compactness error: compactness_error
+    concave points error: concave_points_error
+    concavity error: concavity_error
+    fractal dimension error: fractal_dimension_error
+    mean area: mean_area
+    mean compactness: mean_compactness
+    mean concave points: mean_concave_points
+    mean concavity: mean_concavity
+    mean fractal dimension: mean_fractal_dimension
+    mean perimeter: mean_perimeter
+    mean radius: mean_radius
+    mean smoothness: mean_smoothness
+    mean symmetry: mean_symmetry
+    mean texture: mean_texture
+    perimeter error: perimeter_error
+    radius error: radius_error
+    smoothness error: smoothness_error
+    symmetry error: symmetry_error
+    texture error: texture_error
+    worst area: worst_area
+    worst compactness: worst_compactness
+    worst concave points: worst_concave_points
+    worst concavity: worst_concavity
+    worst fractal dimension: worst_fractal_dimension
+    worst perimeter: worst_perimeter
+    worst radius: worst_radius
+    worst smoothness: worst_smoothness
+    worst symmetry: worst_symmetry
+    worst texture: worst_texture
+  custom_root_fields: {}
