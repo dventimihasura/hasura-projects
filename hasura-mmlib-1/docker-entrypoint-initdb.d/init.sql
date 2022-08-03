@@ -108,6 +108,8 @@ create or replace view linnerud as
     eval.*
     from eval;
 
+-- Set up a function that Hasura can use.
+
 drop table if exists pulse;
 
 create table if not exists pulse (rate double precision);
