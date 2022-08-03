@@ -41,6 +41,30 @@ hasura metadata reload
 hasura console
 ```
 
+6. Use the GraphQL API to query for `pulse_rate` predictions based
+   exercise factors `chins`, `situps`, `situps`, with JSON output
+   illustrating the expected pulse rate for this individual.
+   
+```graphql
+query PredutPulseRate {
+  pulse_rate(args: {chins: 50, jumps: 50, situps: 50}) {
+    rate
+  }
+}
+```
+
+```json
+{
+  "data": {
+    "pulse_rate": [
+      {
+        "rate": 55.670792260952766
+      }
+    ]
+  }
+}
+```
+
 # Further Information #
 
 PostgresML installs several example projects, with data, trained
