@@ -1,5 +1,3 @@
-drop materialized view if exists asset_with_traits_as_array;
-
 drop view if exists asset_with_traits_as_array;
 
 create materialized view if not exists asset_with_traits_as_array as
