@@ -1,4 +1,6 @@
 - "!include public_asset_denormed.yaml"
 - "!include public_asset_denormed_2.yaml"
 - "!include public_asset_with_traits.yaml"
+- "!include public_asset_with_traits_as_jsonb_table.yaml"
+- "!include public_asset_with_traits_as_jsonb_view.yaml"
 - "!include public_event.yaml"
