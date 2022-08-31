@@ -1,0 +1,7 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- create or replace function array_to_json_immutable(anyarray)
+--   returns json
+--   language sql
+--   immutable
+--   as $$select array_to_json($1)$$;
