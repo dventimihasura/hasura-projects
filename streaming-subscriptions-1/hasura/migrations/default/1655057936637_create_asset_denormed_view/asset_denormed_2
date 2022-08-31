@@ -1,0 +1,1879 @@
+\timing
+select * from person;
+select * from person;
+select * from person;
+select * from person;
+select * from person;
+select * from person;
+explain analyze select * from person;
+select * from person;
+select * from pg_state_activity;
+select * from pg_stat_activity;
+select pid, state, usename, query, query_start 
+from pg_stat_activity 
+where pid in (
+  select pid from pg_locks l 
+  join pg_class t on l.relation = t.oid 
+  and t.relkind = 'r' 
+  where t.relname = 'vehicle'
+);
+\x
+select pid, state, usename, query, query_start 
+from pg_stat_activity 
+where pid in (
+  select pid from pg_locks l 
+  join pg_class t on l.relation = t.oid 
+  and t.relkind = 'r' 
+  where t.relname = 'vehicle'
+);
+select pg_backend_pid();
+select pid, state, usename, query, query_start 
+from pg_stat_activity 
+where pid in (
+  select pid from pg_locks l 
+  join pg_class t on l.relation = t.oid 
+  and t.relkind = 'r' 
+  where t.relname = 'vehicle'
+);
+SELECT blocked_locks.pid     AS blocked_pid,
+         blocked_activity.usename  AS blocked_user,
+         blocking_locks.pid     AS blocking_pid,
+         blocking_activity.usename AS blocking_user,
+         blocked_activity.query    AS blocked_statement,
+         blocking_activity.query   AS current_statement_in_blocking_process,
+         blocked_activity.application_name AS blocked_application,
+         blocking_activity.application_name AS blocking_application
+   FROM  pg_catalog.pg_locks         blocked_locks
+    JOIN pg_catalog.pg_stat_activity blocked_activity  ON blocked_activity.pid = blocked_locks.pid
+    JOIN pg_catalog.pg_locks         blocking_locks 
+        ON blocking_locks.locktype = blocked_locks.locktype
+        AND blocking_locks.DATABASE IS NOT DISTINCT FROM blocked_locks.DATABASE
+        AND blocking_locks.relation IS NOT DISTINCT FROM blocked_locks.relation
+        AND blocking_locks.page IS NOT DISTINCT FROM blocked_locks.page
+        AND blocking_locks.tuple IS NOT DISTINCT FROM blocked_locks.tuple
+        AND blocking_locks.virtualxid IS NOT DISTINCT FROM blocked_locks.virtualxid
+        AND blocking_locks.transactionid IS NOT DISTINCT FROM blocked_locks.transactionid
+        AND blocking_locks.classid IS NOT DISTINCT FROM blocked_locks.classid
+        AND blocking_locks.objid IS NOT DISTINCT FROM blocked_locks.objid
+        AND blocking_locks.objsubid IS NOT DISTINCT FROM blocked_locks.objsubid
+        AND blocking_locks.pid != blocked_locks.pid
+    JOIN pg_catalog.pg_stat_activity blocking_activity ON blocking_activity.pid = blocking_locks.pid
+   WHERE NOT blocked_locks.GRANTED;
+SELECT blocked_locks.pid     AS blocked_pid,
+         blocked_activity.usename  AS blocked_user,
+         blocking_locks.pid     AS blocking_pid,
+         blocking_activity.usename AS blocking_user,
+         blocked_activity.query    AS blocked_statement,
+         blocking_activity.query   AS current_statement_in_blocking_process,
+         blocked_activity.application_name AS blocked_application,
+         blocking_activity.application_name AS blocking_application
+   FROM  pg_catalog.pg_locks         blocked_locks
+    JOIN pg_catalog.pg_stat_activity blocked_activity  ON blocked_activity.pid = blocked_locks.pid
+    JOIN pg_catalog.pg_locks         blocking_locks 
+        ON blocking_locks.locktype = blocked_locks.locktype
+        AND blocking_locks.DATABASE IS NOT DISTINCT FROM blocked_locks.DATABASE
+        AND blocking_locks.relation IS NOT DISTINCT FROM blocked_locks.relation
+        AND blocking_locks.page IS NOT DISTINCT FROM blocked_locks.page
+        AND blocking_locks.tuple IS NOT DISTINCT FROM blocked_locks.tuple
+        AND blocking_locks.virtualxid IS NOT DISTINCT FROM blocked_locks.virtualxid
+        AND blocking_locks.transactionid IS NOT DISTINCT FROM blocked_locks.transactionid
+        AND blocking_locks.classid IS NOT DISTINCT FROM blocked_locks.classid
+        AND blocking_locks.objid IS NOT DISTINCT FROM blocked_locks.objid
+        AND blocking_locks.objsubid IS NOT DISTINCT FROM blocked_locks.objsubid
+        AND blocking_locks.pid != blocked_locks.pid
+    JOIN pg_catalog.pg_stat_activity blocking_activity ON blocking_activity.pid = blocking_locks.pid
+   WHERE NOT blocked_locks.GRANTED;
+SELECT blocked_locks.pid     AS blocked_pid,
+         blocked_activity.usename  AS blocked_user,
+         blocking_locks.pid     AS blocking_pid,
+         blocking_activity.usename AS blocking_user,
+         blocked_activity.query    AS blocked_statement,
+         blocking_activity.query   AS current_statement_in_blocking_process,
+         blocked_activity.application_name AS blocked_application,
+         blocking_activity.application_name AS blocking_application
+   FROM  pg_catalog.pg_locks         blocked_locks
+    JOIN pg_catalog.pg_stat_activity blocked_activity  ON blocked_activity.pid = blocked_locks.pid
+    JOIN pg_catalog.pg_locks         blocking_locks 
+        ON blocking_locks.locktype = blocked_locks.locktype
+        AND blocking_locks.DATABASE IS NOT DISTINCT FROM blocked_locks.DATABASE
+        AND blocking_locks.relation IS NOT DISTINCT FROM blocked_locks.relation
+        AND blocking_locks.page IS NOT DISTINCT FROM blocked_locks.page
+        AND blocking_locks.tuple IS NOT DISTINCT FROM blocked_locks.tuple
+        AND blocking_locks.virtualxid IS NOT DISTINCT FROM blocked_locks.virtualxid
+        AND blocking_locks.transactionid IS NOT DISTINCT FROM blocked_locks.transactionid
+        AND blocking_locks.classid IS NOT DISTINCT FROM blocked_locks.classid
+        AND blocking_locks.objid IS NOT DISTINCT FROM blocked_locks.objid
+        AND blocking_locks.objsubid IS NOT DISTINCT FROM blocked_locks.objsubid
+        AND blocking_locks.pid != blocked_locks.pid
+    JOIN pg_catalog.pg_stat_activity blocking_activity ON blocking_activity.pid = blocking_locks.pid
+   WHERE NOT blocked_locks.GRANTED;
+select pid, state, usename, query, query_start 
+from pg_stat_activity 
+where pid in (
+  select pid from pg_locks l 
+  join pg_class t on l.relation = t.oid 
+  and t.relkind = 'r' 
+  where t.relname = 'vehicle'
+);
+show deadlock_timeout
+;
+\x
+\d pg_locks
+select * from pg_locks;
+select * from pg_stat_activity;
+select pid, state, usename, query, query_start 
+from pg_stat_activity 
+where pid in (
+  select pid from pg_locks l 
+  join pg_class t on l.relation = t.oid 
+  and t.relkind = 'r' 
+  where t.relname = 'vehicle'
+);
+select pid, state, usename, query, query_start 
+from pg_stat_activity 
+where pid in (
+  select pid from pg_locks l 
+  join pg_class t on l.relation = t.oid 
+  and t.relkind = 'r' 
+  where t.relname = 'vehicle'
+);
+\x
+select pid, state, usename, query, query_start 
+from pg_stat_activity 
+where pid in (
+  select pid from pg_locks l 
+  join pg_class t on l.relation = t.oid 
+  and t.relkind = 'r' 
+  where t.relname = 'vehicle'
+);
+\q
+\d
+\h lock
+lock table only vehicle in access exclusive mode nowait;
+begin;
+lock table only vehicle in access exclusive mode nowait;
+rollback;
+\?
+\dy
+\?
+\d
+\d vehicle
+select * from pg_available_extensions;
+create or replace function notice_ddl() returns event_trigger as $$
+begin
+raise info '%', session_user || ' ran '||tg_tag||' '||current_query();
+end;
+$$ language plpgsql;
+create event trigger etg on ddl_command_start execute procedure notice_ddl();
+create table so(i int);
+drop table so;
+create table so(i int);
+raise notice 'Hello, World!';
+create or replace function notice_ddl() returns event_trigger as $$
+begin
+raise notice '%', session_user || ' ran '||tg_tag||' '||current_query();
+end;
+$$ language plpgsql;
+\d
+drop table so;
+create or replace function notice_ddl() returns event_trigger as $$
+begin
+raise notice '%', session_user || ' ran '||tg_tag||' '||current_query();
+end;
+$$ language plpgsql;
+create table so(i int);
+raise notice 'Hello, World!';
+raise notice 'Hello, World!';
+raise notice 'Hello';
+\h raise
+select version();
+RAISE NOTICE 'Calling cs_create_job(%)', v_job_id;
+drop event trigger etg on ddl_command_start;
+\h drop event trigger
+drop event trigger if exists etg;
+create event trigger etg on ddl_command_start execute procedure notice_ddl();
+create table so(i int);
+drop table so;
+create table so(i int);
+drop table so;
+create or replace function notice_ddl() returns event_trigger as $$
+begin
+raise debug '%', session_user || ' ran '||tg_tag||' '||current_query();
+end;
+$$ language plpgsql;
+create table so(i int);
+drop table so;
+create or replace function notice_ddl() returns event_trigger as $$
+begin
+raise warning '%', session_user || ' ran '||tg_tag||' '||current_query();
+end;
+$$ language plpgsql;
+create table so(i int);
+drop table so;
+lock table only vehicle in access exclusive mode nowait;
+begin
+;
+lock table only vehicle in access exclusive mode nowait;
+rollback;
+begin;
+lock table only vehicle in access exclusive mode nowait;
+rollback;
+\qrollback;
+\q
+show wal_level;
+set wal_level = logica;
+set wal_level = logical;
+\q
+show wal_level;
+\q
+\q
+select * from pg_stat_activity;
+select application_name, count(1) from pg_stat_activity group by application_name;
+select application_name, count(1) from pg_stat_activity group by application_name;
+\conninfo
+select application_name, count(1) from pg_stat_activity group by application_name;
+select application_name, count(1) from pg_stat_activity group by application_name;
+select application_name, count(1) from pg_stat_activity group by application_name;
+select application_name, count(1) from pg_stat_activity group by application_name;
+select application_name, count(1) from pg_stat_activity group by application_name;
+select application_name, count(1) from pg_stat_activity group by application_name;
+select application_name, count(1) from pg_stat_activity group by application_name;
+\q
+\q
+\q
+\q
+select application_name, count(1) from pg_stat_activity group by application_name;
+select application_name, count(1) from pg_stat_activity group by application_name;
+\conninfo
+\q
+\d
+\l
+\d
+\dt bdrdb.*
+\dt bdrdb.*
+\d
+\d
+select * from pg_stat_user_tables limit 1;
+select * from pg_stat_user_tables;
+\d
+\d
+select * from pg_stat_user_tables;
+\d pg_statistic
+\d pg_class
+\d pg_stats
+select * from pg_stats;
+EXPLAIN (ANALYZE, COSTS, VERBOSE, BUFFERS, FORMAT JSON)
+SELECT
+  coalesce(
+    json_agg(
+      "root"
+      ORDER BY
+        "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    ),
+    '[]'
+  ) AS "root"
+FROM
+  (
+    SELECT
+      row_to_json(
+        (
+          SELECT
+            "_8_e"
+          FROM
+            (
+              SELECT
+                "_7_root.or.referral"."referral" AS "referral"
+            ) AS "_8_e"
+        )
+      ) AS "root",
+      "_7_root.or.referral"."root.or.referral.pg.lastActionDate" AS "root.or.referral.pg.lastActionDate"
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          "public"."committeeReferralSearch"(('') :: text) AS "_0_committeeReferralSearch"
+        WHERE
+          ('true')
+      ) AS "_1_root.base"
+      LEFT OUTER JOIN LATERAL (
+        SELECT
+          row_to_json(
+            (
+              SELECT
+                "_6_e"
+              FROM
+                (
+                  SELECT
+                    "_2_root.or.referral.base"."id" AS "id",
+                    "_2_root.or.referral.base"."lastActionDate" AS "lastActionDate",
+                    "_5_root.or.referral.or.bill"."bill" AS "bill"
+                ) AS "_6_e"
+            )
+          ) AS "referral",
+          "_2_root.or.referral.base"."lastActionDate" AS "root.or.referral.pg.lastActionDate"
+        FROM
+          (
+            SELECT
+              *
+            FROM
+              "public"."CommitteeReferral"
+            WHERE
+              (
+                ("_1_root.base"."committee_referral_id") = ("id")
+              )
+          ) AS "_2_root.or.referral.base"
+          LEFT OUTER JOIN LATERAL (
+            SELECT
+              row_to_json(
+                (
+                  SELECT
+                    "_4_e"
+                  FROM
+                    (
+                      SELECT
+                        "_3_root.or.referral.or.bill.base"."id" AS "id",
+                        "_3_root.or.referral.or.bill.base"."billNumber" AS "billNumber"
+                    ) AS "_4_e"
+                )
+              ) AS "bill"
+            FROM
+              (
+                SELECT
+                  *
+                FROM
+                  "public"."Bill"
+                WHERE
+                  (("_2_root.or.referral.base"."bill_id") = ("id"))
+              ) AS "_3_root.or.referral.or.bill.base"
+          ) AS "_5_root.or.referral.or.bill" ON ('true')
+      ) AS "_7_root.or.referral" ON ('true')
+    ORDER BY
+      "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    LIMIT
+      10 OFFSET 0
+  ) AS "_9_root"
+;
+;
+\dv
+\sv CommitteeReferral;
+\sv "CommitteeReferral"
+SELECT
+  coalesce(
+    json_agg(
+      "root"
+      ORDER BY
+        "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    ),
+    '[]'
+  ) AS "root"
+FROM
+  (
+    SELECT
+      row_to_json(
+        (
+          SELECT
+            "_8_e"
+          FROM
+            (
+              SELECT
+                "_7_root.or.referral"."referral" AS "referral"
+            ) AS "_8_e"
+        )
+      ) AS "root",
+      "_7_root.or.referral"."root.or.referral.pg.lastActionDate" AS "root.or.referral.pg.lastActionDate"
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          "public"."committeeReferralSearch"(('') :: text) AS "_0_committeeReferralSearch"
+        WHERE
+          ('true')
+      ) AS "_1_root.base"
+      LEFT OUTER JOIN LATERAL (
+        SELECT
+          row_to_json(
+            (
+              SELECT
+                "_6_e"
+              FROM
+                (
+                  SELECT
+                    "_2_root.or.referral.base"."id" AS "id",
+                    "_2_root.or.referral.base"."lastActionDate" AS "lastActionDate",
+                    "_5_root.or.referral.or.bill"."bill" AS "bill"
+                ) AS "_6_e"
+            )
+          ) AS "referral",
+          "_2_root.or.referral.base"."lastActionDate" AS "root.or.referral.pg.lastActionDate"
+        FROM
+          (
+            SELECT
+              *
+            FROM
+              "public"."CommitteeReferral"
+            WHERE
+              (
+                ("_1_root.base"."committee_referral_id") = ("id")
+              )
+          ) AS "_2_root.or.referral.base"
+          LEFT OUTER JOIN LATERAL (
+            SELECT
+              row_to_json(
+                (
+                  SELECT
+                    "_4_e"
+                  FROM
+                    (
+                      SELECT
+                        "_3_root.or.referral.or.bill.base"."id" AS "id",
+                        "_3_root.or.referral.or.bill.base"."billNumber" AS "billNumber"
+                    ) AS "_4_e"
+                )
+              ) AS "bill"
+            FROM
+              (
+                SELECT
+                  *
+                FROM
+                  "public"."Bill"
+                WHERE
+                  (("_2_root.or.referral.base"."bill_id") = ("id"))
+              ) AS "_3_root.or.referral.or.bill.base"
+          ) AS "_5_root.or.referral.or.bill" ON ('true')
+      ) AS "_7_root.or.referral" ON ('true')
+    ORDER BY
+      "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    LIMIT
+      10 OFFSET 0
+  ) AS "_9_root";
+\timing
+select *
+  from "committeeReferralSearch"('');
+select *
+  from "committeeReferralSearch"('')
+  limit 10;
+\dv
+\d "CommitteeReferral"
+select *
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" on id = committee_referral_id
+  limit 10;
+select
+  referral.id
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on id = committee_referral_id
+  limit 10;
+select
+  referral.id,
+  referral.lastActionDate
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on id = committee_referral_id
+  limit 10;
+select
+  referral.id,
+  referral."lastActionDate"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on id = committee_referral_id
+  limit 10;
+select
+  referral.id,
+  referral."lastActionDate"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on id = committee_referral_id
+       left join "Bill" bill on id = bill_id
+  limit 10;
+select
+  referral.id,
+  referral."lastActionDate"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+  limit 10;
+\d "Bill"
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill.billNumber
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+  limit 10;
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill."billNumber"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+  limit 10;
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill."billNumber"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+ order by
+   "lastActionDate" asc nulls last
+   limit 10;
+select min("lastActionDate") from "CommitteeReferral";
+SELECT
+  coalesce(
+    json_agg(
+      "root"
+      ORDER BY
+        "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    ),
+    '[]'
+  ) AS "root"
+FROM
+  (
+    SELECT
+      row_to_json(
+        (
+          SELECT
+            "_8_e"
+          FROM
+            (
+              SELECT
+                "_7_root.or.referral"."referral" AS "referral"
+            ) AS "_8_e"
+        )
+      ) AS "root",
+      "_7_root.or.referral"."root.or.referral.pg.lastActionDate" AS "root.or.referral.pg.lastActionDate"
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          "public"."committeeReferralSearch"(('') :: text) AS "_0_committeeReferralSearch"
+        WHERE
+          ('true')
+      ) AS "_1_root.base"
+      LEFT OUTER JOIN LATERAL (
+        SELECT
+          row_to_json(
+            (
+              SELECT
+                "_6_e"
+              FROM
+                (
+                  SELECT
+                    "_2_root.or.referral.base"."id" AS "id",
+                    "_2_root.or.referral.base"."lastActionDate" AS "lastActionDate",
+                    "_5_root.or.referral.or.bill"."bill" AS "bill"
+                ) AS "_6_e"
+            )
+          ) AS "referral",
+          "_2_root.or.referral.base"."lastActionDate" AS "root.or.referral.pg.lastActionDate"
+        FROM
+          (
+            SELECT
+              *
+            FROM
+              "public"."CommitteeReferral"
+            WHERE
+              (
+                ("_1_root.base"."committee_referral_id") = ("id")
+              )
+          ) AS "_2_root.or.referral.base"
+          LEFT OUTER JOIN LATERAL (
+            SELECT
+              row_to_json(
+                (
+                  SELECT
+                    "_4_e"
+                  FROM
+                    (
+                      SELECT
+                        "_3_root.or.referral.or.bill.base"."id" AS "id",
+                        "_3_root.or.referral.or.bill.base"."billNumber" AS "billNumber"
+                    ) AS "_4_e"
+                )
+              ) AS "bill"
+            FROM
+              (
+                SELECT
+                  *
+                FROM
+                  "public"."Bill"
+                WHERE
+                  (("_2_root.or.referral.base"."bill_id") = ("id"))
+              ) AS "_3_root.or.referral.or.bill.base"
+          ) AS "_5_root.or.referral.or.bill" ON ('true')
+      ) AS "_7_root.or.referral" ON ('true')
+    ORDER BY
+      "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    LIMIT
+      10 OFFSET 0
+  ) AS "_9_root";
+SELECT
+  jsonb_pretth(coalesce(
+    json_agg(
+      "root"
+      ORDER BY
+        "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    ),
+    '[]'
+  )::jsonb)
+FROM
+  (
+    SELECT
+      row_to_json(
+        (
+          SELECT
+            "_8_e"
+          FROM
+            (
+              SELECT
+                "_7_root.or.referral"."referral" AS "referral"
+            ) AS "_8_e"
+        )
+      ) AS "root",
+      "_7_root.or.referral"."root.or.referral.pg.lastActionDate" AS "root.or.referral.pg.lastActionDate"
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          "public"."committeeReferralSearch"(('') :: text) AS "_0_committeeReferralSearch"
+        WHERE
+          ('true')
+      ) AS "_1_root.base"
+      LEFT OUTER JOIN LATERAL (
+        SELECT
+          row_to_json(
+            (
+              SELECT
+                "_6_e"
+              FROM
+                (
+                  SELECT
+                    "_2_root.or.referral.base"."id" AS "id",
+                    "_2_root.or.referral.base"."lastActionDate" AS "lastActionDate",
+                    "_5_root.or.referral.or.bill"."bill" AS "bill"
+                ) AS "_6_e"
+            )
+          ) AS "referral",
+          "_2_root.or.referral.base"."lastActionDate" AS "root.or.referral.pg.lastActionDate"
+        FROM
+          (
+            SELECT
+              *
+            FROM
+              "public"."CommitteeReferral"
+            WHERE
+              (
+                ("_1_root.base"."committee_referral_id") = ("id")
+              )
+          ) AS "_2_root.or.referral.base"
+          LEFT OUTER JOIN LATERAL (
+            SELECT
+              row_to_json(
+                (
+                  SELECT
+                    "_4_e"
+                  FROM
+                    (
+                      SELECT
+                        "_3_root.or.referral.or.bill.base"."id" AS "id",
+                        "_3_root.or.referral.or.bill.base"."billNumber" AS "billNumber"
+                    ) AS "_4_e"
+                )
+              ) AS "bill"
+            FROM
+              (
+                SELECT
+                  *
+                FROM
+                  "public"."Bill"
+                WHERE
+                  (("_2_root.or.referral.base"."bill_id") = ("id"))
+              ) AS "_3_root.or.referral.or.bill.base"
+          ) AS "_5_root.or.referral.or.bill" ON ('true')
+      ) AS "_7_root.or.referral" ON ('true')
+    ORDER BY
+      "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    LIMIT
+      10 OFFSET 0
+  ) AS "_9_root";
+SELECT
+  jsonb_pretty(coalesce(
+    json_agg(
+      "root"
+      ORDER BY
+        "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    ),
+    '[]'
+  )::jsonb)
+FROM
+  (
+    SELECT
+      row_to_json(
+        (
+          SELECT
+            "_8_e"
+          FROM
+            (
+              SELECT
+                "_7_root.or.referral"."referral" AS "referral"
+            ) AS "_8_e"
+        )
+      ) AS "root",
+      "_7_root.or.referral"."root.or.referral.pg.lastActionDate" AS "root.or.referral.pg.lastActionDate"
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          "public"."committeeReferralSearch"(('') :: text) AS "_0_committeeReferralSearch"
+        WHERE
+          ('true')
+      ) AS "_1_root.base"
+      LEFT OUTER JOIN LATERAL (
+        SELECT
+          row_to_json(
+            (
+              SELECT
+                "_6_e"
+              FROM
+                (
+                  SELECT
+                    "_2_root.or.referral.base"."id" AS "id",
+                    "_2_root.or.referral.base"."lastActionDate" AS "lastActionDate",
+                    "_5_root.or.referral.or.bill"."bill" AS "bill"
+                ) AS "_6_e"
+            )
+          ) AS "referral",
+          "_2_root.or.referral.base"."lastActionDate" AS "root.or.referral.pg.lastActionDate"
+        FROM
+          (
+            SELECT
+              *
+            FROM
+              "public"."CommitteeReferral"
+            WHERE
+              (
+                ("_1_root.base"."committee_referral_id") = ("id")
+              )
+          ) AS "_2_root.or.referral.base"
+          LEFT OUTER JOIN LATERAL (
+            SELECT
+              row_to_json(
+                (
+                  SELECT
+                    "_4_e"
+                  FROM
+                    (
+                      SELECT
+                        "_3_root.or.referral.or.bill.base"."id" AS "id",
+                        "_3_root.or.referral.or.bill.base"."billNumber" AS "billNumber"
+                    ) AS "_4_e"
+                )
+              ) AS "bill"
+            FROM
+              (
+                SELECT
+                  *
+                FROM
+                  "public"."Bill"
+                WHERE
+                  (("_2_root.or.referral.base"."bill_id") = ("id"))
+              ) AS "_3_root.or.referral.or.bill.base"
+          ) AS "_5_root.or.referral.or.bill" ON ('true')
+      ) AS "_7_root.or.referral" ON ('true')
+    ORDER BY
+      "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    LIMIT
+      10 OFFSET 0
+  ) AS "_9_root";
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill."billNumber"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+ order by
+   "lastActionDate" asc nulls last
+   limit 10;
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill."billNumber"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+ order by
+   "lastActionDate" asc nulls last
+   limit 10 offset 0;
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill."billNumber"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+ where "billNumber" in ('H. R. 1')
+ order by
+   "lastActionDate" asc nulls last
+   limit 10 offset 0;
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill."billNumber"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+ where "billNumber" in ('H. R. 1')
+ order by
+   "lastActionDate" asc nulls last;
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill."billNumber"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+ order by
+   "lastActionDate" asc nulls last;
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill."billNumber"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+ order by
+   "lastActionDate" asc nulls last;
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill."billNumber"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+ order by
+   "lastActionDate" asc nulls last
+   limit 10 offset 0;
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill."billNumber"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+     where "billNumber" in ('H. R. 1', 'H. R. 159')
+   order by
+   "lastActionDate" asc nulls last
+   limit 10 offset 0;
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill."billNumber"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+     where "billNumber" in ('H. R. 1', 'H. R. 159')
+   order by
+   "lastActionDate" asc nulls last;
+select
+  referral.id,
+  referral."lastActionDate",
+  bill.id,
+  bill."billNumber"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+       left join "Bill" bill on bill.id = bill_id
+   order by
+   "lastActionDate" asc nulls last
+ limit 10 offset 0;
+SELECT
+  jsonb_pretty(coalesce(
+    json_agg(
+      "root"
+      ORDER BY
+        "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    ),
+    '[]'
+  )::jsonb)
+FROM
+  (
+    SELECT
+      row_to_json(
+        (
+          SELECT
+            "_8_e"
+          FROM
+            (
+              SELECT
+                "_7_root.or.referral"."referral" AS "referral"
+            ) AS "_8_e"
+        )
+      ) AS "root",
+      "_7_root.or.referral"."root.or.referral.pg.lastActionDate" AS "root.or.referral.pg.lastActionDate"
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          "public"."committeeReferralSearch"(('') :: text) AS "_0_committeeReferralSearch"
+        WHERE
+          ('true')
+      ) AS "_1_root.base"
+      LEFT OUTER JOIN LATERAL (
+        SELECT
+          row_to_json(
+            (
+              SELECT
+                "_6_e"
+              FROM
+                (
+                  SELECT
+                    "_2_root.or.referral.base"."id" AS "id",
+                    "_2_root.or.referral.base"."lastActionDate" AS "lastActionDate",
+                    "_5_root.or.referral.or.bill"."bill" AS "bill"
+                ) AS "_6_e"
+            )
+          ) AS "referral",
+          "_2_root.or.referral.base"."lastActionDate" AS "root.or.referral.pg.lastActionDate"
+        FROM
+          (
+            SELECT
+              *
+            FROM
+              "public"."CommitteeReferral"
+            WHERE
+              (
+                ("_1_root.base"."committee_referral_id") = ("id")
+              )
+          ) AS "_2_root.or.referral.base"
+          LEFT OUTER JOIN LATERAL (
+            SELECT
+              row_to_json(
+                (
+                  SELECT
+                    "_4_e"
+                  FROM
+                    (
+                      SELECT
+                        "_3_root.or.referral.or.bill.base"."id" AS "id",
+                        "_3_root.or.referral.or.bill.base"."billNumber" AS "billNumber"
+                    ) AS "_4_e"
+                )
+              ) AS "bill"
+            FROM
+              (
+                SELECT
+                  *
+                FROM
+                  "public"."Bill"
+                WHERE
+                  (("_2_root.or.referral.base"."bill_id") = ("id"))
+              ) AS "_3_root.or.referral.or.bill.base"
+          ) AS "_5_root.or.referral.or.bill" ON ('true')
+      ) AS "_7_root.or.referral" ON ('true')
+    ORDER BY
+      "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    LIMIT
+      10 OFFSET 0
+  ) AS "_9_root";
+select
+  row_to_json((
+    select
+      referral.id,
+      referral."lastActionDate"
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10) l1);
+select
+  row_to_json((
+    select
+      referral.id,
+      referral."lastActionDate"
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10));
+select
+  row_to_json(
+    select
+      referral.id,
+      referral."lastActionDate"
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10);
+select
+  row_to_json(row(
+    select
+      referral.id,
+      referral."lastActionDate"
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10));
+select
+  referral.id,
+  referral."lastActionDate"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+ order by
+   "lastActionDate" asc nulls last
+ limit 10;
+select
+  row(
+  referral.id,
+  referral."lastActionDate")
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+ order by
+   "lastActionDate" asc nulls last
+ limit 10;
+select
+  row_to_json(
+  row(
+  referral.id,
+  referral."lastActionDate")
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+ order by
+   "lastActionDate" asc nulls last
+ limit 10);
+select
+  row_to_json(
+  row(
+  referral.id,
+  referral."lastActionDate"))
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+ order by
+   "lastActionDate" asc nulls last
+ limit 10;
+select
+  json_agg(
+select
+  row_to_json(
+  row(
+  referral.id,
+  referral."lastActionDate"))
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+ order by
+   "lastActionDate" asc nulls last
+ limit 10);
+select
+  row_to_json(
+  row(
+  referral.id,
+  referral."lastActionDate"))
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+ order by
+   "lastActionDate" asc nulls last
+ limit 10;
+select
+  row_to_json(
+  row(
+  referral.id,
+  referral."lastActionDate")) as l1
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+ order by
+   "lastActionDate" asc nulls last
+ limit 10;
+select
+  root
+  from (
+    select
+      row_to_json(
+ row(
+   referral.id,
+   referral."lastActionDate")) as l1
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10) l1
+;
+select
+  root
+  from (
+    select
+      row_to_json(
+ row(
+   referral.id,
+   referral."lastActionDate")) as root
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10) l1
+;
+select
+  json_agg(root)
+  from (
+    select
+      row_to_json(
+ row(
+   referral.id,
+   referral."lastActionDate")) as root
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10) l1
+;
+select
+  jsonb_pretty(json_agg(root)::jsonb)
+  from (
+    select
+      row_to_json(
+ row(
+   referral.id,
+   referral."lastActionDate")) as root
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10) l1
+;
+select
+  jsonb_pretty(json_agg(root)::jsonb)
+  from (
+    select
+      row_to_json(
+ row(
+   referral.id as id,
+   referral."lastActionDate")) as root
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10) l1
+;
+select
+  jsonb_pretty(json_agg(root)::jsonb)
+  from (
+    select
+      row_to_json(
+ row(
+   referral.id as id,
+   referral."lastActionDate")) as root
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10) l1
+;
+select
+  jsonb_pretty(json_agg(root)::jsonb)
+  from (
+    select
+      row_to_json(
+ row(
+   referral.id,
+   referral."lastActionDate")) as root
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10) l1
+;
+select
+  referral.id,
+  referral."lastActionDate"
+  from "committeeReferralSearch"('')
+       left join "CommitteeReferral" referral on referral.id = committee_referral_id
+ order by
+   "lastActionDate" asc nulls last
+ limit 10;
+select
+  _
+  from (
+    select
+      referral.id,
+      referral."lastActionDate"
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10) as _;
+select
+  row_to_json(_)
+  from (
+    select
+      referral.id,
+      referral."lastActionDate"
+      from "committeeReferralSearch"('')
+    left join "CommitteeReferral" referral on referral.id = committee_referral_id
+     order by
+   "lastActionDate" asc nulls last
+     limit 10) as _;
+select
+  json_agg(_)
+  from (
+    select
+      row_to_json(_)
+      from (
+ select
+   referral.id,
+   referral."lastActionDate"
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by
+   "lastActionDate" asc nulls last
+  limit 10) as _) as _;
+select
+  json_agg(_) as root;
+  from (
+    select
+      row_to_json(_)
+      from (
+ select
+   referral.id,
+   referral."lastActionDate"
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by
+   "lastActionDate" asc nulls last
+  limit 10) as _) as _;
+select
+  json_agg(_) as root;
+  from (
+    select
+      row_to_json(_)
+      from (
+ select
+   referral.id,
+   referral."lastActionDate"
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by
+   "lastActionDate" asc nulls last
+  limit 10) as _) as _;
+;
+select
+  json_agg(_) as root
+  from (
+    select
+      row_to_json(_)
+      from (
+ select
+   referral.id,
+   referral."lastActionDate"
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by
+   "lastActionDate" asc nulls last
+  limit 10) as _) as _;
+select
+  jsonb_pretty(json_agg(_))
+  from (
+    select
+      row_to_json(_)
+      from (
+ select
+   referral.id,
+   referral."lastActionDate"
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by
+   "lastActionDate" asc nulls last
+  limit 10) as _) as _;
+select
+  jsonb_pretty(json_agg(_)::jsonb)
+  from (
+    select
+      row_to_json(_)
+      from (
+ select
+   referral.id,
+   referral."lastActionDate"
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by
+   "lastActionDate" asc nulls last
+  limit 10) as _) as _;
+select
+  jsonb_pretty(json_agg(_)::jsonb) as root
+  from (
+    select
+      row_to_json(_)
+      from (
+ select
+   referral.id,
+   referral."lastActionDate",
+   (select row_to_json(_) from (select id, "billNumber" from "Bill" bill where bill.id = _.bill_id) as _) as bill
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by "lastActionDate" asc nulls last
+  limit 10) as _) as _;
+select
+  jsonb_pretty(json_agg(_)::jsonb) as root
+  from (
+    select
+      row_to_json(referral)
+      from (
+ select
+   referral.id,
+   referral."lastActionDate"
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by "lastActionDate" asc nulls last
+  limit 10) as referral) as _;
+select
+  jsonb_pretty(json_agg(root)::jsonb)
+  from (
+    select
+      row_to_json(referral)
+      from (
+ select
+   referral.id,
+   referral."lastActionDate"
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by "lastActionDate" asc nulls last
+  limit 10) as referral) as root;
+select
+  jsonb_pretty(json_agg(root)::jsonb)
+  from (
+    select
+      row_to_json(referral)
+      from (
+ select
+   referral.id,
+   referral."lastActionDate",
+   (select count(1) from "Bill" bill where bill.id = referral.bill_id) as bill_count
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by "lastActionDate" asc nulls last
+  limit 10) as referral) as root;
+select
+  jsonb_pretty(json_agg(root)::jsonb)
+  from (
+    select
+      row_to_json(referral)
+      from (
+ select
+   referral.id,
+   referral."lastActionDate",
+   (select count(1) from "Bill" bill where bill.id = referral.bill_id) as bill_count,
+   (select row_to_json(bill) from (select id, "billNumber" from "Bill" bill where bill.id = referral.bill_id) bill) as bill
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by "lastActionDate" asc nulls last
+  limit 10) as referral) as root;
+select
+  jsonb_pretty(json_agg(root)::jsonb)
+  from (
+    select
+      row_to_json(referral)
+      from (
+ select
+   referral.id,
+   referral."lastActionDate",
+   (select row_to_json(bill) from (select id, "billNumber" from "Bill" bill where bill.id = referral.bill_id) bill) as bill
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by "lastActionDate" asc nulls last
+  limit 10) as referral) as root;
+SELECT
+  jsonb_pretty(coalesce(
+    json_agg(
+      "root"
+      ORDER BY
+        "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    ),
+    '[]'
+  )::jsonb)
+FROM
+  (
+    SELECT
+      row_to_json(
+        (
+          SELECT
+            "_8_e"
+          FROM
+            (
+              SELECT
+                "_7_root.or.referral"."referral" AS "referral"
+            ) AS "_8_e"
+        )
+      ) AS "root",
+      "_7_root.or.referral"."root.or.referral.pg.lastActionDate" AS "root.or.referral.pg.lastActionDate"
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          "public"."committeeReferralSearch"(('') :: text) AS "_0_committeeReferralSearch"
+        WHERE
+          ('true')
+      ) AS "_1_root.base"
+      LEFT OUTER JOIN LATERAL (
+        SELECT
+          row_to_json(
+            (
+              SELECT
+                "_6_e"
+              FROM
+                (
+                  SELECT
+                    "_2_root.or.referral.base"."id" AS "id",
+                    "_2_root.or.referral.base"."lastActionDate" AS "lastActionDate",
+                    "_5_root.or.referral.or.bill"."bill" AS "bill"
+                ) AS "_6_e"
+            )
+          ) AS "referral",
+          "_2_root.or.referral.base"."lastActionDate" AS "root.or.referral.pg.lastActionDate"
+        FROM
+          (
+            SELECT
+              *
+            FROM
+              "public"."CommitteeReferral"
+            WHERE
+              (
+                ("_1_root.base"."committee_referral_id") = ("id")
+              )
+          ) AS "_2_root.or.referral.base"
+          LEFT OUTER JOIN LATERAL (
+            SELECT
+              row_to_json(
+                (
+                  SELECT
+                    "_4_e"
+                  FROM
+                    (
+                      SELECT
+                        "_3_root.or.referral.or.bill.base"."id" AS "id",
+                        "_3_root.or.referral.or.bill.base"."billNumber" AS "billNumber"
+                    ) AS "_4_e"
+                )
+              ) AS "bill"
+            FROM
+              (
+                SELECT
+                  *
+                FROM
+                  "public"."Bill"
+                WHERE
+                  (("_2_root.or.referral.base"."bill_id") = ("id"))
+              ) AS "_3_root.or.referral.or.bill.base"
+          ) AS "_5_root.or.referral.or.bill" ON ('true')
+      ) AS "_7_root.or.referral" ON ('true')
+    ORDER BY
+      "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    LIMIT
+      10 OFFSET 0
+  ) AS "_9_root";
+select
+  jsonb_pretty(json_agg("committeeReferralSearch")::jsonb)
+  from (
+    select
+      row_to_json(referral) as referral
+      from (
+ select
+   referral.id,
+   referral."lastActionDate",
+   (
+     select
+       row_to_json(bill)
+       from (
+  select
+    id,
+    "billNumber"
+    from
+      "Bill" bill
+   where bill.id = referral.bill_id) bill
+   ) as bill
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by "lastActionDate" asc nulls last
+  limit 10
+      ) as referral
+  ) as "committeeReferralSearch";
+SELECT
+  jsonb_pretty(coalesce(
+    json_agg(
+      "root"
+      ORDER BY
+        "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    ),
+    '[]'
+  )::jsonb)
+FROM
+  (
+    SELECT
+      row_to_json(
+        (
+          SELECT
+            "_8_e"
+          FROM
+            (
+              SELECT
+                "_7_root.or.referral"."referral" AS "referral"
+            ) AS "_8_e"
+        )
+      ) AS "root",
+      "_7_root.or.referral"."root.or.referral.pg.lastActionDate" AS "root.or.referral.pg.lastActionDate"
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          "public"."committeeReferralSearch"(('') :: text) AS "_0_committeeReferralSearch"
+        WHERE
+          ('true')
+      ) AS "_1_root.base"
+      LEFT OUTER JOIN LATERAL (
+        SELECT
+          row_to_json(
+            (
+              SELECT
+                "_6_e"
+              FROM
+                (
+                  SELECT
+                    "_2_root.or.referral.base"."id" AS "id",
+                    "_2_root.or.referral.base"."lastActionDate" AS "lastActionDate",
+                    "_5_root.or.referral.or.bill"."bill" AS "bill"
+                ) AS "_6_e"
+            )
+          ) AS "referral",
+          "_2_root.or.referral.base"."lastActionDate" AS "root.or.referral.pg.lastActionDate"
+        FROM
+          (
+            SELECT
+              *
+            FROM
+              "public"."CommitteeReferral"
+            WHERE
+              (
+                ("_1_root.base"."committee_referral_id") = ("id")
+              )
+          ) AS "_2_root.or.referral.base"
+          LEFT OUTER JOIN LATERAL (
+            SELECT
+              row_to_json(
+                (
+                  SELECT
+                    "_4_e"
+                  FROM
+                    (
+                      SELECT
+                        "_3_root.or.referral.or.bill.base"."id" AS "id",
+                        "_3_root.or.referral.or.bill.base"."billNumber" AS "billNumber"
+                    ) AS "_4_e"
+                )
+              ) AS "bill"
+            FROM
+              (
+                SELECT
+                  *
+                FROM
+                  "public"."Bill"
+                WHERE
+                  (("_2_root.or.referral.base"."bill_id") = ("id"))
+              ) AS "_3_root.or.referral.or.bill.base"
+          ) AS "_5_root.or.referral.or.bill" ON ('true')
+      ) AS "_7_root.or.referral" ON ('true')
+    ORDER BY
+      "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    LIMIT
+      10 OFFSET 0
+  ) AS "_9_root";
+select
+  jsonb_pretty(json_agg("committeeReferralSearch")::jsonb)
+  from (
+    select
+      row_to_json(referral) as referral
+      from (
+ select
+   referral.id,
+   referral."lastActionDate",
+   (
+     select
+       row_to_json(bill)
+       from (
+  select
+    id,
+    "billNumber"
+    from
+      "Bill" bill
+   where bill.id = referral.bill_id) bill
+   ) as bill
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by "lastActionDate" asc nulls last
+  limit 10
+      ) as referral
+  ) as "committeeReferralSearch";
+EXPLAIN (ANALYZE, COSTS, VERBOSE, BUFFERS, FORMAT JSON)
+select
+  jsonb_pretty(json_agg("committeeReferralSearch")::jsonb)
+  from (
+    select
+      row_to_json(referral) as referral
+      from (
+ select
+   referral.id,
+   referral."lastActionDate",
+   (
+     select
+       row_to_json(bill)
+       from (
+  select
+    id,
+    "billNumber"
+    from
+      "Bill" bill
+   where bill.id = referral.bill_id) bill
+   ) as bill
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by "lastActionDate" asc nulls last
+  limit 10
+      ) as referral
+  ) as "committeeReferralSearch";
+\dv
+\sv "CommitteeReferral"
+SELECT
+  jsonb_pretty(coalesce(
+    json_agg(
+      "root"
+      ORDER BY
+        "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    ),
+    '[]'
+  )::jsonb)
+FROM
+  (
+    SELECT
+      row_to_json(
+        (
+          SELECT
+            "_8_e"
+          FROM
+            (
+              SELECT
+                "_7_root.or.referral"."referral" AS "referral"
+            ) AS "_8_e"
+        )
+      ) AS "root",
+      "_7_root.or.referral"."root.or.referral.pg.lastActionDate" AS "root.or.referral.pg.lastActionDate"
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          "public"."committeeReferralSearch"(('') :: text) AS "_0_committeeReferralSearch"
+        WHERE
+          ('true')
+      ) AS "_1_root.base"
+      LEFT OUTER JOIN LATERAL (
+        SELECT
+          row_to_json(
+            (
+              SELECT
+                "_6_e"
+              FROM
+                (
+                  SELECT
+                    "_2_root.or.referral.base"."id" AS "id",
+                    "_2_root.or.referral.base"."lastActionDate" AS "lastActionDate",
+                    "_5_root.or.referral.or.bill"."bill" AS "bill"
+                ) AS "_6_e"
+            )
+          ) AS "referral",
+          "_2_root.or.referral.base"."lastActionDate" AS "root.or.referral.pg.lastActionDate"
+        FROM
+          (
+            SELECT
+              *
+            FROM
+              "public"."CommitteeReferral"
+            WHERE
+              (
+                ("_1_root.base"."committee_referral_id") = ("id")
+              )
+          ) AS "_2_root.or.referral.base"
+          LEFT OUTER JOIN LATERAL (
+            SELECT
+              row_to_json(
+                (
+                  SELECT
+                    "_4_e"
+                  FROM
+                    (
+                      SELECT
+                        "_3_root.or.referral.or.bill.base"."id" AS "id",
+                        "_3_root.or.referral.or.bill.base"."billNumber" AS "billNumber"
+                    ) AS "_4_e"
+                )
+              ) AS "bill"
+            FROM
+              (
+                SELECT
+                  *
+                FROM
+                  "public"."Bill"
+                WHERE
+                  (("_2_root.or.referral.base"."bill_id") = ("id"))
+              ) AS "_3_root.or.referral.or.bill.base"
+          ) AS "_5_root.or.referral.or.bill" ON ('true')
+      ) AS "_7_root.or.referral" ON ('true')
+    ORDER BY
+      "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    LIMIT
+      10 OFFSET 0
+  ) AS "_9_root";
+select
+  jsonb_pretty(json_agg("committeeReferralSearch")::jsonb)
+  from (
+    select
+      row_to_json(referral) as referral
+      from (
+ select
+   referral.id,
+   referral."lastActionDate",
+   (
+     select
+       row_to_json(bill)
+       from (
+  select
+    id,
+    "billNumber"
+    from
+      "Bill" bill
+   where bill.id = referral.bill_id) bill
+   ) as bill
+   from "committeeReferralSearch"('')
+        left join "CommitteeReferral" referral on referral.id = committee_referral_id
+  order by "lastActionDate" asc nulls last
+  limit 10
+      ) as referral
+  ) as "committeeReferralSearch";
+\dv
+EXPLAIN (ANALYZE, COSTS, VERBOSE, BUFFERS, FORMAT JSON)
+SELECT
+  jsonb_pretty(coalesce(
+    json_agg(
+      "root"
+      ORDER BY
+        "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    ),
+    '[]'
+  )::jsonb)
+FROM
+  (
+    SELECT
+      row_to_json(
+        (
+          SELECT
+            "_8_e"
+          FROM
+            (
+              SELECT
+                "_7_root.or.referral"."referral" AS "referral"
+            ) AS "_8_e"
+        )
+      ) AS "root",
+      "_7_root.or.referral"."root.or.referral.pg.lastActionDate" AS "root.or.referral.pg.lastActionDate"
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          "public"."committeeReferralSearch"(('') :: text) AS "_0_committeeReferralSearch"
+        WHERE
+          ('true')
+      ) AS "_1_root.base"
+      LEFT OUTER JOIN LATERAL (
+        SELECT
+          row_to_json(
+            (
+              SELECT
+                "_6_e"
+              FROM
+                (
+                  SELECT
+                    "_2_root.or.referral.base"."id" AS "id",
+                    "_2_root.or.referral.base"."lastActionDate" AS "lastActionDate",
+                    "_5_root.or.referral.or.bill"."bill" AS "bill"
+                ) AS "_6_e"
+            )
+          ) AS "referral",
+          "_2_root.or.referral.base"."lastActionDate" AS "root.or.referral.pg.lastActionDate"
+        FROM
+          (
+            SELECT
+              *
+            FROM
+              "public"."CommitteeReferral"
+            WHERE
+              (
+                ("_1_root.base"."committee_referral_id") = ("id")
+              )
+          ) AS "_2_root.or.referral.base"
+          LEFT OUTER JOIN LATERAL (
+            SELECT
+              row_to_json(
+                (
+                  SELECT
+                    "_4_e"
+                  FROM
+                    (
+                      SELECT
+                        "_3_root.or.referral.or.bill.base"."id" AS "id",
+                        "_3_root.or.referral.or.bill.base"."billNumber" AS "billNumber"
+                    ) AS "_4_e"
+                )
+              ) AS "bill"
+            FROM
+              (
+                SELECT
+                  *
+                FROM
+                  "public"."Bill"
+                WHERE
+                  (("_2_root.or.referral.base"."bill_id") = ("id"))
+              ) AS "_3_root.or.referral.or.bill.base"
+          ) AS "_5_root.or.referral.or.bill" ON ('true')
+      ) AS "_7_root.or.referral" ON ('true')
+    ORDER BY
+      "root.or.referral.pg.lastActionDate" ASC NULLS LAST
+    LIMIT
+      10 OFFSET 0
+  ) AS "_9_root";
+\dv
+\sv "CommitteeReferral"
+\q
+\d
+\q
+\d
+\dv
+\d
+\dv
+\sv asset_denormed
+\s asset_denormed_2
