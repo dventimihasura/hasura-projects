@@ -17,10 +17,10 @@
 ** Postgres
 *** Schema
 **** DONE Table Basics
-- [ ] Add database
-- [ ] Add account and product tables
-- [ ] Add account and product data
-- [ ] Perform CRUD operations
+- [X] Add database
+- [X] Add account and product tables
+- [X] Add account and product data
+- [X] Perform CRUD operations
   - Read
     #+begin_src graphql
       query MyQuery {
@@ -74,19 +74,17 @@
     #+end_src
   - Delete
     #+begin_src graphql
-      mutation MyMutation {
+    mutation MyMutation {
         delete_product(where: {name: {_eq: "Doughnut"}}) {
           affected_rows
         }
       }
     #+end_src
 **** DONE Table Relationships
-- [ ] Add the order and order detail tables
-- [ ] Add relationships for account, order, order detail, and product
-- [ ] Generate order and order detail data
-- [ ] Perform queries across relationships
-
-  
+- [X] Add the order and order detail tables
+- [X] Add relationships for account, order, order detail, and product
+- [X] Generate order and order detail data
+- [X] Perform queries across relationships
   #+begin_src graphql
     query MyQuery {
       account(limit: 2) {
@@ -117,10 +115,8 @@
   #+end_src
 **** TODO Remote Relationships                       :DOES_NOT_INVOLVE_DB:
 **** DONE Extend with Views
-- [ ] Add account_summary view and relationships
-- [ ] Query across table and view relationships
-
-
+- [X] Add account_summary view and relationships
+- [X] Query across table and view relationships
   #+begin_src graphql
     query MyQuery {
       account_summary(limit: 10) {
@@ -133,10 +129,8 @@
     }
   #+end_src
 **** DONE Extend with SQL Functions
-- [ ] Add search functions
-- [ ] Query search functions
-
-
+- [X] Add search functions
+- [X] Query search functions
   #+begin_src graphql
     query MyQuery {
       product_search(args: {search: "apple"}) {
@@ -155,13 +149,11 @@
   #+end_src
 **** DONE Default field values
 **** DONE Enum type fields
-- [ ] Create a native Postgres enum type for order status.
-- [ ] Create a enum table for region and track it as order sales_region.
+- [X] Create a native Postgres enum type for order status.
+- [X] Create a enum table for region and track it as order sales_region.
 **** DONE Computed fields
-- [ ] Add product_sku function and track it as a computed field
-- [ ] Query product table with computed field
-
-
+- [X] Add product_sku function and track it as a computed field
+- [X] Query product table with computed field
 #+begin_src graphql
   query {
     product(limit: 10) {
@@ -174,13 +166,10 @@
 #+end_src
 
 **** DONE Customize auto-generated fields            :DOES_NOT_INVOLVE_DB:
-- [ ] Change order.status to order.state for the GraphQL field name
-
+- [X] Change order.status to order.state for the GraphQL field name
 **** DONE Data validations
-- [ ] Add non_negative_price check constraint
-- [ ] Attempt mutations with and without negative prices
-
-
+- [X] Add non_negative_price check constraint
+- [X] Attempt mutations with and without negative prices
   #+begin_src graphql
     mutation MyMutation {
       update_product(where: {name: {_eq: "Chilli Paste, Sambal Oelek"}}, _set: {price: 10}) {
@@ -188,7 +177,6 @@
       }
     }
   #+end_src
-
   #+begin_src graphql
     mutation MyMutation {
       update_product(where: {name: {_eq: "Pastry - Raisin Muffin - Mini"}}, _set: {price: -10}) {
@@ -196,12 +184,9 @@
       }
     }
   #+end_src
-
 **** DONE Using an existing database
 **** DONE Relay Schema                               :DOES_NOT_INVOLVE_DB:
-- [ ] Turn on the Relay API in the Console
-
-
+- [X] Turn on the Relay API in the Console
 #+begin_src graphql
   query MyQuery {
     account_connection(first: 10) {
@@ -210,9 +195,7 @@
           name
           orders {
             id
-            sales_region {
-              description
-            }
+            region
             order_details {
               units
               product {
@@ -270,10 +253,9 @@
 **** TODO Delete
 **** TODO Multiple mutations in a request
 *** Subscriptions
-**** DONE Live queries
+**** TODO Live queries
 *** Supported Postgres types
 ***** DONE Perform inserts on the ~misc~ table.
-
 #+begin_src graphql
   mutation {
     insert_misc(objects: [
@@ -376,8 +358,6 @@
 ***** TODO Create an update trigger
 - [ ] Perform a mutation to update an order
 - [ ] Update an order from the Console
-
-
 #+begin_src graphql
   mutation MyMutation {
     update_order_by_pk(pk_columns: {id: "1564344e-e528-43de-b88e-dab9c3efa44e"}, _set: {state: "fulfilled"}) {
@@ -386,7 +366,6 @@
     }
   }
 #+end_src
-
 - [ ] Check the events logs
 * Scheduled Triggers
 *** Creating a chron trigger
@@ -425,7 +404,7 @@
 | Use defaults for field values                           | YES  | SUCCESS |                                          |
 | Use a native enum as a Hasura enum                      | YES  | SUCCESS |                                          |
 | Use a table as a Hasura enum                            | YES  | SUCCESS |                                          |
-| Customize field-names in API                             | YES  | SUCCESS | Doesn't actually involve the DB          |
+| Customize field-names in API                            | YES  | SUCCESS | Doesn't actually involve the DB          |
 | Data validation with a database constraint              | YES  | SUCCESS |                                          |
 | Test using the Relay API                                | YES  | SUCCESS | Doesn't actually involve the DB          |
 | Simple object queries                                   | YES  | SUCCESS |                                          |
@@ -448,7 +427,7 @@
 | Remote Database                                         | TBD  |         | We forgot to test this!                  |
 | Creating event triggers                                 | YES  | FAIL    | Needs a Hasura fix                       |
 | Creating a chron trigger                                | TBD  |         | Needs a Hasura fix                       |
-| Creating a one-off scheduled event                       | TBD  |         | Needs a Hasura fix                       |
+| Creating a one-off scheduled event                      | TBD  |         | Needs a Hasura fix                       |
 | Cleaning up scheduled trigger data                      | TBD  |         | Needs a Hasura fix                       |
 | CI/CD: hasura metadata (apply, clear, reload, status)   | YES  | SUCCESS |                                          |
 | CI/CD: hasura migrate (apply, apply --down all, delete) | YES  | SUCCESS |                                          |
