@@ -1,0 +1,559 @@
+% Created 2022-08-31 Wed 16:41
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{David A. Ventimiglia}
+\date{\textit{<2022-06-03 Fri>}}
+\title{EDB Test Plan}
+\hypersetup{
+ pdfauthor={David A. Ventimiglia},
+ pdftitle={EDB Test Plan},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 29.0.50 (Org mode 9.5.3)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+\section{Databases}
+\label{sec:org57ee5ba}
+\subsection{Postgres}
+\label{sec:org353d7d7}
+\subsection{Schema}
+\label{sec:orgde2ac44}
+\subsubsection{{\bfseries\sffamily DONE} Table Basics}
+\label{sec:orgd78c12c}
+\begin{itemize}
+\item[{$\boxtimes$}] Add database
+\item[{$\boxtimes$}] Add account and product tables
+\item[{$\boxtimes$}] Add account and product data
+\item[{$\boxtimes$}] Perform CRUD operations
+\begin{itemize}
+\item Read
+\begin{verbatim}
+query MyQuery {
+  account(order_by: {name: asc}, limit: 10) {
+    id
+    name
+    created_at
+    updated_at
+  }
+}
+\end{verbatim}
+\begin{verbatim}
+query MyQuery {
+  product(order_by: {price: asc}, limit: 10) {
+    id
+    name
+    price
+    updated_at
+    created_at
+  }
+}
+\end{verbatim}
+\item Insert
+\begin{verbatim}
+mutation MyMutation {
+  insert_account(objects: {name: "John Doe"}) {
+    affected_rows
+  }
+}
+\end{verbatim}
+\begin{verbatim}
+mutation MyMutation {
+  insert_product(objects: {name: "Doughnut", price: 100}) {
+    returning {
+      id
+      name
+      price
+      updated_at
+      created_at
+    }
+  }
+}
+\end{verbatim}
+\item Update
+\begin{verbatim}
+mutation MyMutation {
+  update_account(where: {name: {_eq: "John Doe"}}, _set: {name: "Jane Doe"}) {
+    affected_rows
+  }
+}
+\end{verbatim}
+\item Delete
+\begin{verbatim}
+mutation MyMutation {
+    delete_product(where: {name: {_eq: "Doughnut"}}) {
+      affected_rows
+    }
+  }
+\end{verbatim}
+\end{itemize}
+\end{itemize}
+\subsubsection{{\bfseries\sffamily DONE} Table Relationships}
+\label{sec:org3e6162a}
+\begin{itemize}
+\item[{$\boxtimes$}] Add the order and order detail tables
+\item[{$\boxtimes$}] Add relationships for account, order, order detail, and product
+\item[{$\boxtimes$}] Generate order and order detail data
+\item[{$\boxtimes$}] Perform queries across relationships
+\begin{verbatim}
+query MyQuery {
+  account(limit: 2) {
+    id
+    name
+    created_at
+    updated_at
+    orders {
+      id
+      created_at
+      updated_at
+      order_details {
+	id
+	created_at
+	updated_at
+	units
+	product {
+	  id
+	  name
+	  created_at
+	  updated_at
+	  price
+	}
+      }
+    }
+  }
+}
+\end{verbatim}
+\end{itemize}
+\subsubsection{{\bfseries\sffamily TODO} Remote Relationships\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
+\label{sec:orge964fb8}
+\subsubsection{{\bfseries\sffamily DONE} Extend with Views}
+\label{sec:org2d4f323}
+\begin{itemize}
+\item[{$\boxtimes$}] Add account\textsubscript{summary} view and relationships
+\item[{$\boxtimes$}] Query across table and view relationships
+\begin{verbatim}
+query MyQuery {
+  account_summary(limit: 10) {
+    id
+    sum
+    account {
+      name
+    }
+  }
+}
+\end{verbatim}
+\end{itemize}
+\subsubsection{{\bfseries\sffamily DONE} Extend with SQL Functions}
+\label{sec:org2cd12c5}
+\begin{itemize}
+\item[{$\boxtimes$}] Add search functions
+\item[{$\boxtimes$}] Query search functions
+\begin{verbatim}
+query MyQuery {
+  product_search(args: {search: "apple"}) {
+    name
+    price
+  }
+}
+\end{verbatim}
+\begin{verbatim}
+query MyQuery {
+  product_fuzzy_search(args: {search: "apple"}) {
+    name
+    price
+  }
+}
+\end{verbatim}
+\end{itemize}
+\subsubsection{{\bfseries\sffamily DONE} Default field values}
+\label{sec:org928b3d8}
+\subsubsection{{\bfseries\sffamily DONE} Enum type fields}
+\label{sec:orgfbccd5a}
+\begin{itemize}
+\item[{$\boxtimes$}] Create a native Postgres enum type for order status.
+\item[{$\boxtimes$}] Create a enum table for region and track it as order sales\textsubscript{region}.
+\end{itemize}
+\subsubsection{{\bfseries\sffamily DONE} Computed fields}
+\label{sec:orgca53d20}
+\begin{itemize}
+\item[{$\boxtimes$}] Add product\textsubscript{sku} function and track it as a computed field
+\item[{$\boxtimes$}] Query product table with computed field
+\end{itemize}
+\begin{verbatim}
+query {
+  product(limit: 10) {
+    id
+    name
+    price
+    sku
+  }
+}
+\end{verbatim}
+
+\subsubsection{{\bfseries\sffamily DONE} Customize auto-generated fields\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
+\label{sec:org8af7bd0}
+\begin{itemize}
+\item[{$\boxtimes$}] Change order.status to order.state for the GraphQL field name
+\end{itemize}
+\subsubsection{{\bfseries\sffamily DONE} Data validations}
+\label{sec:org2c9b983}
+\begin{itemize}
+\item[{$\boxtimes$}] Add non\textsubscript{negative}\textsubscript{price} check constraint
+\item[{$\boxtimes$}] Attempt mutations with and without negative prices
+\begin{verbatim}
+mutation MyMutation {
+  update_product(where: {name: {_eq: "Chilli Paste, Sambal Oelek"}}, _set: {price: 10}) {
+    affected_rows
+  }
+}
+\end{verbatim}
+\begin{verbatim}
+mutation MyMutation {
+  update_product(where: {name: {_eq: "Pastry - Raisin Muffin - Mini"}}, _set: {price: -10}) {
+    affected_rows
+  }
+}
+\end{verbatim}
+\end{itemize}
+\subsubsection{{\bfseries\sffamily DONE} Using an existing database}
+\label{sec:org7368291}
+\subsubsection{{\bfseries\sffamily DONE} Relay Schema\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
+\label{sec:org4aa34b5}
+\begin{itemize}
+\item[{$\boxtimes$}] Turn on the Relay API in the Console
+\end{itemize}
+\begin{verbatim}
+query MyQuery {
+  account_connection(first: 10) {
+    edges {
+      node {
+	name
+	orders {
+	  id
+	  region
+	  order_details {
+	    units
+	    product {
+	      name
+	      price
+	      sku
+	    }
+	  }
+	}
+      }
+      cursor
+    }
+  }
+}
+\end{verbatim}
+\subsection{Queries}
+\label{sec:org0695bb1}
+\subsubsection{{\bfseries\sffamily DONE} Simple object queries}
+\label{sec:org7534d48}
+\subsubsection{{\bfseries\sffamily DONE} Nested object queries}
+\label{sec:org4f3980c}
+\subsubsection{{\bfseries\sffamily DONE} Aggregation queries}
+\label{sec:org8253cc0}
+\begin{verbatim}
+query MyQuery {
+  account_aggregate {
+    aggregate {
+      count
+    }
+  }
+}
+\end{verbatim}
+\begin{verbatim}
+query MyQuery {
+  account(limit: 10) {
+    orders {
+      order_details_aggregate {
+	aggregate {
+	  sum {
+	    units
+	  }
+	}
+      }
+    }
+  }
+}
+\end{verbatim}
+\subsubsection{{\bfseries\sffamily DONE} Filter query results / search queries}
+\label{sec:org63fb049}
+\subsubsection{{\bfseries\sffamily DONE} Sort query results}
+\label{sec:org69f00e4}
+\subsubsection{{\bfseries\sffamily DONE} Distinct query results}
+\label{sec:org3453617}
+\subsubsection{{\bfseries\sffamily TODO} Using multiple arguments\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
+\label{sec:org136f8d2}
+\subsubsection{{\bfseries\sffamily TODO} Multiple queries in a request\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
+\label{sec:orga81738a}
+\subsubsection{{\bfseries\sffamily TODO} Using variables / aliases / fragments / directives\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
+\label{sec:org9de1670}
+\subsubsection{{\bfseries\sffamily TODO} Query performance}
+\label{sec:org2970e77}
+\subsection{Mutations}
+\label{sec:orga0ff2d3}
+\subsubsection{{\bfseries\sffamily DONE} Insert}
+\label{sec:org4719e70}
+\subsubsection{{\bfseries\sffamily TODO} Upsert}
+\label{sec:org47f89ad}
+\subsubsection{{\bfseries\sffamily DONE} Update}
+\label{sec:org9f624b8}
+\subsubsection{{\bfseries\sffamily TODO} Delete}
+\label{sec:org1e3b568}
+\subsubsection{{\bfseries\sffamily TODO} Multiple mutations in a request}
+\label{sec:org757723b}
+\subsection{Subscriptions}
+\label{sec:org4e96128}
+\subsubsection{{\bfseries\sffamily TODO} Live queries}
+\label{sec:org26a0f46}
+\subsection{Supported Postgres types}
+\label{sec:org87b6c52}
+\subsubsection{{\bfseries\sffamily DONE} Perform inserts on the \texttt{misc} table.}
+\label{sec:org8dd177a}
+\begin{verbatim}
+mutation {
+  insert_misc(objects: [
+      {
+	bigint_field: 1
+	bigserial_field: 1
+	boolean_field: true
+	box_field: "((0,0),(1,1))"
+	bytea_field: "\\xDEADBEEF"
+	character_field: "foo"
+	character_varying_field: "bar"
+	cidr_field: "192.168.100.128/25"
+	circle_field: "0,0,1"
+	date_field: "2022-01-01"
+	double_precision_field: 9673143120,
+	inet_field: "192.168.0.1/24"
+	integer_field: 1
+	interval_field: "'1 month ago'"
+	json_field: {}
+	jsonb_field: {}
+	line_field: "0,0,1,1"
+	lseg_field: "0,0,1,1"
+	macaddr_field: "08:00:2b:01:02:03"
+	macaddr8_field: "08:00:2b:01:02:03:04:05"
+	money_field: 52093.89
+	numeric_field: 10
+	path_field: "0,0,1,1,2,2,3,3,3,0,2,0,0,0"
+	pg_lsn_field: "FFFFFFFF/FFFFFFFF"
+	point_field: "0,0"
+	polygon_field: "0,0,1,0,1,1,0,1"
+	real_field: 3.14159
+	serial_field: 1
+	smallint_field: 1
+	smallserial_field: 1
+	text_field: "abc"
+	time_with_time_zone_field: "04:05:06 PST"
+	time_without_time_zone_field: "04:05:06"
+	timestamp_with_time_zone_field: "2022-01-01 04:05:06 PST"
+	timestamp_without_time_zone_field: "2022-01-01 04:05:06"
+	txid_snapshot_field: "566:566:"
+	uuid_field: "61a41be6-4eb4-45a5-bfb5-b68c20e9ccde"
+	xml_field: "<?xml version=\"1.0\"?><book><title>Manual</title><chapter>...</chapter></book>"
+      }
+    ]) {
+    returning {
+      bigint_field
+      bigserial_field
+      boolean_field
+      box_field
+      bytea_field
+      character_field
+      character_varying_field
+      cidr_field
+      circle_field
+      date_field
+      double_precision_field
+      inet_field
+      integer_field
+      interval_field
+      json_field
+      jsonb_field
+      line_field
+      lseg_field
+      macaddr_field
+      macaddr8_field
+      money_field
+      numeric_field
+      path_field
+      pg_lsn_field
+      point_field
+      polygon_field
+      real_field
+      serial_field
+      smallint_field
+      smallserial_field
+      text_field
+      time_with_time_zone_field
+      time_without_time_zone_field
+      timestamp_with_time_zone_field
+      timestamp_without_time_zone_field
+      txid_snapshot_field
+      uuid_field
+      xml_field
+    }
+  }
+}
+\end{verbatim}
+
+\section{Remote Schema}
+\label{sec:org2926e6a}
+\subsection{Remote relationships}
+\label{sec:org5772a0f}
+\subsubsection{{\bfseries\sffamily TODO} To remote database}
+\label{sec:org3e3361c}
+\subsubsection{{\bfseries\sffamily TODO} To Remote Schema\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
+\label{sec:orgf41fcb8}
+\subsection{Authorization in remote schema}
+\label{sec:orgebc8a5c}
+\subsubsection{{\bfseries\sffamily TODO} Forwarding auth context to/from remote schema\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
+\label{sec:orge5898cd}
+\subsubsection{{\bfseries\sffamily TODO} Remote schema permissions\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
+\label{sec:org6c8727e}
+\subsubsection{{\bfseries\sffamily TODO} Bypassing Hasura's auth for remote schema\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
+\label{sec:orgc25b9f8}
+\section{Event Triggers}
+\label{sec:orgd8526a4}
+\subsection{Creating an Event Trigger}
+\label{sec:org3794c0b}
+\subsubsection{{\bfseries\sffamily TODO} Create an insert trigger}
+\label{sec:orgd69a9d0}
+\subsubsection{{\bfseries\sffamily TODO} Create an update trigger}
+\label{sec:org7846a26}
+\begin{itemize}
+\item[{$\square$}] Perform a mutation to update an order
+\item[{$\square$}] Update an order from the Console
+\end{itemize}
+\begin{verbatim}
+mutation MyMutation {
+  update_order_by_pk(pk_columns: {id: "1564344e-e528-43de-b88e-dab9c3efa44e"}, _set: {state: "fulfilled"}) {
+    id
+    state
+  }
+}
+\end{verbatim}
+\begin{itemize}
+\item[{$\square$}] Check the events logs
+\end{itemize}
+\section{Scheduled Triggers}
+\label{sec:org2d7fea5}
+\subsection{Creating a chron trigger}
+\label{sec:orgb50c382}
+\subsubsection{{\bfseries\sffamily TODO} Create a chron trigger}
+\label{sec:org0c32813}
+\begin{itemize}
+\item[{$\square$}] Allow time to pass
+\item[{$\square$}] Check the events logs
+\end{itemize}
+\subsection{Creating a one-off scheduled event}
+\label{sec:org5ea96e5}
+\subsubsection{{\bfseries\sffamily TODO} Create a one-off scheduled event}
+\label{sec:org928aeb3}
+\subsection{Cleaning up scheduled triggers data}
+\label{sec:orgb350def}
+\subsubsection{{\bfseries\sffamily TODO} Clear Everything}
+\label{sec:orge660f67}
+\begin{itemize}
+\item[{$\square$}] Cron triggers
+
+\begin{verbatim}
+DELETE FROM hdb_catalog.hdb_cron_events;
+\end{verbatim}
+
+\item[{$\square$}] Scheduled events
+
+\begin{verbatim}
+DELETE FROM hdb_catalog.hdb_scheduled_events;
+\end{verbatim}
+\end{itemize}
+\section{Test Matrix}
+\label{sec:org0739d70}
+\begin{center}
+\begin{tabular}{llll}
+\hline
+Function & Test & Outcome & Comments\\
+\hline
+Remote Relationships & NO &  & Remote Schema connect to GraphQL servers\\
+Add Database & YES & SUCCESS & \\
+Add tables and relationships in Console & YES & SUCCESS & \\
+Perform CRUD operations in API & YES & SUCCESS & \\
+Set up and use table relationships & YES & SUCCESS & \\
+Track views & YES & SUCCESS & \\
+Manually add relationships to views & YES & SUCCESS & \\
+Query across view/table relationships & YES & SUCCESS & \\
+Track a function as a table and use & YES & SUCCESS & \\
+Track a function as a computed field and use & YES & SUCCESS & \\
+Use defaults for field values & YES & SUCCESS & \\
+Use a native enum as a Hasura enum & YES & SUCCESS & \\
+Use a table as a Hasura enum & YES & SUCCESS & \\
+Customize field-names in API & YES & SUCCESS & Doesn't actually involve the DB\\
+Data validation with a database constraint & YES & SUCCESS & \\
+Test using the Relay API & YES & SUCCESS & Doesn't actually involve the DB\\
+Simple object queries & YES & SUCCESS & \\
+Nested object queries (involves JOINs) & YES & SUCCESS & \\
+Aggregation queries (count) & YES & SUCCESS & We didn't test min, max, avg, etc.\\
+Filter queries (involves WHERE) & YES & SUCCESS & \\
+Sort queries (involves ORDER BY) & YES & SUCCESS & \\
+Distinct queries (involves DISTINCT) & YES & SUCCESS & \\
+Limit queries (involves LIMIT) & YES & SUCCESS & \\
+Using multiple arguments & NO &  & Doesn't actually involve the DB\\
+Multiple queries in a request & NO &  & Doesn't actually involve the DB\\
+Multiple variables / aliases / fragments / directives & NO &  & Doesn't actually involve the DB\\
+INSERT (see "Perform CRUD operations in API" above & YES & SUCCESS & \\
+UPDATE (see "Perform CRUD operations in API" above & YES & SUCCESS & \\
+DELETE (see "Perform CRUD operations in API" above & TBD &  & We forgot to test this!\\
+ON CONFLICT (an "upsert") & TBD &  & We forgot to test this!\\
+Multiple mutations in a request & TBD &  & We forgot to test this!\\
+Subscriptions (Live Queries) & TBD & SUCCESS & \\
+Test all Postgres/Hasura types (mutation, query) & TBD & SUCCESS & \\
+Remote Database & TBD &  & We forgot to test this!\\
+Creating event triggers & YES & FAIL & Needs a Hasura fix\\
+Creating a chron trigger & TBD &  & Needs a Hasura fix\\
+Creating a one-off scheduled event & TBD &  & Needs a Hasura fix\\
+Cleaning up scheduled trigger data & TBD &  & Needs a Hasura fix\\
+CI/CD: hasura metadata (apply, clear, reload, status) & YES & SUCCESS & \\
+CI/CD: hasura migrate (apply, apply --down all, delete) & YES & SUCCESS & \\
+\end{tabular}
+\end{center}
+
+\subsection{NOTES}
+\label{sec:org406a1c5}
+
+\begin{description}
+\item[{Test}] do we test this (YES, NO, TBD)
+\item[{YES}] we should test this (and have)
+\item[{NO}] we may not need to test this
+\item[{TBD}] we should test this (but have not yet, possibly because we
+cannot)
+\item[{SUCCESS}] we tested it and it passed
+\item[{FAIL}] we tested it and it did not pass
+\item[{"We forgot to test this!"}] either we forgot, or we suspect we may
+not need to (e.g. "Remote Database")
+\item[{"Doesn't actually involve the DB"}] a Hasura function which we
+believe shouldn't work differently on BDR, since the function
+doesn't actually interact with the database.
+\item[{"Needs a Hasura fix"}] either we have a FAIL test or a TBD test,
+because of an identified gap in Hasura that needs to be fixed.
+\end{description}
+\end{document}

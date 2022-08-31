@@ -3,14 +3,14 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-07-19 Tue 07:57 -->
+<!-- 2022-08-31 Wed 16:40 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>EDB Test Plan</title>
+<meta name="generator" content="Org mode" />
 <meta name="author" content="David A. Ventimiglia" />
-<meta name="generator" content="Org Mode" />
-<style>
-  #content { max-width: 60em; margin: auto; }
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -31,9 +31,8 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #e6e6e6;
-    border-radius: 3px;
-    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -41,22 +40,22 @@
   }
   pre.src {
     position: relative;
-    overflow: auto;
+    overflow: visible;
+    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    top: -8px;
-    right: 12px;
+    background-color: white;
+    top: -10px;
+    right: 10px;
     padding: 3px;
-    color: #555;
-    background-color: #f2f2f299;
+    border: 1px solid black;
   }
-  pre.src:hover:before { display: inline; margin-top: 14px;}
+  pre.src:hover:before { display: inline;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
-  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -191,145 +190,192 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
 </style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
 </head>
 <body>
-<div id="content" class="content">
+<div id="content">
 <h1 class="title">EDB Test Plan</h1>
-<div id="table-of-contents" role="doc-toc">
+<div id="table-of-contents">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents" role="doc-toc">
+<div id="text-table-of-contents">
 <ul>
-<li><a href="#org29e72b5">1. Databases</a>
+<li><a href="#orgec492be">1. Databases</a>
 <ul>
-<li><a href="#org220c57c">1.1. Postgres</a></li>
-<li><a href="#orgeeb2045">1.2. Schema</a>
+<li><a href="#orgdfb6829">1.1. Postgres</a></li>
+<li><a href="#org462eea5">1.2. Schema</a>
 <ul>
-<li><a href="#orgdd3ce83">1.2.1. <span class="done DONE">DONE</span> Table Basics</a></li>
-<li><a href="#org27d7c60">1.2.2. <span class="done DONE">DONE</span> Table Relationships</a></li>
-<li><a href="#orgfe3ce9a">1.2.3. <span class="todo TODO">TODO</span> Remote Relationships&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
-<li><a href="#org236af11">1.2.4. <span class="done DONE">DONE</span> Extend with Views</a></li>
-<li><a href="#org032aa53">1.2.5. <span class="done DONE">DONE</span> Extend with SQL Functions</a></li>
-<li><a href="#org5b751bc">1.2.6. <span class="done DONE">DONE</span> Default field values</a></li>
-<li><a href="#orgfa0cc44">1.2.7. <span class="done DONE">DONE</span> Enum type fields</a></li>
-<li><a href="#org71eb65e">1.2.8. <span class="done DONE">DONE</span> Computed fields</a></li>
-<li><a href="#org0b38087">1.2.9. <span class="done DONE">DONE</span> Customize auto-generated fields&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
-<li><a href="#orga7bc0c2">1.2.10. <span class="done DONE">DONE</span> Data validations</a></li>
-<li><a href="#org20a4378">1.2.11. <span class="done DONE">DONE</span> Using an existing database</a></li>
-<li><a href="#orgf9599ac">1.2.12. <span class="done DONE">DONE</span> Relay Schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
+<li><a href="#orgea39138">1.2.1. <span class="done DONE">DONE</span> Table Basics</a></li>
+<li><a href="#org26959b0">1.2.2. <span class="done DONE">DONE</span> Table Relationships</a></li>
+<li><a href="#org205da60">1.2.3. <span class="todo TODO">TODO</span> Remote Relationships&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
+<li><a href="#orga74eff6">1.2.4. <span class="done DONE">DONE</span> Extend with Views</a></li>
+<li><a href="#org2366a81">1.2.5. <span class="done DONE">DONE</span> Extend with SQL Functions</a></li>
+<li><a href="#org0d3aad3">1.2.6. <span class="done DONE">DONE</span> Default field values</a></li>
+<li><a href="#org37c21b9">1.2.7. <span class="done DONE">DONE</span> Enum type fields</a></li>
+<li><a href="#org6a24f1b">1.2.8. <span class="done DONE">DONE</span> Computed fields</a></li>
+<li><a href="#org4a3db42">1.2.9. <span class="done DONE">DONE</span> Customize auto-generated fields&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
+<li><a href="#orgb6988fe">1.2.10. <span class="done DONE">DONE</span> Data validations</a></li>
+<li><a href="#org3ccfcf6">1.2.11. <span class="done DONE">DONE</span> Using an existing database</a></li>
+<li><a href="#org9cf98e9">1.2.12. <span class="done DONE">DONE</span> Relay Schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
 </ul>
 </li>
-<li><a href="#orga294dfc">1.3. Queries</a>
+<li><a href="#org88bbf80">1.3. Queries</a>
 <ul>
-<li><a href="#org5ed2e14">1.3.1. <span class="done DONE">DONE</span> Simple object queries</a></li>
-<li><a href="#org9b21cbd">1.3.2. <span class="done DONE">DONE</span> Nested object queries</a></li>
-<li><a href="#org871b18f">1.3.3. <span class="done DONE">DONE</span> Aggregation queries</a></li>
-<li><a href="#org39a64a0">1.3.4. <span class="done DONE">DONE</span> Filter query results / search queries</a></li>
-<li><a href="#orgf69ec1f">1.3.5. <span class="done DONE">DONE</span> Sort query results</a></li>
-<li><a href="#orgd77fe4c">1.3.6. <span class="done DONE">DONE</span> Distinct query results</a></li>
-<li><a href="#orgdf590f6">1.3.7. <span class="todo TODO">TODO</span> Using multiple arguments&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
-<li><a href="#org1a977bf">1.3.8. <span class="todo TODO">TODO</span> Multiple queries in a request&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
-<li><a href="#orgd35adb1">1.3.9. <span class="todo TODO">TODO</span> Using variables / aliases / fragments / directives&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
-<li><a href="#org6a27b2b">1.3.10. <span class="todo TODO">TODO</span> Query performance</a></li>
+<li><a href="#orgc899f6d">1.3.1. <span class="done DONE">DONE</span> Simple object queries</a></li>
+<li><a href="#orgbc51453">1.3.2. <span class="done DONE">DONE</span> Nested object queries</a></li>
+<li><a href="#orgf2dbc85">1.3.3. <span class="done DONE">DONE</span> Aggregation queries</a></li>
+<li><a href="#org8e5bc62">1.3.4. <span class="done DONE">DONE</span> Filter query results / search queries</a></li>
+<li><a href="#org3f3eb93">1.3.5. <span class="done DONE">DONE</span> Sort query results</a></li>
+<li><a href="#orge0b9faa">1.3.6. <span class="done DONE">DONE</span> Distinct query results</a></li>
+<li><a href="#orgf3a7775">1.3.7. <span class="todo TODO">TODO</span> Using multiple arguments&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
+<li><a href="#org691acce">1.3.8. <span class="todo TODO">TODO</span> Multiple queries in a request&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
+<li><a href="#orgd5e4e67">1.3.9. <span class="todo TODO">TODO</span> Using variables / aliases / fragments / directives&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
+<li><a href="#orgfad85fc">1.3.10. <span class="todo TODO">TODO</span> Query performance</a></li>
 </ul>
 </li>
-<li><a href="#orge7957fe">1.4. Mutations</a>
+<li><a href="#org73b02b0">1.4. Mutations</a>
 <ul>
-<li><a href="#org669e3a7">1.4.1. <span class="done DONE">DONE</span> Insert</a></li>
-<li><a href="#org88ef238">1.4.2. <span class="todo TODO">TODO</span> Upsert</a></li>
-<li><a href="#org46f45c0">1.4.3. <span class="done DONE">DONE</span> Update</a></li>
-<li><a href="#orgbdeddaa">1.4.4. <span class="todo TODO">TODO</span> Delete</a></li>
-<li><a href="#org147e128">1.4.5. <span class="todo TODO">TODO</span> Multiple mutations in a request</a></li>
+<li><a href="#org8d367f0">1.4.1. <span class="done DONE">DONE</span> Insert</a></li>
+<li><a href="#org4040a87">1.4.2. <span class="todo TODO">TODO</span> Upsert</a></li>
+<li><a href="#orgc5e4e0d">1.4.3. <span class="done DONE">DONE</span> Update</a></li>
+<li><a href="#org06bdeee">1.4.4. <span class="todo TODO">TODO</span> Delete</a></li>
+<li><a href="#orgd66505d">1.4.5. <span class="todo TODO">TODO</span> Multiple mutations in a request</a></li>
 </ul>
 </li>
-<li><a href="#org6670e2b">1.5. Subscriptions</a>
+<li><a href="#org44eca60">1.5. Subscriptions</a>
 <ul>
-<li><a href="#org87fda79">1.5.1. <span class="done DONE">DONE</span> Live queries</a></li>
+<li><a href="#orgf123c60">1.5.1. <span class="todo TODO">TODO</span> Live queries</a></li>
 </ul>
 </li>
-<li><a href="#orga2c7b72">1.6. Supported Postgres types</a>
+<li><a href="#org04b290c">1.6. Supported Postgres types</a>
 <ul>
-<li><a href="#org812c47d">1.6.1. <span class="done DONE">DONE</span> Perform inserts on the <code>misc</code> table.</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#org7a76cf4">2. Remote Schema</a>
-<ul>
-<li><a href="#orgfd29fa7">2.1. Remote relationships</a>
-<ul>
-<li><a href="#orgba8c8bc">2.1.1. <span class="todo TODO">TODO</span> To remote database</a></li>
-<li><a href="#orgab2f25d">2.1.2. <span class="todo TODO">TODO</span> To Remote Schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
-</ul>
-</li>
-<li><a href="#org4a3fa2a">2.2. Authorization in remote schema</a>
-<ul>
-<li><a href="#orga3fbb4e">2.2.1. <span class="todo TODO">TODO</span> Forwarding auth context to/from remote schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
-<li><a href="#org0140670">2.2.2. <span class="todo TODO">TODO</span> Remote schema permissions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
-<li><a href="#orga05b3ac">2.2.3. <span class="todo TODO">TODO</span> Bypassing Hasura's auth for remote schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
+<li><a href="#org1a76369">1.6.1. <span class="done DONE">DONE</span> Perform inserts on the <code>misc</code> table.</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org3599a94">3. Event Triggers</a>
+<li><a href="#org4eb9de5">2. Remote Schema</a>
 <ul>
-<li><a href="#org942aa82">3.1. Creating an Event Trigger</a>
+<li><a href="#orgf46d332">2.1. Remote relationships</a>
 <ul>
-<li><a href="#org43529a5">3.1.1. <span class="todo TODO">TODO</span> Create an insert trigger</a></li>
-<li><a href="#org3659437">3.1.2. <span class="todo TODO">TODO</span> Create an update trigger</a></li>
+<li><a href="#org2193070">2.1.1. <span class="todo TODO">TODO</span> To remote database</a></li>
+<li><a href="#org792b03a">2.1.2. <span class="todo TODO">TODO</span> To Remote Schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
+</ul>
+</li>
+<li><a href="#org6a5be66">2.2. Authorization in remote schema</a>
+<ul>
+<li><a href="#orgb67523b">2.2.1. <span class="todo TODO">TODO</span> Forwarding auth context to/from remote schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
+<li><a href="#orgb384d90">2.2.2. <span class="todo TODO">TODO</span> Remote schema permissions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
+<li><a href="#org99307ae">2.2.3. <span class="todo TODO">TODO</span> Bypassing Hasura's auth for remote schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgbe03cff">4. Scheduled Triggers</a>
+<li><a href="#orga28a6af">3. Event Triggers</a>
 <ul>
-<li><a href="#org4fbc72b">4.1. Creating a chron trigger</a>
+<li><a href="#orga6c3283">3.1. Creating an Event Trigger</a>
 <ul>
-<li><a href="#org72c64ff">4.1.1. <span class="todo TODO">TODO</span> Create a chron trigger</a></li>
-</ul>
-</li>
-<li><a href="#org1b455b8">4.2. Creating a one-off scheduled event</a>
-<ul>
-<li><a href="#org90d4d7c">4.2.1. <span class="todo TODO">TODO</span> Create a one-off scheduled event</a></li>
-</ul>
-</li>
-<li><a href="#orgccfe72d">4.3. Cleaning up scheduled triggers data</a>
-<ul>
-<li><a href="#orgcf14f0f">4.3.1. <span class="todo TODO">TODO</span> Clear Everything</a></li>
+<li><a href="#orgfa716fd">3.1.1. <span class="todo TODO">TODO</span> Create an insert trigger</a></li>
+<li><a href="#orgc9c0bce">3.1.2. <span class="todo TODO">TODO</span> Create an update trigger</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org89f5462">5. Test Matrix</a>
+<li><a href="#org659c01a">4. Scheduled Triggers</a>
 <ul>
-<li><a href="#org5e5c528">5.1. NOTES</a></li>
+<li><a href="#orgf29c94d">4.1. Creating a chron trigger</a>
+<ul>
+<li><a href="#org18b3578">4.1.1. <span class="todo TODO">TODO</span> Create a chron trigger</a></li>
+</ul>
+</li>
+<li><a href="#orga96c9b6">4.2. Creating a one-off scheduled event</a>
+<ul>
+<li><a href="#org0544ad7">4.2.1. <span class="todo TODO">TODO</span> Create a one-off scheduled event</a></li>
+</ul>
+</li>
+<li><a href="#org5397609">4.3. Cleaning up scheduled triggers data</a>
+<ul>
+<li><a href="#org4e5a243">4.3.1. <span class="todo TODO">TODO</span> Clear Everything</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgccd94fe">5. Test Matrix</a>
+<ul>
+<li><a href="#org8fe6ef4">5.1. NOTES</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org29e72b5" class="outline-2">
-<h2 id="org29e72b5"><span class="section-number-2">1.</span> Databases</h2>
+<div id="outline-container-orgec492be" class="outline-2">
+<h2 id="orgec492be"><span class="section-number-2">1</span> Databases</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org220c57c" class="outline-3">
-<h3 id="org220c57c"><span class="section-number-3">1.1.</span> Postgres</h3>
+<div id="outline-container-orgdfb6829" class="outline-3">
+<h3 id="orgdfb6829"><span class="section-number-3">1.1</span> Postgres</h3>
 <div class="outline-text-3" id="text-1-1">
 </div>
-<div id="outline-container-orgeeb2045" class="outline-3">
-<h3 id="orgeeb2045"><span class="section-number-3">1.2.</span> Schema</h3>
+<div id="outline-container-org462eea5" class="outline-3">
+<h3 id="org462eea5"><span class="section-number-3">1.2</span> Schema</h3>
 <div class="outline-text-3" id="text-1-2">
 </div>
-<div id="outline-container-orgdd3ce83" class="outline-4">
-<h4 id="orgdd3ce83"><span class="section-number-4">1.2.1.</span> <span class="done DONE">DONE</span> Table Basics</h4>
+<div id="outline-container-orgea39138" class="outline-4">
+<h4 id="orgea39138"><span class="section-number-4">1.2.1</span> <span class="done DONE">DONE</span> Table Basics</h4>
 <div class="outline-text-4" id="text-1-2-1">
 <ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Add database</li>
-<li class="off"><code>[&#xa0;]</code> Add account and product tables</li>
-<li class="off"><code>[&#xa0;]</code> Add account and product data</li>
-<li class="off"><code>[&#xa0;]</code> Perform CRUD operations
+<li class="on"><code>[X]</code> Add database</li>
+<li class="on"><code>[X]</code> Add account and product tables</li>
+<li class="on"><code>[X]</code> Add account and product data</li>
+<li class="on"><code>[X]</code> Perform CRUD operations
 <ul class="org-ul">
 <li><p>
 Read
@@ -398,27 +444,26 @@ Delete
 </p>
 <div class="org-src-container">
 <pre class="src src-graphql">mutation MyMutation {
-  delete_product(where: {name: {_eq: "Doughnut"}}) {
-    affected_rows
+    delete_product(where: {name: {_eq: "Doughnut"}}) {
+      affected_rows
+    }
   }
-}
 </pre>
 </div></li>
 </ul></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org27d7c60" class="outline-4">
-<h4 id="org27d7c60"><span class="section-number-4">1.2.2.</span> <span class="done DONE">DONE</span> Table Relationships</h4>
+<div id="outline-container-org26959b0" class="outline-4">
+<h4 id="org26959b0"><span class="section-number-4">1.2.2</span> <span class="done DONE">DONE</span> Table Relationships</h4>
 <div class="outline-text-4" id="text-1-2-2">
 <ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Add the order and order detail tables</li>
-<li class="off"><code>[&#xa0;]</code> Add relationships for account, order, order detail, and product</li>
-<li class="off"><code>[&#xa0;]</code> Generate order and order detail data</li>
-<li class="off"><code>[&#xa0;]</code> Perform queries across relationships</li>
-</ul>
-
-
+<li class="on"><code>[X]</code> Add the order and order detail tables</li>
+<li class="on"><code>[X]</code> Add relationships for account, order, order detail, and product</li>
+<li class="on"><code>[X]</code> Generate order and order detail data</li>
+<li class="on"><code>[X]</code> <p>
+Perform queries across relationships
+</p>
 <div class="org-src-container">
 <pre class="src src-graphql">query MyQuery {
   account(limit: 2) {
@@ -447,21 +492,21 @@ Delete
   }
 }
 </pre>
+</div></li>
+</ul>
 </div>
 </div>
+<div id="outline-container-org205da60" class="outline-4">
+<h4 id="org205da60"><span class="section-number-4">1.2.3</span> <span class="todo TODO">TODO</span> Remote Relationships&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
 </div>
-<div id="outline-container-orgfe3ce9a" class="outline-4">
-<h4 id="orgfe3ce9a"><span class="section-number-4">1.2.3.</span> <span class="todo TODO">TODO</span> Remote Relationships&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
-</div>
-<div id="outline-container-org236af11" class="outline-4">
-<h4 id="org236af11"><span class="section-number-4">1.2.4.</span> <span class="done DONE">DONE</span> Extend with Views</h4>
+<div id="outline-container-orga74eff6" class="outline-4">
+<h4 id="orga74eff6"><span class="section-number-4">1.2.4</span> <span class="done DONE">DONE</span> Extend with Views</h4>
 <div class="outline-text-4" id="text-1-2-4">
 <ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Add account<sub>summary</sub> view and relationships</li>
-<li class="off"><code>[&#xa0;]</code> Query across table and view relationships</li>
-</ul>
-
-
+<li class="on"><code>[X]</code> Add account<sub>summary</sub> view and relationships</li>
+<li class="on"><code>[X]</code> <p>
+Query across table and view relationships
+</p>
 <div class="org-src-container">
 <pre class="src src-graphql">query MyQuery {
   account_summary(limit: 10) {
@@ -473,18 +518,18 @@ Delete
   }
 }
 </pre>
+</div></li>
+</ul>
 </div>
 </div>
-</div>
-<div id="outline-container-org032aa53" class="outline-4">
-<h4 id="org032aa53"><span class="section-number-4">1.2.5.</span> <span class="done DONE">DONE</span> Extend with SQL Functions</h4>
+<div id="outline-container-org2366a81" class="outline-4">
+<h4 id="org2366a81"><span class="section-number-4">1.2.5</span> <span class="done DONE">DONE</span> Extend with SQL Functions</h4>
 <div class="outline-text-4" id="text-1-2-5">
 <ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Add search functions</li>
-<li class="off"><code>[&#xa0;]</code> Query search functions</li>
-</ul>
-
-
+<li class="on"><code>[X]</code> Add search functions</li>
+<li class="on"><code>[X]</code> <p>
+Query search functions
+</p>
 <div class="org-src-container">
 <pre class="src src-graphql">query MyQuery {
   product_search(args: {search: "apple"}) {
@@ -502,30 +547,29 @@ Delete
   }
 }
 </pre>
+</div></li>
+</ul>
 </div>
 </div>
+<div id="outline-container-org0d3aad3" class="outline-4">
+<h4 id="org0d3aad3"><span class="section-number-4">1.2.6</span> <span class="done DONE">DONE</span> Default field values</h4>
 </div>
-<div id="outline-container-org5b751bc" class="outline-4">
-<h4 id="org5b751bc"><span class="section-number-4">1.2.6.</span> <span class="done DONE">DONE</span> Default field values</h4>
-</div>
-<div id="outline-container-orgfa0cc44" class="outline-4">
-<h4 id="orgfa0cc44"><span class="section-number-4">1.2.7.</span> <span class="done DONE">DONE</span> Enum type fields</h4>
+<div id="outline-container-org37c21b9" class="outline-4">
+<h4 id="org37c21b9"><span class="section-number-4">1.2.7</span> <span class="done DONE">DONE</span> Enum type fields</h4>
 <div class="outline-text-4" id="text-1-2-7">
 <ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Create a native Postgres enum type for order status.</li>
-<li class="off"><code>[&#xa0;]</code> Create a enum table for region and track it as order sales<sub>region</sub>.</li>
+<li class="on"><code>[X]</code> Create a native Postgres enum type for order status.</li>
+<li class="on"><code>[X]</code> Create a enum table for region and track it as order sales<sub>region</sub>.</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org71eb65e" class="outline-4">
-<h4 id="org71eb65e"><span class="section-number-4">1.2.8.</span> <span class="done DONE">DONE</span> Computed fields</h4>
+<div id="outline-container-org6a24f1b" class="outline-4">
+<h4 id="org6a24f1b"><span class="section-number-4">1.2.8</span> <span class="done DONE">DONE</span> Computed fields</h4>
 <div class="outline-text-4" id="text-1-2-8">
 <ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Add product<sub>sku</sub> function and track it as a computed field</li>
-<li class="off"><code>[&#xa0;]</code> Query product table with computed field</li>
+<li class="on"><code>[X]</code> Add product<sub>sku</sub> function and track it as a computed field</li>
+<li class="on"><code>[X]</code> Query product table with computed field</li>
 </ul>
-
-
 <div class="org-src-container">
 <pre class="src src-graphql">query {
   product(limit: 10) {
@@ -540,24 +584,22 @@ Delete
 </div>
 </div>
 
-<div id="outline-container-org0b38087" class="outline-4">
-<h4 id="org0b38087"><span class="section-number-4">1.2.9.</span> <span class="done DONE">DONE</span> Customize auto-generated fields&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
+<div id="outline-container-org4a3db42" class="outline-4">
+<h4 id="org4a3db42"><span class="section-number-4">1.2.9</span> <span class="done DONE">DONE</span> Customize auto-generated fields&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
 <div class="outline-text-4" id="text-1-2-9">
 <ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Change order.status to order.state for the GraphQL field name</li>
+<li class="on"><code>[X]</code> Change order.status to order.state for the GraphQL field name</li>
 </ul>
 </div>
 </div>
-
-<div id="outline-container-orga7bc0c2" class="outline-4">
-<h4 id="orga7bc0c2"><span class="section-number-4">1.2.10.</span> <span class="done DONE">DONE</span> Data validations</h4>
+<div id="outline-container-orgb6988fe" class="outline-4">
+<h4 id="orgb6988fe"><span class="section-number-4">1.2.10</span> <span class="done DONE">DONE</span> Data validations</h4>
 <div class="outline-text-4" id="text-1-2-10">
 <ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Add non<sub>negative</sub><sub>price</sub> check constraint</li>
-<li class="off"><code>[&#xa0;]</code> Attempt mutations with and without negative prices</li>
-</ul>
-
-
+<li class="on"><code>[X]</code> Add non<sub>negative</sub><sub>price</sub> check constraint</li>
+<li class="on"><code>[X]</code> <p>
+Attempt mutations with and without negative prices
+</p>
 <div class="org-src-container">
 <pre class="src src-graphql">mutation MyMutation {
   update_product(where: {name: {_eq: "Chilli Paste, Sambal Oelek"}}, _set: {price: 10}) {
@@ -566,7 +608,6 @@ Delete
 }
 </pre>
 </div>
-
 <div class="org-src-container">
 <pre class="src src-graphql">mutation MyMutation {
   update_product(where: {name: {_eq: "Pastry - Raisin Muffin - Mini"}}, _set: {price: -10}) {
@@ -574,21 +615,19 @@ Delete
   }
 }
 </pre>
+</div></li>
+</ul>
 </div>
 </div>
+<div id="outline-container-org3ccfcf6" class="outline-4">
+<h4 id="org3ccfcf6"><span class="section-number-4">1.2.11</span> <span class="done DONE">DONE</span> Using an existing database</h4>
 </div>
-
-<div id="outline-container-org20a4378" class="outline-4">
-<h4 id="org20a4378"><span class="section-number-4">1.2.11.</span> <span class="done DONE">DONE</span> Using an existing database</h4>
-</div>
-<div id="outline-container-orgf9599ac" class="outline-4">
-<h4 id="orgf9599ac"><span class="section-number-4">1.2.12.</span> <span class="done DONE">DONE</span> Relay Schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
+<div id="outline-container-org9cf98e9" class="outline-4">
+<h4 id="org9cf98e9"><span class="section-number-4">1.2.12</span> <span class="done DONE">DONE</span> Relay Schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
 <div class="outline-text-4" id="text-1-2-12">
 <ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Turn on the Relay API in the Console</li>
+<li class="on"><code>[X]</code> Turn on the Relay API in the Console</li>
 </ul>
-
-
 <div class="org-src-container">
 <pre class="src src-graphql">query MyQuery {
   account_connection(first: 10) {
@@ -597,9 +636,7 @@ Delete
 	name
 	orders {
 	  id
-	  sales_region {
-	    description
-	  }
+	  region
 	  order_details {
 	    units
 	    product {
@@ -619,18 +656,18 @@ Delete
 </div>
 </div>
 </div>
-<div id="outline-container-orga294dfc" class="outline-3">
-<h3 id="orga294dfc"><span class="section-number-3">1.3.</span> Queries</h3>
+<div id="outline-container-org88bbf80" class="outline-3">
+<h3 id="org88bbf80"><span class="section-number-3">1.3</span> Queries</h3>
 <div class="outline-text-3" id="text-1-3">
 </div>
-<div id="outline-container-org5ed2e14" class="outline-4">
-<h4 id="org5ed2e14"><span class="section-number-4">1.3.1.</span> <span class="done DONE">DONE</span> Simple object queries</h4>
+<div id="outline-container-orgc899f6d" class="outline-4">
+<h4 id="orgc899f6d"><span class="section-number-4">1.3.1</span> <span class="done DONE">DONE</span> Simple object queries</h4>
 </div>
-<div id="outline-container-org9b21cbd" class="outline-4">
-<h4 id="org9b21cbd"><span class="section-number-4">1.3.2.</span> <span class="done DONE">DONE</span> Nested object queries</h4>
+<div id="outline-container-orgbc51453" class="outline-4">
+<h4 id="orgbc51453"><span class="section-number-4">1.3.2</span> <span class="done DONE">DONE</span> Nested object queries</h4>
 </div>
-<div id="outline-container-org871b18f" class="outline-4">
-<h4 id="org871b18f"><span class="section-number-4">1.3.3.</span> <span class="done DONE">DONE</span> Aggregation queries</h4>
+<div id="outline-container-orgf2dbc85" class="outline-4">
+<h4 id="orgf2dbc85"><span class="section-number-4">1.3.3</span> <span class="done DONE">DONE</span> Aggregation queries</h4>
 <div class="outline-text-4" id="text-1-3-3">
 <div class="org-src-container">
 <pre class="src src-graphql">query MyQuery {
@@ -660,62 +697,62 @@ Delete
 </div>
 </div>
 </div>
-<div id="outline-container-org39a64a0" class="outline-4">
-<h4 id="org39a64a0"><span class="section-number-4">1.3.4.</span> <span class="done DONE">DONE</span> Filter query results / search queries</h4>
+<div id="outline-container-org8e5bc62" class="outline-4">
+<h4 id="org8e5bc62"><span class="section-number-4">1.3.4</span> <span class="done DONE">DONE</span> Filter query results / search queries</h4>
 </div>
-<div id="outline-container-orgf69ec1f" class="outline-4">
-<h4 id="orgf69ec1f"><span class="section-number-4">1.3.5.</span> <span class="done DONE">DONE</span> Sort query results</h4>
+<div id="outline-container-org3f3eb93" class="outline-4">
+<h4 id="org3f3eb93"><span class="section-number-4">1.3.5</span> <span class="done DONE">DONE</span> Sort query results</h4>
 </div>
-<div id="outline-container-orgd77fe4c" class="outline-4">
-<h4 id="orgd77fe4c"><span class="section-number-4">1.3.6.</span> <span class="done DONE">DONE</span> Distinct query results</h4>
+<div id="outline-container-orge0b9faa" class="outline-4">
+<h4 id="orge0b9faa"><span class="section-number-4">1.3.6</span> <span class="done DONE">DONE</span> Distinct query results</h4>
 </div>
-<div id="outline-container-orgdf590f6" class="outline-4">
-<h4 id="orgdf590f6"><span class="section-number-4">1.3.7.</span> <span class="todo TODO">TODO</span> Using multiple arguments&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
+<div id="outline-container-orgf3a7775" class="outline-4">
+<h4 id="orgf3a7775"><span class="section-number-4">1.3.7</span> <span class="todo TODO">TODO</span> Using multiple arguments&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
 </div>
-<div id="outline-container-org1a977bf" class="outline-4">
-<h4 id="org1a977bf"><span class="section-number-4">1.3.8.</span> <span class="todo TODO">TODO</span> Multiple queries in a request&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
+<div id="outline-container-org691acce" class="outline-4">
+<h4 id="org691acce"><span class="section-number-4">1.3.8</span> <span class="todo TODO">TODO</span> Multiple queries in a request&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
 </div>
-<div id="outline-container-orgd35adb1" class="outline-4">
-<h4 id="orgd35adb1"><span class="section-number-4">1.3.9.</span> <span class="todo TODO">TODO</span> Using variables / aliases / fragments / directives&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
+<div id="outline-container-orgd5e4e67" class="outline-4">
+<h4 id="orgd5e4e67"><span class="section-number-4">1.3.9</span> <span class="todo TODO">TODO</span> Using variables / aliases / fragments / directives&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
 </div>
-<div id="outline-container-org6a27b2b" class="outline-4">
-<h4 id="org6a27b2b"><span class="section-number-4">1.3.10.</span> <span class="todo TODO">TODO</span> Query performance</h4>
+<div id="outline-container-orgfad85fc" class="outline-4">
+<h4 id="orgfad85fc"><span class="section-number-4">1.3.10</span> <span class="todo TODO">TODO</span> Query performance</h4>
 </div>
 </div>
-<div id="outline-container-orge7957fe" class="outline-3">
-<h3 id="orge7957fe"><span class="section-number-3">1.4.</span> Mutations</h3>
+<div id="outline-container-org73b02b0" class="outline-3">
+<h3 id="org73b02b0"><span class="section-number-3">1.4</span> Mutations</h3>
 <div class="outline-text-3" id="text-1-4">
 </div>
-<div id="outline-container-org669e3a7" class="outline-4">
-<h4 id="org669e3a7"><span class="section-number-4">1.4.1.</span> <span class="done DONE">DONE</span> Insert</h4>
+<div id="outline-container-org8d367f0" class="outline-4">
+<h4 id="org8d367f0"><span class="section-number-4">1.4.1</span> <span class="done DONE">DONE</span> Insert</h4>
 </div>
-<div id="outline-container-org88ef238" class="outline-4">
-<h4 id="org88ef238"><span class="section-number-4">1.4.2.</span> <span class="todo TODO">TODO</span> Upsert</h4>
+<div id="outline-container-org4040a87" class="outline-4">
+<h4 id="org4040a87"><span class="section-number-4">1.4.2</span> <span class="todo TODO">TODO</span> Upsert</h4>
 </div>
-<div id="outline-container-org46f45c0" class="outline-4">
-<h4 id="org46f45c0"><span class="section-number-4">1.4.3.</span> <span class="done DONE">DONE</span> Update</h4>
+<div id="outline-container-orgc5e4e0d" class="outline-4">
+<h4 id="orgc5e4e0d"><span class="section-number-4">1.4.3</span> <span class="done DONE">DONE</span> Update</h4>
 </div>
-<div id="outline-container-orgbdeddaa" class="outline-4">
-<h4 id="orgbdeddaa"><span class="section-number-4">1.4.4.</span> <span class="todo TODO">TODO</span> Delete</h4>
+<div id="outline-container-org06bdeee" class="outline-4">
+<h4 id="org06bdeee"><span class="section-number-4">1.4.4</span> <span class="todo TODO">TODO</span> Delete</h4>
 </div>
-<div id="outline-container-org147e128" class="outline-4">
-<h4 id="org147e128"><span class="section-number-4">1.4.5.</span> <span class="todo TODO">TODO</span> Multiple mutations in a request</h4>
+<div id="outline-container-orgd66505d" class="outline-4">
+<h4 id="orgd66505d"><span class="section-number-4">1.4.5</span> <span class="todo TODO">TODO</span> Multiple mutations in a request</h4>
 </div>
 </div>
-<div id="outline-container-org6670e2b" class="outline-3">
-<h3 id="org6670e2b"><span class="section-number-3">1.5.</span> Subscriptions</h3>
+<div id="outline-container-org44eca60" class="outline-3">
+<h3 id="org44eca60"><span class="section-number-3">1.5</span> Subscriptions</h3>
 <div class="outline-text-3" id="text-1-5">
 </div>
-<div id="outline-container-org87fda79" class="outline-4">
-<h4 id="org87fda79"><span class="section-number-4">1.5.1.</span> <span class="done DONE">DONE</span> Live queries</h4>
+<div id="outline-container-orgf123c60" class="outline-4">
+<h4 id="orgf123c60"><span class="section-number-4">1.5.1</span> <span class="todo TODO">TODO</span> Live queries</h4>
 </div>
 </div>
-<div id="outline-container-orga2c7b72" class="outline-3">
-<h3 id="orga2c7b72"><span class="section-number-3">1.6.</span> Supported Postgres types</h3>
+<div id="outline-container-org04b290c" class="outline-3">
+<h3 id="org04b290c"><span class="section-number-3">1.6</span> Supported Postgres types</h3>
 <div class="outline-text-3" id="text-1-6">
 </div>
-<div id="outline-container-org812c47d" class="outline-4">
-<h4 id="org812c47d"><span class="section-number-4">1.6.1.</span> <span class="done DONE">DONE</span> Perform inserts on the <code>misc</code> table.</h4>
+<div id="outline-container-org1a76369" class="outline-4">
+<h4 id="org1a76369"><span class="section-number-4">1.6.1</span> <span class="done DONE">DONE</span> Perform inserts on the <code>misc</code> table.</h4>
 <div class="outline-text-4" id="text-1-6-1">
 <div class="org-src-container">
 <pre class="src src-graphql">mutation {
@@ -811,56 +848,54 @@ Delete
 </div>
 </div>
 
-<div id="outline-container-org7a76cf4" class="outline-2">
-<h2 id="org7a76cf4"><span class="section-number-2">2.</span> Remote Schema</h2>
+<div id="outline-container-org4eb9de5" class="outline-2">
+<h2 id="org4eb9de5"><span class="section-number-2">2</span> Remote Schema</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orgfd29fa7" class="outline-3">
-<h3 id="orgfd29fa7"><span class="section-number-3">2.1.</span> Remote relationships</h3>
+<div id="outline-container-orgf46d332" class="outline-3">
+<h3 id="orgf46d332"><span class="section-number-3">2.1</span> Remote relationships</h3>
 <div class="outline-text-3" id="text-2-1">
 </div>
-<div id="outline-container-orgba8c8bc" class="outline-4">
-<h4 id="orgba8c8bc"><span class="section-number-4">2.1.1.</span> <span class="todo TODO">TODO</span> To remote database</h4>
+<div id="outline-container-org2193070" class="outline-4">
+<h4 id="org2193070"><span class="section-number-4">2.1.1</span> <span class="todo TODO">TODO</span> To remote database</h4>
 </div>
-<div id="outline-container-orgab2f25d" class="outline-4">
-<h4 id="orgab2f25d"><span class="section-number-4">2.1.2.</span> <span class="todo TODO">TODO</span> To Remote Schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
+<div id="outline-container-org792b03a" class="outline-4">
+<h4 id="org792b03a"><span class="section-number-4">2.1.2</span> <span class="todo TODO">TODO</span> To Remote Schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
 </div>
 </div>
-<div id="outline-container-org4a3fa2a" class="outline-3">
-<h3 id="org4a3fa2a"><span class="section-number-3">2.2.</span> Authorization in remote schema</h3>
+<div id="outline-container-org6a5be66" class="outline-3">
+<h3 id="org6a5be66"><span class="section-number-3">2.2</span> Authorization in remote schema</h3>
 <div class="outline-text-3" id="text-2-2">
 </div>
-<div id="outline-container-orga3fbb4e" class="outline-4">
-<h4 id="orga3fbb4e"><span class="section-number-4">2.2.1.</span> <span class="todo TODO">TODO</span> Forwarding auth context to/from remote schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
+<div id="outline-container-orgb67523b" class="outline-4">
+<h4 id="orgb67523b"><span class="section-number-4">2.2.1</span> <span class="todo TODO">TODO</span> Forwarding auth context to/from remote schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
 </div>
-<div id="outline-container-org0140670" class="outline-4">
-<h4 id="org0140670"><span class="section-number-4">2.2.2.</span> <span class="todo TODO">TODO</span> Remote schema permissions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
+<div id="outline-container-orgb384d90" class="outline-4">
+<h4 id="orgb384d90"><span class="section-number-4">2.2.2</span> <span class="todo TODO">TODO</span> Remote schema permissions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
 </div>
-<div id="outline-container-orga05b3ac" class="outline-4">
-<h4 id="orga05b3ac"><span class="section-number-4">2.2.3.</span> <span class="todo TODO">TODO</span> Bypassing Hasura's auth for remote schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
+<div id="outline-container-org99307ae" class="outline-4">
+<h4 id="org99307ae"><span class="section-number-4">2.2.3</span> <span class="todo TODO">TODO</span> Bypassing Hasura's auth for remote schema&#xa0;&#xa0;&#xa0;<span class="tag"><span class="DOES_NOT_INVOLVE_DB">DOES_NOT_INVOLVE_DB</span></span></h4>
 </div>
 </div>
 </div>
-<div id="outline-container-org3599a94" class="outline-2">
-<h2 id="org3599a94"><span class="section-number-2">3.</span> Event Triggers</h2>
+<div id="outline-container-orga28a6af" class="outline-2">
+<h2 id="orga28a6af"><span class="section-number-2">3</span> Event Triggers</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-org942aa82" class="outline-3">
-<h3 id="org942aa82"><span class="section-number-3">3.1.</span> Creating an Event Trigger</h3>
+<div id="outline-container-orga6c3283" class="outline-3">
+<h3 id="orga6c3283"><span class="section-number-3">3.1</span> Creating an Event Trigger</h3>
 <div class="outline-text-3" id="text-3-1">
 </div>
-<div id="outline-container-org43529a5" class="outline-4">
-<h4 id="org43529a5"><span class="section-number-4">3.1.1.</span> <span class="todo TODO">TODO</span> Create an insert trigger</h4>
+<div id="outline-container-orgfa716fd" class="outline-4">
+<h4 id="orgfa716fd"><span class="section-number-4">3.1.1</span> <span class="todo TODO">TODO</span> Create an insert trigger</h4>
 </div>
-<div id="outline-container-org3659437" class="outline-4">
-<h4 id="org3659437"><span class="section-number-4">3.1.2.</span> <span class="todo TODO">TODO</span> Create an update trigger</h4>
+<div id="outline-container-orgc9c0bce" class="outline-4">
+<h4 id="orgc9c0bce"><span class="section-number-4">3.1.2</span> <span class="todo TODO">TODO</span> Create an update trigger</h4>
 <div class="outline-text-4" id="text-3-1-2">
 <ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> Perform a mutation to update an order</li>
 <li class="off"><code>[&#xa0;]</code> Update an order from the Console</li>
 </ul>
-
-
 <div class="org-src-container">
 <pre class="src src-graphql">mutation MyMutation {
   update_order_by_pk(pk_columns: {id: "1564344e-e528-43de-b88e-dab9c3efa44e"}, _set: {state: "fulfilled"}) {
@@ -870,7 +905,6 @@ Delete
 }
 </pre>
 </div>
-
 <ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> Check the events logs</li>
 </ul>
@@ -878,16 +912,16 @@ Delete
 </div>
 </div>
 </div>
-<div id="outline-container-orgbe03cff" class="outline-2">
-<h2 id="orgbe03cff"><span class="section-number-2">4.</span> Scheduled Triggers</h2>
+<div id="outline-container-org659c01a" class="outline-2">
+<h2 id="org659c01a"><span class="section-number-2">4</span> Scheduled Triggers</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-org4fbc72b" class="outline-3">
-<h3 id="org4fbc72b"><span class="section-number-3">4.1.</span> Creating a chron trigger</h3>
+<div id="outline-container-orgf29c94d" class="outline-3">
+<h3 id="orgf29c94d"><span class="section-number-3">4.1</span> Creating a chron trigger</h3>
 <div class="outline-text-3" id="text-4-1">
 </div>
-<div id="outline-container-org72c64ff" class="outline-4">
-<h4 id="org72c64ff"><span class="section-number-4">4.1.1.</span> <span class="todo TODO">TODO</span> Create a chron trigger</h4>
+<div id="outline-container-org18b3578" class="outline-4">
+<h4 id="org18b3578"><span class="section-number-4">4.1.1</span> <span class="todo TODO">TODO</span> Create a chron trigger</h4>
 <div class="outline-text-4" id="text-4-1-1">
 <ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> Allow time to pass</li>
@@ -896,20 +930,20 @@ Delete
 </div>
 </div>
 </div>
-<div id="outline-container-org1b455b8" class="outline-3">
-<h3 id="org1b455b8"><span class="section-number-3">4.2.</span> Creating a one-off scheduled event</h3>
+<div id="outline-container-orga96c9b6" class="outline-3">
+<h3 id="orga96c9b6"><span class="section-number-3">4.2</span> Creating a one-off scheduled event</h3>
 <div class="outline-text-3" id="text-4-2">
 </div>
-<div id="outline-container-org90d4d7c" class="outline-4">
-<h4 id="org90d4d7c"><span class="section-number-4">4.2.1.</span> <span class="todo TODO">TODO</span> Create a one-off scheduled event</h4>
+<div id="outline-container-org0544ad7" class="outline-4">
+<h4 id="org0544ad7"><span class="section-number-4">4.2.1</span> <span class="todo TODO">TODO</span> Create a one-off scheduled event</h4>
 </div>
 </div>
-<div id="outline-container-orgccfe72d" class="outline-3">
-<h3 id="orgccfe72d"><span class="section-number-3">4.3.</span> Cleaning up scheduled triggers data</h3>
+<div id="outline-container-org5397609" class="outline-3">
+<h3 id="org5397609"><span class="section-number-3">4.3</span> Cleaning up scheduled triggers data</h3>
 <div class="outline-text-3" id="text-4-3">
 </div>
-<div id="outline-container-orgcf14f0f" class="outline-4">
-<h4 id="orgcf14f0f"><span class="section-number-4">4.3.1.</span> <span class="todo TODO">TODO</span> Clear Everything</h4>
+<div id="outline-container-org4e5a243" class="outline-4">
+<h4 id="org4e5a243"><span class="section-number-4">4.3.1</span> <span class="todo TODO">TODO</span> Clear Everything</h4>
 <div class="outline-text-4" id="text-4-3-1">
 <ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> <p>
@@ -934,8 +968,8 @@ Scheduled events
 </div>
 </div>
 </div>
-<div id="outline-container-org89f5462" class="outline-2">
-<h2 id="org89f5462"><span class="section-number-2">5.</span> Test Matrix</h2>
+<div id="outline-container-orgccd94fe" class="outline-2">
+<h2 id="orgccd94fe"><span class="section-number-2">5</span> Test Matrix</h2>
 <div class="outline-text-2" id="text-5">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1241,8 +1275,8 @@ Scheduled events
 </table>
 </div>
 
-<div id="outline-container-org5e5c528" class="outline-3">
-<h3 id="org5e5c528"><span class="section-number-3">5.1.</span> NOTES</h3>
+<div id="outline-container-org8fe6ef4" class="outline-3">
+<h3 id="org8fe6ef4"><span class="section-number-3">5.1</span> NOTES</h3>
 <div class="outline-text-3" id="text-5-1">
 <dl class="org-dl">
 <dt>Test</dt><dd>do we test this (YES, NO, TBD)</dd>
@@ -1267,8 +1301,8 @@ because of an identified gap in Hasura that needs to be fixed.</dd>
 <div id="postamble" class="status">
 <p class="date">Date: 2022-06-03 Fri 00:00</p>
 <p class="author">Author: David A. Ventimiglia</p>
-<p class="date">Created: 2022-07-19 Tue 07:57</p>
-<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+<p class="date">Created: 2022-08-31 Wed 16:40</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
 </html>
