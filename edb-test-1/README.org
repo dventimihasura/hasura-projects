@@ -354,8 +354,8 @@
 ***** TODO Bypassing Hasura's auth for remote schema :DOES_NOT_INVOLVE_DB:
 * Event Triggers
 *** Creating an Event Trigger
-***** TODO Create an insert trigger
-***** TODO Create an update trigger
+***** DONE Create an insert trigger
+***** DONE Create an update trigger
 - [ ] Perform a mutation to update an order
 - [ ] Update an order from the Console
 #+begin_src graphql
@@ -425,8 +425,8 @@
 | Subscriptions (Live Queries)                            | TBD  | SUCCESS |                                          |
 | Test all Postgres/Hasura types (mutation, query)        | TBD  | SUCCESS |                                          |
 | Remote Database                                         | TBD  |         | We forgot to test this!                  |
-| Creating event triggers                                 | YES  | FAIL    | Needs a Hasura fix                       |
-| Creating a chron trigger                                | TBD  |         | Needs a Hasura fix                       |
+| Creating event triggers                                 | YES  | FAIL    | Needs a Hasura fix. See Notes below      |
+| Creating a chron trigger                                | TBD  | FAIL    | Needs a Hasura fix. See Notes below      |
 | Creating a one-off scheduled event                      | TBD  |         | Needs a Hasura fix                       |
 | Cleaning up scheduled trigger data                      | TBD  |         | Needs a Hasura fix                       |
 | CI/CD: hasura metadata (apply, clear, reload, status)   | YES  | SUCCESS |                                          |
@@ -452,3 +452,29 @@
 
 #  LocalWords:  xDEADBEEF lsn FFFFFFFF abc eb bfb ccde de efa hdb BDR
 #  LocalWords:  cron
+
+*** Additional Notes
+
+Event Trigger creation fails with the following error:
+
+#+begin_src json
+{
+    "internal": {
+        "statement": "\n  INSERT INTO hdb_catalog.hdb_source_catalog_version(version, upgraded_on)\n    VALUES ($1, NOW())\n   ON CONFLICT ((version IS NOT NULL))\n   DO UPDATE SET version = $1, upgraded_on = NOW()\n  ",
+        "prepared": false,
+        "error": {
+            "exec_status": "FatalError",
+            "hint": "To enable updating the table, set REPLICA IDENTITY using ALTER TABLE.",
+            "message": "cannot run INSERT ON CONFLICT DO UPDATE on table \"hdb_source_catalog_version\" because it does not have a replica identity and is part of replication set which publishes updates",
+            "status_code": "55000",
+            "description": null
+        },
+        "arguments": [
+            "(Oid 25,Just (\"2\",Binary))"
+        ]
+    },
+    "path": "$.args[0].args",
+    "error": "database query error",
+    "code": "unexpected"
+}
+#+end_src
