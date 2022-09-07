@@ -1,0 +1,11 @@
+table:
+  name: account
+  schema: public
+array_relationships:
+  - name: leads_aggregates
+    using:
+      foreign_key_constraint_on:
+        column: account_id
+        table:
+          name: leads_aggregate
+          schema: public
