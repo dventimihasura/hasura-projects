@@ -1,0 +1,3 @@
+table:
+  name: leaderboard_snapshot
+  schema: public
