@@ -283,6 +283,9 @@ query MyQuery {
    Performance-vs-accuracy is a common trade-off in systems of any
    kind. 
 3. Suitable indexes were placed on the necessary tables and views.
+4. The GraphQL version of the query to "Find accounts with a range of
+   ranks" is cumbersome because the Hasura GraphQL API does not
+   support `between` predicates in filters.
 
 <!--  LocalWords:  TotalOrder leaderboard POC DESC tablesample
  -->
