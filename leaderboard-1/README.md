@@ -87,7 +87,7 @@ It has these important details.
    obtained by joining to the `leads_aggregate` table on the related
    key. 
    
-Example queries:
+## Example SQL Queries ##
 
 ## Top-10 With a filter, Without ORDER BY, Without LIMIT ##
 
@@ -185,6 +185,89 @@ select
     join leads_aggregate on leads_aggregate.id = leaderboard_snapshot.id
     join account on account.id = leads_aggregate.account_id
     join sample on sample.rank between leaderboard_snapshot.rank - 2 and leaderboard_snapshot.rank + 2;
+```
+
+## Example GQL Queries ##
+
+### Top-10 With a filter, Without ORDER BY, Without LIMIT ###
+
+```graphql
+query MyQuery {
+  leaderboard_snapshot(where: {rank: {_lte: "10"}}) {
+    id
+    rank
+    leads {
+      referrals
+      account {
+        id
+        name
+        created_at
+      }
+    }
+  }
+}
+```
+
+### Top-10 Without a filter, With ORDER BY, With LIMIT ###
+
+```graphql
+query MyQuery {
+  leaderboard_snapshot(order_by: {rank: asc}, limit: 10) {
+    id
+    rank
+    leads {
+      referrals
+      account {
+        id
+        name
+        created_at
+      }
+    }
+  }
+}
+```
+
+## Find the rank of a particular account ##
+
+```graphql
+```
+
+## Find the account with a particular rank ##
+
+```graphql
+query MyQuery {
+  leaderboard_snapshot(where: {rank: {_eq: "500000"}}) {
+    id
+    rank
+    leads {
+      referrals
+      account {
+        id
+        name
+        created_at
+      }
+    }
+  }
+}
+```
+
+## Find accounts with a range of ranks ##
+
+```graphql
+query MyQuery {
+  leaderboard_snapshot(where: {rank: {_in: [499998, 499999, 500000, 500001, 500002]}}) {
+    id
+    rank
+    leads {
+      referrals
+      account {
+        id
+        name
+        created_at
+      }
+    }
+  }
+}
 ```
 
 ## Notes ##
