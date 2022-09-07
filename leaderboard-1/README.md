@@ -6,12 +6,12 @@ PostgreSQL and Hasura.
 # Why #
 
 Hasura users have asked for example in
-[GitHub](https://github.com/hasura/graphql-engine/discussions/8923
+[GitHub Issue 8923](https://github.com/hasura/graphql-engine/discussions/8923
 "GitHub Issue 8923") how to build a leader-board with PostgreSQL and
 Hasura.  Concerns about scalability and performance were raised.
 
 A "leader-board" is a database result imposes a
-[TotalOrder](https://en.wikipedia.org/wiki/Total_order "total order")
+[total order](https://en.wikipedia.org/wiki/Total_order "total order")
 over a set (a table, view, query result, etc.) and assigns
 monotonically-increasing numerical rank to items in the set.  Common
 query patterns are:
@@ -199,6 +199,7 @@ select
    most recent time it was built or refreshed.
    Performance-vs-accuracy is a common trade-off in systems of any
    kind. 
+3. Suitable indexes were placed on the necessary tables and views.
 
 <!--  LocalWords:  TotalOrder leaderboard POC DESC tablesample
  -->
