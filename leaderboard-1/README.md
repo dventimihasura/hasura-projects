@@ -10,9 +10,9 @@ Hasura users have asked for example in
 "GitHub Issue 8923") how to build a leader-board with PostgreSQL and
 Hasura.  Concerns about scalability and performance were raised.
 
-A "leader-board" is a database result imposes a
-[total order](https://en.wikipedia.org/wiki/Total_order "total order")
-over a set (a table, view, query result, etc.) and assigns
+A "leader-board" is a database result that imposes a [total
+order](https://en.wikipedia.org/wiki/Total_order "total order") over a
+set (a table, view, query result, etc.) and assigns
 monotonically-increasing numerical rank to items in the set.  Common
 query patterns are:
 
@@ -37,7 +37,7 @@ these tables.
   and `last_name`
   
 `leads_aggregate`
-: 100000 entries one for each `account` with a randomly generated
+: 1000000 entries one for each `account` with a randomly generated
   numerical value for `referrals`.  Values are chosen between 0
   and 1000000. 
   
@@ -184,7 +184,7 @@ select
     leaderboard_snapshot
     join leads_aggregate on leads_aggregate.id = leaderboard_snapshot.id
     join account on account.id = leads_aggregate.account_id
-    join sample on sample.rank between leaderboard_snapshot.rank - 2 and leaderboard_snapshot.rank + 2;
+    join sample on leaderboard_snapshot.rank between sample.rank - 2 and sample.rank + 2;
 ```
 
 ## Example GQL Queries ##
