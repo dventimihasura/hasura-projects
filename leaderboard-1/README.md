@@ -318,7 +318,14 @@ hasura seed apply
 hasura console
 ```
 
-5. (Optional) connect to the database using `psql` in another terminal.
+5. In Hasura Console, in the Data Tab, in the SQL editor, execute this
+   SQL statement to refresh the materialized view.
+   
+```sql
+refresh materialized view leaderboard_snapshot
+```
+
+6. (Optional) connect to the database using `psql` in another terminal.
 
 ```shell
 psql "postgresql://postgres:postgrespassword@localhost:5432/postgres"
