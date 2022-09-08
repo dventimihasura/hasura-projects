@@ -287,5 +287,42 @@ query MyQuery {
    ranks" is cumbersome because the Hasura GraphQL API does not
    support `between` predicates in filters.
 
+# Steps #
+
+1. Clone this repository.
+
+```shell
+git clone git@github.com:dventimihasura/hasura-projects.git
+```
+
+2. Change to the `leaderboard-1/hasura` directory.
+
+```shell
+cd hasura-projects/leaderboard-1/hasura
+```
+
+3. Launch the services using Docker Compose.
+
+```shell
+docker-compose up -d
+```
+
+4. Use the Hasura CLI to apply the metadata, apply the migrations,
+   reload the metadata, load the seed data, and launche the console.
+   
+```shell
+hasura metadata apply
+hasura migrate apply
+hasura metadata reload
+hasura seed apply
+hasura console
+```
+
+5. (Optional) connect to the database using `psql` in another terminal.
+
+```shell
+psql "postgresql://postgres:postgrespassword@localhost:5432/postgres"
+```
+
 <!--  LocalWords:  TotalOrder leaderboard POC DESC tablesample
  -->
