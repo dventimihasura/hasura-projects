@@ -1,5 +1,45 @@
 # Abstract #
 
+To create a "leaderboard" or
+[standings](https://en.wikipedia.org/wiki/Standings "standings") in a
+database application, don't just write SQL `select` queries with
+`order by` and `limit` clauses.  The efficiency and flexibility of
+this approach is very low.  Instead, use
+[window functions](https://en.wikipedia.org/wiki/Window_function_(SQL)
+"window functions"), [views](https://en.wikipedia.org/wiki/View_(SQL)
+"views"),
+[materialized views](https://en.wikipedia.org/wiki/Materialized_view
+"materialized views"), and suitable
+[indexes](https://use-the-index-luke.com/ "indexes").  Window
+functions like `rank`, `dense_rank`, and `row_number` create genuine
+numerical rank values, which `order by` alone does not, which can be
+stored and indexed, and which increase application flexibility.  Views
+encapsulate that query logic in a
+[relation](https://en.wikipedia.org/wiki/Relation_(database)
+"relation") for easy reuse or tracking in a tool like
+[Hasura](https://hasura.io/ "hasura"). Materialized views then cache
+that output for fast retrieval.  Finally, indexes on the table columns
+used to generate the rankings, indexes on any join columns involved,
+and indexes on the rank values in the materialized views themselves
+lead to even better performance.  An example of this approach is
+presented in a GitHub repository
+[here](https://github.com/dventimihasura/hasura-projects/tree/master/leaderboard-1
+"here").
+
+This approach applies just a few basic principles to let the database
+help you do what it does best, which is operating over sets of data in
+large volumes with good performance.
+
+1. DO perform the work right in the database, using SQL.
+2. DO NOT perform the work in application layer code.
+3. DO use powerful tools like window functions, views, materialized
+   views, and indexes to help the database reduce the
+   [working set](https://en.wikipedia.org/wiki/Working_set "working
+   set") and achieve good performance.
+4. DO NOT use crude tools like SQL `order by` and `limit`.
+5. DO observe trade-offs between performance and accuracy.
+6. DO NOT over-promise and under-deliver.
+
 # What #
 
 This project explores approaches for building a leader-board with
