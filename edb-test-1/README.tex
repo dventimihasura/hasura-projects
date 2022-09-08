@@ -1,4 +1,4 @@
-% Created 2022-09-02 Fri 15:34
+% Created 2022-09-08 Thu 12:33
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -31,13 +31,13 @@
 
 
 \section{Databases}
-\label{sec:org50a7424}
+\label{sec:orgfed373d}
 \subsection{Postgres}
-\label{sec:orga668f6e}
+\label{sec:org5675fdc}
 \subsection{Schema}
-\label{sec:org9f7333d}
+\label{sec:org62d280f}
 \subsubsection{{\bfseries\sffamily DONE} Table Basics}
-\label{sec:org9ffa711}
+\label{sec:orgd8a359b}
 \begin{itemize}
 \item[{$\boxtimes$}] Add database
 \item[{$\boxtimes$}] Add account and product tables
@@ -106,7 +106,7 @@ mutation MyMutation {
 \end{itemize}
 \end{itemize}
 \subsubsection{{\bfseries\sffamily DONE} Table Relationships}
-\label{sec:org1f19421}
+\label{sec:orgaf1d19e}
 \begin{itemize}
 \item[{$\boxtimes$}] Add the order and order detail tables
 \item[{$\boxtimes$}] Add relationships for account, order, order detail, and product
@@ -142,9 +142,9 @@ query MyQuery {
 \end{verbatim}
 \end{itemize}
 \subsubsection{{\bfseries\sffamily TODO} Remote Relationships\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
-\label{sec:orgb914b56}
+\label{sec:org3829435}
 \subsubsection{{\bfseries\sffamily DONE} Extend with Views}
-\label{sec:orgef71ec1}
+\label{sec:orgd9f9541}
 \begin{itemize}
 \item[{$\boxtimes$}] Add account\textsubscript{summary} view and relationships
 \item[{$\boxtimes$}] Query across table and view relationships
@@ -161,7 +161,7 @@ query MyQuery {
 \end{verbatim}
 \end{itemize}
 \subsubsection{{\bfseries\sffamily DONE} Extend with SQL Functions}
-\label{sec:org9c083e4}
+\label{sec:org5c4a51c}
 \begin{itemize}
 \item[{$\boxtimes$}] Add search functions
 \item[{$\boxtimes$}] Query search functions
@@ -183,15 +183,15 @@ query MyQuery {
 \end{verbatim}
 \end{itemize}
 \subsubsection{{\bfseries\sffamily DONE} Default field values}
-\label{sec:orgd510066}
+\label{sec:org66abc95}
 \subsubsection{{\bfseries\sffamily DONE} Enum type fields}
-\label{sec:org90f5db2}
+\label{sec:org99557a5}
 \begin{itemize}
 \item[{$\boxtimes$}] Create a native Postgres enum type for order status.
 \item[{$\boxtimes$}] Create a enum table for region and track it as order sales\textsubscript{region}.
 \end{itemize}
 \subsubsection{{\bfseries\sffamily DONE} Computed fields}
-\label{sec:org22a62b4}
+\label{sec:org21af866}
 \begin{itemize}
 \item[{$\boxtimes$}] Add product\textsubscript{sku} function and track it as a computed field
 \item[{$\boxtimes$}] Query product table with computed field
@@ -208,12 +208,12 @@ query {
 \end{verbatim}
 
 \subsubsection{{\bfseries\sffamily DONE} Customize auto-generated fields\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
-\label{sec:org86be622}
+\label{sec:org0e1e491}
 \begin{itemize}
 \item[{$\boxtimes$}] Change order.status to order.state for the GraphQL field name
 \end{itemize}
 \subsubsection{{\bfseries\sffamily DONE} Data validations}
-\label{sec:orga58dd10}
+\label{sec:orgf2ab2d7}
 \begin{itemize}
 \item[{$\boxtimes$}] Add non\textsubscript{negative}\textsubscript{price} check constraint
 \item[{$\boxtimes$}] Attempt mutations with and without negative prices
@@ -233,9 +233,9 @@ mutation MyMutation {
 \end{verbatim}
 \end{itemize}
 \subsubsection{{\bfseries\sffamily DONE} Using an existing database}
-\label{sec:orgd182bfd}
+\label{sec:org33351ad}
 \subsubsection{{\bfseries\sffamily DONE} Relay Schema\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
-\label{sec:org5ff57c6}
+\label{sec:org3bace26}
 \begin{itemize}
 \item[{$\boxtimes$}] Turn on the Relay API in the Console
 \end{itemize}
@@ -264,13 +264,13 @@ query MyQuery {
 }
 \end{verbatim}
 \subsection{Queries}
-\label{sec:org929a1b4}
+\label{sec:orgee7bf86}
 \subsubsection{{\bfseries\sffamily DONE} Simple object queries}
-\label{sec:org7b63330}
+\label{sec:orgfd75b0c}
 \subsubsection{{\bfseries\sffamily DONE} Nested object queries}
-\label{sec:org277b4c7}
+\label{sec:orgff0a21d}
 \subsubsection{{\bfseries\sffamily DONE} Aggregation queries}
-\label{sec:org6ce5b11}
+\label{sec:orgcb9bd4b}
 \begin{verbatim}
 query MyQuery {
   account_aggregate {
@@ -296,39 +296,39 @@ query MyQuery {
 }
 \end{verbatim}
 \subsubsection{{\bfseries\sffamily DONE} Filter query results / search queries}
-\label{sec:org11a8848}
+\label{sec:org5bdbced}
 \subsubsection{{\bfseries\sffamily DONE} Sort query results}
-\label{sec:orgf9c1f2d}
+\label{sec:org89b2155}
 \subsubsection{{\bfseries\sffamily DONE} Distinct query results}
-\label{sec:org95051f6}
+\label{sec:org500bd88}
 \subsubsection{{\bfseries\sffamily TODO} Using multiple arguments\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
-\label{sec:org8349c71}
+\label{sec:org6072330}
 \subsubsection{{\bfseries\sffamily TODO} Multiple queries in a request\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
-\label{sec:org52cb7e6}
+\label{sec:org38d7a43}
 \subsubsection{{\bfseries\sffamily TODO} Using variables / aliases / fragments / directives\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
-\label{sec:org1813577}
+\label{sec:org8a0157f}
 \subsubsection{{\bfseries\sffamily TODO} Query performance}
-\label{sec:orgc8f6310}
+\label{sec:orgbe1c75e}
 \subsection{Mutations}
-\label{sec:org1ba5a2e}
+\label{sec:org1c77a0e}
 \subsubsection{{\bfseries\sffamily DONE} Insert}
-\label{sec:orge275d70}
+\label{sec:orgf23df0d}
 \subsubsection{{\bfseries\sffamily TODO} Upsert}
-\label{sec:orgd252462}
+\label{sec:org7534149}
 \subsubsection{{\bfseries\sffamily DONE} Update}
-\label{sec:orgdb1781c}
+\label{sec:org379e375}
 \subsubsection{{\bfseries\sffamily TODO} Delete}
-\label{sec:orgd6a0b5e}
+\label{sec:orgba3677f}
 \subsubsection{{\bfseries\sffamily TODO} Multiple mutations in a request}
-\label{sec:org6bbb768}
+\label{sec:orgfda73bb}
 \subsection{Subscriptions}
-\label{sec:orgba2efab}
+\label{sec:orge509d5d}
 \subsubsection{{\bfseries\sffamily TODO} Live queries}
-\label{sec:org829f5c8}
+\label{sec:org255d256}
 \subsection{Supported Postgres types}
-\label{sec:org0cdd61d}
+\label{sec:org8070d2d}
 \subsubsection{{\bfseries\sffamily DONE} Perform inserts on the \texttt{misc} table.}
-\label{sec:orgaa7142c}
+\label{sec:orgea08508}
 \begin{verbatim}
 mutation {
   insert_misc(objects: [
@@ -418,29 +418,29 @@ mutation {
 \end{verbatim}
 
 \section{Remote Schema}
-\label{sec:org587f8f1}
+\label{sec:orgda6b431}
 \subsection{Remote relationships}
-\label{sec:org62754fe}
+\label{sec:org4b7d9a4}
 \subsubsection{{\bfseries\sffamily TODO} To remote database}
-\label{sec:org415c76d}
+\label{sec:orge2d9779}
 \subsubsection{{\bfseries\sffamily TODO} To Remote Schema\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
-\label{sec:orge9a1cfc}
+\label{sec:orge84f2bd}
 \subsection{Authorization in remote schema}
-\label{sec:org1110818}
+\label{sec:org80bd00d}
 \subsubsection{{\bfseries\sffamily TODO} Forwarding auth context to/from remote schema\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
-\label{sec:orgf2226b7}
+\label{sec:orgacc8bd4}
 \subsubsection{{\bfseries\sffamily TODO} Remote schema permissions\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
-\label{sec:org211ab7c}
+\label{sec:org26b3f49}
 \subsubsection{{\bfseries\sffamily TODO} Bypassing Hasura's auth for remote schema\hfill{}\textsc{DOES\_NOT\_INVOLVE\_DB}}
-\label{sec:org10f91f5}
+\label{sec:org9c2f86c}
 \section{Event Triggers}
-\label{sec:org89b1537}
+\label{sec:org2444bb0}
 \subsection{Creating an Event Trigger}
-\label{sec:org9c9293c}
+\label{sec:orgc887d64}
 \subsubsection{{\bfseries\sffamily DONE} Create an insert trigger}
-\label{sec:orgb6b7479}
+\label{sec:org9528673}
 \subsubsection{{\bfseries\sffamily DONE} Create an update trigger}
-\label{sec:org2690f68}
+\label{sec:org8373561}
 \begin{itemize}
 \item[{$\square$}] Perform a mutation to update an order
 \item[{$\square$}] Update an order from the Console
@@ -457,23 +457,23 @@ mutation MyMutation {
 \item[{$\square$}] Check the events logs
 \end{itemize}
 \section{Scheduled Triggers}
-\label{sec:org17a6475}
+\label{sec:orgc40938f}
 \subsection{Creating a chron trigger}
-\label{sec:org5c5314e}
+\label{sec:org5db7765}
 \subsubsection{{\bfseries\sffamily TODO} Create a chron trigger}
-\label{sec:org501cf47}
+\label{sec:orgcfd18db}
 \begin{itemize}
 \item[{$\square$}] Allow time to pass
 \item[{$\square$}] Check the events logs
 \end{itemize}
 \subsection{Creating a one-off scheduled event}
-\label{sec:orgff70621}
+\label{sec:org6796172}
 \subsubsection{{\bfseries\sffamily TODO} Create a one-off scheduled event}
-\label{sec:org67b05c9}
+\label{sec:orgc4dd55b}
 \subsection{Cleaning up scheduled triggers data}
-\label{sec:org180ea80}
+\label{sec:org5ffb846}
 \subsubsection{{\bfseries\sffamily TODO} Clear Everything}
-\label{sec:orgef0e673}
+\label{sec:org915fc74}
 \begin{itemize}
 \item[{$\square$}] Cron triggers
 
@@ -488,7 +488,7 @@ DELETE FROM hdb_catalog.hdb_scheduled_events;
 \end{verbatim}
 \end{itemize}
 \section{Test Matrix}
-\label{sec:org66841b0}
+\label{sec:orgef421fa}
 \begin{center}
 \begin{tabular}{llll}
 \hline
@@ -538,7 +538,7 @@ CI/CD: hasura migrate (apply, apply --down all, delete) & YES & SUCCESS & \\
 \end{center}
 
 \subsection{NOTES}
-\label{sec:org01b9203}
+\label{sec:org8d056ce}
 
 \begin{description}
 \item[{Test}] do we test this (YES, NO, TBD)
@@ -558,9 +558,11 @@ because of an identified gap in Hasura that needs to be fixed.
 \end{description}
 
 \subsection{Additional Notes}
-\label{sec:orgfe89b4c}
+\label{sec:org088be7e}
 
-Event Trigger creation fails with the following error:
+\begin{enumerate}
+\item Event Trigger creation fails with the following error:
+\end{enumerate}
 
 \begin{verbatim}
 {
@@ -583,4 +585,30 @@ Event Trigger creation fails with the following error:
     "code": "unexpected"
 }
 \end{verbatim}
+
+\begin{enumerate}
+\item Cannot alter table with volatile function.  This error is the result of trying to add a UUID column to an existing table:
+\end{enumerate}
+
+\begin{verbatim}
+{
+    "internal": {
+	"statement": "CREATE EXTENSION IF NOT EXISTS pgcrypto;\nalter table \"public\"."\misc\" add colum \"id\" uuid\n not null unique default gen_random_uuid():\n",
+	"prepared": false,
+	"error": {
+	    "exec_status": "FatalError",
+	    "hint": "null.",
+	    "message": "ALTER TABLE ... ADD COLUMN ... (mutable) DEFAULT may not affect replicated tables on a BDR node",
+	    "status_code": "0A000",
+	    "description": null
+	},
+	"arguments": []
+    },
+    "path": "$",
+    "error": "query execution failed",
+    "code": "postgres-error"
+}
+\end{verbatim}
+
+Workaround is detailed in \url{https://www.enterprisedb.com/docs/pgd/latest/bdr/ddl/\#adding-a-column}
 \end{document}
