@@ -455,7 +455,7 @@
 
 *** Additional Notes
 
-Event Trigger creation fails with the following error:
+1. Event Trigger creation fails with the following error:
 
 #+begin_src json
 {
@@ -478,3 +478,27 @@ Event Trigger creation fails with the following error:
     "code": "unexpected"
 }
 #+end_src
+
+2. Cannot alter table with volatile function.  This error is the result of trying to add a UUID column to an existing table:
+
+#+begin_src json
+{
+    "internal": {
+        "statement": CREATE EXTENSION IF NOT EXISTS pgcrypto;\nalter table \"public\"."\misc\" add colum \"id\" uuid\n not null unique default gen_random_uuid():\n,
+        "prepared": false,
+        "error": {
+            "exec_status": "FatalError",
+            "hint": "null.",
+            "message": "ALTER TABLE ... ADD COLUMN ... (mutable) DEFAULT may not affect replicated tables on a BDR node",
+            "status_code": "0A000",
+            "description": null
+        },
+        "arguments": []
+    },
+    "path": "$",
+    "error": "query execution failed",
+    "code": "postgres-error"
+}
+#+end_src
+
+Workaround is detailed in https://www.enterprisedb.com/docs/pgd/latest/bdr/ddl/#adding-a-column
