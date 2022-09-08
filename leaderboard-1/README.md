@@ -339,11 +339,10 @@ psql "postgresql://postgres:postgrespassword@localhost:5432/postgres"
    execute these statements to replace the view and then to refresh
    the materialized view.  The `row_number` window function is
    guaranteed to generate monotonically-increasing values unlike the
-   `rank` function, which may produce duplicates.  However, the order
-   of entries with the same value of `referrals` is not guaranteed.
-   If that ordering is important (essentially, if there is a chosen
-   scheme for breaking ties) then continue to use the `rank` window
-   function. 
+   `rank` function, which may produce duplicates.  However, preserving
+   ties may be important, depending on the application.  If they are,
+   then continue to use the `rank` window function.
+
    
 ```sql
 create or replace view leaderboard as
