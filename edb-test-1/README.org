@@ -484,7 +484,7 @@
 #+begin_src json
 {
     "internal": {
-        "statement": CREATE EXTENSION IF NOT EXISTS pgcrypto;\nalter table \"public\"."\misc\" add colum \"id\" uuid\n not null unique default gen_random_uuid():\n,
+        "statement": "CREATE EXTENSION IF NOT EXISTS pgcrypto;\nalter table \"public\"."\misc\" add colum \"id\" uuid\n not null unique default gen_random_uuid():\n",
         "prepared": false,
         "error": {
             "exec_status": "FatalError",
