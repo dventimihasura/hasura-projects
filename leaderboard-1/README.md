@@ -1,3 +1,5 @@
+# Abstract #
+
 # What #
 
 This project explores approaches for building a leader-board with
@@ -329,6 +331,27 @@ refresh materialized view leaderboard_snapshot
 
 ```shell
 psql "postgresql://postgres:postgrespassword@localhost:5432/postgres"
+```
+
+7. (Optional) replace the view definition for `leaderboard` for
+   simplicity, while sacrificing control over tie-breaking.  In a SQL
+   client or in Hasura Console, in the Data Tab, in the SQL editor,
+   execute these statements to replace the view and then to refresh
+   the materialized view.  The `row_number` window function is
+   guaranteed to generate monotonically-increasing values unlike the
+   `rank` function, which may produce duplicates.  However, the order
+   of entries with the same value of `referrals` is not guaranteed.
+   If that ordering is important (essentially, if there is a chosen
+   scheme for breaking ties) then continue to use the `rank` window
+   function. 
+   
+```sql
+create or replace view leaderboard as
+  select
+    row_number() over (order by referrals desc) as rank,
+    leads_aggregate.id
+    from
+      leads_aggregate;
 ```
 
 <!--  LocalWords:  TotalOrder leaderboard POC DESC tablesample
