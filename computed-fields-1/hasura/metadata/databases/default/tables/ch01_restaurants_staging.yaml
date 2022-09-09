@@ -1,0 +1,3 @@
+table:
+  name: restaurants_staging
+  schema: ch01

@@ -1,0 +1,11 @@
+table:
+  name: lu_franchises
+  schema: ch01
+array_relationships:
+  - name: restaurants
+    using:
+      foreign_key_constraint_on:
+        column: franchise
+        table:
+          name: restaurants
+          schema: ch01

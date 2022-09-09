@@ -1,4 +1,1 @@
-- "!include public_account.yaml"
-- "!include public_leaderboard.yaml"
-- "!include public_leaderboard_snapshot.yaml"
-- "!include public_leads_aggregate.yaml"
+[]

@@ -1,0 +1,4 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- CREATE INDEX fi_restaurants_franchises
+--  ON ch01.restaurants (franchise);
