@@ -1,7 +1,3 @@
 table:
   name: restaurants
   schema: ch01
-object_relationships:
-  - name: lu_franchise
-    using:
-      foreign_key_constraint_on: franchise
