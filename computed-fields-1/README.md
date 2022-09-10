@@ -1,5 +1,9 @@
 # Abstract #
 
+In Hasura, ordering results by Computed Fields is not strictly
+necessary since it is already possible to order results of Custom
+Functions.  We illustrate how to do that here.
+
 # What #
 
 This is a Proof-Of-Concept (POC) that demonstrates how to use a
