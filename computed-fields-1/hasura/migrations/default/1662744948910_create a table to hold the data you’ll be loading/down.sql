@@ -1,8 +1,0 @@
--- Could not auto-generate a down migration.
--- Please write an appropriate down migration for the SQL below:
--- CREATE TABLE ch01.restaurants
--- (
---   id serial primary key,
---   franchise char(3) NOT NULL,
---   geom geometry(point,2163)
--- );
