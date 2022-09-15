@@ -44,7 +44,7 @@ been modified in this POC.
 This POC has these important pieces which, in the database, are in the
 `ch01` schema.
 
-`restaurants` : restaurants with a `franchise` identifier (an md5 has
+`restaurants` : restaurants with a `franchise` identifier (an md5 hash
 of name and address) and a PostGIS `geometry` storing their `Point`
 locations, with ~5000 entries
 
