@@ -10,3 +10,6 @@ drop function if exists product_search cascade;
 
 drop function if exists product_search_slow cascade;
 
+drop extension if exists pgcrypto cascade;
+
+drop type if exists status cascade;
