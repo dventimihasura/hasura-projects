@@ -12,7 +12,6 @@ create or replace view account as
     account.name,
     account.created_at,
     account.updated_at,
-    account.country_id,
     country.name as country
     from
       core.account
