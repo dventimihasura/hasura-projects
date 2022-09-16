@@ -1,15 +1,13 @@
 table:
   name: account
   schema: public
-object_relationships:
-  - name: countryByCountryId
-    using:
-      foreign_key_constraint_on: country_id
 array_relationships:
   - name: orders
     using:
-      foreign_key_constraint_on:
-        column: account_id
-        table:
+      manual_configuration:
+        column_mapping:
+          id: account_id
+        insertion_order: null
+        remote_table:
           name: order
           schema: public
