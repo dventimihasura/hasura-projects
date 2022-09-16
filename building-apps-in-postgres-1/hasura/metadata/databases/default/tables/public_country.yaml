@@ -8,4 +8,4 @@ array_relationships:
         column: country_id
         table:
           name: account
-          schema: public
+          schema: core

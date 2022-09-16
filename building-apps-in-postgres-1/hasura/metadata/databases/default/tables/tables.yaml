@@ -1,4 +1,4 @@
-- "!include public_account.yaml"
+- "!include core_account.yaml"
 - "!include public_country.yaml"
 - "!include public_order.yaml"
 - "!include public_order_detail.yaml"
