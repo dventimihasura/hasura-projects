@@ -1,6 +1,10 @@
 table:
   name: account
   schema: public
+object_relationships:
+  - name: countryByCountryId
+    using:
+      foreign_key_constraint_on: country_id
 array_relationships:
   - name: orders
     using:
