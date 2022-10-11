@@ -1,0 +1,10 @@
+table:
+  name: product_price
+  schema: public
+object_relationships:
+  - name: merchant
+    using:
+      foreign_key_constraint_on: merchant_id
+  - name: product
+    using:
+      foreign_key_constraint_on: product_id

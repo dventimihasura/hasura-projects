@@ -1,0 +1,11 @@
+table:
+  name: merchant
+  schema: public
+array_relationships:
+  - name: product_prices
+    using:
+      foreign_key_constraint_on:
+        column: merchant_id
+        table:
+          name: product_price
+          schema: public
