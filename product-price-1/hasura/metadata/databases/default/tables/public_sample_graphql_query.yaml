@@ -1,0 +1,3 @@
+table:
+  name: sample_graphql_query
+  schema: public
