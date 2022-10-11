@@ -1,5 +1,6 @@
 - "!include public_account.yaml"
 - "!include public_merchant.yaml"
+- "!include public_min_product_prices.yaml"
 - "!include public_order.yaml"
 - "!include public_order_detail.yaml"
 - "!include public_product.yaml"
