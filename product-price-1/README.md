@@ -71,6 +71,143 @@ query MyQuery {
 }
 ```
 
+This should produce data like the following.
+
+```json
+{
+  "data": {
+    "product_min_prices": [
+      {
+        "product_id": "868bde21-37de-412f-95f4-a219142d37f2",
+        "merchant_id": "4fa28a25-822b-4536-b999-48019524ff5f",
+        "price": 28,
+        "created_at": "2022-10-11T21:10:06.673027+00:00",
+        "id": "5e02dedb-48ec-43ed-a882-2dd24f188160",
+        "updated_at": "2022-10-11T21:10:06.673027+00:00",
+        "product": {
+          "name": "Flower - Daisies"
+        },
+        "merchant": {
+          "name": "Jaxbean"
+        }
+      },
+      {
+        "product_id": "868bde21-37de-412f-95f4-a219142d37f2",
+        "merchant_id": "ecc0585b-033d-4cd2-a5d3-282bf7fec994",
+        "price": 28,
+        "created_at": "2022-10-11T21:10:06.673027+00:00",
+        "id": "e530c50b-964a-460f-b105-0852a05f979d",
+        "updated_at": "2022-10-11T21:10:06.673027+00:00",
+        "product": {
+          "name": "Flower - Daisies"
+        },
+        "merchant": {
+          "name": "Abata"
+        }
+      },
+      {
+        "product_id": "868bde21-37de-412f-95f4-a219142d37f2",
+        "merchant_id": "85f3a655-c17b-4f79-8125-7755038cd6c6",
+        "price": 28,
+        "created_at": "2022-10-11T21:10:06.673027+00:00",
+        "id": "70a855cc-c0a6-4816-ac93-3e775db1d921",
+        "updated_at": "2022-10-11T21:10:06.673027+00:00",
+        "product": {
+          "name": "Flower - Daisies"
+        },
+        "merchant": {
+          "name": "Riffpath"
+        }
+      },
+      {
+        "product_id": "868bde21-37de-412f-95f4-a219142d37f2",
+        "merchant_id": "8a699995-778d-4dbf-889f-0f1ee8e43ba8",
+        "price": 28,
+        "created_at": "2022-10-11T21:10:06.673027+00:00",
+        "id": "baf6168b-fca0-4403-a1d0-ed19c0adaa3a",
+        "updated_at": "2022-10-11T21:10:06.673027+00:00",
+        "product": {
+          "name": "Flower - Daisies"
+        },
+        "merchant": {
+          "name": "Linklinks"
+        }
+      },
+      {
+        "product_id": "868bde21-37de-412f-95f4-a219142d37f2",
+        "merchant_id": "32094189-d14f-41b6-936a-dfc4b6de59a1",
+        "price": 28,
+        "created_at": "2022-10-11T21:10:06.673027+00:00",
+        "id": "291302d2-9d90-433a-9a1a-e18158ad7175",
+        "updated_at": "2022-10-11T21:10:06.673027+00:00",
+        "product": {
+          "name": "Flower - Daisies"
+        },
+        "merchant": {
+          "name": "Brightbean"
+        }
+      },
+      {
+        "product_id": "aa898c80-34ad-4d76-a122-e32dbeba8525",
+        "merchant_id": "f4fbbfba-bc83-4cd0-8b9e-c51eec525a10",
+        "price": 44,
+        "created_at": "2022-10-11T21:10:06.673027+00:00",
+        "id": "483a916b-4c15-4b41-852d-e08803d36866",
+        "updated_at": "2022-10-11T21:10:06.673027+00:00",
+        "product": {
+          "name": "Flour Dark Rye"
+        },
+        "merchant": {
+          "name": "Topicshots"
+        }
+      },
+      {
+        "product_id": "aa898c80-34ad-4d76-a122-e32dbeba8525",
+        "merchant_id": "5c0a837a-c168-46bb-8c3d-09a5f2493363",
+        "price": 44,
+        "created_at": "2022-10-11T21:10:06.673027+00:00",
+        "id": "bfd03e0a-925e-4cce-a357-566f26d32c1d",
+        "updated_at": "2022-10-11T21:10:06.673027+00:00",
+        "product": {
+          "name": "Flour Dark Rye"
+        },
+        "merchant": {
+          "name": "Dynava"
+        }
+      },
+      {
+        "product_id": "aa898c80-34ad-4d76-a122-e32dbeba8525",
+        "merchant_id": "c5a13fc4-e1ce-4400-8d66-2bf089f2fa8a",
+        "price": 44,
+        "created_at": "2022-10-11T21:10:06.673027+00:00",
+        "id": "d95cdab9-7a1a-4a8b-9e4d-58c86da9ceca",
+        "updated_at": "2022-10-11T21:10:06.673027+00:00",
+        "product": {
+          "name": "Flour Dark Rye"
+        },
+        "merchant": {
+          "name": "Eayo"
+        }
+      },
+      {
+        "product_id": "f3d90400-e103-4d8f-8827-e25fd7c03c6e",
+        "merchant_id": "c5a13fc4-e1ce-4400-8d66-2bf089f2fa8a",
+        "price": 4,
+        "created_at": "2022-10-11T21:10:06.673027+00:00",
+        "id": "379e708b-ce06-4aa6-ba7e-9f06f50f1575",
+        "updated_at": "2022-10-11T21:10:06.673027+00:00",
+        "product": {
+          "name": "Muffins - Assorted"
+        },
+        "merchant": {
+          "name": "Eayo"
+        }
+      }
+    ]
+  }
+}
+```
+
 # Why #
 
 Sometimes it is desireable or even necessary to encapsulate complex
