@@ -210,7 +210,7 @@ This should produce data like the following.
 
 # Why #
 
-Sometimes it is desireable or even necessary to encapsulate complex
+Sometimes it is desirable or even necessary to encapsulate complex
 SQL queries into views that accept parameters.  SQL views cannot
 accept parameters, however.  Therefore, a SQL function often can be
 substituted where one would ordinarily use a SQL view.
@@ -233,13 +233,13 @@ The procedure is quite straightforward.
 
 1. Write the function to `return setof <table>` where `<table>` is
    already a tracked table.
-2. Write the function to issue a `select <table>*` to ensure that the
+2. Write the function to issue a `select <table>.*` to ensure that the
    function returns a compatible column set.
 3. Avoid `order by`, and `limit` clauses within the function in order
    to maximize its generality.
 4. As always, pay close attention to any columns involved in `where`
    clauses, in `join` clauses, or in any `order by` or `group by`
-   clauses.
+   clauses and create indexes as necessary.
 
 # Steps #
 
@@ -279,3 +279,14 @@ psql -At "postgresql://postgres:postgrespassword@localhost:5432/postgres" -c "se
 
 7. Evaluate the efficiency of this operation by examining its query
    plan:  https://explain.dalibo.com/plan/ec95a7c468908678
+
+<!--  LocalWords:  cebad fe acf aded bd fcbb cb de dce aa bb ef ffa
+ -->
+<!--  LocalWords:  fc ee bde dedb ec Jaxbean ecc cd fec Abata dbf ba
+ -->
+<!--  LocalWords:  Riffpath baf fca adaa Linklinks dfc Brightbean bc
+ -->
+<!--  LocalWords:  dbeba fbbfba eec Topicshots bfd cce Dynava ce cdab
+ -->
+<!--  LocalWords:  da Eayo fd
+ -->
