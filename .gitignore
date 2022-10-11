@@ -1,2 +1,3 @@
 *.env
 scratch.*
+/product-price-1/sample.graphql
