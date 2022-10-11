@@ -1,0 +1,7 @@
+table:
+  name: owner
+  schema: ch01
+object_relationships:
+  - name: restaurant
+    using:
+      foreign_key_constraint_on: restaurant_id

@@ -1,3 +1,11 @@
 table:
   name: restaurants
   schema: ch01
+array_relationships:
+  - name: owners
+    using:
+      foreign_key_constraint_on:
+        column: restaurant_id
+        table:
+          name: owner
+          schema: ch01
