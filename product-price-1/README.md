@@ -240,6 +240,14 @@ The procedure is quite straightforward.
 4. As always, pay close attention to any columns involved in `where`
    clauses, in `join` clauses, or in any `order by` or `group by`
    clauses and create indexes as necessary.
+5. In the questions above we are asking for `product-merchant`
+   relationships with the lowest offered price for a given set of
+   products, filtered by a given set of merchants.  As written,
+   nothing forbids the prices offered for a product by different
+   merchants to be unique.  Consequently, multiple merchants may offer
+   the minimum price for a given product.  In the absence of a
+   strategy for breaking these ties, all matching entries appear in
+   the result.
 
 # Steps #
 
