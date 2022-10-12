@@ -6,7 +6,6 @@ services:
       - "5432:5432"
     restart: always
     volumes:
-      - db_data:/var/lib/postgresql/data
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_PASSWORD: postgrespassword
@@ -29,6 +28,4 @@ services:
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       ## uncomment next line to set an admin secret
       # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-volumes:
-  db_data:
 
