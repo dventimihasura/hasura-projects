@@ -46,24 +46,18 @@ This POC has these important pieces which, in the database, are in the
 
 `restaurants` : restaurants with a `franchise` identifier (an md5 hash
 of name and address) and a PostGIS `geometry` storing their `Point`
-locations, with ~5000 entries
-
-`restaurants_near` : a *dummy* table with the same fields as
-`restaurants`, adding a `distance double precision` field, but having
-*no data*
+locations, with ~5000 entries.  Crucially, the `restaurants` table
+*also* has a `distance double precision` field (nullable) to act as a
+place-holder for distances between restaurants and a location.  In the
+*table* that column is null, but functions that return this table as a
+type (such as the `restaurants_near_to` function below) can supply
+this value.
 
 `restaurants_near_to` : a *function* that accepts `lat double
 precision, lon double precision` arguments and returns `setof
-restaurants_near`, essentially calculating *on-the-fly* the data for
-the dummy `restaurants_near` table (which cannot and does not contain
-any actual data)
-
-In Hasura, `restaurants_near` is tracked as a table in order to create
-the GraphQL type that can be returned from the function, and then
-`restaurants_near_to` is tracked as the top-level field.  In practice,
-users of the GraphQL API will issue GraphQL queries that access
-`restaurants_near_to` but will never actually issue GraphQL queries
-that access `restaurants_near` as it is merely a dummy type.
+restaurants`, essentially calculating *on-the-fly* the data for the
+`restaurants_near` table *when* the `distance` column can be
+calculated based on input parameters.
 
 Importantly, GraphQL queries that invoke the top-level
 `restaurants_near_to` field (which takes arguments, as it is supported
@@ -72,6 +66,20 @@ computed `distance` field.  This satisfies the general requirement to
 sort by fields computed from a function, even if the particular
 feature request to sort by a Computed Field on a tracked *table* is
 not implemented.
+
+**NOTE**:  As we saw, functions tracked as a top-level field return a
+`setof <table>` where `<table>` is a table that is already being
+tracked.  A crucial thing to understand is that top-level fields from
+tracked functions *have the same relationships* as the tracked table
+whose type they return.  In this case, the `restaurants_near_to`
+top-level field *has the same relationships* as the `restaurants`
+table.  In this example, the `restaurants` top-level field participates in
+relationships with the `owner` table.  Consequently, the
+`restaurants_near_to` top-level field *ALSO* participates in
+relationships with the `owner` table.  This is convenenient, as it
+means that queries involving the function can be enriched with nested
+elements corresponding to related tables.  See the example query below
+for an illustration of this.
 
 # Steps #
 
@@ -98,10 +106,7 @@ docker-compose up -d
    reload the data, and launch the Console.
    
 ```shell
-hasura metadata apply
-hasura migrate apply
-hasura metadata reload
-hasura console
+hasura deploy
 ```
 
 5. In Console's API tab, issue GraphQL queries to search for
@@ -110,11 +115,13 @@ hasura console
    
 ```graphql
 query MyQuery {
-  ch01_restaurants_near_to(args: {lat: "77.7843636", lon: "9.4664509"}, 
-    limit: 10, order_by: {distance: asc}) {
+  ch01_restaurants_near_to(args: {lat: "77.7843636", lon: "9.4664509"}, limit: 10, order_by: {distance: asc}, where: {owners: {id: {_is_null: false}}}) {
     id
     franchise
     distance
+    owners {
+      name
+    }
   }
 }
 ```
