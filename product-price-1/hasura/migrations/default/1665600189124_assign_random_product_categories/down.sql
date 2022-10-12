@@ -1,0 +1,14 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- update
+--   product
+--    set
+--      product_category_id = (
+--        select
+-- 	 id
+-- 	 from
+-- 	   product_category
+-- 	where
+-- 	  product.id is not null
+-- 	order by random()
+-- 		 limit 1);
