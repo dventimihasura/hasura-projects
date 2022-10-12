@@ -1,6 +1,10 @@
 table:
   name: product
   schema: public
+object_relationships:
+  - name: product_category
+    using:
+      foreign_key_constraint_on: product_category_id
 array_relationships:
   - name: order_details
     using:
