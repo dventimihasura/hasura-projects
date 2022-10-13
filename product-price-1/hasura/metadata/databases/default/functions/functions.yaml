@@ -1,3 +1,4 @@
 - "!include public_product_min_prices.yaml"
 - "!include public_product_search.yaml"
 - "!include public_product_search_slow.yaml"
+- "!include public_product_with_min_price.yaml"
