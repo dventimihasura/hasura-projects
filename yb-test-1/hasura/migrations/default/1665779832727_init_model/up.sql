@@ -1,5 +1,7 @@
 -- -*- sql-product: postgres; -*-
 
+create schema if not exists public;
+
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- account table

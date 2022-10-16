@@ -1,6 +1,6 @@
 version: 3
-endpoint: https://advanced-mackerel-45.hasura.app
-admin_secret: aQSYzeqb5utVX7wwmwBM7b0EvCHHyqUvaw6fp9F3DK02jp1e3DUydXv7jlqoPcpY
+endpoint: https://patient-jennet-24.hasura.app
+admin_secret: 7zC8wPRgG0OejVnaUjjiQ5JNEaGPefa4YMx8LFUl5L24jGJ9zUhslRp1gcah0uZy
 metadata_directory: metadata
 actions:
   kind: synchronous
