@@ -111,7 +111,7 @@ hasura deploy
 
 5. In Console's API tab, issue GraphQL queries to search for
    restaurants near to a latitude and longitude, sorting by
-   `distance`.  
+   `distance`.
    
 ```graphql
 query MyQuery {
