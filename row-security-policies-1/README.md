@@ -101,12 +101,17 @@ curl -s 'http://localhost:8080/v1/graphql' -H 'Accept-Encoding: gzip, deflate, b
 curl 'http://localhost:8080/v1/graphql' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Connection: keep-alive' -H 'Origin: chrome-extension://flnheeellpciglgpaodhkhmapeljopja' -H 'x-hasura-admin-secret: ijawqhgVtsykcSJxCRYpAEYnmM475uGbATuyyG5kGHt83M8BUMNhkPH2IH6o4WL9' --data-binary '{"query":"mutation UpdateAccount{update_account_by_pk(_set:{name:\"Test Test Test\"}pk_columns:{id:\"530df8ec-8fa4-4a9a-8c18-2eb6715d2e08\"}){id name}}","variables":{}}' --compressed
 ```
 
-7. Use `curl` to submit a GraphQL mutatation to try to change an
+7. Use `curl` to submit a GraphQL mutation to try to change an
    account, this time supplying the matching `x-hasura-user-id` as a
-   heaer.  Note that this time the data does change because it does
+   header.  Note that this time the data does change because it does
    not violate the PostgreSQL policy that was created on the `account`
    table.
    
 ```shell
 curl 'http://localhost:8080/v1/graphql' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Connection: keep-alive' -H 'Origin: chrome-extension://flnheeellpciglgpaodhkhmapeljopja' -H 'x-hasura-admin-secret: ijawqhgVtsykcSJxCRYpAEYnmM475uGbATuyyG5kGHt83M8BUMNhkPH2IH6o4WL9' -H 'x-hasura-user-id: 530df8ec-8fa4-4a9a-8c18-2eb6715d2e08' --data-binary '{"query":"mutation UpdateAccount{update_account_by_pk(_set:{name:\"Test Test Test\"}pk_columns:{id:\"530df8ec-8fa4-4a9a-8c18-2eb6715d2e08\"}){id name}}","variables":{}}' --compressed
 ```
+
+<!--  LocalWords:  RLS RSP cd br ijawqhgVtsykcSJxCRYpAEYnmM uGbATuyyG
+ -->
+<!--  LocalWords:  kGHt BUMNhkPH IH WL df ec eb jq UpdateAccount
+ -->
