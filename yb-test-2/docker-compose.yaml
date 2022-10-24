@@ -28,25 +28,25 @@ services:
     image: yugabytedb/yugabyte:latest
     command: bin/yugabyted start --background=false --join yb-master --advertise_address=yb-tserver-3
     restart: always
-  # postgres:
-  #   image: postgres:14
-  #   ports:
-  #     - "5432:5432"
-  #   restart: always
-  #   volumes:
-  #     - db_data:/var/lib/postgresql/data
-  #   environment:
-  #     POSTGRES_PASSWORD: postgrespassword
+  postgres:
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
     image: hasura/graphql-engine:v2.13.0
     ports:
       - "8080:8080"
     depends_on:
-      - "postgres"
+      - "yb-tserver-3"
     restart: always
     environment:
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
-      PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://yugabyte:yugabyte@yb-master:5433/yugabyte
+      PG_DATABASE_URL: postgres://yugabyte:yugabyte@yb-master:5433/yugabyte
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
