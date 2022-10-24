@@ -1,9 +1,5 @@
 version: '2'
 
-volumes:
-  yb-master-data-1:
-  yb-tserver-data-1:
-
 services:
   yb-master:
     image: yugabytedb/yugabyte:latest

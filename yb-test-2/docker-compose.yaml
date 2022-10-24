@@ -1,14 +1,42 @@
 version: '3.6'
 services:
-  postgres:
-    image: postgres:14
+services:
+  yb-master:
+    image: yugabytedb/yugabyte:latest
+    command: bin/yugabyted start --background=false --advertise_address=yb-master
     ports:
-      - "5432:5432"
+      - "5433:5433"
+      - "7000:7000"
+      - "9000:9000"
+      - "9042:9042"
     restart: always
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: postgrespassword
+  yb-tserver-1:
+    depends_on:
+      - yb-master
+    image: yugabytedb/yugabyte:latest
+    command: bin/yugabyted start --background=false --join yb-master --advertise_address=yb-tserver-1
+    restart: always
+  yb-tserver-2:
+    depends_on:
+      - yb-master
+    image: yugabytedb/yugabyte:latest
+    command: bin/yugabyted start --background=false --join yb-master --advertise_address=yb-tserver-2
+    restart: always
+  yb-tserver-3:
+    depends_on:
+      - yb-master
+    image: yugabytedb/yugabyte:latest
+    command: bin/yugabyted start --background=false --join yb-master --advertise_address=yb-tserver-3
+    restart: always
+  # postgres:
+  #   image: postgres:14
+  #   ports:
+  #     - "5432:5432"
+  #   restart: always
+  #   volumes:
+  #     - db_data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
     image: hasura/graphql-engine:v2.13.0
     ports:
@@ -17,19 +45,11 @@ services:
       - "postgres"
     restart: always
     environment:
-      ## postgres database to store Hasura metadata
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
-      ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
       PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
-      ## enable the console served by server
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
-      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      ## uncomment next line to run console offline (i.e load console assets from server instead of CDN)
-      # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
-      ## uncomment next line to set an admin secret
-      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
 volumes:
   db_data:
 
