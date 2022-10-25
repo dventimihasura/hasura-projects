@@ -1,5 +1,7 @@
 # Abstract #
 
+It's Hasura + Yugabyte!
+
 # What #
 
 This project sets up a very basic 4-node Yugabyte database cluster in
