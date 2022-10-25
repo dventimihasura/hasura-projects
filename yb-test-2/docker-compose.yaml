@@ -1,6 +1,5 @@
 version: '3.6'
 services:
-services:
   yb-master:
     image: yugabytedb/yugabyte:latest
     command: bin/yugabyted start --background=false --advertise_address=yb-master
@@ -28,15 +27,6 @@ services:
     image: yugabytedb/yugabyte:latest
     command: bin/yugabyted start --background=false --join yb-master --advertise_address=yb-tserver-3
     restart: always
-  postgres:
-    image: postgres:14
-    ports:
-      - "5432:5432"
-    restart: always
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
     image: hasura/graphql-engine:v2.13.0
     ports:
@@ -52,4 +42,3 @@ services:
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
 volumes:
   db_data:
-
