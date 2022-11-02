@@ -120,3 +120,45 @@ docker-compose stop postgres-master
 ```shell
 curl 'http://localhost:8080/v1/graphql' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Connection: keep-alive' -H 'Origin: chrome-extension://flnheeellpciglgpaodhkhmapeljopja' -H 'x-hasura-admin-secret: ijawqhgVtsykcSJxCRYpAEYnmM475uGbATuyyG5kGHt83M8BUMNhkPH2IH6o4WL9' -H 'x-hasura-user-id: 530df8ec-8fa4-4a9a-8c18-2eb6715d2e08' --data-binary '{"query":"query{account(limit:10){id name orders{region status order_details{product{name price}units}}}}","variables":{}}' --compressed | jq -r '.'
 ```
+
+## Notes ##
+
+There are several things to note here.  First, this POC sets up a
+simple toy replication scheme between multiple databases (primary,
+secondary) using streaming replication.  An easy way to do this is to
+use the bitnami-docker-postgresql Docker image.  This is a version of
+PostgreSQL packaged up in a Docker image, augmented with an easy way
+to set up streaming replication:  just specify certain environment
+variables.  
+
+Second, a third database called `metadata` is used to house the Hasura
+metadata.  This isn't strictly necessary, but housing the metadata in
+a different database is a feature Hasura offers.  Moreover it just
+simplifies matters for demonstration purposes since only the data and
+not the metadata is experiencing failover. 
+
+Third, failover is simulated in two steps.  The read-only secondary is
+promoted to being a read-write primary.  Then, the original read-write
+primary is stopped to simulate failure.  The bitnami Docker image is
+set up to respond to the creation of a special `trigger_file` in the
+`/tmp` folder.  A read-only secondary instance will notice the
+presence of this file and automatically promote itself to a primary
+read-write node.  The original read-write instance is of course
+stopped with a simple Docker Compose command to stop its service.
+
+## Summary ##
+
+Again, HA is a broad topic.  It can apply not just to the data sources
+that Hasura uses, but to the Hasura instances itself, as well as to
+other components in an application (cache layers, integration points,
+etc.)  HA can be applied in layers and its application in those layers
+can even overlap.  Moreover, there are many different ways to layer in
+HA capabilities.  
+
+This POC illustrates just *one* way to layer in *one* element of HA in
+*one* component:  *failover* in the *database* using *libpq*.  This is
+a nice feature of the libpq libary, it's available to almost any
+application that is built with libpq, it's therefore available in
+Hasura, and it can be a *part* of an emerging HA story for any project
+that uses Hasura.
+
