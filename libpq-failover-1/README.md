@@ -1,5 +1,7 @@
 # High-Availability Fail-over for Hasura Data (Almost) For Free #
 
+<https://drive.google.com/file/d/1q5o_xPOxrCErTDq9V1D-g6Yw_Nf2nSn7/view?usp=sharing>
+
 Hasura users often seek
 [High-Availability](https://en.wikipedia.org/wiki/High_availability)
 (HA) for their data sources. Here we illustrate a simple way to obtain
