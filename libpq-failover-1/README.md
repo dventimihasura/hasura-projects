@@ -1,25 +1,25 @@
-# High-Availablity Failover for Hasura Data (Almost) For Free #
+# High-Availability Fail-over for Hasura Data (Almost) For Free #
 
 Hasura users often seek
-[High-Availablity](https://en.wikipedia.org/wiki/High_availability)
+[High-Availability](https://en.wikipedia.org/wiki/High_availability)
 (HA) for their data sources. Here we illustrate a simple way to obtain
 a crucial element of HA.  HA is a broad topic with several related but
 still independent elements, and while we can't address them all in
 just one article we can address one of them:
-[failover](https://en.wikipedia.org/wiki/Failover).
+[fail-over](https://en.wikipedia.org/wiki/Failover).
 
-Failover for a data application typically involves multiple redundant
+Fail-over for a data application typically involves multiple redundant
 database instances, with the application switching from a primary
 instance experiencing a failure event to a secondary instance acting
 as a [warm
 standby](https://www.postgresql.org/docs/8.2/warm-standby.html).  A
 warm standby is a read-only instance whose state is replicated from
 the primary (replication being another crucial element of HA *not*
-covered here).  During failover, the secondary is promoted to becoming
+covered here).  During fail-over, the secondary is promoted to becoming
 a new primary, it switches from read-only mode to
 read-write mode, and downstream applications respond seamlessly.  
 
-Failover is also a feature built into the libpq library.  The
+Fail-over is also a feature built into the libpq library.  The
 [libpq](https://www.postgresql.org/docs/9.5/libpq.html) library is the
 connection library provided by the PostgreSQL project, it supports the
 PostgreSQL wire-protocol, and it is the basic communication library
@@ -29,7 +29,7 @@ establishing connections, and one nice feature is that it actually
 accepts connection strings with a [multiple host
 entries](https://www.postgresql.org/docs/current/libpq-connect.html).
 It will attempt connections to each host in turn and in this way
-offers a basic implementation of failover. The libpq library does this
+offers a basic implementation of fail-over. The libpq library does this
 and as a consequence Hasura does this.  This is what is illustrated
 here in this Proof-Of-Concept (POC).
 
@@ -157,8 +157,11 @@ HA capabilities.
 
 This POC illustrates just *one* way to layer in *one* element of HA in
 *one* component:  *failover* in the *database* using *libpq*.  This is
-a nice feature of the libpq libary, it's available to almost any
+a nice feature of the libpq library, it's available to almost any
 application that is built with libpq, it's therefore available in
 Hasura, and it can be a *part* of an emerging HA story for any project
 that uses Hasura.
 
+
+<!--  LocalWords:  libpq cd failover postgres bitnami postgresql tmp
+ -->
