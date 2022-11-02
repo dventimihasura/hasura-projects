@@ -12,7 +12,6 @@ services:
       POSTGRESQL_REPLICATION_PASSWORD: repl_password
       POSTGRESQL_USERNAME: postgres
       POSTGRESQL_PASSWORD: postgrespassword
-      POSTGRESQL_DATABASE: my_database
       ALLOW_EMPTY_PASSWORD: "yes"
   postgres-slave:
     image: docker.io/bitnami/postgresql:14
@@ -28,20 +27,29 @@ services:
       POSTGRESQL_PASSWORD: postgrespassword
       POSTGRESQL_MASTER_PORT_NUMBER: 5432
       ALLOW_EMPTY_PASSWORD: "yes"
+  postgres-metadata:
+    image: docker.io/bitnami/postgresql:14
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_PASSWORD: postgrespassword
+      ALLOW_EMPTY_PASSWORD: "yes"
   graphql-engine:
     image: hasura/graphql-engine:v2.14.0
     ports:
       - "8080:8080"
     depends_on:
+      - "postgres-master"
       - "postgres-slave"
+      - "postgres-metadata"
     restart: always
     environment:
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: "postgres://postgres:postgrespassword@postgres-master:5432/postgres"
-      PG_DATABASE_URL: "postgres://postgres:postgrespassword@postgres-master:5432/postgres"
+      PG_DATABASE_URL: "postgres://postgres:postgrespassword@postgres-master,postgres-slave:5432/postgres"
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: "postgres://postgres:postgrespassword@postgres-metadata:5432/postgres"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
 volumes:
   postgres_master_data:
     driver: local
-
