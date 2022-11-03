@@ -1,0 +1,43 @@
+table:
+  name: product
+  schema: public
+array_relationships:
+  - name: order_details
+    using:
+      foreign_key_constraint_on:
+        column: product_id
+        table:
+          name: order_detail
+          schema: public
+event_triggers:
+  - name: product_create
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: https://{{ALGOLIA_APPLICATION_ID}}-dsn.algolia.net/1/indexes/{{ALGOLIA_INDEX_NAME}}/
+    headers:
+      - name: X-Algolia-API-Key
+        value_from_env: ALGOLIA_API_KEY
+      - name: X-Algolia-Application-Id
+        value_from_env: ALGOLIA_APPLICATION_ID
+    request_transform:
+      body:
+        action: transform
+        template: '{"name": {{$body.event.data.new.name}}}'
+      method: PUT
+      query_params: {}
+      template_engine: Kriti
+      url: '{{$base_url}}{{$body.event.data.new.id}}'
+      version: 2
+    cleanup_config:
+      batch_size: 10000
+      clean_invocation_logs: false
+      clear_older_than: 168
+      paused: true
+      schedule: 0 0 * * *
+      timeout: 60

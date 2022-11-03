@@ -1,0 +1,49 @@
+version: '3.6'
+services:
+  graphql-postgres:             # Data and Metadata db for the graphql instance
+    image: postgres:14
+    ports:
+      - "5433:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+  search-postgres:              # Data and Metadata db for the search instance
+    image: postgres:14
+    ports:
+      - "5434:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+  search:
+    image: hasura/graphql-engine:v2.14.0
+    ports:
+      - "8081:8080"
+    depends_on:
+      - "search-postgres"
+    restart: always
+    environment:
+      PG_DATABASE_URL: postgres://postgres:postgrespassword@search-postgres:5432/postgres
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@search-postgres:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ALGOLIA_APPLICATION_ID: "${ALGOLIA_APPLICATION_ID}" # The search instance needs Algolia
+      ALGOLIA_INDEX_NAME: "${ALGOLIA_INDEX_NAME}"         # for the search_remote action.
+      ALGOLIA_API_KEY: "${ALGOLIA_API_KEY}"
+  graphql:
+    image: hasura/graphql-engine:v2.14.0
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "graphql-postgres"
+      - "search"
+    restart: always
+    environment:
+      PG_DATABASE_URL: postgres://postgres:postgrespassword@graphql-postgres:5432/postgres
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@graphql-postgres:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ALGOLIA_APPLICATION_ID: "${ALGOLIA_APPLICATION_ID}" # The graphql instance needs Algolia
+      ALGOLIA_INDEX_NAME: "${ALGOLIA_INDEX_NAME}"         # for the search_local action and
+      ALGOLIA_API_KEY: "${ALGOLIA_API_KEY}"               # for the product custom events.

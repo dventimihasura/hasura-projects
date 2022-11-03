@@ -1,0 +1,47 @@
+type Query {
+  search_local(
+    query: String!
+  ): SearchProductsOutput
+}
+
+type SearchProductsOutput {
+  exhaustive: Exhaustive
+  exhaustiveNbHits: Boolean
+  exhaustiveTypo: Boolean
+  hits: [Hits]
+  hitsPerPage: Int
+  nbHits: Int
+  nbPages: Int
+  page: Int
+  params: String
+  processingTimeMS: Int
+  processingTimingsMS: ProcessingTimingsMs
+  query: String
+}
+
+type Exhaustive {
+  nbHits: Boolean
+  typo: Boolean
+}
+
+type Hits {
+  _highlightResult: HighlightResult
+  name: String
+  objectID: String
+}
+
+type HighlightResult {
+  name: Name
+}
+
+type Name {
+  fullyHighlighted: Boolean
+  matchedWords: [String]
+  matchLevel: String
+  value: String
+}
+
+type ProcessingTimingsMs {
+  total: Int
+}
+

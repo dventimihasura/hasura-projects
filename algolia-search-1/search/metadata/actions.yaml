@@ -1,0 +1,30 @@
+actions:
+  - name: search_product
+    definition:
+      kind: ""
+      handler: https://{{ALGOLIA_APPLICATION_ID}}-dsn.algolia.net/1/indexes/{{ALGOLIA_INDEX_NAME}}/query
+      headers:
+        - name: X-Algolia-API-Key
+          value_from_env: ALGOLIA_API_KEY
+        - name: X-Algolia-Application-Id
+          value_from_env: ALGOLIA_APPLICATION_ID
+      request_transform:
+        body:
+          action: transform
+          template: '{ "params": "query={{$body.input.query}}" }'
+        method: POST
+        query_params: {}
+        template_engine: Kriti
+        version: 2
+    comment: product_search
+custom_types:
+  enums: []
+  input_objects: []
+  objects:
+    - name: Exhaustive
+    - name: HighlightResult
+    - name: Hits
+    - name: Name
+    - name: ProcessingTimingsMs
+    - name: SearchProductsOutput
+  scalars: []

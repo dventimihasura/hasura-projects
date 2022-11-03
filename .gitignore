@@ -1,3 +1,5 @@
 *.env
 scratch.*
 /product-price-1/sample.graphql
+/algolia-search-1/test.txt
+*.txt

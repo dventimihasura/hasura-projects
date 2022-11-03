@@ -1,0 +1,26 @@
+- name: search
+  definition:
+    url: http://search:8080/v1/graphql
+    timeout_seconds: 60
+    customization:
+      field_names:
+        - mapping:
+            search_product: search_remote
+          parent_type: query_root
+      type_names:
+        mapping: {}
+        prefix: remote_
+  comment: ""
+  remote_relationships:
+    - relationships:
+        - definition:
+            to_source:
+              field_mapping:
+                objectID: id
+              relationship_type: object
+              source: default
+              table:
+                name: product
+                schema: public
+          name: product
+      type_name: Hits

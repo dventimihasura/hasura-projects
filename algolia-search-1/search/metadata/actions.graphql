@@ -1,0 +1,47 @@
+type Query {
+  search_product(
+    query: String!
+  ): SearchProductsOutput
+}
+
+type Exhaustive {
+  nbHits: Boolean
+  typo: Boolean
+}
+
+type HighlightResult {
+  name: Name
+}
+
+type Hits {
+  _highlightResult: HighlightResult
+  name: String
+  objectID: String
+}
+
+type Name {
+  fullyHighlighted: Boolean
+  matchedWords: [String]
+  matchLevel: String
+  value: String
+}
+
+type ProcessingTimingsMs {
+  total: Int
+}
+
+type SearchProductsOutput {
+  exhaustive: Exhaustive
+  exhaustiveNbHits: Boolean
+  exhaustiveTypo: Boolean
+  hits: [Hits]
+  hitsPerPage: Int
+  nbHits: Int
+  nbPages: Int
+  page: Int
+  params: String
+  processingTimeMS: Int
+  processingTimingsMS: ProcessingTimingsMs
+  query: String
+}
+
