@@ -69,7 +69,7 @@ cd algolia-search-1
    - `ALGOLIA_API_KEY`
    
 4. Create a `.env` file in the root `algolia-search-1` project
-   sub-directory with thse data as name=value pairs.  **DO NOT ADD
+   sub-directory with these data as name=value pairs.  **DO NOT ADD
    THIS FILE TO SOURCE CONTROL**
 
 5. Use Docker Compose to launch the services.
@@ -130,3 +130,6 @@ query MyQuery {
   }
 }
 ```
+
+<!--  LocalWords:  objectId algolia cd env nbHits nbPages objectID
+ -->
