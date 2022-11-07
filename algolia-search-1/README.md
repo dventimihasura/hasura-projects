@@ -35,13 +35,13 @@ products by name.
 To get the data *into* Algolia we use Hasura custom Events in the
 `graphql` instance.  I.e., as products are added to that service's
 `product` table, custom events make sure to insert the relevant data
-(mainly, the `id` and `name`) into Algolia to be search.  Moreover, we
-take care that the `id` which becomes the Algolia `objectId` is *the
-same* as the `product.id` primary key.  That is, we take care that
-this is a related field.  That way we can set up a join relationship
-on that field.
+(mainly, the `id` and `name`) into Algolia to be searched.  Moreover,
+we take care that the `id` which becomes the Algolia `objectId` is
+*the same* as the `product.id` primary key.  That is, we take care
+that this is a related field.  That way we can set up a join
+relationship on that field.
 
-Where *set up* that join relationship is in Hasura Remote Schema
+Where we *set up* that join relationship is in Hasura Remote Schema
 relationships.  Again, Remote Schema relationships are more robust
 than custom Action relationships and support the kind of join that we
 need to perform in order to merge the Algolia search results with the
