@@ -1,10 +1,24 @@
 version: '3.6'
 services:
-  postgres:
-    image: postgres:12
+  postgres_1:
+    image: postgres:14
+    ports:
+      - "5433:5432"
     restart: always
-    volumes:
-      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+  postgres_2:
+    image: postgres:14
+    ports:
+      - "5434:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+  metadata:
+    image: postgres:14
+    ports:
+      - "5435:5432"
+    restart: always
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
@@ -12,22 +26,16 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - "postgres"
+      - "postgres_1"
+      - "postgres_2"
     restart: always
     environment:
-      ## postgres database to store Hasura metadata
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
-      ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
-      PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
-      ## enable the console served by server
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
-      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@metadata:5432/postgres
+      PG_DATABASE_URL_POSTGRES_1: postgres://postgres:postgrespassword@postgres_1:5432/postgres
+      PG_DATABASE_URL_POSTGRES_1: postgres://postgres:postgrespassword@postgres_2:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      ## uncomment next line to run console offline (i.e load console assets from server instead of CDN)
-      # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
-      ## uncomment next line to set an admin secret
-      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-volumes:
-  db_data:
+
+
 
