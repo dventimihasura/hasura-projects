@@ -1,2 +1,7 @@
 - "!include ddl_monitor_ddl_command.yaml"
 - "!include ddl_monitor_dropped_object.yaml"
+- "!include public_account.yaml"
+- "!include public_order.yaml"
+- "!include public_order_detail.yaml"
+- "!include public_product.yaml"
+- "!include public_region.yaml"
