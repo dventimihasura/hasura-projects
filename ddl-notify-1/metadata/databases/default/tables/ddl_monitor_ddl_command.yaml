@@ -1,0 +1,3 @@
+table:
+  name: ddl_command
+  schema: ddl_monitor

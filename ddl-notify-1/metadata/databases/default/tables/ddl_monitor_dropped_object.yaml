@@ -1,0 +1,3 @@
+table:
+  name: dropped_object
+  schema: ddl_monitor

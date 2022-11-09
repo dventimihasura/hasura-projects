@@ -1,0 +1,2 @@
+- "!include ddl_monitor_ddl_command.yaml"
+- "!include ddl_monitor_dropped_object.yaml"
