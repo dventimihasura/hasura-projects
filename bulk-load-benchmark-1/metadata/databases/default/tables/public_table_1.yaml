@@ -1,3 +1,11 @@
 table:
   name: table_1
   schema: public
+array_relationships:
+  - name: table_2s
+    using:
+      foreign_key_constraint_on:
+        column: parent_id
+        table:
+          name: table_2
+          schema: public
