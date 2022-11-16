@@ -1,0 +1,7 @@
+- "!include public_table_1.yaml"
+- "!include public_table_2.yaml"
+- "!include public_table_3.yaml"
+- "!include public_table_4.yaml"
+- "!include public_table_5.yaml"
+- "!include public_table_6.yaml"
+- "!include public_table_7.yaml"
