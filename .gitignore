@@ -5,3 +5,4 @@ scratch.*
 *.txt
 /bulk-load-benchmark-1/pgbench_log.1085638
 /bulk-load-benchmark-1/pgbench_log.1085651
+pgbench_log.*
