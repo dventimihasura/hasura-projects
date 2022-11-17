@@ -3,3 +3,5 @@ scratch.*
 /product-price-1/sample.graphql
 /algolia-search-1/test.txt
 *.txt
+/bulk-load-benchmark-1/pgbench_log.1085638
+/bulk-load-benchmark-1/pgbench_log.1085651
