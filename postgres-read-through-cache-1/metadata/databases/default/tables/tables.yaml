@@ -1,1 +1,2 @@
 - "!include public_account_summary.yaml"
+- "!include public_account_summary_cached.yaml"

@@ -1,0 +1,6 @@
+function:
+  name: refresh_account_summary_cached
+  schema: public
+configuration:
+  custom_root_fields: {}
+  exposed_as: mutation
