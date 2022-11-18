@@ -1,0 +1,3 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- create user mapping for postgres server origin options (user 'postgres', password 'postgrespassword');
