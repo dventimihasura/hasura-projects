@@ -1,1 +1,9 @@
-[]
+- comment: Refresh the account_summary_cached view
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: refresh_account_summary_cached
+  methods:
+    - POST
+  name: refresh_account_summary_cached
+  url: refresh_account_summary_cached

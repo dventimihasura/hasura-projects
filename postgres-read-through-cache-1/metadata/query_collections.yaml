@@ -1,1 +1,11 @@
-[]
+- name: allowed-queries
+  definition:
+    queries:
+      - name: refresh_account_summary_cached
+        query: |
+          mutation MyMutation {
+            refresh_account_summary_cached {
+              id
+              sum
+            }
+          }
