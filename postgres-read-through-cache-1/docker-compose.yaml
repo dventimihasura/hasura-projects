@@ -1,7 +1,25 @@
 version: '3.6'
 services:
-  postgres:
+  metadata:
     image: postgres:14
+    ports:
+      - "5433:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+  origin:
+    image: postgres:14
+    ports:
+      - "5434:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+  cache:
+    image: postgres:14
+    ports:
+      - "5435:5432"
+    depends_on:
+      - "origin"
     restart: always
     environment:
       POSTGRES_PASSWORD: postgrespassword
@@ -10,11 +28,12 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - "postgres"
+      - "metadata"
+      - "cache"
     restart: always
     environment:
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
-      PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      PG_DATABASE_URL: postgres://postgres:postgrespassword@cache:5432/postgres
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@metadata:5432/postgres
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
