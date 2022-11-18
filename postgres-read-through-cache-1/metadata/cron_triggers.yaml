@@ -1,1 +1,5 @@
-[]
+- name: refresh_account_summary_cached
+  webhook: http://graphql-engine:8080/api/rest/refresh_account_summary_cached
+  schedule: '*/10 * * * *'
+  include_in_metadata: true
+  payload: {}
