@@ -3,3 +3,8 @@
   schedule: '*/1 * * * *'
   include_in_metadata: true
   payload: {}
+  comment: refresh_account_summary_cached
+  request_transform:
+    body: '{}'
+    template_engine: Kriti
+    version: 1
