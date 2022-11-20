@@ -6,3 +6,9 @@ scratch.*
 /bulk-load-benchmark-1/pgbench_log.1085638
 /bulk-load-benchmark-1/pgbench_log.1085651
 pgbench_log.*
+/postgres-read-through-cache-1/rsa_key.p8
+/postgres-read-through-cache-1/rsa_key.pub
+/snowsql_rt.log
+*.log
+*.p8
+*.pub
