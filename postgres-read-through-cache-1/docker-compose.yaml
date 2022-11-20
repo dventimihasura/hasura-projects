@@ -16,23 +16,13 @@ services:
       POSTGRES_PASSWORD: postgrespassword
     volumes:
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-  # cache2:
-  #   image: postgres:14
-  #   ports:
-  #     - "5435:5432"
-  #   depends_on:
-  #     - "origin"
-  #   restart: always
-  #   environment:
-  #     POSTGRES_PASSWORD: postgrespassword
   cache:
-    image: hasura/postgres-jdbc-fdw:14
+    build: .
     ports:
       - "5436:5432"
     depends_on:
       - "origin"
     restart: always
-    command: postgres -c log_min_messages=DEBUG5
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
