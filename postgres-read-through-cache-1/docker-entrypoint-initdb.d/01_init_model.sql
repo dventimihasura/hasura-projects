@@ -42,9 +42,9 @@ CREATE TRIGGER "set_public_product_updated_at"
 COMMENT ON TRIGGER "set_public_product_updated_at" ON "public"."product" 
   IS 'trigger to set value of column "updated_at" to current timestamp on row update';
 
--- order table
+-- invoice table
 
-CREATE TABLE "public"."order" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "account_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("account_id") REFERENCES "public"."account"("id") ON UPDATE restrict ON DELETE restrict);
+CREATE TABLE "public"."invoice" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "account_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("account_id") REFERENCES "public"."account"("id") ON UPDATE restrict ON DELETE restrict);
 CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
   RETURNS TRIGGER AS $$
   DECLARE
@@ -55,18 +55,18 @@ CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
     RETURN _new;
   END;
 $$ LANGUAGE plpgsql;
-CREATE TRIGGER "set_public_order_updated_at"
-  BEFORE UPDATE ON "public"."order"
+CREATE TRIGGER "set_public_invoice_updated_at"
+  BEFORE UPDATE ON "public"."invoice"
   FOR EACH ROW
   EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
-COMMENT ON TRIGGER "set_public_order_updated_at" ON "public"."order" 
+COMMENT ON TRIGGER "set_public_invoice_updated_at" ON "public"."invoice" 
   IS 'trigger to set value of column "updated_at" to current timestamp on row update';
 
-create index on "order" (account_id);
+create index on "invoice" (account_id);
 
--- order_detail table
+-- line_item table
 
-CREATE TABLE "public"."order_detail" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "units" integer NOT NULL, "order_id" uuid NOT NULL, "product_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("order_id") REFERENCES "public"."order"("id") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("product_id") REFERENCES "public"."product"("id") ON UPDATE restrict ON DELETE restrict);
+CREATE TABLE "public"."line_item" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "units" integer NOT NULL, "invoice_id" uuid NOT NULL, "product_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("invoice_id") REFERENCES "public"."invoice"("id") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("product_id") REFERENCES "public"."product"("id") ON UPDATE restrict ON DELETE restrict);
 CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
   RETURNS TRIGGER AS $$
   DECLARE
@@ -77,16 +77,16 @@ CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
     RETURN _new;
   END;
 $$ LANGUAGE plpgsql;
-CREATE TRIGGER "set_public_order_detail_updated_at"
-  BEFORE UPDATE ON "public"."order_detail"
+CREATE TRIGGER "set_public_line_item_updated_at"
+  BEFORE UPDATE ON "public"."line_item"
   FOR EACH ROW
   EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
-COMMENT ON TRIGGER "set_public_order_detail_updated_at" ON "public"."order_detail" 
+COMMENT ON TRIGGER "set_public_line_item_updated_at" ON "public"."line_item" 
   IS 'trigger to set value of column "updated_at" to current timestamp on row update';
 
-create index on order_detail (order_id);
+create index on line_item (invoice_id);
 
-create index on order_detail (product_id);
+create index on line_item (product_id);
 
 -- product_search function
 
@@ -120,11 +120,11 @@ create index if not exists account_name_idx on account (name);
 
 CREATE TYPE status AS ENUM ('new', 'processing', 'fulfilled');
 
--- add status to order table
+-- add status to invoice table
 
-alter table "public"."order" add column "status" status null;
+alter table "public"."invoice" add column "status" status null;
 
-create index on "order" (status);
+create index on "invoice" (status);
 
 -- region dictionary table
 
@@ -132,15 +132,15 @@ create table if not exists region (
   value text primary key,
   description text);
 
--- add region to order
+-- add region to invoice
 
-alter table "public"."order" add column "region" Text
+alter table "public"."invoice" add column "region" Text
  null;
 
-alter table "public"."order"
-  add constraint "order_region_fkey"
+alter table "public"."invoice"
+  add constraint "invoice_region_fkey"
   foreign key ("region")
   references "public"."region"
   ("value") on update restrict on delete restrict;
 
-create index on "order" (region);
+create index on "invoice" (region);

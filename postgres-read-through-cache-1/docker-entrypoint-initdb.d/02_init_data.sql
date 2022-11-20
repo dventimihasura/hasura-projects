@@ -2009,40 +2009,40 @@ with
     select
       account.id,
       name,
-      (random()*5)::int orders
+      (random()*5)::int invoices
       from account)
-    insert into "order" (account_id)
+    insert into "invoice" (account_id)
 select
   account_id
   from (
     select
       account.id account_id,
       row_number() over (partition by account.id order by account.name) ordinal
-      from account, generate_series(1, 5)) orders
-       join account on account.id = orders.account_id
-	   and orders.ordinal <= account.orders;
+      from account, generate_series(1, 5)) invoices
+       join account on account.id = invoices.account_id
+	   and invoices.ordinal <= account.invoices;
 
 with
-  "order" as (
+  "invoice" as (
     select
-      "order".id,
+      "invoice".id,
       (random()*9 + 1)::int items
-      from "order")
-    insert into order_detail (order_id, product_id, units)
+      from "invoice")
+    insert into line_item (invoice_id, product_id, units)
 select
-  order_id,
+  invoice_id,
   product_id,
   (random()*9 + 1)::int units
   from (
     select
-      "order".id order_id,
+      "invoice".id invoice_id,
       product.id product_id,
-      row_number() over (partition by "order".id) ordinal
-      from "order", product) user_item
-       join "order" on "order".id = user_item.order_id
-	   and user_item.ordinal <= "order".items;
+      row_number() over (partition by "invoice".id) ordinal
+      from "invoice", product) user_item
+       join "invoice" on "invoice".id = user_item.invoice_id
+	   and user_item.ordinal <= "invoice".items;
 
-update "order" set status = ((array['new', 'processing', 'fulfilled'])[floor(random()*3+1)])::status;
+update "invoice" set status = ((array['new', 'processing', 'fulfilled'])[floor(random()*3+1)])::status;
 
 insert into region (value, description)
 values
@@ -2056,7 +2056,7 @@ values
   ('WEST', 'California'),
   ('SOUTHWEST', 'Cacti');
 
-update "order" set region = ((array[
+update "invoice" set region = ((array[
   'NORTHEAST',
   'MIDWEST',
   'SOUTH',

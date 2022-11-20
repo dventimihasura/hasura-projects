@@ -3,7 +3,7 @@ select
   account.id,
   sum(units*price)
   from origin.account
-       left join origin."order" on "order".account_id = account.id
-       left join origin.order_detail on order_detail.order_id = "order".id
-       left join origin.product on product.id = order_detail.product_id
+       left join origin."invoice" on "invoice".account_id = account.id
+       left join origin.line_item on line_item.invoice_id = "invoice".id
+       left join origin.product on product.id = line_item.product_id
  group by account.id;

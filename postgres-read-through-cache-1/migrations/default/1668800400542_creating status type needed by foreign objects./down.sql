@@ -1,3 +1,1 @@
--- Could not auto-generate a down migration.
--- Please write an appropriate down migration for the SQL below:
--- CREATE TYPE status AS ENUM ('new', 'processing', 'fulfilled');
+drop type if exists status cascade;
