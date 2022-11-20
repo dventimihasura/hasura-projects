@@ -1,1 +1,2 @@
-create extension if not exists postgres_fdw;
+CREATE EXTENSION jdbc_fdw;
+
