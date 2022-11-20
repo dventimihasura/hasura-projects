@@ -12,3 +12,5 @@ pgbench_log.*
 *.log
 *.p8
 *.pub
+/postgres-read-through-cache-1/01_account.csv
+*.csv
