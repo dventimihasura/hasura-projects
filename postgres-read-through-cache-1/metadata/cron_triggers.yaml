@@ -8,3 +8,13 @@
     body: '{}'
     template_engine: Kriti
     version: 1
+- name: refresh_snowflake_account_summary_cached
+  webhook: http://graphql-engine:8080/api/rest/refresh_snowflake_account_summary_cached
+  schedule: '*/1 * * * *'
+  include_in_metadata: true
+  payload: {}
+  comment: refresh_snowflake_account_summary_cached
+  request_transform:
+    body: '{}'
+    template_engine: Kriti
+    version: 1
