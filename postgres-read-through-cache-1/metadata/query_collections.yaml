@@ -9,3 +9,11 @@
               sum
             }
           }
+      - name: refresh_snowflake_account_summary_cached
+        query: |
+          mutation MyMutation {
+            refresh_snowflake_account_summary_cached {
+              id
+              sum
+            }
+          }

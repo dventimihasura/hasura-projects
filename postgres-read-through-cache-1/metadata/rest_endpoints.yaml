@@ -7,3 +7,12 @@
     - POST
   name: refresh_account_summary_cached
   url: refresh_account_summary_cached
+- comment: Refresh the snowflake_account_summary_cached view
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: refresh_snowflake_account_summary_cached
+  methods:
+    - POST
+  name: refresh_snowflake_account_summary_cached
+  url: refresh_snowflake_account_summary_cached
