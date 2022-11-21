@@ -115,3 +115,6 @@ query MyQuery {
   }
 }
 ```
+
+<!--  LocalWords:  FDW fdw jdbc cron TTL cd TODO env
+ -->
