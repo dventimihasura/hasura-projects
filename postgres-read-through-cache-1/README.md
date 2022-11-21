@@ -55,4 +55,11 @@ hasura deploy
    GraphQL queries like the following:
    
 ```graphql
+query MyQuery {
+  snowflake_account_summary_cached_aggregate {
+    aggregate {
+      count
+    }
+  }
+}
 ```
