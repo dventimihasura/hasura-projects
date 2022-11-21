@@ -25,7 +25,8 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: postgrespassword
-      PASSWORD: ${PASSWORD}
+      SNOWFLAKE_USER: ${SNOWFLAKE_USER}
+      SNOWFLAKE_PASSWORD: ${SNOWFLAKE_PASSWORD}
     volumes:
       - ./cache-init:/docker-entrypoint-initdb.d
   graphql-engine:               # Hasura instance
