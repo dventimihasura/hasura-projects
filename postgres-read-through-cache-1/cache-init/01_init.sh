@@ -18,7 +18,7 @@ create server if not exists snowflake foreign data wrapper jdbc_fdw options(
   jarfile '/usr/share/java/snowflake-jdbc-3.13.20.jar'
 );
 		
-create user mapping if not exists for current_user server snowflake options(username 'dventimihasura', password 'Tmtctmtsts4!');
+create user mapping if not exists for current_user server snowflake options(username '${SNOWFLAKE_USER}', password '${SNOWFLAKE_PASSWORD}');
 
 create foreign table snowflake.account (id text, name text, created_at timestamptz, updated_at timestamptz) server snowflake;
 
