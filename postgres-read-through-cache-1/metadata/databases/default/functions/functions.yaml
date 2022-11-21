@@ -1,1 +1,2 @@
 - "!include public_refresh_account_summary_cached.yaml"
+- "!include public_refresh_snowflake_account_summary_cached.yaml"

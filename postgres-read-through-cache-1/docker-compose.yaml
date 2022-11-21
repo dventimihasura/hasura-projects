@@ -1,13 +1,13 @@
 version: '3.6'
 services:
-  metadata:
+  metadata:                     # Put Hasura metadata into its own db.
     image: postgres:14
     ports:
       - "5433:5432"
     restart: always
     environment:
       POSTGRES_PASSWORD: postgrespassword
-  origin:
+  origin:                       # Data warehouse data source db
     image: postgres:14
     ports:
       - "5434:5432"
@@ -16,7 +16,7 @@ services:
       POSTGRES_PASSWORD: postgrespassword
     volumes:
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-  cache:
+  cache:                        # Read-through cache db
     build: .
     ports:
       - "5436:5432"
@@ -25,7 +25,10 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: postgrespassword
-  graphql-engine:
+      PASSWORD: ${PASSWORD}
+    volumes:
+      - ./cache-init:/docker-entrypoint-initdb.d
+  graphql-engine:               # Hasura instance
     image: hasura/graphql-engine:v2.15.1
     ports:
       - "8080:8080"

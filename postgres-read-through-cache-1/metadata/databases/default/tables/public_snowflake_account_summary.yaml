@@ -1,0 +1,3 @@
+table:
+  name: snowflake_account_summary
+  schema: public
