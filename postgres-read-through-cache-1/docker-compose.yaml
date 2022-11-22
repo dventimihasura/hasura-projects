@@ -27,6 +27,8 @@ services:
       POSTGRES_PASSWORD: postgrespassword
       SNOWFLAKE_USER: ${SNOWFLAKE_USER}
       SNOWFLAKE_PASSWORD: ${SNOWFLAKE_PASSWORD}
+      SNOWFLAKE_WAREHOUSE: ${SNOWFLAKE_WAREHOUSE}
+      SNOWFLAKE_DB: ${SNOWFLAKE_DB}
     volumes:
       - ./cache-init:/docker-entrypoint-initdb.d
   graphql-engine:               # Hasura instance

@@ -14,7 +14,7 @@ drop server if exists snowflake cascade;
 
 create server if not exists snowflake foreign data wrapper jdbc_fdw options(
   drivername 'net.snowflake.client.jdbc.SnowflakeDriver',
-  url 'jdbc:snowflake://jwwigcl-fyb31202.snowflakecomputing.com?user=${SNOWFLAKE_USER}&password=${SNOWFLAKE_PASSWORD}&db=postgres&warehouse=postgres',
+  url 'jdbc:snowflake://${SNOWFLAKE_H?user=${SNOWFLAKE_USER}&password=${SNOWFLAKE_PASSWORD}&db=${SNOWFLAKE_DB}&warehouse=${SNOWFLAKE_WAREHOUSE}',
   jarfile '/usr/share/java/snowflake-jdbc-3.13.20.jar'
 );
 		
