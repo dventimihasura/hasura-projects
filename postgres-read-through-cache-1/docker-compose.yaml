@@ -31,7 +31,7 @@ services:
       SNOWFLAKE_USER: ${SNOWFLAKE_USER}
       SNOWFLAKE_WAREHOUSE: ${SNOWFLAKE_WAREHOUSE}
     volumes:
-      - ./origin_2-initdb.d:/docker-entrypoint-initdb.d
+      - ./cache-initdb.d:/docker-entrypoint-initdb.d
   graphql-engine:               # Hasura instance
     image: hasura/graphql-engine:v2.15.1
     ports:
