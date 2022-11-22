@@ -1,1 +1,1 @@
-DROP USER MAPPING IF EXISTS FOR CURRENT_USER SERVER origin;
+drop user mapping if exists for current_user server origin_1;

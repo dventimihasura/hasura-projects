@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: postgrespassword
-  origin:                       # Data warehouse data source db
+  origin_1:                       # Data warehouse data source db
     image: postgres:14
     ports:
       - "5434:5432"
@@ -21,14 +21,15 @@ services:
     ports:
       - "5436:5432"
     depends_on:
-      - "origin"
+      - "origin_1"
     restart: always
     environment:
       POSTGRES_PASSWORD: postgrespassword
-      SNOWFLAKE_USER: ${SNOWFLAKE_USER}
-      SNOWFLAKE_PASSWORD: ${SNOWFLAKE_PASSWORD}
-      SNOWFLAKE_WAREHOUSE: ${SNOWFLAKE_WAREHOUSE}
+      SNOWFLAKE_ADDRESS: ${SNOWFLAKE_ADDRESS}
       SNOWFLAKE_DB: ${SNOWFLAKE_DB}
+      SNOWFLAKE_PASSWORD: ${SNOWFLAKE_PASSWORD}
+      SNOWFLAKE_USER: ${SNOWFLAKE_USER}
+      SNOWFLAKE_WAREHOUSE: ${SNOWFLAKE_WAREHOUSE}
     volumes:
       - ./cache-init:/docker-entrypoint-initdb.d
   graphql-engine:               # Hasura instance

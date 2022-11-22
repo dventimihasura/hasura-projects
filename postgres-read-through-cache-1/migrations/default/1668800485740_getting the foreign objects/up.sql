@@ -1,1 +1,1 @@
-import foreign schema public from server origin into origin;
+import foreign schema public from server origin_1 into origin_1;
