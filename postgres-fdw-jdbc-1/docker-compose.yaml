@@ -33,7 +33,6 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      PG_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@localhost:5432/postgres
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@metadata:5432/postgres
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"

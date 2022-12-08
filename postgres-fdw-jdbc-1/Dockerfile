@@ -25,4 +25,6 @@ RUN wget https://repo1.maven.org/maven2/net/snowflake/snowflake-jdbc/3.13.20/sno
 RUN mv snowflake-jdbc-3.13.20.jar /usr/share/java
 COPY --from=0 /usr/bin/graphql-engine /usr/bin
 ENV HGE_BINARY graphql-engine
-COPY hasura.sh /docker-entrypoint-initdb.d
+ENV HASURA_GRAPHQL_DATABASE_URL ${POSTGRES_PASSWORD}
+COPY 01_hasura.sh /docker-entrypoint-initdb.d
+COPY 02_init.sh /docker-entrypoint-initdb.d
