@@ -1,0 +1,40 @@
+version: '3.6'
+services:
+  metadata:                     # Put Hasura metadata into its own db.
+    image: postgres:14
+    ports:
+      - "5433:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+  origin_1:                     # Data warehouse data source db
+    image: postgres:14
+    ports:
+      - "5434:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+    volumes:
+      - ./origin_1-initdb.d:/docker-entrypoint-initdb.d
+  origin_2:                     # Data warehouse data source db
+    image: postgres:14
+    ports:
+      - "5435:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+    volumes:
+      - ./origin_2-initdb.d:/docker-entrypoint-initdb.d
+  graphql-engine:               # Hasura instance
+    build: .
+    ports:
+      - "8080:8080"
+      - "5436:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PG_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@localhost:5432/postgres
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@metadata:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
