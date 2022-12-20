@@ -1,0 +1,58 @@
+version: "3.6"
+services:
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+  postgres:
+    image: postgres:15
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  graphql-engine-1:
+    image: hasura/graphql-engine:v2.16.1
+    ports:
+      - "8081:8080"
+    depends_on:
+      - "postgres"
+      - "redis"
+    restart: always
+    environment:
+      PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ENABLED_APIS: "graphql,metadata,config,developer,pgdump,metrics"
+      HASURA_GRAPHQL_METRICS_SECRET: ${HASURA_GRAPHQL_METRICS_SECRET}
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_LOG_LEVEL: debug
+      HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: "/srv/console-assets"
+      HASURA_GRAPHQL_REDIS_URL: "redis://redis:6379"
+      HASURA_GRAPHQL_RATE_LIMIT_REDIS_URL: "redis://redis:6379"
+      HASURA_GRAPHQL_MAX_CACHE_SIZE: "200"
+  graphql-engine-2:
+    image: hasura/graphql-engine:v2.16.1
+    ports:
+      - "8082:8080"
+    depends_on:
+      - "postgres"
+      - "redis"
+    restart: always
+    environment:
+      PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ENABLED_APIS: "graphql,metadata,config,developer,pgdump,metrics"
+      HASURA_GRAPHQL_METRICS_SECRET: ${HASURA_GRAPHQL_METRICS_SECRET}
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_LOG_LEVEL: debug
+      HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: "/srv/console-assets"
+      HASURA_GRAPHQL_REDIS_URL: "redis://redis:6379"
+      HASURA_GRAPHQL_RATE_LIMIT_REDIS_URL: "redis://redis:6379"
+      HASURA_GRAPHQL_MAX_CACHE_SIZE: "200"
