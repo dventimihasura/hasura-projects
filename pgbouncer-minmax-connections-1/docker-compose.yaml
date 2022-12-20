@@ -12,6 +12,19 @@ services:
       - "5433:5432"
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  load-balancer:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    restart: always
+    depends_on:
+      - "graphql-engine-1"
+      - "graphql-engine-2"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      - NGINX_HOST=foobar.com
+      - NGINX_PORT=80
   graphql-engine-1:
     image: hasura/graphql-engine:v2.16.1
     ports:
