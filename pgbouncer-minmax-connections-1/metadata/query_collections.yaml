@@ -1,1 +1,27 @@
-[]
+- name: allowed-queries
+  definition:
+    queries:
+      - name: Account Summary Sample
+        query: |
+          query MyQuery {
+            account_sample(limit: 10) {
+              account {
+                name
+                orders {
+                  id
+                  region
+                  status
+                  order_details {
+                    id
+                    units
+                    product {
+                      id
+                      name
+                      price
+                    }
+                  }
+                }
+                id
+              }
+            }
+          }

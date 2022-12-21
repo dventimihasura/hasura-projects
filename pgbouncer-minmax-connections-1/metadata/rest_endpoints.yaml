@@ -1,1 +1,9 @@
-[]
+- comment: ""
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: Account Summary Sample
+  methods:
+    - GET
+  name: Account Summary Sample
+  url: account_summary_sample
