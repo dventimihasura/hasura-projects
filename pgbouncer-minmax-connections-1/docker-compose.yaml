@@ -1,33 +1,35 @@
 version: "3.6"
 services:
-  redis:
+  redis:                        # Needed for EE Lite
     image: redis:latest
     restart: always
     ports:
       - "6379:6379"
-  postgres:
+  postgres:                     # Origin database
     image: postgres:15
     restart: always
     ports:
       - "5433:5432"
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  pgbouncer:
+  pgbouncer:                    # Connection pool in front of the origin database
     image: edoburu/pgbouncer:latest
     restart: always
+    depends_on:
+      - "postgres"
     ports:
       - "5434:5432"
     environment:
-      DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
-      DEFAULT_POOL_SIZE: 20
-      MIN_POOL_SIZE: 10
-      ADMIN_USERS: postgres
-      POOL_MODE: session
-      AUTH_TYPE: plain
-      APPLICATION_NAME_ADD_HOST: 1
-      SERVER_ROUND_ROBIN: 1
-      SERVER_IDLE_TIMEOUT: 30
-  load-balancer:
+      DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres # Downstream database (origin)
+      DEFAULT_POOL_SIZE: 20     # Connection pool ceiling
+      MIN_POOL_SIZE: 10         # Connection pool floor
+      ADMIN_USERS: postgres     # Database user who can access `pgbouncer` database
+      POOL_MODE: session        # CRUCIAL for using prepared statements !!!
+      AUTH_TYPE: plain          # DO NOT USE IN PRODUCTION !!!
+      APPLICATION_NAME_ADD_HOST: 1 # Convenient for inspecting pg_stat_activity
+      SERVER_ROUND_ROBIN: 1        # Try to distribute connections evenly
+      SERVER_IDLE_TIMEOUT: 30      # Close idle connections to the downstream database after this interval
+  load-balancer:                   # nginx proxy acts as a load balancer across two graphql-engine instances
     image: nginx:latest
     ports:
       - "8080:80"
@@ -40,20 +42,19 @@ services:
     environment:
       - NGINX_HOST=foobar.com
       - NGINX_PORT=80
-  graphql-engine-1:
+  graphql-engine-1:             # Hasura instance 1
     image: hasura/graphql-engine:v2.16.1
     ports:
       - "8081:8080"
     depends_on:
-      - "postgres"
       - "redis"
       - "pgbouncer"
     restart: always
     environment:
-      PG_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@pgbouncer:5432/postgres
+      PG_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@pgbouncer:5432/postgres # Data connection uses pgbouncer pool
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres # Metadata connection does not use pgbouncer pool
       HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ENABLED_APIS: "graphql,metadata,config,developer,pgdump,metrics"
       HASURA_GRAPHQL_METRICS_SECRET: ${HASURA_GRAPHQL_METRICS_SECRET}
@@ -63,7 +64,7 @@ services:
       HASURA_GRAPHQL_REDIS_URL: "redis://redis:6379"
       HASURA_GRAPHQL_RATE_LIMIT_REDIS_URL: "redis://redis:6379"
       HASURA_GRAPHQL_MAX_CACHE_SIZE: "200"
-  graphql-engine-2:
+  graphql-engine-2:             # Hasura instance 2
     image: hasura/graphql-engine:v2.16.1
     ports:
       - "8082:8080"
@@ -72,10 +73,10 @@ services:
       - "redis"
     restart: always
     environment:
-      PG_DATABASE_URL: postgres://postgres:postgrespassword@pgbouncer:5432/postgres
+      PG_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@pgbouncer:5432/postgres # Data connection uses pgbouncer pool
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres # Metadata connection does not use pgbouncer pool
       HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ENABLED_APIS: "graphql,metadata,config,developer,pgdump,metrics"
       HASURA_GRAPHQL_METRICS_SECRET: ${HASURA_GRAPHQL_METRICS_SECRET}
