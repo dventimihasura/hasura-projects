@@ -5,10 +5,10 @@
       database_url:
         from_env: PG_DATABASE_URL
       isolation_level: read-committed
-      # pool_settings:
-      #   connection_lifetime: 600
-      #   idle_timeout: 30
-      #   total_max_connections: 3
+      pool_settings:
+        # connection_lifetime: 600
+        idle_timeout: 1
+        # total_max_connections: 3
       use_prepared_statements: true
   tables: "!include default/tables/tables.yaml"
   functions: "!include default/functions/functions.yaml"
