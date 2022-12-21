@@ -75,7 +75,7 @@ ab -c 100 -t 60 -H x-hasura-admin-secret\:\ myadminsecretkey http\://localhost\:
     connections to the pgbouncer pool rather quickly.  See
     `idle_timeout: 1`.
 	
-	```yaml
+```yaml
 - name: default
   kind: postgres
   configuration:
@@ -90,7 +90,7 @@ ab -c 100 -t 60 -H x-hasura-admin-secret\:\ myadminsecretkey http\://localhost\:
       use_prepared_statements: true
   tables: "!include default/tables/tables.yaml"
   functions: "!include default/functions/functions.yaml"
-	```
+```
 	
   * This example uses a Hasura REST endpoint because it makes it easy
     to generate load with the `ab` tool.
