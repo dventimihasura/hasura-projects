@@ -12,6 +12,21 @@ services:
       - "5433:5432"
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    restart: always
+    ports:
+      - "5434:5432"
+    environment:
+      DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
+      DEFAULT_POOL_SIZE: 20
+      MIN_POOL_SIZE: 10
+      ADMIN_USERS: postgres
+      POOL_MODE: session
+      AUTH_TYPE: plain
+      APPLICATION_NAME_ADD_HOST: 1
+      SERVER_ROUND_ROBIN: 1
+      SERVER_IDLE_TIMEOUT: 30
   load-balancer:
     image: nginx:latest
     ports:
@@ -32,12 +47,13 @@ services:
     depends_on:
       - "postgres"
       - "redis"
+      - "pgbouncer"
     restart: always
     environment:
-      PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      PG_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@pgbouncer:5432/postgres
       HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ENABLED_APIS: "graphql,metadata,config,developer,pgdump,metrics"
       HASURA_GRAPHQL_METRICS_SECRET: ${HASURA_GRAPHQL_METRICS_SECRET}
@@ -56,10 +72,10 @@ services:
       - "redis"
     restart: always
     environment:
-      PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      PG_DATABASE_URL: postgres://postgres:postgrespassword@pgbouncer:5432/postgres
       HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ENABLED_APIS: "graphql,metadata,config,developer,pgdump,metrics"
       HASURA_GRAPHQL_METRICS_SECRET: ${HASURA_GRAPHQL_METRICS_SECRET}
