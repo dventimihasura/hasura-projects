@@ -25,3 +25,14 @@
               }
             }
           }
+      - name: Product Search Slow
+        query: |
+          query MyQuery ($term: String, $wait: Float) {
+            product_search_slow(args: {search:$term,wait:$wait}) {
+              id
+              name
+              price
+              updated_at
+              created_at
+            }
+          }

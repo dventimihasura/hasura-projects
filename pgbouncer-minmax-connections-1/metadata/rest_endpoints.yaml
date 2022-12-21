@@ -7,3 +7,12 @@
     - GET
   name: Account Summary Sample
   url: account_summary_sample
+- comment: ""
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: Product Search Slow
+  methods:
+    - GET
+  name: Product Search Slow
+  url: product_search_slow/:term/:wait
