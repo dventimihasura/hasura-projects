@@ -14,3 +14,5 @@ pgbench_log.*
 *.pub
 /postgres-read-through-cache-1/01_account.csv
 *.csv
+/pgbouncer-minmax-connections-1/hasura.gnuplot
+*.gnuplot
