@@ -47,7 +47,7 @@ permission.  The is implemented in two alternative ways.
 4. Create the Hasura application.
 
 	```shell
-	hasura metadata deploy
+	hasura deploy
 	```
 
 5. Launch the Hasura Console.
