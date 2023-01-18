@@ -1,0 +1,7 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- CREATE TABLE articles (
+--   id              INT           NOT NULL    IDENTITY    PRIMARY KEY,
+--   title           VARCHAR(100)  NULL,
+--   content         VARCHAR(100)  NULL
+-- );
