@@ -1,0 +1,11 @@
+- name: default
+  kind: mssql
+  configuration:
+    connection_info:
+      connection_string:
+        from_env: MS_DATABASE_URL
+      pool_settings:
+        idle_timeout: 5
+        max_connections: null
+        total_max_connections: null
+  tables: "!include default/tables/tables.yaml"

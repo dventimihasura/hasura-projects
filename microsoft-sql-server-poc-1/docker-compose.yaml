@@ -1,0 +1,31 @@
+version: '3.6'
+services:
+  postgres:
+    image: postgres:14
+    ports:
+      - "5433:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "password12345!"
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1434:1433"
+    environment:
+      ACCEPT_EULA: y
+      MSSQL_SA_PASSWORD: "password12345!"
+  graphql-engine:
+    image: hasura/graphql-engine:v2.16.1
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "postgres"
+    restart: always
+    environment:
+      PG_DATABASE_URL: "postgres://postgres:password12345!@postgres:5432/postgres"
+      MS_DATABASE_URL: "Driver={ODBC Driver 18 for SQL Server};Server=tcp:mssql,1433;Database=tempdb;Uid=sa;Pwd=password12345!;Encrypt=optional"
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: "postgres://postgres:password12345!@postgres:5432/postgres"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+

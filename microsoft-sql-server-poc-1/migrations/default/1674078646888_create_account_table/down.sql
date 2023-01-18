@@ -1,0 +1,6 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- CREATE TABLE account (
+--   id              INT           NOT NULL    IDENTITY    PRIMARY KEY,
+--   name           VARCHAR(100)  NOT NULL
+-- );
