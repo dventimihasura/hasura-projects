@@ -1,0 +1,6 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- create view page_items as
+--   select title, content from articles
+--   union all
+--   select title, description from alerts;
