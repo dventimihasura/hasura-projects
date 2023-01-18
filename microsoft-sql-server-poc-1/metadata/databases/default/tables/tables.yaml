@@ -1,2 +1,3 @@
 - "!include dbo_account.yaml"
+- "!include dbo_alerts.yaml"
 - "!include dbo_articles.yaml"

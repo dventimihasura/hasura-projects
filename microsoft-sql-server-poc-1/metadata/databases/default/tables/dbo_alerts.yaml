@@ -1,0 +1,3 @@
+table:
+  name: alerts
+  schema: dbo
