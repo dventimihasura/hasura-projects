@@ -1,0 +1,10 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- CREATE FUNCTION search_articles(@search varchar)
+-- RETURNS table return (
+--   SELECT *
+--   FROM articles
+--   WHERE
+--     title like ('%' + @search + '%')
+--     OR content like ('%' + @search + '%')
+-- );
