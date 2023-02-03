@@ -1,39 +1,52 @@
-version: '3.6'
+version: "3.6"
 services:
-  metadata:                     # Put Hasura metadata into its own db.
-    image: postgres:14
+  graphql-engine:
+    build: .
     ports:
+      - "8081:8080"
       - "5433:5432"
     restart: always
     environment:
-      POSTGRES_PASSWORD: postgrespassword
-  origin_1:                     # Data warehouse data source db
-    image: postgres:14
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+  postgres:
+    image: postgres:15
     ports:
       - "5434:5432"
     restart: always
     environment:
       POSTGRES_PASSWORD: postgrespassword
-    volumes:
-      - ./origin_1-initdb.d:/docker-entrypoint-initdb.d
-  origin_2:                     # Data warehouse data source db
-    image: postgres:14
+  oracle:
+    image: oracleinanutshell/oracle-xe-11g:latest
     ports:
-      - "5435:5432"
+      - "1522:1521"
+      - "5501:5500"
+  db2:
+    image: icr.io/db2_community/db2
+    privileged: true
+    environment:
+      LICENSE: "accept"
+      DB2INSTANCE: "db2inst1"
+      DB2INST1_PASSWORD: "password"
+      DBNAME: "testdb"
+      BLU: "false"
+      ENABLE_ORACLE_COMPATIBILITY: "false"
+      UPDATEAVAIL: "NO"
+      TO_CREATE_SAMPLEDB: "false"
+      REPODB: "false"
+      IS_OSXFS: "false"
+      PERSISTENT_HOME: "true"
+      HADR_ENABLED: "false"
+    ports:
+      - "50000:50000"
+  mysql:
+    image: mysql:5.7
     restart: always
     environment:
-      POSTGRES_PASSWORD: postgrespassword
-    volumes:
-      - ./origin_2-initdb.d:/docker-entrypoint-initdb.d
-  graphql-engine:               # Hasura instance
-    build: .
+      MYSQL_DATABASE: "db"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
     ports:
-      - "8080:8080"
-      - "5436:5432"
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@metadata:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      - "3307:3306"
