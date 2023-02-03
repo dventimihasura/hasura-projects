@@ -1,5 +1,10 @@
 version: "3.6"
 services:
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    ports:
+      - "8080:8978"
+    restart: always
   graphql-engine:
     build: .
     ports:
@@ -39,7 +44,7 @@ services:
       PERSISTENT_HOME: "true"
       HADR_ENABLED: "false"
     ports:
-      - "50000:50000"
+      - "50001:50000"
   mysql:
     image: mysql:5.7
     restart: always
