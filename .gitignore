@@ -16,3 +16,14 @@ pgbench_log.*
 *.csv
 /pgbouncer-minmax-connections-1/hasura.gnuplot
 *.gnuplot
+postgres-fdw-jdbc-1/cloudbeaver/workspace/.data/.cloudbeaver.runtime.conf
+postgres-fdw-jdbc-1/cloudbeaver/workspace/.data/.database-credentials.dat
+postgres-fdw-jdbc-1/cloudbeaver/workspace/.data/cb.h2.dat.mv.db
+postgres-fdw-jdbc-1/cloudbeaver/workspace/.data/cb.h2.dat.trace.db
+postgres-fdw-jdbc-1/cloudbeaver/workspace/.metadata/dbeaver-workspace.properties
+postgres-fdw-jdbc-1/cloudbeaver/workspace/.metadata/.http-sessions/0__0.0.0.0_11opuqbedp9nc1kvgs8v6gf7uu0
+postgres-fdw-jdbc-1/cloudbeaver/workspace/.metadata/.http-sessions/0__0.0.0.0_tlt6vy6dilwn1k0ool8alkjv00
+postgres-fdw-jdbc-1/cloudbeaver/workspace/.metadata/.plugins/org.eclipse.core.resources/
+postgres-fdw-jdbc-1/cloudbeaver/workspace/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.core.resources.prefs
+postgres-fdw-jdbc-1/cloudbeaver/workspace/GlobalConfiguration/
+postgres-fdw-jdbc-1/cloudbeaver/workspace/.data/
