@@ -9,8 +9,8 @@ services:
     restart: always
     environment:
       CB_SERVER_NAME: test
-      CB_ADMIN_NAME: admin
-      CB_ADMIN_PASSWORD: password
+      CB_ADMIN_NAME: test
+      CB_ADMIN_PASSWORD: test
   graphql-engine:
     build: .
     ports:
