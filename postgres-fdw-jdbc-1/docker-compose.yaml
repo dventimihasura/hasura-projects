@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:8978"
     volumes:
-      - ./cloudbeaver/workspace:/opt/cloudbeaver/workspace
+      - ./cloudbeaver/workspace/GlobalConfiguration/.dbeaver:/opt/cloudbeaver/workspace/GlobalConfiguration/.dbeaver
     restart: always
     environment:
       CB_SERVER_NAME: test
