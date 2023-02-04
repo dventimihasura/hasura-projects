@@ -1,0 +1,101 @@
+{
+	"folders": {},
+	"connections": {
+		"postgresql-template-1": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "PostgreSQL (Template)",
+			"template": true,
+			"read-only": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "5432",
+				"database": "postgres",
+				"url": "jdbc:postgresql://localhost:5432/postgres",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"provider-properties": {
+					"@dbeaver-show-non-default-db@": "false"
+				}
+			}
+		},
+		"mariaDB-1861df29a6d-34d47850ef2626fa": {
+			"provider": "mysql",
+			"driver": "mariaDB",
+			"name": "MariaDB@mysql",
+			"save-password": true,
+			"configuration": {
+				"host": "mysql",
+				"port": "3306",
+				"database": "db",
+				"url": "jdbc:mariadb://mysql:3306/db",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"auth-model": "native"
+			}
+		},
+		"postgres-jdbc-1861df31c74-7d56f6efedce0cb7": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "PostgreSQL@postgres",
+			"save-password": true,
+			"configuration": {
+				"host": "postgres",
+				"port": "5432",
+				"database": "postgres",
+				"url": "jdbc:postgresql://postgres:5432/postgres",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"auth-model": "native"
+			}
+		},
+		"oracle_thin-1861df9b76f-1f41bb56f8d3f457": {
+			"provider": "oracle",
+			"driver": "oracle_thin",
+			"name": "Oracle@oracle",
+			"save-password": true,
+			"configuration": {
+				"host": "oracle",
+				"port": "1521",
+				"database": "xe",
+				"url": "jdbc:oracle:thin:@oracle:1521:xe",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"properties": {
+					"oracle.jdbc.timezoneAsRegion": "false"
+				},
+				"provider-properties": {
+					"@dbeaver-sid-service@": "SID",
+					"oracle.logon-as": "Normal"
+				},
+				"auth-model": "oracle_native"
+			}
+		},
+		"db2-1861dfa34c3-4090156ed20616a7": {
+			"provider": "db2",
+			"driver": "db2",
+			"name": "Db2 for LUW@db2",
+			"save-password": true,
+			"configuration": {
+				"host": "db2",
+				"port": "50000",
+				"database": "testdb",
+				"url": "jdbc:db2://db2:50000/testdb",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"auto-close-transactions": false
+		}
+	}
+}
