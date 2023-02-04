@@ -4,6 +4,8 @@ services:
     image: dbeaver/cloudbeaver:latest
     ports:
       - "8080:8978"
+    volumes:
+      - ./cloudbeaver/workspace:/opt/cloudbeaver/workspace
     restart: always
   graphql-engine:
     build: .
