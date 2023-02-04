@@ -7,6 +7,10 @@ services:
     volumes:
       - ./cloudbeaver/workspace:/opt/cloudbeaver/workspace
     restart: always
+    environment:
+      CB_SERVER_NAME: test
+      CB_ADMIN_NAME: admin
+      CB_ADMIN_PASSWORD: password
   graphql-engine:
     build: .
     ports:
