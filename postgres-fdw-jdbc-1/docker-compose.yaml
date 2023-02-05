@@ -30,6 +30,8 @@ services:
       POSTGRES_PASSWORD: hasura
       POSTGRES_USER: hasura
       POSTGRES_DB: hasura
+    volumes:
+      - ./init_postgres:/docker-entrypoint-initdb.d
   oracle:
     image: gvenzl/oracle-xe:latest
     ports:
@@ -39,6 +41,8 @@ services:
       ORACLE_DATABASE: hasura
       APP_USER: hasura
       APP_USER_PASSWORD: hasura
+    volumes:
+      - ./init_oracle:/container-entrypoint-initdb.d
   db2:
     image: icr.io/db2_community/db2
     privileged: true
@@ -50,13 +54,15 @@ services:
       BLU: "false"
       ENABLE_ORACLE_COMPATIBILITY: "false"
       UPDATEAVAIL: "NO"
-      TO_CREATE_SAMPLEDB: "false"
+      TO_CREATE_SAMPLEDB: "true"
       REPODB: "false"
       IS_OSXFS: "false"
       PERSISTENT_HOME: "true"
       HADR_ENABLED: "false"
     ports:
       - "50001:50000"
+    volumes:
+      - ./init_db2:/var/custom
   mysql:
     image: mysql:5.7
     restart: always
@@ -67,3 +73,5 @@ services:
       MYSQL_ROOT_PASSWORD: "hasura"
     ports:
       - "3307:3306"
+    volumes:
+      - ./init_mysql:/docker-entrypoint-initdb.d
