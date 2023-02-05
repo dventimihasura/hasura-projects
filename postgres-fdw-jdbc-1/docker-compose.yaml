@@ -31,9 +31,9 @@ services:
       POSTGRES_USER: chinook
       POSTGRES_DB: chinook
     volumes:
-      - ./chinook:/docker-entrypoint-initdb.d
+      - ./chinook_postgres:/docker-entrypoint-initdb.d
   oracle:
-    image: gvenzl/oracle-xe:latest
+    image: gvenzl/oracle-xe
     ports:
       - "1522:1521"
     environment:
@@ -42,7 +42,7 @@ services:
       APP_USER: chinook
       APP_USER_PASSWORD: chinook
     volumes:
-      - ./chinook:/container-entrypoint-initdb.d
+      - ./chinook_oracle:/docker-entrypoint-initdb.d
   db2:
     image: icr.io/db2_community/db2
     privileged: true
@@ -62,7 +62,7 @@ services:
     ports:
       - "50001:50000"
     volumes:
-      - ./chinook:/var/custom
+      - ./chinook_db2:/var/custom
   mysql:
     image: mysql:5.7
     restart: always
@@ -74,5 +74,5 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ./chinook:/docker-entrypoint-initdb.d
+      - ./chinook_mysql:/docker-entrypoint-initdb.d
       - ./mysql/conf.d:/etc/mysql/conf.d
