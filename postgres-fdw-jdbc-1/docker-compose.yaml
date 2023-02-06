@@ -1,9 +1,19 @@
 version: "3.6"
 services:
+  graphql-engine:
+    build: .
+    ports:
+      - "8080:8080"
+      - "5433:5432"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
   cloudbeaver:
     image: dbeaver/cloudbeaver:latest
     ports:
-      - "8080:8978"
+      - "8081:8978"
     volumes:
       - ./cloudbeaver/conf:/opt/cloudbeaver/conf
     restart: always
@@ -11,16 +21,6 @@ services:
       CB_SERVER_NAME: test
       CB_ADMIN_NAME: test
       CB_ADMIN_PASSWORD: test
-  graphql-engine:
-    build: .
-    ports:
-      - "8081:8080"
-      - "5433:5432"
-    restart: always
-    environment:
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
   postgres:
     image: postgres:15
     ports:
