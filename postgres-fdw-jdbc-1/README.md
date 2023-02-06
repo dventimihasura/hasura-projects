@@ -4,62 +4,106 @@
 # Abstract #
 
 This is a Proof-Of-Concept (POC) demonstrating how to use PostgreSQL
-and its Foreign Data Wrapper (FDW) support as a read-through cache to
-a data warehouse.
+and its Foreign Data Wrapper (FDW) support as a gateway to a
+heterogeneous array of data sources. 
 
 # What #
 
-This POC uses a PostgreSQL database instance as a read-through cache
-to other databases (both PostgreSQL and Snowflake).  It also uses
-Hasura to expose this as a GraphQL API and also as a way to refresh
-the cache.
+This POC uses a PostgreSQL database instance as a gateway to other
+databases (PostgreSQL, MySQL, Oracle, DB2).
 
 # Why #
 
-Hasura users looking for a way to cache aggregate data from a data
-warehouse may find this approach useful as an alternative to Extract
-Translate and Load (ETL) pipelines.
+Hasura users looking for a way to use other data sources for which
+Hasura does not yet have first-class support or GraphQL Data Connector
+(GDC) support may find this approach useful as an alternative in the
+interim. 
 
 # How #
 
-A PostgreSQL database server named `origin` is created, which contains
-system-of-record data for a demonstration e-commerce data model.  Raw
-data from this server are made available as CSV files for importation
-into a data warehouse such as Snowflake as an illustration of an
-analytics application.  Another PostgreSQL database server named
-`cache` is also created, which uses PostgreSQL Foreign Data Wrappers
-(FDW) to access both the data in the `origin` instance, and also in a
-data warehouse (Snowflake in this demonstration).  Different schema
-are created within the `cache` database for these two applications:
+Database servers for PostgreSQL, MySQL, Oracle, and DB2 are
+simultaneously started.  Each is initialized with the same data model,
+based on the Chinook database.  In the docker-compose.yaml file they
+are in these services.
 
-  * `origin`
-  * `snowflake`
+  * `postgres`
+  * `mysql`
+  * `oracle`
+  * `db2`
   
-Foreign data wrappers are create using these two different providers
+In addition, another PostgreSQL server instance is started, named
+`gateway`.  Also, a Hasura server instance is started in
+`graphql-engine`.  The `gateway` PostgreSQL instance has extensions
+for these Foreign Data Wrappers.
 
-  * `postgres_fdw`
-  * `jdbc_fdw`
+  * `postgres-fdw`
+  * `oracle-fdw`
+  * `jdbc-fdw`
+
+These are used to create foreign servers to each of the other
+databases, `postgres`, `oracle`, `mysql`, `db2`.  The first two of
+those, `postgres` and `oracle`, have their foreign servers created
+using the `postgres-fdw` and `oracle-fdw` foreign data wrappers,
+respectively.  The latter two, `mysql` and `dbw`, hae their foreign
+servers created using the `jdbc-fdw` foreign data wrapper (for now).
+
+The Chinook tables (`album`, `artist`, `customer`, `employee`,
+`genre`, `invoice`, `invoiceline`, `mediatype`, `playlist`,
+`playlisttrack`, `track`) are imported from each of these foreign
+servers (all mapped to databases that all have the same data model and
+data) into appropriately-named schema in the `gateway` PostgreSQL
+database:  `postgres`, `mysql`, `oracle`.
+
+**NOTE**: `db2` is ommited for now.
+
+The data model is then divided in three broad domains, each devoted to
+a different database.
+
+  * `postgres`:  `customer`, `employee`, `invoice`, `invoiceline`
+  * `mysql`:  `album`, `artist`, `genre`, `mediatype`, `track`
+  * `oracle`: `playlist`, `playlisttrack`
   
-The former is used to access the `origin` PostgreSQL database
-instance.  The latter is used to access the `snowflake` database
-instance.  The foreign servers are used in order to map foreign tables
-into their respective schema `origin` and `snowflake` for the remote
-tables:  `account`, `invoice`, `line_item`, and `product`.  
+As these are all tables in *one* database instance (`gateway`), albeit
+*foreign* tables, they can be treated by Hasura as such.
+Consequently, regular non-remote relationships are created among these
+tables.  This can be done even though they are in different schema, of
+course.  
 
-Views are then created in the `public` schema on top of these foreign
-tables.  For both `origin` and `snowflake`, first a dynamic view is
-created, then a materialized view is created on top of the
-corresponding dynamic view.
+Finally, this supports GraphQL queries such as the following example,
+which joins data from three different databases, PostgreSQL, MySQL,
+and Oracle, without schema-stitching, remote joins, or remote
+databases.  
 
-Functions are then created in order to refresh the materialized views,
-these functions are tracked in Hasura as top-level GraphQL mutations,
-and those mutations are encoded as Hasura REST endpoints.  
+```graphql
+query MyQuery {
+  postgres_customer(limit: 10) {
+    firstname
+    lastname
+    invoices {
+      total
+      invoicelines {
+        unitprice
+        quantity
+        track {
+          name
+          milliseconds
+          mediatypeid
+          genre {
+            name
+          }
+          album {
+            title
+            artist {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
 
-Finally, Hasura cron triggers are set up (with request transforms) to
-activate these REST endpoints on a periodic basis with a 1 minute
-interval.  This serves to to refresh the underlying materialized views
-on that same schedule and therefore keep the cached data fresh with a
-Time To Live (TTL) of 1 minute.
 
 # Steps #
 
@@ -69,35 +113,20 @@ Time To Live (TTL) of 1 minute.
 git clone https://github.com/dventimihasura/hasura-projects
 ```
 
-2. Change to the `postgres-read-through-cache-1` sub-directory.
+2. Change to the `postgres-fdw-jdbc-1` sub-directory.
 
 ```shell
-cd postgres-read-through-cache-1
+cd postgres-fdw-jdbc-1
 ```
 
-3. Go to https://www.snowflake.com and create a free trial account,
-   create a database named `postgres` and a warehouse named
-   `postgres`.
-
-4. Create Snowflake tables and import data. `TODO`
-
-5. Create a `.env` file in the local `postgres-read-through-cache-1`
-   directory and add your Snowflake username and password like so.
-   **DO NOT CHECK THIS FILE INTO SOURCE CONTROL**.
-   
-```shell
-SNOWFLAKE_USER=<your Snowflake username>
-SNOWFLAKE_PASSWORD=<your Snowflake password>
-```
-
-6. Use Docker Compose to build the Docker image and launch the
+3. Use Docker Compose to build the Docker image and launch the
    services.
    
 ```shell
 docker-compose up -d --build
 ```
 
-7. Deploy the Hasura migrations and metadata.  **NOTE: If you have set
+4. Deploy the Hasura migrations and metadata.  **NOTE: If you have set
    up Multi-Factor Authentication (MFA) with your Snowflake account
    then you should be alert for push notifications on your MFA device
    as Snowflake connections are established.**
@@ -106,14 +135,34 @@ docker-compose up -d --build
 hasura deploy
 ```
 
-8. Access the Hasura Console via http://localhost:8080 and try out
+5. Access the Hasura Console via http://localhost:9080 and try out
    GraphQL queries like the following:
    
 ```graphql
 query MyQuery {
-  snowflake_account_summary_cached_aggregate {
-    aggregate {
-      count
+  postgres_customer(limit: 10) {
+    firstname
+    lastname
+    invoices {
+      total
+      invoicelines {
+        unitprice
+        quantity
+        track {
+          name
+          milliseconds
+          mediatypeid
+          genre {
+            name
+          }
+          album {
+            title
+            artist {
+              name
+            }
+          }
+        }
+      }
     }
   }
 }
