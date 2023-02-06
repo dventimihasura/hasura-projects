@@ -20,6 +20,15 @@ object_relationships:
         remote_table:
           name: genre
           schema: mysql
+  - name: invoicelines
+    using:
+      manual_configuration:
+        column_mapping:
+          trackid: trackid
+        insertion_order: null
+        remote_table:
+          name: invoiceline
+          schema: postgres
   - name: mediatype
     using:
       manual_configuration:

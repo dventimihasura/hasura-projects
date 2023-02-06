@@ -11,3 +11,12 @@ object_relationships:
         remote_table:
           name: invoice
           schema: postgres
+  - name: track
+    using:
+      manual_configuration:
+        column_mapping:
+          trackid: trackid
+        insertion_order: null
+        remote_table:
+          name: track
+          schema: mysql
