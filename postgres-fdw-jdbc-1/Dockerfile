@@ -1,6 +1,7 @@
 FROM hasura/graphql-engine:latest
 
-FROM postgres:14
+# FROM postgres:14
+FROM toleg/postgres_oracle_fdw:latest
 WORKDIR /root
 RUN apt-get -y update && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     default-jdk \
