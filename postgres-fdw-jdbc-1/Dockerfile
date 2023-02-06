@@ -11,6 +11,9 @@ RUN apt-get -y update && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get insta
     git \
     wget \
     libmariadb3 \
+    unixodbc \
+    libodbc1 \
+    odbcinst \
     libmariadb-java \
     libpostgresql-jdbc-java
 RUN git clone https://github.com/pgspider/jdbc_fdw.git
