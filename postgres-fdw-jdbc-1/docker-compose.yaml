@@ -1,70 +1,89 @@
 version: "3.6"
 services:
-  graphql-engine:
-    build: .
-    ports:
-      - "9080:8080"
-      - "9432:5432"
-    restart: always
-    environment:
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-  cloudbeaver:
-    image: dbeaver/cloudbeaver:latest
-    ports:
-      - "9081:8978"
-    volumes:
-      - ./cloudbeaver/conf:/opt/cloudbeaver/conf
-    restart: always
-    environment:
-      CB_SERVER_NAME: test
-      CB_ADMIN_NAME: test
-      CB_ADMIN_PASSWORD: test
   postgres:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_PASSWORD: chinook
-      POSTGRES_USER: chinook
-      POSTGRES_DB: chinook
+      POSTGRES_PASSWORD: "chinook"
+      POSTGRES_USER: "chinook"
+      POSTGRES_DB: "chinook"
     volumes:
       - ./chinook_postgres:/docker-entrypoint-initdb.d
   oracle:
     image: gvenzl/oracle-xe
     environment:
-      ORACLE_PASSWORD: chinook
-      ORACLE_DATABASE: chinook
-      APP_USER: chinook
-      APP_USER_PASSWORD: chinook
+      ORACLE_PASSWORD: "chinook"
+      ORACLE_DATABASE: "chinook"
+      APP_USER: "chinook"
+      APP_USER_PASSWORD: "chinook"
     volumes:
       - ./chinook_oracle:/docker-entrypoint-initdb.d
   db2:
     image: icr.io/db2_community/db2
     privileged: true
     environment:
-      BLU: false
-      DB2INST1_PASSWORD: chinook
-      DB2INSTANCE: chinook
-      DBNAME: chinook
-      ENABLE_ORACLE_COMPATIBILITY: false
-      HADR_ENABLED: false
-      IS_OSXFS: false
-      LICENSE: accept
-      PERSISTENT_HOME: true
-      REPODB: false
-      TO_CREATE_SAMPLEDB: false
-      UPDATEAVAIL: NO
+      BLU: "false"
+      DB2INST1_PASSWORD: "chinook"
+      DB2INSTANCE: "chinook"
+      DBNAME: "chinook"
+      ENABLE_ORACLE_COMPATIBILITY: "false"
+      HADR_ENABLED: "false"
+      IS_OSXFS: "false"
+      LICENSE: "accept"
+      PERSISTENT_HOME: "true"
+      REPODB: "false"
+      TO_CREATE_SAMPLEDB: "false"
+      UPDATEAVAIL: "NO"
     volumes:
       - ./chinook_db2:/var/custom
   mysql:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_DATABASE: chinook
-      MYSQL_USER: chinook
-      MYSQL_PASSWORD: chinook
-      MYSQL_ROOT_PASSWORD: chinook
+      MYSQL_DATABASE: "chinook"
+      MYSQL_USER: "chinook"
+      MYSQL_PASSWORD: "chinook"
+      MYSQL_ROOT_PASSWORD: "chinook"
     volumes:
       - ./chinook_mysql:/docker-entrypoint-initdb.d
       - ./mysql/conf.d:/etc/mysql/conf.d
+  gateway:
+    build: .
+    depends_on:
+      - postgres
+      - oracle
+      - db2
+      - mysql
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "gateway"
+    volumes:
+      - ./gateway:/docker-entrypoint-initdb.d
+  graphql-engine:
+    image: hasura/graphql-engine:v2.17.0
+    ports:
+      - "9080:8080"
+    depends_on:
+      - gateway
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://postgres:gateway@gateway:5432/postgres"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    ports:
+      - "9081:8978"
+    depends_on:
+      - postgres
+      - oracle
+      - db2
+      - mysql
+    volumes:
+      - ./cloudbeaver/conf:/opt/cloudbeaver/conf
+    restart: always
+    environment:
+      CB_SERVER_NAME: "test"
+      CB_ADMIN_NAME: "test"
+      CB_ADMIN_PASSWORD: "test"
