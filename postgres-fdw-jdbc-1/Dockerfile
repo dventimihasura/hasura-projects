@@ -1,6 +1,4 @@
-# FROM hasura/graphql-engine:latest
-# FROM postgres:14
-FROM toleg/postgres_oracle_fdw:latest
+FROM toleg/postgres_fdw:latest
 WORKDIR /root
 RUN apt-get -y update && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     default-jdk \
@@ -26,9 +24,3 @@ RUN wget https://repo1.maven.org/maven2/net/snowflake/snowflake-jdbc/3.13.20/sno
 RUN wget https://download.oracle.com/otn-pub/otn_software/jdbc/218/ojdbc11.jar
 RUN mv snowflake-jdbc-3.13.20.jar /usr/share/java
 RUN mv ojdbc11.jar /usr/share/java
-# COPY --from=0 /usr/bin/graphql-engine /usr/bin
-# ENV HGE_BINARY graphql-engine
-# ENV POSTGRES_PASSWORD postgrespassword
-# ENV HASURA_GRAPHQL_DATABASE_URL postgresql://postgres:postgrespassword@127.0.0.1:5432/postgres
-# COPY 01_hasura.sh /docker-entrypoint-initdb.d
-# COPY 02_init.sh /docker-entrypoint-initdb.d
