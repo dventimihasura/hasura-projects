@@ -1,0 +1,13 @@
+table:
+  name: employee
+  schema: postgres
+array_relationships:
+  - name: customers
+    using:
+      manual_configuration:
+        column_mapping:
+          employeeid: supportrepid
+        insertion_order: null
+        remote_table:
+          name: customer
+          schema: postgres

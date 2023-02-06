@@ -1,0 +1,31 @@
+table:
+  name: track
+  schema: mysql
+object_relationships:
+  - name: album
+    using:
+      manual_configuration:
+        column_mapping:
+          albumid: albumid
+        insertion_order: null
+        remote_table:
+          name: album
+          schema: mysql
+  - name: genre
+    using:
+      manual_configuration:
+        column_mapping:
+          genreid: genreid
+        insertion_order: null
+        remote_table:
+          name: genre
+          schema: mysql
+  - name: mediatype
+    using:
+      manual_configuration:
+        column_mapping:
+          mediatypeid: mediatypeid
+        insertion_order: null
+        remote_table:
+          name: mediatype
+          schema: mysql

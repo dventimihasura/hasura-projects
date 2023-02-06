@@ -1,0 +1,13 @@
+table:
+  name: invoiceline
+  schema: postgres
+object_relationships:
+  - name: invoice
+    using:
+      manual_configuration:
+        column_mapping:
+          invoiceid: invoiceid
+        insertion_order: null
+        remote_table:
+          name: invoice
+          schema: postgres

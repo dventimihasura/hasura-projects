@@ -1,0 +1,13 @@
+table:
+  name: playlisttrack
+  schema: mysql
+object_relationships:
+  - name: track
+    using:
+      manual_configuration:
+        column_mapping:
+          trackid: trackid
+        insertion_order: null
+        remote_table:
+          name: track
+          schema: mysql

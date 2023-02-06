@@ -1,0 +1,13 @@
+table:
+  name: artist
+  schema: mysql
+array_relationships:
+  - name: albums
+    using:
+      manual_configuration:
+        column_mapping:
+          artistid: artistid
+        insertion_order: null
+        remote_table:
+          name: album
+          schema: mysql

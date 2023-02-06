@@ -1,0 +1,23 @@
+table:
+  name: invoice
+  schema: postgres
+object_relationships:
+  - name: customer
+    using:
+      manual_configuration:
+        column_mapping:
+          customerid: customerid
+        insertion_order: null
+        remote_table:
+          name: customer
+          schema: postgres
+array_relationships:
+  - name: invoicelines
+    using:
+      manual_configuration:
+        column_mapping:
+          invoiceid: invoiceid
+        insertion_order: null
+        remote_table:
+          name: invoiceline
+          schema: postgres

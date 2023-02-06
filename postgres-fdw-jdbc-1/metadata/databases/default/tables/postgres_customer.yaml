@@ -1,0 +1,23 @@
+table:
+  name: customer
+  schema: postgres
+object_relationships:
+  - name: supportrep
+    using:
+      manual_configuration:
+        column_mapping:
+          supportrepid: employeeid
+        insertion_order: null
+        remote_table:
+          name: employee
+          schema: postgres
+array_relationships:
+  - name: invoices
+    using:
+      manual_configuration:
+        column_mapping:
+          customerid: customerid
+        insertion_order: null
+        remote_table:
+          name: invoice
+          schema: postgres
