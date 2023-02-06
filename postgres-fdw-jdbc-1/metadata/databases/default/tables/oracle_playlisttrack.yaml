@@ -1,3 +1,22 @@
 table:
   name: playlisttrack
   schema: oracle
+object_relationships:
+  - name: playlist
+    using:
+      manual_configuration:
+        column_mapping:
+          playlistid: playlistid
+        insertion_order: null
+        remote_table:
+          name: playlist
+          schema: oracle
+  - name: track
+    using:
+      manual_configuration:
+        column_mapping:
+          trackid: trackid
+        insertion_order: null
+        remote_table:
+          name: track
+          schema: mysql

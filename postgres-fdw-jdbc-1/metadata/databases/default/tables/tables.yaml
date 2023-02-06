@@ -2,8 +2,6 @@
 - "!include mysql_artist.yaml"
 - "!include mysql_genre.yaml"
 - "!include mysql_mediatype.yaml"
-- "!include mysql_playlist.yaml"
-- "!include mysql_playlisttrack.yaml"
 - "!include mysql_track.yaml"
 - "!include oracle_playlist.yaml"
 - "!include oracle_playlisttrack.yaml"
