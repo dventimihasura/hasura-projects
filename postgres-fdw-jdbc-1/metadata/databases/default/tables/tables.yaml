@@ -5,6 +5,8 @@
 - "!include mysql_playlist.yaml"
 - "!include mysql_playlisttrack.yaml"
 - "!include mysql_track.yaml"
+- "!include oracle_playlist.yaml"
+- "!include oracle_playlisttrack.yaml"
 - "!include postgres_customer.yaml"
 - "!include postgres_employee.yaml"
 - "!include postgres_invoice.yaml"
