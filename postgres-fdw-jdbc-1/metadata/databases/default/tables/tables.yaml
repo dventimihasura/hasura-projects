@@ -1,1 +1,11 @@
-[]
+- "!include mysql_album.yaml"
+- "!include mysql_artist.yaml"
+- "!include mysql_genre.yaml"
+- "!include mysql_mediatype.yaml"
+- "!include mysql_playlist.yaml"
+- "!include mysql_playlisttrack.yaml"
+- "!include mysql_track.yaml"
+- "!include postgres_customer.yaml"
+- "!include postgres_employee.yaml"
+- "!include postgres_invoice.yaml"
+- "!include postgres_invoiceline.yaml"
