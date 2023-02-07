@@ -23,7 +23,7 @@ interim.
 
 Database servers for PostgreSQL, MySQL, Oracle, and DB2 are
 simultaneously started.  Each is initialized with the same data model,
-based on the Chinook database.  In the docker-compose.yaml file they
+based on the Chinook database.  In the `docker-compose.yaml` file they
 are in these services.
 
   * `postgres`
