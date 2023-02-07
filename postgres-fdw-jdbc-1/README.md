@@ -97,6 +97,12 @@ query MyQuery {
               name
             }
           }
+          playlisttrack {
+            playlistid
+            playlist {
+              name
+            }
+          }
         }
       }
     }
@@ -158,6 +164,12 @@ query MyQuery {
           album {
             title
             artist {
+              name
+            }
+          }
+          playlisttrack {
+            playlistid
+            playlist {
               name
             }
           }

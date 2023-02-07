@@ -39,6 +39,15 @@ object_relationships:
           name: mediatype
           schema: mysql
 array_relationships:
+  - name: playlisttrack
+    using:
+      manual_configuration:
+        column_mapping:
+          trackid: trackid
+        insertion_order: null
+        remote_table:
+          name: playlisttrack
+          schema: oracle
   - name: tracks
     using:
       manual_configuration:
