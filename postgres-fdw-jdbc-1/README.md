@@ -129,10 +129,7 @@ cd postgres-fdw-jdbc-1
 docker-compose up -d --build
 ```
 
-4. Deploy the Hasura migrations and metadata.  **NOTE: If you have set
-   up Multi-Factor Authentication (MFA) with your Snowflake account
-   then you should be alert for push notifications on your MFA device
-   as Snowflake connections are established.**
+4. Deploy the Hasura migrations and metadata.
 
 ```shell
 hasura deploy
