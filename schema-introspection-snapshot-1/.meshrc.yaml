@@ -1,0 +1,9 @@
+sources:
+  - name: faker
+    handler:
+      graphql:
+        endpoint: https://magnetic-moose-60.hasura.app/v1/graphql
+        schemaHeaders:
+          x-hasura-admin-secret: uR6eCiOTupeTgB1ivHTNFM2g0w3jTacN2WB0T77rrA62UCyqGXcYCeUn34GK0Tz7
+        operationHeaders:
+          x-hasura-admin-secret: uR6eCiOTupeTgB1ivHTNFM2g0w3jTacN2WB0T77rrA62UCyqGXcYCeUn34GK0Tz7
