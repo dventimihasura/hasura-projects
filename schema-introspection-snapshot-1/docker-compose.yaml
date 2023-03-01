@@ -1,0 +1,27 @@
+version: '3.6'
+services:
+  faker:
+    image: apisguru/graphql-faker
+    restart: always
+    ports:
+      - "9002:9002"
+    volumes:
+      - ./:/workdir
+    entrypoint: graphql-faker schema.sdl
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+  graphql-engine:
+    image: hasura/graphql-engine:v2.19.0
+    ports:
+      - "9080:8080"
+    depends_on:
+      - "postgres"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"

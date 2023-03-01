@@ -1,0 +1,9 @@
+type Query {
+  product: [Product!]
+}
+
+type Product {
+  id: ID
+  name: String @fake(type: productName)
+  price: String @fake(type: number)
+}
