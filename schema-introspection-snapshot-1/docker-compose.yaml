@@ -8,20 +8,32 @@ services:
     volumes:
       - ./:/workdir
     entrypoint: graphql-faker schema.sdl
+  mesh:
+    image: hiroyukiosaki/graphql-mesh:latest-all-alpine
+    restart: always
+    ports:
+      - "4000:4000"
+    depends_on:
+      - "faker"
+    volumes:
+      - ./.meshrc.yaml:/work/.meshrc.yaml
   postgres:
     image: postgres:15
     restart: always
+    ports:
+      - "6432:5432"
     environment:
       POSTGRES_PASSWORD: postgres
   graphql-engine:
     image: hasura/graphql-engine:v2.19.0
+    restart: always
     ports:
       - "9080:8080"
     depends_on:
       - "postgres"
-    restart: always
+      - "mesh"
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://postgres:postgres@postgres:5432/postgres"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
