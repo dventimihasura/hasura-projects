@@ -90,5 +90,11 @@ MSSQL, so this POC develops a workaround.
      psql "postgresql://${PGUSER}:${PGPASSWORD}@localhost/postgres" -c "select * from sequence_id;"
    #+end_src
 
+6. Deploy the Hasura configuration.
+
+   #+begin_src shell
+     hasura deploy
+   #+end_src
+
 
 #  LocalWords:  sa cd
