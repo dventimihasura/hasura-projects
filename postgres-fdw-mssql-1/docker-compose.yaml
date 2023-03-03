@@ -1,6 +1,6 @@
 version: "3.6"
 services:
-  mssql:
+  mssql:                        # Start the mssql db.
     image: mcr.microsoft.com/mssql/server:2022-latest
     restart: always
     healthcheck:
@@ -11,7 +11,7 @@ services:
       MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
     ports: 
       - "1433:1433"
-  mssql_init:
+  mssql_init:                   # Run db init script for mssql.
     image: mcr.microsoft.com/mssql/server:2022-latest
     restart: "no"
     healthcheck:
@@ -22,10 +22,12 @@ services:
     entrypoint: ["/opt/mssql-tools/bin/sqlcmd", "-S", "mssql", "-U", "${MSSQL_SA_USER}", "-P", "${MSSQL_SA_PASSWORD}", "-i", "/init_mssql.sql"]
     volumes:
       - ./init_mssql.sql:/init_mssql.sql
-  postgres:
+  postgres:                     # Start the postgres db.
     image: toleg/postgres_mssql_fdw
     restart: always
-    command: "postgres -c custom.sa_password=${MSSQL_SA_PASSWORD}"
+    healthcheck:
+      test: ["CMD", "psql", "postgresql://${PGUSER}:${PGPASSWORD}@localhost/postgres", "-c", "select * from guid_id"]
+    command: "postgres -c custom.sa_password=${MSSQL_SA_PASSWORD}" # non-hard-coded mssql password
     depends_on:
       mssql_init:
         condition: service_healthy
@@ -39,7 +41,8 @@ services:
     image: hasura/graphql-engine:v2.17.0
     restart: always
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "9080:8080"
     environment:
