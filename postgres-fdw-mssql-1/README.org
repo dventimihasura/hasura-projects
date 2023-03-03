@@ -1,0 +1,85 @@
+* What
+
+This Proof-Of-Concept (POC) illustrates calling Microsoft SQL Server
+(MSSQL) stored procedures from PostgreSQL (postgres) using Foreign
+Data Wrappers (FDW).
+
+* Why
+
+Hasura does not yet support calling functions or stored procedures for
+MSSQL, so this POC develops a workaround.
+
+* How
+
+- [[https://hub.docker.com/r/toleg/postgres_mssql_fdw][postgres_mssql_fdw]] :: Docker image for postgres that includes the [[https://github.com/tds-fdw/tds_fdw][tds_fdw]] FDW
+- [[https://hub.docker.com/_/postgres][postgres]] :: Docker image for postgres
+- [[file:docker-compose.yaml][docker-compose.yaml]] :: Docker Compose file to orchestrate the components
+- [[file:init_mssql.sql][init_mssql.sql]] :: MSSQL initialization script
+- [[file:init_postgres.sql][init_postgres.sql]] :: postgres initialization script
+
+** Details
+
+1. A major objective is not to hard-code the MSSQL password into the
+   postgres database or into any scripts.  The password should somehow
+   be "injected" dynamically.
+   
+2. To that end, the postgres database is started with this command
+
+   #+begin_src shell
+     postgres -c custom.sa_password=${MSSQL_SA_PASSWORD}
+   #+end_src
+
+3. Postgres can have custom configuration parameters, either passed in
+   on the command-line or through its configuration files or through a
+   ~set~ command, so long as the parameter name contains a dot (.) as
+   it does here.
+
+4. That custom configuration parameter can be read dynamically at
+   run-time with ~current_setting('custom.sa_password')~, /however/ it
+   cannot be used in a simple way with ~create user mapping~ because
+   that DDL requires a string constant for the password.
+
+5. Therefore, the ~create user mapping~ DDL has to be executed as
+   non-inlined dynamic SQL.  That means ~execute~ and ~plpgsql~.
+
+6. FDWs generally do not have access to remote functions, but rather
+   only remote tables.  Therefore, calls to remote functions or
+   procedures have to be embedded in the ~query~ option of an ersatz
+   foreign table created in postgres.
+
+7. This does highlight a major limitation, which is that parameters
+   therefore cannot be passed to the remote functions or procedures.
+   The parameters have to be hard-coded in the ~query~ option string
+   or more realistically, this would only be useful for functions and
+   procedures that take no parameters.
+
+* Steps
+
+1. Clone this repository.
+
+   #+begin_src shell
+     git clone https://github.com/dventimihasura/hasura-projects
+   #+end_src
+
+2. Change to the ~postgres-fdw-mssql-1~ directory.
+
+   #+begin_src shell
+     cd postgres-fdw-mssql-1
+   #+end_src
+
+3. Use Docker Compose to launch the services.
+
+   #+begin_src shell
+     docker-compose up
+   #+end_src
+
+4. Use ~psql~ to access the ersatz tables in postgres which are in
+   turn accessing remote stored procedures in MSSQL.
+
+   #+begin_src shell
+     psql "postgresql://${PGUSER}:${PGPASSWORD}@localhost/postgres" -c "select * from guid_id;"
+     psql "postgresql://${PGUSER}:${PGPASSWORD}@localhost/postgres" -c "select * from sequence_id;"
+   #+end_src
+
+
+#  LocalWords:  sa cd
