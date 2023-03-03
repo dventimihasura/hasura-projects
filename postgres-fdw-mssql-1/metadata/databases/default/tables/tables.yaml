@@ -1,0 +1,3 @@
+- "!include public_guid_id.yaml"
+- "!include public_person.yaml"
+- "!include public_sequence_id.yaml"

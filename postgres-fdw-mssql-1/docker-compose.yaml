@@ -38,8 +38,10 @@ services:
     volumes:
       - ./init_postgres.sql:/docker-entrypoint-initdb.d/init_postgres.sql
   graphql-engine:
-    image: hasura/graphql-engine:v2.17.0
+    build: .
     restart: always
+    healthcheck:
+      test: ["CMD", "GET", "http://localhost:8080/healthz"]
     depends_on:
       postgres:
         condition: service_healthy

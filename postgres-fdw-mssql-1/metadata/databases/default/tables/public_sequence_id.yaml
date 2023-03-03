@@ -1,0 +1,3 @@
+table:
+  name: sequence_id
+  schema: public
