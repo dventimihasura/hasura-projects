@@ -67,13 +67,22 @@ MSSQL, so this POC develops a workaround.
      cd postgres-fdw-mssql-1
    #+end_src
 
-3. Use Docker Compose to launch the services.
+3. Create a ~.env~ file.
+
+   #+begin_src shell
+     MSSQL_SA_USER=sa
+     MSSQL_SA_PASSWORD=<MSSSQL password>
+     PGUSER=postgres
+     PGPASSWORD=<postgres password>
+   #+end_src
+
+4. Use Docker Compose to launch the services.
 
    #+begin_src shell
      docker-compose up
    #+end_src
 
-4. Use ~psql~ to access the ersatz tables in postgres which are in
+5. Use ~psql~ to access the ersatz tables in postgres which are in
    turn accessing remote stored procedures in MSSQL.
 
    #+begin_src shell
