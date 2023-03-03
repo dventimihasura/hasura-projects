@@ -15,7 +15,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     restart: "no"
     healthcheck:
-      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "mssql", "-U", "${MSSQL_SA_USER}", "-P", "${MSSQL_SA_PASSWORD}", "-Q", "select * from person"]
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "mssql", "-U", "${MSSQL_SA_USER}", "-P", "${MSSQL_SA_PASSWORD}", "-d", "test", "-Q", "exec get_guid_id"]
     depends_on:
       mssql:
         condition: service_healthy

@@ -17,21 +17,14 @@ select create_user_mapping('postgres', 'mssql', 'sa', current_setting('custom.sa
 
 import foreign schema dbo from server mssql into public;
 
-create foreign table get_persons (
-  id int options (column_name 'id') not null,
-  name varchar(255) options (column_name 'name')
-)
-  server mssql
-  options (schema_name 'dbo', query 'select * from get_persons()');
-
 create foreign table sequence_id (
   id int options (column_name 'id') not null
 )
   server mssql
-  options (schema_name 'dbo', query 'exec get_sequence_id');
+  options (schema_name 'dbo', query 'exec get_sequence_id', row_estimate_method 'showplan_all');
 
 create foreign table guid_id (
   id uuid options (column_name 'id') not null
 )
   server mssql
-  options (schema_name 'dbo', query 'exec get_guid_id');
+  options (schema_name 'dbo', query 'exec get_guid_id', row_estimate_method 'showplan_all');
