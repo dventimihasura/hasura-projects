@@ -23,11 +23,13 @@ services:
     volumes:
       - ./init_mssql.sql:/init_mssql.sql
   postgres:                     # Start the postgres db.
-    image: toleg/postgres_mssql_fdw
+    build:
+      context: .
+      dockerfile: postgres.Dockerfile
     restart: always
     healthcheck:
       test: ["CMD", "psql", "postgresql://${PGUSER}:${PGPASSWORD}@localhost/postgres", "-c", "select * from guid_id"]
-    command: "postgres -c custom.sa_password=${MSSQL_SA_PASSWORD}" # non-hard-coded mssql password
+    command: ["postgres", "-c", "custom.sa_password=${MSSQL_SA_PASSWORD}"]
     depends_on:
       mssql_init:
         condition: service_healthy
@@ -38,7 +40,9 @@ services:
     volumes:
       - ./init_postgres.sql:/docker-entrypoint-initdb.d/init_postgres.sql
   graphql-engine:
-    build: .
+    build:
+      context: .
+      dockerfile: hasura.Dockerfile
     restart: always
     healthcheck:
       test: ["CMD", "GET", "http://localhost:8080/healthz"]
