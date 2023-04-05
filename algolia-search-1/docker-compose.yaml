@@ -15,7 +15,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgrespassword
   search:
-    image: hasura/graphql-engine:v2.14.0
+    image: hasura/graphql-engine:${GRAPHQL_ENGINE_VERSION}
     ports:
       - "8081:8080"
     depends_on:
@@ -31,7 +31,7 @@ services:
       ALGOLIA_INDEX_NAME: "${ALGOLIA_INDEX_NAME}"         # for the search_remote action.
       ALGOLIA_API_KEY: "${ALGOLIA_API_KEY}"
   graphql:
-    image: hasura/graphql-engine:v2.14.0
+    image: hasura/graphql-engine:${GRAPHQL_ENGINE_VERSION}
     ports:
       - "8080:8080"
     depends_on:
