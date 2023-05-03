@@ -52,6 +52,7 @@ services:
     ports:
       - "9080:8080"
     environment:
+      MSSQL_URL: "Driver={ODBC Driver 18 for SQL Server};Server=mssql;Database=test;Uid=${MSSQL_SA_USER};Pwd=${MSSQL_SA_PASSWORD}"
       HASURA_GRAPHQL_DATABASE_URL: "postgres://${PGUSER}:${PGPASSWORD}@postgres:5432/postgres"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
