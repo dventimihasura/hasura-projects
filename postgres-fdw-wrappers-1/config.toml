@@ -1,0 +1,2 @@
+[configs]
+pg14="/usr/bin/pg_config"

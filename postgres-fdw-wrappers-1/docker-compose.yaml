@@ -1,0 +1,29 @@
+version: '3.6'
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.4.2.11
+    restart: always
+    ports:
+      - "19005:9005"
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: password
+    volumes:
+      - ./entrypoint-initdb.d-clickhouse:/docker-entrypoint-initdb.d
+  postgres:
+    build: .
+    restart: always
+    depends_on:
+      - "clickhouse"
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    volumes:
+      - ./entrypoint-initdb.d-postgres:/docker-entrypoint-initdb.d
+
+
+
