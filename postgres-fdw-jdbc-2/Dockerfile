@@ -30,3 +30,4 @@ COPY config.toml .pgx/config.toml
 RUN git clone https://github.com/supabase/wrappers.git
 WORKDIR /root/wrappers/wrappers
 RUN /root/.cargo/bin/cargo pgx install --features clickhouse_fdw
+
