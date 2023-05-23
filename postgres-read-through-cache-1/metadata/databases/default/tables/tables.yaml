@@ -1,4 +1,2 @@
 - "!include public_account_summary.yaml"
 - "!include public_account_summary_cached.yaml"
-- "!include public_snowflake_account_summary.yaml"
-- "!include public_snowflake_account_summary_cached.yaml"
