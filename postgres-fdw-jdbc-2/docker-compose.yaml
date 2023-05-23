@@ -16,7 +16,8 @@ services:
     "-c", "custom.jdbc_jarfile=${JDBC_JARFILE}",
     "-c", "custom.jdbc_password=${JDBC_PASSWORD}",
     "-c", "custom.jdbc_url=${JDBC_URL}",
-    "-c", "custom.jdbc_user=${JDBC_USER}"
+    "-c", "custom.jdbc_user=${JDBC_USER}",
+    "-c", "custom.X_HASURA_USER_ID=1"
     ]
   graphql-engine:
     image: hasura/graphql-engine:v2.15.2
@@ -27,10 +28,10 @@ services:
       - "postgres"
     restart: always
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://hasura:password@localhost:28814/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
 
 
 
