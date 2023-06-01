@@ -1,0 +1,331 @@
+{
+  "resource_version": 34,
+  "metadata": {
+    "version": 3,
+    "sources": [],
+    "actions": [
+      {
+        "name": "getAccount",
+        "definition": {
+          "handler": "http://nginx",
+          "output_type": "[Account2]",
+          "forward_client_headers": true,
+          "headers": [
+            {
+              "name": "Range",
+              "value": "0-{{$body.input?.limit}}"
+            }
+          ],
+          "arguments": [
+            {
+              "name": "id",
+              "type": "ID"
+            },
+            {
+              "name": "limit",
+              "type": "String"
+            }
+          ],
+          "request_transform": {
+            "method": "GET",
+            "query_params": {
+              "id": "{{$body.input?.id}}"
+            },
+            "request_headers": {
+              "add_headers": {},
+              "remove_headers": [
+                "content-type"
+              ]
+            },
+            "template_engine": "Kriti",
+            "url": "{{$base_url}}/account",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{{if inverse(empty($body))}} {{ range _, item := $body}} {\n  \"id\": {{item?.id}},\n  \"name\": {{item?.name}},\n  \"createdAt\": {{item?.created_at}},\n  \"updatedAt\": {{item?.updated_at}}\n  } {{end}} {{else}} null {{end}}"
+            },
+            "template_engine": "Kriti",
+            "version": 2
+          },
+          "type": "query"
+        }
+      },
+      {
+        "name": "getOrder",
+        "definition": {
+          "handler": "http://nginx",
+          "output_type": "[Order2]",
+          "forward_client_headers": true,
+          "headers": [
+            {
+              "name": "Range",
+              "value": "0-{{$body.input?.limit}}"
+            }
+          ],
+          "arguments": [
+            {
+              "name": "id",
+              "type": "ID"
+            },
+            {
+              "name": "accountId",
+              "type": "ID"
+            },
+            {
+              "name": "limit",
+              "type": "String"
+            }
+          ],
+          "request_transform": {
+            "method": "GET",
+            "query_params": {
+              "account_id": "{{$body.input?.accountId}}",
+              "id": "{{$body.input?.id}}"
+            },
+            "request_headers": {
+              "add_headers": {},
+              "remove_headers": [
+                "content-type"
+              ]
+            },
+            "template_engine": "Kriti",
+            "url": "{{$base_url}}/order",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{{if inverse(empty($body))}} {{ range _, item := $body}} {\n  \"id\": {{item?.id}},\n  \"createdAt\": {{item?.created_at}},\n  \"updatedAt\": {{item?.updated_at}},\n  \"accountId\": {{item?.account_id}},\n  \"status\": {{item?.status}},\n  \"region\": {{item?.region}}\n  } {{end}} {{else}} null {{end}}"
+            },
+            "template_engine": "Kriti",
+            "version": 2
+          },
+          "type": "query"
+        }
+      },
+      {
+        "name": "getOrderDetail",
+        "definition": {
+          "handler": "http://nginx",
+          "output_type": "[OrderDetail2]",
+          "forward_client_headers": true,
+          "headers": [
+            {
+              "name": "Range",
+              "value": "0-{{$body.input?.limit}}"
+            }
+          ],
+          "arguments": [
+            {
+              "name": "id",
+              "type": "ID"
+            },
+            {
+              "name": "orderId",
+              "type": "ID"
+            },
+            {
+              "name": "limit",
+              "type": "String"
+            }
+          ],
+          "request_transform": {
+            "method": "GET",
+            "query_params": {
+              "id": "{{$body.input?.id}}",
+              "order_id": "{{$body.input?.order_id}}"
+            },
+            "request_headers": {
+              "add_headers": {},
+              "remove_headers": [
+                "content-type"
+              ]
+            },
+            "template_engine": "Kriti",
+            "url": "{{$base_url}}/order_detail",
+            "version": 2
+          },
+          "response_transform": {
+            "body": {
+              "action": "transform",
+              "template": "{{if inverse(empty($body))}} {{ range _, item := $body}} {\n  \"id\": {{item?.id}},\n  \"createdAt\": {{item?.created_at}},\n  \"updatedAt\": {{item?.updated_at}},\n  \"units\": {{item?.units}},\n  \"orderId\": {{item?.order_id}},\n  \"productId\": {{item?.product_id}}\n  } {{end}} {{else}} null {{end}}"
+            },
+            "template_engine": "Kriti",
+            "version": 2
+          },
+          "type": "query"
+        }
+      },
+      {
+        "name": "getRegion",
+        "definition": {
+          "handler": "http://nginx",
+          "output_type": "[Region2]",
+          "forward_client_headers": true,
+          "headers": [
+            {
+              "name": "Range",
+              "value": "0-{{$body.input?.limit}}"
+            }
+          ],
+          "arguments": [
+            {
+              "name": "limit",
+              "type": "String"
+            },
+            {
+              "name": "value",
+              "type": "String"
+            }
+          ],
+          "request_transform": {
+            "method": "GET",
+            "query_params": {
+              "value": "{{$body.input?.value}}"
+            },
+            "request_headers": {
+              "add_headers": {},
+              "remove_headers": [
+                "content-type"
+              ]
+            },
+            "template_engine": "Kriti",
+            "url": "{{$base_url}}/region",
+            "version": 2
+          },
+          "type": "query"
+        }
+      }
+    ],
+    "custom_types": {
+      "objects": [
+        {
+          "name": "Order2",
+          "fields": [
+            {
+              "name": "accountId",
+              "type": "ID"
+            },
+            {
+              "name": "createdAt",
+              "type": "String"
+            },
+            {
+              "name": "id",
+              "type": "ID"
+            },
+            {
+              "name": "region",
+              "type": "String"
+            },
+            {
+              "name": "status",
+              "type": "Status"
+            },
+            {
+              "name": "updatedAt",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "name": "Region2",
+          "fields": [
+            {
+              "name": "description",
+              "type": "String"
+            },
+            {
+              "name": "value",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "name": "OrderDetail2",
+          "fields": [
+            {
+              "name": "createdAt",
+              "type": "String"
+            },
+            {
+              "name": "id",
+              "type": "ID"
+            },
+            {
+              "name": "orderId",
+              "type": "ID"
+            },
+            {
+              "name": "productId",
+              "type": "ID"
+            },
+            {
+              "name": "units",
+              "type": "Int"
+            },
+            {
+              "name": "updatedAt",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "name": "Account2",
+          "fields": [
+            {
+              "name": "createdAt",
+              "type": "String"
+            },
+            {
+              "name": "id",
+              "type": "ID"
+            },
+            {
+              "name": "name",
+              "type": "String"
+            },
+            {
+              "name": "updatedAt",
+              "type": "String"
+            }
+          ]
+        }
+      ],
+      "enums": [
+        {
+          "name": "Prefer",
+          "values": [
+            {
+              "description": null,
+              "is_deprecated": null,
+              "value": "countnone"
+            }
+          ]
+        },
+        {
+          "name": "Status",
+          "values": [
+            {
+              "description": null,
+              "is_deprecated": null,
+              "value": "new"
+            },
+            {
+              "description": null,
+              "is_deprecated": null,
+              "value": "processing"
+            },
+            {
+              "description": null,
+              "is_deprecated": null,
+              "value": "fulfilled"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

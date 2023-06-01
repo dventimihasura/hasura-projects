@@ -1,0 +1,86 @@
+version: "3.6"
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    ports:
+      - "15432:5432"
+    volumes:
+      - ./initdb.d-postgres:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_PASSWORD: postgres
+  postgrest:
+    image: postgrest/postgrest:v11.0.1
+    depends_on:
+      - postgres
+    restart: always
+    ports:
+      - "13000:3000"
+    environment:
+      PGRST_DB_ANON_ROLE: web_anon
+      PGRST_DB_SCHEMAS: api
+      PGRST_DB_URI: postgres://postgres:postgres@postgres/postgres
+      PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3000
+  nginx:
+    image: fabiocicerchia/nginx-lua:1.25.0-ubuntu22.04-amd64
+    depends_on:
+      - postgrest
+    ports:
+      - "13001:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  swagger:
+    image: swaggerapi/swagger-ui
+    depends_on:
+      - postgrest
+    ports:
+      - "18080:8080"
+    environment:
+      API_URL: http://localhost:13000
+  metadata:
+    image: postgres:15
+    restart: always
+    volumes:
+      - ./initdb.d-metadata:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_PASSWORD: postgres
+  marketplace:
+    image: hasura/graphql-engine:v2.26.0
+    depends_on:
+      - metadata
+      - postgrest
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/marketplace
+  catalog:
+    image: hasura/graphql-engine:v2.26.0
+    depends_on:
+      - metadata
+      - postgrest
+    ports:
+      - "8081:8080"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/catalog
+  gateway:
+    image: hasura/graphql-engine:v2.26.0
+    depends_on:
+      - metadata
+      - postgrest
+    ports:
+      - "8082:8080"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/gateway
+
