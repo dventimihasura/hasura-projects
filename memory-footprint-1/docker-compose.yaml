@@ -5,6 +5,8 @@ services:
     ports:
       - "15432:5432"
     restart: always
+    volumes:
+      - ./initdb.d:/docker-entrypoint-initdb.d:ro
     command: postgres -c 'max_locks_per_transaction=1024'
     environment:
       POSTGRES_PASSWORD: postgres
