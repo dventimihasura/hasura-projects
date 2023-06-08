@@ -16,21 +16,21 @@ drop table if exists "region";
 
 -- account table
 
-create table "account" ("id" binary(16) not null default (uuid_to_bin(uuid(), 1)), "name" varchar(255) not null, "created_at" timestamp not null default now(), "updated_at" timestamp not null default now(), primary key ("id") );
+create table "account" ("id" char(36) not null default (uuid()), "name" varchar(255) not null, "created_at" timestamp not null default now(), "updated_at" timestamp not null default now(), primary key ("id") );
 
 -- product table
 
-create table "product" ("id" binary(16) not null default (uuid_to_bin(uuid(), 1)), "created_at" timestamp not null default now(), "updated_at" timestamp not null default now(), "name" varchar(255) not null, "price" integer not null, primary key ("id") );
+create table "product" ("id" char(36) not null default (uuid()), "created_at" timestamp not null default now(), "updated_at" timestamp not null default now(), "name" varchar(255) not null, "price" integer not null, primary key ("id") );
 
 -- order table
 
-create table "order" ("id" binary(16) not null default (uuid_to_bin(uuid(), 1)), "created_at" timestamp not null default now(), "updated_at" timestamp not null default now(), "account_id" binary(16) not null, primary key ("id") , foreign key ("account_id") references "account"("id") on update restrict on delete restrict);
+create table "order" ("id" char(36) not null default (uuid()), "created_at" timestamp not null default now(), "updated_at" timestamp not null default now(), "account_id" char(36) not null, primary key ("id") , foreign key ("account_id") references "account"("id") on update restrict on delete restrict);
 
 create index order_idx on "order" (account_id);
 
 -- order_detail table
 
-create table "order_detail" ("id" binary(16) not null default (uuid_to_bin(uuid(), 1)), "created_at" timestamp not null default now(), "updated_at" timestamp not null default now(), "units" integer not null, "order_id" binary(16) not null, "product_id" binary(16) not null, primary key ("id") , foreign key ("order_id") references "order"("id") on update restrict on delete restrict, foreign key ("product_id") references "product"("id") on update restrict on delete restrict);
+create table "order_detail" ("id" char(36) not null default (uuid()), "created_at" timestamp not null default now(), "updated_at" timestamp not null default now(), "units" integer not null, "order_id" char(36) not null, "product_id" char(36) not null, primary key ("id") , foreign key ("order_id") references "order"("id") on update restrict on delete restrict, foreign key ("product_id") references "product"("id") on update restrict on delete restrict);
 
 create index order_detail_idx on order_detail (order_id);
 
@@ -96,7 +96,7 @@ create index order_idx_4 on "order" (region);
 create or replace view account_summary as
 select
   account.id,
-  sum(units*price)
+  sum(units*price) total_price
   from account
        join "order" on "order".account_id = account.id
        join order_detail on order_detail.order_id = "order".id
