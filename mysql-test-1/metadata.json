@@ -1,5 +1,5 @@
 {
-  "resource_version": 4,
+  "resource_version": 10,
   "metadata": {
     "version": 3,
     "sources": [
@@ -48,86 +48,6 @@
           {
             "table": [
               "account_summary"
-            ]
-          },
-          {
-            "table": [
-              "columns_priv"
-            ]
-          },
-          {
-            "table": [
-              "component"
-            ]
-          },
-          {
-            "table": [
-              "db"
-            ]
-          },
-          {
-            "table": [
-              "default_roles"
-            ]
-          },
-          {
-            "table": [
-              "engine_cost"
-            ]
-          },
-          {
-            "table": [
-              "func"
-            ]
-          },
-          {
-            "table": [
-              "general_log"
-            ]
-          },
-          {
-            "table": [
-              "global_grants"
-            ]
-          },
-          {
-            "table": [
-              "gtid_executed"
-            ]
-          },
-          {
-            "table": [
-              "help_category"
-            ]
-          },
-          {
-            "table": [
-              "help_keyword"
-            ]
-          },
-          {
-            "table": [
-              "help_relation"
-            ]
-          },
-          {
-            "table": [
-              "help_topic"
-            ]
-          },
-          {
-            "table": [
-              "innodb_index_stats"
-            ]
-          },
-          {
-            "table": [
-              "innodb_table_stats"
-            ]
-          },
-          {
-            "table": [
-              "ndb_binlog_index"
             ]
           },
           {
@@ -183,21 +103,6 @@
           },
           {
             "table": [
-              "password_history"
-            ]
-          },
-          {
-            "table": [
-              "plugin"
-            ]
-          },
-          {
-            "table": [
-              "procs_priv"
-            ]
-          },
-          {
-            "table": [
               "product"
             ],
             "array_relationships": [
@@ -212,11 +117,6 @@
                   }
                 }
               }
-            ]
-          },
-          {
-            "table": [
-              "proxies_priv"
             ]
           },
           {
@@ -236,103 +136,12 @@
                 }
               }
             ]
-          },
-          {
-            "table": [
-              "replication_asynchronous_connection_failover"
-            ]
-          },
-          {
-            "table": [
-              "replication_asynchronous_connection_failover_managed"
-            ]
-          },
-          {
-            "table": [
-              "replication_group_configuration_version"
-            ]
-          },
-          {
-            "table": [
-              "replication_group_member_actions"
-            ]
-          },
-          {
-            "table": [
-              "role_edges"
-            ]
-          },
-          {
-            "table": [
-              "server_cost"
-            ]
-          },
-          {
-            "table": [
-              "servers"
-            ]
-          },
-          {
-            "table": [
-              "slave_master_info"
-            ]
-          },
-          {
-            "table": [
-              "slave_relay_log_info"
-            ]
-          },
-          {
-            "table": [
-              "slave_worker_info"
-            ]
-          },
-          {
-            "table": [
-              "slow_log"
-            ]
-          },
-          {
-            "table": [
-              "tables_priv"
-            ]
-          },
-          {
-            "table": [
-              "time_zone"
-            ]
-          },
-          {
-            "table": [
-              "time_zone_leap_second"
-            ]
-          },
-          {
-            "table": [
-              "time_zone_name"
-            ]
-          },
-          {
-            "table": [
-              "time_zone_transition"
-            ]
-          },
-          {
-            "table": [
-              "time_zone_transition_type"
-            ]
-          },
-          {
-            "table": [
-              "user"
-            ]
           }
         ],
         "configuration": {
           "template": "{\"fully_qualify_all_names\": false, \"jdbc_url\": \"{{getEnvironmentVariable(\"MYSQL_URL\")}}\"}",
           "timeout": null,
-          "value": {
-          }
+          "value": {}
         }
       }
     ]
