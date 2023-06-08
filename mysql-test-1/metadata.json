@@ -1,0 +1,340 @@
+{
+  "resource_version": 4,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "default",
+        "kind": "postgres",
+        "tables": [],
+        "configuration": {
+          "connection_info": {
+            "database_url": {
+              "from_env": "HASURA_GRAPHQL_DATABASE_URL"
+            },
+            "isolation_level": "read-committed",
+            "pool_settings": {
+              "connection_lifetime": 600,
+              "idle_timeout": 180,
+              "max_connections": 50,
+              "retries": 1
+            },
+            "use_prepared_statements": true
+          }
+        }
+      },
+      {
+        "name": "mysql",
+        "kind": "mysql8",
+        "tables": [
+          {
+            "table": [
+              "account"
+            ],
+            "array_relationships": [
+              {
+                "name": "account_orders",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "account_id",
+                    "table": [
+                      "order"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "table": [
+              "account_summary"
+            ]
+          },
+          {
+            "table": [
+              "columns_priv"
+            ]
+          },
+          {
+            "table": [
+              "component"
+            ]
+          },
+          {
+            "table": [
+              "db"
+            ]
+          },
+          {
+            "table": [
+              "default_roles"
+            ]
+          },
+          {
+            "table": [
+              "engine_cost"
+            ]
+          },
+          {
+            "table": [
+              "func"
+            ]
+          },
+          {
+            "table": [
+              "general_log"
+            ]
+          },
+          {
+            "table": [
+              "global_grants"
+            ]
+          },
+          {
+            "table": [
+              "gtid_executed"
+            ]
+          },
+          {
+            "table": [
+              "help_category"
+            ]
+          },
+          {
+            "table": [
+              "help_keyword"
+            ]
+          },
+          {
+            "table": [
+              "help_relation"
+            ]
+          },
+          {
+            "table": [
+              "help_topic"
+            ]
+          },
+          {
+            "table": [
+              "innodb_index_stats"
+            ]
+          },
+          {
+            "table": [
+              "innodb_table_stats"
+            ]
+          },
+          {
+            "table": [
+              "ndb_binlog_index"
+            ]
+          },
+          {
+            "table": [
+              "order"
+            ],
+            "object_relationships": [
+              {
+                "name": "order_account",
+                "using": {
+                  "foreign_key_constraint_on": "account_id"
+                }
+              },
+              {
+                "name": "order_region",
+                "using": {
+                  "foreign_key_constraint_on": "region"
+                }
+              }
+            ],
+            "array_relationships": [
+              {
+                "name": "order_order_details",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "order_id",
+                    "table": [
+                      "order_detail"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "table": [
+              "order_detail"
+            ],
+            "object_relationships": [
+              {
+                "name": "order_detail_order",
+                "using": {
+                  "foreign_key_constraint_on": "order_id"
+                }
+              },
+              {
+                "name": "order_detail_product",
+                "using": {
+                  "foreign_key_constraint_on": "product_id"
+                }
+              }
+            ]
+          },
+          {
+            "table": [
+              "password_history"
+            ]
+          },
+          {
+            "table": [
+              "plugin"
+            ]
+          },
+          {
+            "table": [
+              "procs_priv"
+            ]
+          },
+          {
+            "table": [
+              "product"
+            ],
+            "array_relationships": [
+              {
+                "name": "product_order_details",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "product_id",
+                    "table": [
+                      "order_detail"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "table": [
+              "proxies_priv"
+            ]
+          },
+          {
+            "table": [
+              "region"
+            ],
+            "array_relationships": [
+              {
+                "name": "region_orders",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "region",
+                    "table": [
+                      "order"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "table": [
+              "replication_asynchronous_connection_failover"
+            ]
+          },
+          {
+            "table": [
+              "replication_asynchronous_connection_failover_managed"
+            ]
+          },
+          {
+            "table": [
+              "replication_group_configuration_version"
+            ]
+          },
+          {
+            "table": [
+              "replication_group_member_actions"
+            ]
+          },
+          {
+            "table": [
+              "role_edges"
+            ]
+          },
+          {
+            "table": [
+              "server_cost"
+            ]
+          },
+          {
+            "table": [
+              "servers"
+            ]
+          },
+          {
+            "table": [
+              "slave_master_info"
+            ]
+          },
+          {
+            "table": [
+              "slave_relay_log_info"
+            ]
+          },
+          {
+            "table": [
+              "slave_worker_info"
+            ]
+          },
+          {
+            "table": [
+              "slow_log"
+            ]
+          },
+          {
+            "table": [
+              "tables_priv"
+            ]
+          },
+          {
+            "table": [
+              "time_zone"
+            ]
+          },
+          {
+            "table": [
+              "time_zone_leap_second"
+            ]
+          },
+          {
+            "table": [
+              "time_zone_name"
+            ]
+          },
+          {
+            "table": [
+              "time_zone_transition"
+            ]
+          },
+          {
+            "table": [
+              "time_zone_transition_type"
+            ]
+          },
+          {
+            "table": [
+              "user"
+            ]
+          }
+        ],
+        "configuration": {
+          "template": "{\"fully_qualify_all_names\": false, \"jdbc_url\": \"{{getEnvironmentVariable(\"MYSQL_URL\")}}\"}",
+          "timeout": null,
+          "value": {
+          }
+        }
+      }
+    ]
+  }
+}
