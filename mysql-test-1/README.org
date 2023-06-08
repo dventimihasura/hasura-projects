@@ -21,19 +21,19 @@ This project has these components:
 
 * Steps
 
-1. Clone this repository.
+- Clone this repository.
 
 #+begin_src bash
 git clone https://github.com/dventimihasura/hasura-projects.git
 #+end_src
 
-2. Change to the ~mysql-test-1~ directory.
+- Change to the ~mysql-test-1~ directory.
 
 #+begin_src bash
 cd mysql-test-1
 #+end_src
 
-3. Create a .env file with your admin secret, JDBC connection information, and an Enterprise license key.
+- Create a .env file with your admin secret, JDBC connection information, and an Enterprise license key.
 
 #+begin_src bash
 HASURA_GRAPHQL_EE_LICENSE_KEY=<your enterprise license key>
@@ -41,10 +41,10 @@ HASURA_GRAPHQL_ADMIN_SECRET=admin
 MYSQL_URL=jdbc:mysql://mysql:3306/mysql?user=mysql&password=mysql
 #+end_src
 
-4. Launch the services with Docker Compose.
-
+- Launch the services with Docker Compose.
 #+begin_src bash
 docker compose up -d
 #+end_src
 
-5. Use the Hasura Console to import the ~metadata.json~ file.
+- Use the Hasura Console to import the ~metadata.json~ file.
+
