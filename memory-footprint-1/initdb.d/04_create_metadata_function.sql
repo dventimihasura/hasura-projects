@@ -49,7 +49,7 @@ as $function$
 					information_schema.columns
 				     where table_name = tables.table_name) foo))) x
 			  from
-			    generate_series(1, 2)) foo),
+			    generate_series(role_start, role_end)) foo),
 			    'table', jsonb_build_object(
 			      'name', table_name,
 			      'schema', table_schema)) x
