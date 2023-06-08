@@ -14,10 +14,10 @@ It's useful to have a Proof-Of-Concept (POC) that possesses these features:
 
 This project has these components:
 
-- docker-compose.yaml :: sets up services for ~postgres~, ~mysql~, ~graphql-engine~, and ~data-connector-agent~
-- metadata.json :: Hasura metadata with the connection information and the tracked tables, views, and relationships
-- 01_init_model.sql :: SQL script to initialize the data model
-- 02_init_data.sql :: SQL script to initialize the data
+- [[file:docker-compose.yaml][docker-compose.yaml]] :: sets up services for ~postgres~, ~mysql~, ~graphql-engine~, and ~data-connector-agent~
+- [[file:metadata.json][metadata.json]] :: Hasura metadata with the connection information and the tracked tables, views, and relationships
+- [[file:initdb.d-mysql/01_init_model.sql][01_init_model.sql]] :: SQL script to initialize the data model
+- [[file:initdb.d-mysql/02_init_data.sql][02_init_data.sql]] :: SQL script to initialize the data
 
 * Steps
 
