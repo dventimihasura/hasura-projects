@@ -26,7 +26,7 @@ This Proof-Of-Concept (POC) has these components.
 - [[file:initdb.d/01_init.sql][01_init.sql]] :: This SQL initialization script uses the Faker tool to
   build up fake sample data in a stepwise fashion in order to create a
   relatively large volume of data somewhat efficiently.  Currently, it
-  builds up 1 billion fake ~profile~ records with these fields.
+  builds up 100 million fake ~profile~ records with these fields.
   - first_name
   - middle_name
   - last_name
@@ -34,6 +34,7 @@ This Proof-Of-Concept (POC) has these components.
   - color_name
   - job
   - company
+  - license_plate
 
 * Steps
 
@@ -43,7 +44,7 @@ This Proof-Of-Concept (POC) has these components.
 git clone https://github.com/dventimihasura/hasura-projects.git
 #+end_src
 
-** Step 2:  Change to the <> directory.
+** Step 2:  Change to the ~bloom-index-1~ directory.
 
 #+begin_src bash
 cd bloom-index-1
@@ -52,7 +53,7 @@ cd bloom-index-1
 ** Step 3:  Launch the service with Docker Compose.
 
 Note that this will take approximately an hour to synthesize all of
-the fake sample data for the 1 billion sample rows
+the fake sample data for the 100 million sample rows
 
 #+begin_src bash
 docker compose up -d
@@ -74,7 +75,7 @@ scaling.
 
 #+begin_src sql :engine postgresql :dbhost localhost :dbuser postgres :dbpassword postgres :database postgres :dbport 15432 :results output :exports both
 explain analyze
-  with
+with
   sample as (select id from profile tablesample system_rows(1))
 select
   *

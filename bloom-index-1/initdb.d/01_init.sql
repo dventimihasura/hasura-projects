@@ -35,7 +35,7 @@ copy job (data) from program 'faker -r=10 -s" " job';
 copy company (data) from program 'faker -r=10 -s" " job';
 copy license_plate (data) from program 'faker -r=10 -s" " license_plate';
 
--- Load the bloom extension and add a bloom index to the profile table.
+-- Load the bloom extension.
 
 create extension if not exists bloom;
 
