@@ -36,6 +36,7 @@ This Proof-Of-Concept (POC) has these components.
   - company
 
 * Steps
+
 ** Step 1:  Clone this repository.
 
 #+begin_src bash
@@ -209,7 +210,7 @@ Execution Time: 1762.171 ms
 *** Add a bloom index over all the non-primary key columns in the ~profile~ table.
 
 #+begin_src sql :engine postgresql :dbhost localhost :dbuser postgres :dbpassword postgres :database postgres :dbport 15432 :results output :exports both
-create index bloomidx on profile using bloom(first_name, middle_name, last_name, city, color_name, job, company);
+create index bloomidx on profile using bloom(first_name, middle_name, last_name, city, color_name, job, company, license_plate);
 #+end_src
 
 #+RESULTS:

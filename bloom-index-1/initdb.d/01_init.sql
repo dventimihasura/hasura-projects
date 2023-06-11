@@ -41,7 +41,9 @@ create extension if not exists bloom;
 
 -- Insert all combinations of seed data into the profile table, but include a sensible limit just in case there's a mistake in our reasoning.
 
-insert into profile (first_name, middle_name, last_name, city, color_name, job, company, license_plate)
+with
+  license_plate as (select data from (select *, row_number() over (order by data) from license_plate order by data) foo where row_number = 1)
+    insert into profile (first_name, middle_name, last_name, city, color_name, job, company, license_plate)
 select
   first_name.data first_name,
   middle_name.data middle_name,
@@ -60,7 +62,214 @@ select
     job,
     company,
     license_plate
- limit 1000000000;
+ limit 100000000;
+
+with
+  license_plate as (select data from (select *, row_number() over (order by data) from license_plate order by data) foo where row_number = 2)
+    insert into profile (first_name, middle_name, last_name, city, color_name, job, company, license_plate)
+select
+  first_name.data first_name,
+  middle_name.data middle_name,
+  last_name.data last_name,
+  city.data city,
+  color_name.data color_name,
+  job.data job,
+  company.data company,
+  license_plate.data license_plate
+  from
+    first_name,
+    middle_name,
+    last_name,
+    city,
+    color_name,
+    job,
+    company,
+    license_plate
+ limit 100000000;
+
+with
+  license_plate as (select data from (select *, row_number() over (order by data) from license_plate order by data) foo where row_number = 3)
+    insert into profile (first_name, middle_name, last_name, city, color_name, job, company, license_plate)
+select
+  first_name.data first_name,
+  middle_name.data middle_name,
+  last_name.data last_name,
+  city.data city,
+  color_name.data color_name,
+  job.data job,
+  company.data company,
+  license_plate.data license_plate
+  from
+    first_name,
+    middle_name,
+    last_name,
+    city,
+    color_name,
+    job,
+    company,
+    license_plate
+ limit 100000000;
+
+with
+  license_plate as (select data from (select *, row_number() over (order by data) from license_plate order by data) foo where row_number = 4)
+    insert into profile (first_name, middle_name, last_name, city, color_name, job, company, license_plate)
+select
+  first_name.data first_name,
+  middle_name.data middle_name,
+  last_name.data last_name,
+  city.data city,
+  color_name.data color_name,
+  job.data job,
+  company.data company,
+  license_plate.data license_plate
+  from
+    first_name,
+    middle_name,
+    last_name,
+    city,
+    color_name,
+    job,
+    company,
+    license_plate
+ limit 100000000;
+
+with
+  license_plate as (select data from (select *, row_number() over (order by data) from license_plate order by data) foo where row_number = 5)
+    insert into profile (first_name, middle_name, last_name, city, color_name, job, company, license_plate)
+select
+  first_name.data first_name,
+  middle_name.data middle_name,
+  last_name.data last_name,
+  city.data city,
+  color_name.data color_name,
+  job.data job,
+  company.data company,
+  license_plate.data license_plate
+  from
+    first_name,
+    middle_name,
+    last_name,
+    city,
+    color_name,
+    job,
+    company,
+    license_plate
+ limit 100000000;
+
+with
+  license_plate as (select data from (select *, row_number() over (order by data) from license_plate order by data) foo where row_number = 6)
+    insert into profile (first_name, middle_name, last_name, city, color_name, job, company, license_plate)
+select
+  first_name.data first_name,
+  middle_name.data middle_name,
+  last_name.data last_name,
+  city.data city,
+  color_name.data color_name,
+  job.data job,
+  company.data company,
+  license_plate.data license_plate
+  from
+    first_name,
+    middle_name,
+    last_name,
+    city,
+    color_name,
+    job,
+    company,
+    license_plate
+ limit 100000000;
+
+with
+  license_plate as (select data from (select *, row_number() over (order by data) from license_plate order by data) foo where row_number = 7)
+    insert into profile (first_name, middle_name, last_name, city, color_name, job, company, license_plate)
+select
+  first_name.data first_name,
+  middle_name.data middle_name,
+  last_name.data last_name,
+  city.data city,
+  color_name.data color_name,
+  job.data job,
+  company.data company,
+  license_plate.data license_plate
+  from
+    first_name,
+    middle_name,
+    last_name,
+    city,
+    color_name,
+    job,
+    company,
+    license_plate
+ limit 100000000;
+
+with
+  license_plate as (select data from (select *, row_number() over (order by data) from license_plate order by data) foo where row_number = 8)
+    insert into profile (first_name, middle_name, last_name, city, color_name, job, company, license_plate)
+select
+  first_name.data first_name,
+  middle_name.data middle_name,
+  last_name.data last_name,
+  city.data city,
+  color_name.data color_name,
+  job.data job,
+  company.data company,
+  license_plate.data license_plate
+  from
+    first_name,
+    middle_name,
+    last_name,
+    city,
+    color_name,
+    job,
+    company,
+    license_plate
+ limit 100000000;
+
+with
+  license_plate as (select data from (select *, row_number() over (order by data) from license_plate order by data) foo where row_number = 9)
+    insert into profile (first_name, middle_name, last_name, city, color_name, job, company, license_plate)
+select
+  first_name.data first_name,
+  middle_name.data middle_name,
+  last_name.data last_name,
+  city.data city,
+  color_name.data color_name,
+  job.data job,
+  company.data company,
+  license_plate.data license_plate
+  from
+    first_name,
+    middle_name,
+    last_name,
+    city,
+    color_name,
+    job,
+    company,
+    license_plate
+ limit 100000000;
+
+with
+  license_plate as (select data from (select *, row_number() over (order by data) from license_plate order by data) foo where row_number = 10)
+    insert into profile (first_name, middle_name, last_name, city, color_name, job, company, license_plate)
+select
+  first_name.data first_name,
+  middle_name.data middle_name,
+  last_name.data last_name,
+  city.data city,
+  color_name.data color_name,
+  job.data job,
+  company.data company,
+  license_plate.data license_plate
+  from
+    first_name,
+    middle_name,
+    last_name,
+    city,
+    color_name,
+    job,
+    company,
+    license_plate
+ limit 100000000;
 
 -- Add the tsm_system_rows extension to make it easier and more efficient to select random rows from tables.
 
