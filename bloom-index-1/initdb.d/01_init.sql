@@ -22,7 +22,7 @@ create table if not exists color_name (data text);
 create table if not exists job (data text);
 create table if not exists company (data text);
 create table if not exists license_plate (data text);
-create unlogged table profile (id uuid primary key default gen_random_uuid(), first_name text, middle_name text, last_name text, city text, color_name text, job text, company text);
+create unlogged table profile (id uuid primary key default gen_random_uuid(), first_name text, middle_name text, last_name text, city text, color_name text, job text, company text, license_plate text);
 
 -- Add randomly-generated fake sample data to the seed tables.
 
@@ -41,7 +41,7 @@ create extension if not exists bloom;
 
 -- Insert all combinations of seed data into the profile table, but include a sensible limit just in case there's a mistake in our reasoning.
 
-insert into profile (first_name, middle_name, last_name, city, color_name, job, company)
+insert into profile (first_name, middle_name, last_name, city, color_name, job, company, license_plate)
 select
   first_name.data first_name,
   middle_name.data middle_name,
@@ -49,7 +49,8 @@ select
   city.data city,
   color_name.data color_name,
   job.data job,
-  company.data company
+  company.data company,
+  license_plate.data license_plate
   from
     first_name,
     middle_name,
@@ -57,8 +58,9 @@ select
     city,
     color_name,
     job,
-    company
- limit 100000000;
+    company,
+    license_plate
+ limit 1000000000;
 
 -- Add the tsm_system_rows extension to make it easier and more efficient to select random rows from tables.
 

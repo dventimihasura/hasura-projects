@@ -37,9 +37,32 @@ This Proof-Of-Concept (POC) has these components.
 
 * Steps
 ** Step 1:  Clone this repository.
+
+#+begin_src bash
+git clone https://github.com/dventimihasura/hasura-projects.git
+#+end_src
+
 ** Step 2:  Change to the <> directory.
+
+#+begin_src bash
+cd bloom-index-1
+#+end_src
+
 ** Step 3:  Launch the service with Docker Compose.
+
+Note that this will take approximately an hour to synthesize all of
+the fake sample data for the 1 billion sample rows
+
+#+begin_src bash
+docker compose up -d
+#+end_src
+
 ** Step 4:  Connect a SQL client to the database.
+
+#+begin_src bash
+psql "postgres://postgres:postgres@localhost:15432/postgres"
+#+end_src
+
 ** Step 5:  Execute the sample queries.
 
 *** Select into a large table using the primary key.
