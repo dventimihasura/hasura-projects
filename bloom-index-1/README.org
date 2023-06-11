@@ -26,7 +26,7 @@ This Proof-Of-Concept (POC) has these components.
 - [[file:initdb.d/01_init.sql][01_init.sql]] :: This SQL initialization script uses the Faker tool to
   build up fake sample data in a stepwise fashion in order to create a
   relatively large volume of data somewhat efficiently.  Currently, it
-  builds up ten million fake ~profile~ records with these fields.
+  builds up 1 billion fake ~profile~ records with these fields.
   - first_name
   - middle_name
   - last_name
