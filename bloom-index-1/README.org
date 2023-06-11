@@ -1,6 +1,6 @@
 * What
 
-Whis illustrates using Bloom indexes in PostgreSQL to speed up queries
+This illustrates using Bloom indexes in PostgreSQL to speed up queries
 with arbitrary combinations of predicates.
 
 * Why
