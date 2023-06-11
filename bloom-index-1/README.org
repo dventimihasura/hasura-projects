@@ -8,7 +8,7 @@ with arbitrary combinations of predicates.
 An optimal indexing strategy in databases like PostgreSQL will
 typically be workload-dependent.  This can be challenging for online
 applications with human operators given a free-form query interface
-where offering arbitrary combinations of search filter predicates that
+that offer arbitrary combinations of search filter predicates that
 cannot be known in advance.  One way to meet this challenge is in
 PostgreSQL is to use [[https://www.postgresql.org/docs/current/bloom.html][Bloom indexes]].
 
