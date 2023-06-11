@@ -67,6 +67,16 @@ psql "postgres://postgres:postgres@localhost:15432/postgres"
 
 ** Step 5:  Execute the sample queries.
 
+*** Verify the volume of data.
+
+#+begin_src sql :engine postgresql :dbhost localhost :dbuser postgres :dbpassword postgres :database postgres :dbport 15432 :results output :exports both
+select count(1) from profile;
+#+end_src
+
+#+RESULTS:
+: count
+: 100000000
+
 *** Select into a large table using the primary key.
 
 The ~id~ column already has a unique B-tree index on it by virtue of
@@ -86,13 +96,13 @@ select
 
 #+RESULTS:
 : QUERY PLAN
-: Nested Loop  (cost=0.43..12.46 rows=1 width=130) (actual time=0.277..0.278 rows=1 loops=1)
-:   ->  Sample Scan on profile profile_1  (cost=0.00..4.01 rows=1 width=16) (actual time=0.079..0.079 rows=1 loops=1)
+: Nested Loop  (cost=0.57..12.60 rows=1 width=130) (actual time=0.325..0.326 rows=1 loops=1)
+:   ->  Sample Scan on profile profile_1  (cost=0.00..4.01 rows=1 width=16) (actual time=0.075..0.075 rows=1 loops=1)
 :         Sampling: system_rows ('1'::bigint)
-:   ->  Index Scan using profile_pkey on profile  (cost=0.43..8.45 rows=1 width=114) (actual time=0.195..0.195 rows=1 loops=1)
+:   ->  Index Scan using profile_pkey on profile  (cost=0.57..8.59 rows=1 width=114) (actual time=0.247..0.247 rows=1 loops=1)
 :         Index Cond: (id = profile_1.id)
-: Planning Time: 0.397 ms
-: Execution Time: 0.293 ms
+: Planning Time: 1.244 ms
+: Execution Time: 0.346 ms
 
 *** Select into a large tables with a combination of predicates over non-primary key columns without the benefit of an index.
 
@@ -104,15 +114,16 @@ or longer.
 #+begin_src sql :engine postgresql :dbhost localhost :dbuser postgres :dbpassword postgres :database postgres :dbport 15432 :results output :exports both
 explain analyze
 with
-  first_name as (select data from first_name order by random() limit 1),
-  middle_name as (select data from middle_name order by random() limit 1),
-  last_name as (select data from last_name order by random() limit 1),
-  city as (select data from city order by random() limit 1),
-  color_name as (select data from color_name order by random() limit 1),
-  job as (select data from job order by random() limit 1),
-  company as (select data from company order by random() limit 1)
+  first_name as (select data from first_name tablesample system_rows(1)),
+  middle_name as (select data from middle_name tablesample system_rows(1)),
+  last_name as (select data from last_name tablesample system_rows(1)),
+  city as (select data from city tablesample system_rows(1)),
+  color_name as (select data from color_name tablesample system_rows(1)),
+  job as (select data from job tablesample system_rows(1)),
+  company as (select data from company tablesample system_rows(1)),
+  license_plate as (select data from license_plate tablesample system_rows(1))
 select
-  *
+  count(1)
   from
     profile
     join first_name on profile.first_name = first_name.data
@@ -121,91 +132,63 @@ select
     join city on profile.city = city.data
     join color_name on profile.color_name = color_name.data
     join job on profile.job = job.data
-    join company on profile.company = company.data;
+    join company on profile.company = company.data
+    join license_plate on profile.license_plate = license_plate.data;
 #+end_src
 
 #+RESULTS:
 #+begin_example
 QUERY PLAN
-Nested Loop  (cost=236.68..336745.82 rows=1 width=338) (actual time=1328.825..1742.717 rows=1 loops=1)
-  Join Filter: (profile.company = company.data)
-  Rows Removed by Join Filter: 9
-  CTE first_name
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=0.006..0.008 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.005..0.007 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on first_name first_name_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.002..0.003 rows=10 loops=1)
-  CTE middle_name
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=0.005..0.005 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.004..0.005 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on middle_name middle_name_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.002..0.003 rows=10 loops=1)
-  CTE last_name
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=0.005..0.006 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.004..0.004 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on last_name last_name_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.002..0.003 rows=10 loops=1)
-  CTE city
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=0.005..0.006 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.004..0.005 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on city city_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.002..0.003 rows=10 loops=1)
-  CTE color_name
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=0.005..0.006 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.005..0.005 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on color_name color_name_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.002..0.003 rows=10 loops=1)
-  CTE job
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=0.005..0.006 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.005..0.005 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on job job_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.002..0.003 rows=10 loops=1)
-  CTE company
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=11.505..11.506 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.045..0.046 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on company company_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.025..0.026 rows=10 loops=1)
-  ->  CTE Scan on company  (cost=0.00..0.02 rows=1 width=32) (actual time=11.507..11.508 rows=1 loops=1)
-  ->  Nested Loop  (cost=0.07..336509.05 rows=10 width=306) (actual time=1317.313..1731.199 rows=10 loops=1)
-        Join Filter: (profile.job = job.data)
-        Rows Removed by Join Filter: 90
-        ->  CTE Scan on job  (cost=0.00..0.02 rows=1 width=32) (actual time=0.006..0.007 rows=1 loops=1)
-        ->  Nested Loop  (cost=0.07..336507.78 rows=100 width=274) (actual time=1317.275..1731.186 rows=100 loops=1)
-              Join Filter: (profile.color_name = color_name.data)
-              Rows Removed by Join Filter: 900
-              ->  CTE Scan on color_name  (cost=0.00..0.02 rows=1 width=32) (actual time=0.007..0.008 rows=1 loops=1)
-              ->  Nested Loop  (cost=0.07..336495.26 rows=1000 width=242) (actual time=1316.971..1731.139 rows=1000 loops=1)
-                    Join Filter: (profile.city = city.data)
-                    Rows Removed by Join Filter: 9000
-                    ->  CTE Scan on city  (cost=0.00..0.02 rows=1 width=32) (actual time=0.006..0.006 rows=1 loops=1)
-                    ->  Nested Loop  (cost=0.07..336370.23 rows=10001 width=210) (actual time=1313.029..1730.752 rows=10000 loops=1)
-                          Join Filter: (profile.last_name = last_name.data)
-                          Rows Removed by Join Filter: 90000
-                          ->  CTE Scan on last_name  (cost=0.00..0.02 rows=1 width=32) (actual time=0.005..0.007 rows=1 loops=1)
-                          ->  Hash Join  (cost=0.07..335120.06 rows=100012 width=178) (actual time=1308.970..1727.091 rows=100000 loops=1)
-                                Hash Cond: (profile.middle_name = middle_name.data)
-                                ->  Hash Join  (cost=0.03..330369.46 rows=1000118 width=146) (actual time=1092.109..1673.629 rows=1000000 loops=1)
-                                      Hash Cond: (profile.first_name = first_name.data)
-                                      ->  Seq Scan on profile  (cost=0.00..282863.82 rows=10001182 width=114) (actual time=0.086..1046.735 rows=10000000 loops=1)
-                                      ->  Hash  (cost=0.02..0.02 rows=1 width=32) (actual time=0.007..0.008 rows=1 loops=1)
-                                            Buckets: 1024  Batches: 1  Memory Usage: 9kB
-                                            ->  CTE Scan on first_name  (cost=0.00..0.02 rows=1 width=32) (actual time=0.007..0.007 rows=1 loops=1)
-                                ->  Hash  (cost=0.02..0.02 rows=1 width=32) (actual time=0.009..0.009 rows=1 loops=1)
-                                      Buckets: 1024  Batches: 1  Memory Usage: 9kB
-                                      ->  CTE Scan on middle_name  (cost=0.00..0.02 rows=1 width=32) (actual time=0.007..0.007 rows=1 loops=1)
-Planning Time: 1.142 ms
+Aggregate  (cost=3377187.99..3377188.00 rows=1 width=8) (actual time=20119.543..20119.548 rows=1 loops=1)
+  ->  Nested Loop  (cost=8.04..3377187.99 rows=1 width=0) (actual time=4041.894..20119.531 rows=1 loops=1)
+        Join Filter: (profile.license_plate = license_plate.data)
+        Rows Removed by Join Filter: 9
+        ->  Sample Scan on license_plate  (cost=0.00..4.01 rows=1 width=32) (actual time=142.236..142.238 rows=1 loops=1)
+              Sampling: system_rows ('1'::bigint)
+        ->  Nested Loop  (cost=8.04..3377183.84 rows=11 width=9) (actual time=0.065..19977.275 rows=10 loops=1)
+              Join Filter: (profile.job = job.data)
+              Rows Removed by Join Filter: 90
+              ->  Sample Scan on job  (cost=0.00..4.01 rows=1 width=32) (actual time=0.004..0.005 rows=1 loops=1)
+                    Sampling: system_rows ('1'::bigint)
+              ->  Nested Loop  (cost=8.04..3377178.58 rows=100 width=33) (actual time=0.060..19977.235 rows=100 loops=1)
+                    Join Filter: (profile.company = company.data)
+                    Rows Removed by Join Filter: 900
+                    ->  Sample Scan on company  (cost=0.00..4.01 rows=1 width=32) (actual time=0.003..0.003 rows=1 loops=1)
+                          Sampling: system_rows ('1'::bigint)
+                    ->  Nested Loop  (cost=8.04..3377162.07 rows=1000 width=53) (actual time=0.056..19977.185 rows=1000 loops=1)
+                          Join Filter: (profile.color_name = color_name.data)
+                          Rows Removed by Join Filter: 9000
+                          ->  Sample Scan on color_name  (cost=0.00..4.01 rows=1 width=32) (actual time=0.002..0.003 rows=1 loops=1)
+                                Sampling: system_rows ('1'::bigint)
+                          ->  Nested Loop  (cost=8.04..3377033.06 rows=10000 width=63) (actual time=0.052..19976.655 rows=10000 loops=1)
+                                Join Filter: (profile.city = city.data)
+                                Rows Removed by Join Filter: 90000
+                                ->  Sample Scan on city  (cost=0.00..4.01 rows=1 width=32) (actual time=0.004..0.004 rows=1 loops=1)
+                                      Sampling: system_rows ('1'::bigint)
+                                ->  Nested Loop  (cost=8.04..3375779.05 rows=100000 width=75) (actual time=0.047..19972.914 rows=100000 loops=1)
+                                      Join Filter: (profile.last_name = last_name.data)
+                                      Rows Removed by Join Filter: 900000
+                                      ->  Sample Scan on last_name  (cost=0.00..4.01 rows=1 width=32) (actual time=0.002..0.004 rows=1 loops=1)
+                                            Sampling: system_rows ('1'::bigint)
+                                      ->  Hash Join  (cost=8.04..3363275.04 rows=1000000 width=83) (actual time=0.042..19933.145 rows=1000000 loops=1)
+                                            Hash Cond: (profile.middle_name = middle_name.data)
+                                            ->  Hash Join  (cost=4.02..3315771.02 rows=10000000 width=90) (actual time=0.026..19366.723 rows=10000000 loops=1)
+                                                  Hash Cond: (profile.first_name = first_name.data)
+                                                  ->  Seq Scan on profile  (cost=0.00..2840767.00 rows=100000000 width=98) (actual time=0.015..13162.457 rows=100000000 loops=1)
+                                                  ->  Hash  (cost=4.01..4.01 rows=1 width=32) (actual time=0.007..0.008 rows=1 loops=1)
+                                                        Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                                        ->  Sample Scan on first_name  (cost=0.00..4.01 rows=1 width=32) (actual time=0.006..0.006 rows=1 loops=1)
+                                                              Sampling: system_rows ('1'::bigint)
+                                            ->  Hash  (cost=4.01..4.01 rows=1 width=32) (actual time=0.006..0.007 rows=1 loops=1)
+                                                  Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                                  ->  Sample Scan on middle_name  (cost=0.00..4.01 rows=1 width=32) (actual time=0.003..0.003 rows=1 loops=1)
+                                                        Sampling: system_rows ('1'::bigint)
+Planning Time: 1.440 ms
 JIT:
-  Functions: 60
-  Options: Inlining false, Optimization false, Expressions true, Deforming true
-  Timing: Generation 2.045 ms, Inlining 0.000 ms, Optimization 0.530 ms, Emission 10.761 ms, Total 13.336 ms
-Execution Time: 1762.171 ms
+  Functions: 43
+  Options: Inlining true, Optimization true, Expressions true, Deforming true
+  Timing: Generation 1.429 ms, Inlining 31.527 ms, Optimization 67.497 ms, Emission 43.006 ms, Total 143.459 ms
+Execution Time: 20139.044 ms
 #+end_example
 
 *** Add a bloom index over all the non-primary key columns in the ~profile~ table.
@@ -221,20 +204,21 @@ create index bloomidx on profile using bloom(first_name, middle_name, last_name,
 
 With the benefit of an index, the database can avoid a sequential
 scane.  Note the ~Bitmap Index Scan on bloomidx~ in the explain plan.
-This will scale as O(log n) and have execution times in milliseconds.
+This will scale as O(1) and have execution times in milliseconds.
 
 #+begin_src sql :engine postgresql :dbhost localhost :dbuser postgres :dbpassword postgres :database postgres :dbport 15432 :results output :exports both
 explain analyze
 with
-  first_name as (select data from first_name order by random() limit 1),
-  middle_name as (select data from middle_name order by random() limit 1),
-  last_name as (select data from last_name order by random() limit 1),
-  city as (select data from city order by random() limit 1),
-  color_name as (select data from color_name order by random() limit 1),
-  job as (select data from job order by random() limit 1),
-  company as (select data from company order by random() limit 1)
+  first_name as (select data from first_name tablesample system_rows(1)),
+  middle_name as (select data from middle_name tablesample system_rows(1)),
+  last_name as (select data from last_name tablesample system_rows(1)),
+  city as (select data from city tablesample system_rows(1)),
+  color_name as (select data from color_name tablesample system_rows(1)),
+  job as (select data from job tablesample system_rows(1)),
+  company as (select data from company tablesample system_rows(1)),
+  license_plate as (select data from license_plate tablesample system_rows(1))
 select
-  *
+  count(1)
   from
     profile
     join first_name on profile.first_name = first_name.data
@@ -243,87 +227,60 @@ select
     join city on profile.city = city.data
     join color_name on profile.color_name = color_name.data
     join job on profile.job = job.data
-    join company on profile.company = company.data;
+    join company on profile.company = company.data
+    join license_plate on profile.license_plate = license_plate.data;
 #+end_src
 
 #+RESULTS:
 #+begin_example
 QUERY PLAN
-Hash Join  (cost=228672.96..232509.13 rows=1 width=338) (actual time=44.208..46.754 rows=1 loops=1)
-  Hash Cond: (profile.company = company.data)
-  CTE first_name
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=0.005..0.006 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.004..0.005 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on first_name first_name_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.002..0.003 rows=10 loops=1)
-  CTE middle_name
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=0.005..0.006 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.005..0.005 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on middle_name middle_name_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.002..0.003 rows=10 loops=1)
-  CTE last_name
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=0.005..0.006 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.005..0.005 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on last_name last_name_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.003..0.003 rows=10 loops=1)
-  CTE city
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=0.005..0.006 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.004..0.005 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on city city_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.002..0.003 rows=10 loops=1)
-  CTE color_name
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=0.005..0.006 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.005..0.005 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on color_name color_name_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.003..0.003 rows=10 loops=1)
-  CTE job
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=0.006..0.007 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.005..0.006 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on job job_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.003..0.004 rows=10 loops=1)
-  CTE company
-    ->  Limit  (cost=33.80..33.80 rows=1 width=40) (actual time=12.251..12.251 rows=1 loops=1)
-          ->  Sort  (cost=33.80..37.20 rows=1360 width=40) (actual time=0.044..0.044 rows=1 loops=1)
-                Sort Key: (random())
-                Sort Method: top-N heapsort  Memory: 25kB
-                ->  Seq Scan on company company_1  (cost=0.00..27.00 rows=1360 width=40) (actual time=0.024..0.025 rows=10 loops=1)
-  ->  Hash Join  (cost=228436.32..232272.43 rows=10 width=306) (actual time=31.937..34.480 rows=10 loops=1)
-        Hash Cond: (profile.job = job.data)
-        ->  Hash Join  (cost=228436.28..232271.92 rows=100 width=274) (actual time=31.893..34.461 rows=100 loops=1)
-              Hash Cond: (profile.color_name = color_name.data)
-              ->  Nested Loop  (cost=228436.25..232267.14 rows=1000 width=242) (actual time=31.598..34.396 rows=1000 loops=1)
-                    ->  CTE Scan on city  (cost=0.00..0.02 rows=1 width=32) (actual time=0.006..0.007 rows=1 loops=1)
-                    ->  Nested Loop  (cost=228436.25..232257.12 rows=1000 width=210) (actual time=31.590..34.338 rows=1000 loops=1)
-                          ->  CTE Scan on last_name  (cost=0.00..0.02 rows=1 width=32) (actual time=0.006..0.007 rows=1 loops=1)
-                          ->  Nested Loop  (cost=228436.25..232247.10 rows=1000 width=178) (actual time=31.583..34.283 rows=1000 loops=1)
-                                ->  CTE Scan on middle_name  (cost=0.00..0.02 rows=1 width=32) (actual time=0.005..0.006 rows=1 loops=1)
-                                ->  Nested Loop  (cost=228436.25..232237.08 rows=1000 width=146) (actual time=31.577..34.228 rows=1000 loops=1)
-                                      ->  CTE Scan on first_name  (cost=0.00..0.02 rows=1 width=32) (actual time=0.006..0.007 rows=1 loops=1)
-                                      ->  Bitmap Heap Scan on profile  (cost=228436.25..232227.06 rows=1000 width=114) (actual time=31.567..34.149 rows=1000 loops=1)
-                                            Recheck Cond: ((first_name = first_name.data) AND (middle_name = middle_name.data) AND (last_name = last_name.data) AND (city = city.data))
-                                            Rows Removed by Index Recheck: 580
-                                            Heap Blocks: exact=174
-                                            ->  Bitmap Index Scan on bloomidx  (cost=0.00..228436.00 rows=1000 width=0) (actual time=30.924..30.924 rows=1580 loops=1)
-                                                  Index Cond: ((first_name = first_name.data) AND (middle_name = middle_name.data) AND (last_name = last_name.data) AND (city = city.data))
-              ->  Hash  (cost=0.02..0.02 rows=1 width=32) (actual time=0.006..0.007 rows=1 loops=1)
+Aggregate  (cost=2322697.20..2322697.21 rows=1 width=8) (actual time=1457.889..1457.895 rows=1 loops=1)
+  ->  Hash Join  (cost=2284338.59..2322697.20 rows=1 width=0) (actual time=1453.215..1457.889 rows=1 loops=1)
+        Hash Cond: (profile.license_plate = license_plate.data)
+        ->  Hash Join  (cost=2284334.57..2322693.12 rows=11 width=9) (actual time=1309.489..1315.134 rows=10 loops=1)
+              Hash Cond: (profile.job = job.data)
+              ->  Hash Join  (cost=2284330.54..2322688.62 rows=100 width=33) (actual time=1309.471..1315.107 rows=100 loops=1)
+                    Hash Cond: (profile.company = company.data)
+                    ->  Hash Join  (cost=2284326.52..2322679.84 rows=1000 width=53) (actual time=1309.464..1315.031 rows=1000 loops=1)
+                          Hash Cond: (profile.color_name = color_name.data)
+                          ->  Nested Loop  (cost=2284322.50..2322628.32 rows=10000 width=63) (actual time=1309.454..1314.522 rows=10000 loops=1)
+                                ->  Sample Scan on city  (cost=0.00..4.01 rows=1 width=32) (actual time=0.002..0.004 rows=1 loops=1)
+                                      Sampling: system_rows ('1'::bigint)
+                                ->  Nested Loop  (cost=2284322.50..2322524.31 rows=10000 width=75) (actual time=1309.446..1314.085 rows=10000 loops=1)
+                                      ->  Sample Scan on last_name  (cost=0.00..4.01 rows=1 width=32) (actual time=0.003..0.004 rows=1 loops=1)
+                                            Sampling: system_rows ('1'::bigint)
+                                      ->  Nested Loop  (cost=2284322.50..2322420.30 rows=10000 width=83) (actual time=1309.442..1313.651 rows=10000 loops=1)
+                                            ->  Sample Scan on middle_name  (cost=0.00..4.01 rows=1 width=32) (actual time=0.002..0.003 rows=1 loops=1)
+                                                  Sampling: system_rows ('1'::bigint)
+                                            ->  Nested Loop  (cost=2284322.50..2322316.29 rows=10000 width=90) (actual time=1309.438..1313.209 rows=10000 loops=1)
+                                                  ->  Sample Scan on first_name  (cost=0.00..4.01 rows=1 width=32) (actual time=0.008..0.010 rows=1 loops=1)
+                                                        Sampling: system_rows ('1'::bigint)
+                                                  ->  Bitmap Heap Scan on profile  (cost=2284322.50..2322212.28 rows=10000 width=98) (actual time=1309.425..1312.525 rows=10000 loops=1)
+                                                        Recheck Cond: ((first_name = first_name.data) AND (middle_name = middle_name.data) AND (last_name = last_name.data) AND (city = city.data))
+                                                        Rows Removed by Index Recheck: 6600
+                                                        Heap Blocks: exact=1445
+                                                        ->  Bitmap Index Scan on bloomidx  (cost=0.00..2284320.00 rows=10000 width=0) (actual time=1309.276..1309.277 rows=16600 loops=1)
+                                                              Index Cond: ((first_name = first_name.data) AND (middle_name = middle_name.data) AND (last_name = last_name.data) AND (city = city.data))
+                          ->  Hash  (cost=4.01..4.01 rows=1 width=32) (actual time=0.005..0.006 rows=1 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                ->  Sample Scan on color_name  (cost=0.00..4.01 rows=1 width=32) (actual time=0.004..0.004 rows=1 loops=1)
+                                      Sampling: system_rows ('1'::bigint)
+                    ->  Hash  (cost=4.01..4.01 rows=1 width=32) (actual time=0.004..0.004 rows=1 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          ->  Sample Scan on company  (cost=0.00..4.01 rows=1 width=32) (actual time=0.003..0.003 rows=1 loops=1)
+                                Sampling: system_rows ('1'::bigint)
+              ->  Hash  (cost=4.01..4.01 rows=1 width=32) (actual time=0.008..0.008 rows=1 loops=1)
                     Buckets: 1024  Batches: 1  Memory Usage: 9kB
-                    ->  CTE Scan on color_name  (cost=0.00..0.02 rows=1 width=32) (actual time=0.006..0.006 rows=1 loops=1)
-        ->  Hash  (cost=0.02..0.02 rows=1 width=32) (actual time=0.007..0.008 rows=1 loops=1)
+                    ->  Sample Scan on job  (cost=0.00..4.01 rows=1 width=32) (actual time=0.005..0.006 rows=1 loops=1)
+                          Sampling: system_rows ('1'::bigint)
+        ->  Hash  (cost=4.01..4.01 rows=1 width=32) (actual time=142.740..142.741 rows=1 loops=1)
               Buckets: 1024  Batches: 1  Memory Usage: 9kB
-              ->  CTE Scan on job  (cost=0.00..0.02 rows=1 width=32) (actual time=0.007..0.007 rows=1 loops=1)
-  ->  Hash  (cost=0.02..0.02 rows=1 width=32) (actual time=12.256..12.256 rows=1 loops=1)
-        Buckets: 1024  Batches: 1  Memory Usage: 9kB
-        ->  CTE Scan on company  (cost=0.00..0.02 rows=1 width=32) (actual time=12.254..12.254 rows=1 loops=1)
-Planning Time: 2.816 ms
+              ->  Sample Scan on license_plate  (cost=0.00..4.01 rows=1 width=32) (actual time=142.729..142.730 rows=1 loops=1)
+                    Sampling: system_rows ('1'::bigint)
+Planning Time: 2.838 ms
 JIT:
-  Functions: 64
-  Options: Inlining false, Optimization false, Expressions true, Deforming true
-  Timing: Generation 2.147 ms, Inlining 0.000 ms, Optimization 0.564 ms, Emission 11.460 ms, Total 14.171 ms
-Execution Time: 69.388 ms
+  Functions: 45
+  Options: Inlining true, Optimization true, Expressions true, Deforming true
+  Timing: Generation 1.526 ms, Inlining 32.610 ms, Optimization 64.802 ms, Emission 45.080 ms, Total 144.017 ms
+Execution Time: 1477.340 ms
 #+end_example
