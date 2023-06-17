@@ -1,0 +1,50 @@
+* What
+
+This project illustrates using Hasura with MySQL using a simple e-commerce data model.
+
+* Why
+
+It's useful to have a Proof-Of-Concept (POC) that possesses these features:
+
+1. Connects Hasura to MySQL via a GraphQL Data Connector agent
+2. Uses Kriti templating to keep database secrets out of the metadata
+3. Has a data model with synthesized data and UUID primary key columns.
+
+* How
+
+This project has these components:
+
+- [[file:docker-compose.yaml][docker-compose.yaml]] :: sets up services for ~postgres~, ~mysql~, ~graphql-engine~, and ~data-connector-agent~
+- [[file:metadata.json][metadata.json]] :: Hasura metadata with the connection information and the tracked tables, views, and relationships
+- [[file:initdb.d-mysql/01_init_model.sql][01_init_model.sql]] :: SQL script to initialize the data model
+- [[file:initdb.d-mysql/02_init_data.sql][02_init_data.sql]] :: SQL script to initialize the data
+
+* Steps
+
+- Clone this repository.
+
+#+begin_src bash
+git clone https://github.com/dventimihasura/hasura-projects.git
+#+end_src
+
+- Change to the ~mysql-test-1~ directory.
+
+#+begin_src bash
+cd mysql-test-1
+#+end_src
+
+- Create a .env file with your admin secret, JDBC connection information, and an Enterprise license key.
+
+#+begin_src bash
+HASURA_GRAPHQL_EE_LICENSE_KEY=<your enterprise license key>
+HASURA_GRAPHQL_ADMIN_SECRET=admin
+MYSQL_URL=jdbc:mysql://mysql:3306/mysql?user=mysql&password=mysql
+#+end_src
+
+- Launch the services with Docker Compose.
+#+begin_src bash
+docker compose up -d
+#+end_src
+
+- Use the Hasura Console to import the ~metadata.json~ file.
+

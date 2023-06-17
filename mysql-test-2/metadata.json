@@ -1,0 +1,149 @@
+{
+  "resource_version": 10,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "default",
+        "kind": "postgres",
+        "tables": [],
+        "configuration": {
+          "connection_info": {
+            "database_url": {
+              "from_env": "HASURA_GRAPHQL_DATABASE_URL"
+            },
+            "isolation_level": "read-committed",
+            "pool_settings": {
+              "connection_lifetime": 600,
+              "idle_timeout": 180,
+              "max_connections": 50,
+              "retries": 1
+            },
+            "use_prepared_statements": true
+          }
+        }
+      },
+      {
+        "name": "mysql",
+        "kind": "mysql8",
+        "tables": [
+          {
+            "table": [
+              "account"
+            ],
+            "array_relationships": [
+              {
+                "name": "account_orders",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "account_id",
+                    "table": [
+                      "order"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "table": [
+              "account_summary"
+            ]
+          },
+          {
+            "table": [
+              "order"
+            ],
+            "object_relationships": [
+              {
+                "name": "order_account",
+                "using": {
+                  "foreign_key_constraint_on": "account_id"
+                }
+              },
+              {
+                "name": "order_region",
+                "using": {
+                  "foreign_key_constraint_on": "region"
+                }
+              }
+            ],
+            "array_relationships": [
+              {
+                "name": "order_order_details",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "order_id",
+                    "table": [
+                      "order_detail"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "table": [
+              "order_detail"
+            ],
+            "object_relationships": [
+              {
+                "name": "order_detail_order",
+                "using": {
+                  "foreign_key_constraint_on": "order_id"
+                }
+              },
+              {
+                "name": "order_detail_product",
+                "using": {
+                  "foreign_key_constraint_on": "product_id"
+                }
+              }
+            ]
+          },
+          {
+            "table": [
+              "product"
+            ],
+            "array_relationships": [
+              {
+                "name": "product_order_details",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "product_id",
+                    "table": [
+                      "order_detail"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "table": [
+              "region"
+            ],
+            "array_relationships": [
+              {
+                "name": "region_orders",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "region",
+                    "table": [
+                      "order"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "configuration": {
+          "template": "{\"fully_qualify_all_names\": false, \"jdbc_url\": \"{{getEnvironmentVariable(\"MYSQL_URL\")}}\"}",
+          "timeout": null,
+          "value": {}
+        }
+      }
+    ]
+  }
+}
