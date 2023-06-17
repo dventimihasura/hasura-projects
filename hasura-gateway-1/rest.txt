@@ -4,37 +4,18 @@
 GET http://localhost:13000
 
 #
-GET http://localhost:13000/region
+GET http://localhost:13000/product
 
 #
-GET http://localhost:13000/region?value=eq.NORTHEAST
+GET http://localhost:13000/product?id=eq.bc383512-659a-453d-a05f-9401fc550abe
 
 #
-GET http://localhost:13001/region?value=NORTHEAST
-
-#
-GET http://localhost:13001/order?account_id=5bd3a08d-f79c-49a8-8ccb-d7bdb01818bf
+GET http://localhost:13001/product?id=bc383512-659a-453d-a05f-9401fc550abe
 
 #
 GET http://localhost:13001
 
 #
-GET http://localhost:13001/account
+GET http://localhost:13001/product
 Range-Unit: items
 Range: 0-2
-
-#
-GET http://localhost:13001/order
-Range: 0-2
-
-#
-GET http://localhost:13001/order?account_id=00709456-7173-412e-ad54-d7f4afec0fdb
-
-#
-GET http://localhost:13000/account?id=eq.dda47e41-5f06-44c3-b872-0c50f7ca6992
-
-#
-GET http://localhost:13001/account?id=dda47e41-5f06-44c3-b872-0c50f7ca6992
-
-# 
-GET http://localhost:13001/order?account_id=00709456-7173-412e-ad54-d7f4afec0fdb
