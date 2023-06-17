@@ -1,0 +1,25 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "15432:5432"
+    volumes: 
+      - ./db:/docker-entrypoint-initdb.d:ro
+  api:
+    build: ./api
+    depends_on:
+      - postgres
+    environment:
+      APP_PORT: 4000
+      DB_HOST: postgres
+      DB_NAME: postgres
+      DB_PASSWORD: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      NODE_ENV: production
+    ports:
+      - "4000:4000"

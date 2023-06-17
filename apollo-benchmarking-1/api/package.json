@@ -1,0 +1,30 @@
+{
+  "name": "batch-example-api",
+  "version": "0.0.2",
+  "author": "Nic Jennings",
+  "scripts": {
+    "serve": "HOST=localhost nodemon src/server.ts --project tsconfig.json",
+    "start": "ts-node --esm ./src/server.ts --project tsconfig.json",
+    "test": "jest --forceExit --coverage --verbose",
+    "docker:build": "docker build -t api .",
+    "docker:run": "docker run -p 4000:4000 api"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "@types/eslint": "^8.4.6",
+    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
+    "concurrently": "^7.4.0",
+    "eslint": "^8.24.0",
+    "nodemon": "^2.0.20",
+    "typescript": "^4.8.3"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.0.0-rc.17",
+    "@nic-jennings/sql-datasource": "^0.0.1",
+    "graphql": "^16.6.0",
+    "graphql-tag": "^2.12.6",
+    "pg": "^8.8.0",
+    "ts-node": "^10.9.1"
+  }
+}
