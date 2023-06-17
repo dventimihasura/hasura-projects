@@ -1,8 +1,17 @@
 version: "3.6"
 services:
+  metadata:
+    image: postgres:15
+    healthcheck:
+      test: "pg_isready"
+    restart: always
+    volumes:
+      - ./initdb.d-metadata:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_PASSWORD: postgres
   postgres:
     healthcheck:
-      test: ["CMD", "/usr/bin/psql -c 'select count(1) from foo'"]
+      test: "psql postgres://postgres:postgres@localhost/postgres -c 'select count(1) from account'"
     image: postgres:15
     restart: always
     ports:
@@ -13,10 +22,9 @@ services:
       POSTGRES_PASSWORD: postgres
   postgrest:
     image: postgrest/postgrest:v11.0.1
-    healthcheck:
-      test: ["CMD", "curl -s http://localhost:3001/live"]
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     restart: always
     ports:
       - "13000:3000"
@@ -42,79 +50,80 @@ services:
       - "18080:8080"
     environment:
       API_URL: http://localhost:13000
-  metadata:
-    image: postgres:15
-    healthcheck:
-      test: ["CMD", "pg_isready -U postgres"]
-    restart: always
-    volumes:
-      - ./initdb.d-metadata:/docker-entrypoint-initdb.d
-    environment:
-      POSTGRES_PASSWORD: postgres
-  marketplace:
-    image: hasura/graphql-engine:v2.26.0
-    healthcheck:
-      test: ["CMD", "curl -s http://localhost:8080/v1/healthcheck"]
-    depends_on:
-      - metadata
-      - postgrest
-    ports:
-      - "8080:8080"
-    restart: always
-    environment:
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/marketplace
-  catalog:
-    image: hasura/graphql-engine:v2.26.0
-    healthcheck:
-      test: ["CMD", "curl -s http://localhost:8080/v1/healthcheck"]
-    depends_on:
-      - metadata
-      - postgrest
-    ports:
-      - "8081:8080"
-    restart: always
-    environment:
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/catalog
-  gateway:
-    image: hasura/graphql-engine:v2.26.0
-    healthcheck:
-      test: ["CMD", "curl -s http://localhost:8080/v1/healthcheck"]
-    depends_on:
-      - metadata
-      - catalog
-      - marketplace
-    ports:
-      - "8082:8080"
-    restart: always
-    environment:
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/gateway
-  init_marketplace:
-    depends_on:
-      - marketplace
-    build: .
-    volumes:
-      - ./hasura_metadata_marketplace.json:/metadata.json:ro
-    command: bash -c "cat /metadata.json | jq -rc '{\"type\":\"replace_metadata\",\"args\":(.metadata)}' | curl -s http://marketplace:8080/v1/metadata -d @-"
-  init_catalog:
-    depends_on:
-      - catalog
-    build: .
-    volumes:
-      - ./hasura_metadata_catalog.json:/metadata.json:ro
-    command: bash -c "cat /metadata.json | jq -rc '{\"type\":\"replace_metadata\",\"args\":(.metadata)}' | curl -s http://catalog:8080/v1/metadata -d @-"
-  init_gateway:
-    depends_on:
-      - gateway
-    build: .
-    volumes:
-      - ./hasura_metadata_gateway.json:/metadata.json:ro
-    command: bash -c "cat /metadata.json | jq -rc '{\"type\":\"replace_metadata\",\"args\":(.metadata)}' | curl -s http://gateway:8080/v1/metadata -d @-"
+  # marketplace:
+  #   image: hasura/graphql-engine:v2.26.0
+  #   healthcheck:
+  #     test: ["CMD", "curl -s http://localhost:8080/v1/healthcheck"]
+  #   depends_on:
+  #     metadata:
+  #       condition: service_healthy
+  #     postgrest:
+  #       condition: service_healthy
+  #   ports:
+  #     - "8080:8080"
+  #   restart: always
+  #   environment:
+  #     HASURA_GRAPHQL_DEV_MODE: "true"
+  #     HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+  #     HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+  #     HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/marketplace
+  # catalog:
+  #   image: hasura/graphql-engine:v2.26.0
+  #   healthcheck:
+  #     test: ["CMD", "curl -s http://localhost:8080/v1/healthcheck"]
+  #   depends_on:
+  #     metadata:
+  #       condition: service_healthy
+  #     postgrest:
+  #       condition: service_healthy
+  #   ports:
+  #     - "8081:8080"
+  #   restart: always
+  #   environment:
+  #     HASURA_GRAPHQL_DEV_MODE: "true"
+  #     HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+  #     HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+  #     HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/catalog
+  # gateway:
+  #   image: hasura/graphql-engine:v2.26.0
+  #   healthcheck:
+  #     test: ["CMD", "curl -s http://localhost:8080/v1/healthcheck"]
+  #   depends_on:
+  #     metadata:
+  #       condition: service_healthy
+  #     catalog:
+  #       condition: service_healthy
+  #     marketplace:
+  #       condition: service_healthy
+  #   ports:
+  #     - "8082:8080"
+  #   restart: always
+  #   environment:
+  #     HASURA_GRAPHQL_DEV_MODE: "true"
+  #     HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+  #     HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+  #     HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/gateway
+  # init_marketplace:
+  #   depends_on:
+  #     marketplace:
+  #       condition: service_healthy
+  #   build: .
+  #   volumes:
+  #     - ./hasura_metadata_marketplace.json:/metadata.json:ro
+  #   command: bash -c "cat /metadata.json | jq -rc '{\"type\":\"replace_metadata\",\"args\":(.metadata)}' | curl -s http://marketplace:8080/v1/metadata -d @-"
+  # init_catalog:
+  #   depends_on:
+  #     catalog:
+  #       condition: service_healthy
+  #   build: .
+  #   volumes:
+  #     - ./hasura_metadata_catalog.json:/metadata.json:ro
+  #   command: bash -c "cat /metadata.json | jq -rc '{\"type\":\"replace_metadata\",\"args\":(.metadata)}' | curl -s http://catalog:8080/v1/metadata -d @-"
+  # init_gateway:
+  #   depends_on:
+  #     gateway:
+  #       condition: service_healthy
+  #   build: .
+  #   volumes:
+  #     - ./hasura_metadata_gateway.json:/metadata.json:ro
+  #   command: bash -c "cat /metadata.json | jq -rc '{\"type\":\"replace_metadata\",\"args\":(.metadata)}' | curl -s http://gateway:8080/v1/metadata -d @-"

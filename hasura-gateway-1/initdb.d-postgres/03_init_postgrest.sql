@@ -17,3 +17,8 @@ create or replace view api.product as select * from product;
 create or replace view api.region as select * from region;
 
 grant select on api.account, api.order, api.order_detail, api.product, api.region to web_anon;
+
+comment on schema api is
+$$Catalog API
+A RESTful API that serves a catalog of Product data.$$;
+  

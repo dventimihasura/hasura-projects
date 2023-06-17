@@ -1,10 +1,16 @@
 # -*- mode: restclient; -*-
 
 #
+GET http://localhost:13000
+
+#
 GET http://localhost:13000/region
 
 #
-GET http://127.0.0.1:13000/region?value=eq.NORTHEAST
+GET http://localhost:13000/region?value=eq.NORTHEAST
+
+#
+GET http://localhost:13001/region?value=NORTHEAST
 
 #
 GET http://localhost:13001/order?account_id=5bd3a08d-f79c-49a8-8ccb-d7bdb01818bf
