@@ -1,15 +1,15 @@
 version: "3.6"
 services:
-  metadata:
+  metadatadb:
     image: postgres:15
     healthcheck:
       test: "pg_isready -U postgres"
     restart: always
     volumes:
-      - ./initdb.d-metadata:/docker-entrypoint-initdb.d
+      - ./initdb.d-metadatadb:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_PASSWORD: postgres
-  postgres:
+  catalogdb:
     healthcheck:
       test: "pg_isready -U postgres"
     image: postgres:15
@@ -18,10 +18,10 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
-      - ./initdb.d-postgres:/docker-entrypoint-initdb.d
+      - ./initdb.d-catalogdb:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_PASSWORD: postgres
-  mysql:
+  mysqldb:
     image: mysql:8.0.33
     healthcheck:
       test: "mysqladmin ping -h localhost"
@@ -30,7 +30,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     volumes:
-      - ./initdb.d-mysql:/docker-entrypoint-initdb.d:ro
+      - ./initdb.d-mysqldb:/docker-entrypoint-initdb.d:ro
     environment:
       MYSQL_DATABASE: mysql
       MYSQL_PASSWORD: mysql
@@ -39,7 +39,7 @@ services:
   postgrest:
     image: postgrest/postgrest:v11.0.1
     depends_on:
-      postgres:
+      catalogdb:
         condition: service_healthy
     restart: always
     ports:
@@ -49,7 +49,7 @@ services:
       PGRST_DB_ANON_ROLE: web_anon
       PGRST_DB_ROOT_SPEC: root
       PGRST_DB_SCHEMAS: api
-      PGRST_DB_URI: postgres://postgres:postgres@postgres/postgres
+      PGRST_DB_URI: postgres://postgres:postgres@catalogdb/postgres
       PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3000
   nginx:
     image: fabiocicerchia/nginx-lua:1.25.0-ubuntu22.04-amd64
@@ -70,35 +70,33 @@ services:
   marketplace:
     image: hasura/graphql-engine:v2.26.0
     depends_on:
-      metadata:
+      metadatadb:
         condition: service_healthy
     ports:
       - "${MARKETPLACE_PORT}:8080"
     restart: always
     environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/marketplace
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadatadb:5432/marketplace
   catalog:
     image: hasura/graphql-engine:v2.26.0
     depends_on:
-      metadata:
+      metadatadb:
         condition: service_healthy
     ports:
       - "${CATALOG_PORT}:8080"
     restart: always
     environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/catalog
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadatadb:5432/catalog
   gateway:
     image: hasura/graphql-engine:v2.26.0
     depends_on:
-      metadata:
+      metadatadb:
         condition: service_healthy
     ports:
       - "${GATEWAY_PORT}:8080"
@@ -107,4 +105,4 @@ services:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/gateway
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadatadb:5432/gateway
