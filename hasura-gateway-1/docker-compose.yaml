@@ -50,66 +50,44 @@ services:
       - "18080:8080"
     environment:
       API_URL: http://localhost:13000
-  # marketplace:
-  #   image: hasura/graphql-engine:v2.26.0
-  #   depends_on:
-  #     metadata:
-  #       condition: service_healthy
-  #   ports:
-  #     - "8080:8080"
-  #   restart: always
-  #   environment:
-  #     HASURA_GRAPHQL_DEV_MODE: "true"
-  #     HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-  #     HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-  #     HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/marketplace
-  # catalog:
-  #   image: hasura/graphql-engine:v2.26.0
-  #   depends_on:
-  #     metadata:
-  #       condition: service_healthy
-  #   ports:
-  #     - "8081:8080"
-  #   restart: always
-  #   environment:
-  #     HASURA_GRAPHQL_DEV_MODE: "true"
-  #     HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-  #     HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-  #     HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/catalog
-  # gateway:
-  #   image: hasura/graphql-engine:v2.26.0
-  #   depends_on:
-  #     metadata:
-  #       condition: service_healthy
-  #   ports:
-  #     - "8082:8080"
-  #   restart: always
-  #   environment:
-  #     HASURA_GRAPHQL_DEV_MODE: "true"
-  #     HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-  #     HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-  #     HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/gateway
-  # init_marketplace:
-  #   depends_on:
-  #     marketplace:
-  #       condition: service_healthy
-  #   build: .
-  #   volumes:
-  #     - ./hasura_metadata_marketplace.json:/metadata.json:ro
-  #   command: bash -c "cat /metadata.json | jq -rc '{\"type\":\"replace_metadata\",\"args\":(.metadata)}' | curl -s http://marketplace:8080/v1/metadata -d @-"
-  # init_catalog:
-  #   depends_on:
-  #     catalog:
-  #       condition: service_healthy
-  #   build: .
-  #   volumes:
-  #     - ./hasura_metadata_catalog.json:/metadata.json:ro
-  #   command: bash -c "cat /metadata.json | jq -rc '{\"type\":\"replace_metadata\",\"args\":(.metadata)}' | curl -s http://catalog:8080/v1/metadata -d @-"
-  # init_gateway:
-  #   depends_on:
-  #     gateway:
-  #       condition: service_healthy
-  #   build: .
-  #   volumes:
-  #     - ./hasura_metadata_gateway.json:/metadata.json:ro
-  #   command: bash -c "cat /metadata.json | jq -rc '{\"type\":\"replace_metadata\",\"args\":(.metadata)}' | curl -s http://gateway:8080/v1/metadata -d @-"
+  marketplace:
+    image: hasura/graphql-engine:v2.26.0
+    depends_on:
+      metadata:
+        condition: service_healthy
+    ports:
+      - "28080:8080"
+    restart: always
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/marketplace
+  catalog:
+    image: hasura/graphql-engine:v2.26.0
+    depends_on:
+      metadata:
+        condition: service_healthy
+    ports:
+      - "38080:8080"
+    restart: always
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/catalog
+  gateway:
+    image: hasura/graphql-engine:v2.26.0
+    depends_on:
+      metadata:
+        condition: service_healthy
+    ports:
+      - "48080:8080"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/gateway
