@@ -20,7 +20,20 @@ services:
       - ./initdb.d-postgres:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_PASSWORD: postgres
-  postgrest:
+  mysql:
+    image: mysql:8.0.33
+    ports:
+      - "13306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./initdb.d-mysql:/docker-entrypoint-initdb.d:ro
+    environment:
+      MYSQL_DATABASE: mysql
+      MYSQL_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_USER: mysql
+  restapi:
     image: postgrest/postgrest:v11.0.1
     depends_on:
       postgres:
@@ -37,7 +50,7 @@ services:
   nginx:
     image: fabiocicerchia/nginx-lua:1.25.0-ubuntu22.04-amd64
     depends_on:
-      - postgrest
+      - restapi
     ports:
       - "13001:80"
     volumes:
@@ -45,7 +58,7 @@ services:
   swagger:
     image: swaggerapi/swagger-ui
     depends_on:
-      - postgrest
+      - restapi
     ports:
       - "18080:8080"
     environment:
