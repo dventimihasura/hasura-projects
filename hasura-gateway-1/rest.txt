@@ -1,21 +1,21 @@
 # -*- mode: restclient; -*-
 
-#
+# Get the OpenAPI spec for the Catalog REST API directly.
 GET http://localhost:13000
 
-#
-GET http://localhost:13000/product
+# Get the OpenAPI spec for the Catalog REST API via nginx.
+GET http://localhost:18080
 
-#
-GET http://localhost:13000/product?id=eq.bc383512-659a-453d-a05f-9401fc550abe
+# Get the list of products from the Catalog REST API via nginx.
+GET http://localhost:18080/product
 
-#
-GET http://localhost:13001/product?id=bc383512-659a-453d-a05f-9401fc550abe
+# Get a particular product from the Catalog REST API directly.
+GET http://localhost:13000/product?id=eq.3ee2cf0c-e87f-461a-a8a5-856f6bf05aab
 
-#
-GET http://localhost:13001
+# Get a particular product from the Catalog REST API indirectly.
+GET http://localhost:18080/product?id=b8ca86d0-7da7-4a4c-8976-062bc9c5d729
 
-#
-GET http://localhost:13001/product
+# Get the first two products from the Catalog REST API via nginx.
+GET http://localhost:18080/product
 Range-Unit: items
-Range: 0-2
+Range: 0-1
