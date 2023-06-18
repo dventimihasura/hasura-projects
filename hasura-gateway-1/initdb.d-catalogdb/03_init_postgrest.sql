@@ -6,7 +6,7 @@ create schema api;
 
 grant usage on schema api to web_anon;
 
-create or replace view api.product as select * from catalog.product;
+create or replace view api.product as select * from "public".product;
 
 grant select on api.product to web_anon;
 

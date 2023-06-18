@@ -16,9 +16,23 @@ services:
     command: ["postgres", "-c", "custom.swagger_port=${NGINX_PORT}"]
     restart: always
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "${CATALOGDB_PORT}:5432"
     volumes:
       - ./initdb.d-catalogdb:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_PASSWORD: postgres
+  marketplacedb:
+    healthcheck:
+      test: "pg_isready -U postgres"
+    image: postgres:15
+    depends_on:
+      catalogdb:
+        condition: service_healthy
+    restart: always
+    ports:
+      - "${MARKETPLACEDB_PORT}:5432"
+    volumes:
+      - ./initdb.d-marketplacedb:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_PASSWORD: postgres
   mysqldb:
