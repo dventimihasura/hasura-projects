@@ -81,19 +81,6 @@ services:
       - "${SWAGGER_PORT}:8080"
     environment:
       API_URL: http://localhost:${NGINX_PORT}
-  marketplace:
-    image: hasura/graphql-engine:v2.26.0
-    depends_on:
-      metadatadb:
-        condition: service_healthy
-    ports:
-      - "${MARKETPLACE_PORT}:8080"
-    restart: always
-    environment:
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadatadb:5432/marketplace
   catalog:
     image: hasura/graphql-engine:v2.26.0
     depends_on:
@@ -107,6 +94,19 @@ services:
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadatadb:5432/catalog
+  marketplace:
+    image: hasura/graphql-engine:v2.26.0
+    depends_on:
+      metadatadb:
+        condition: service_healthy
+    ports:
+      - "${MARKETPLACE_PORT}:8080"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadatadb:5432/marketplace
   gateway:
     image: hasura/graphql-engine:v2.26.0
     depends_on:

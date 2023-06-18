@@ -22,16 +22,6 @@ CREATE TRIGGER "set_public_account_updated_at"
 COMMENT ON TRIGGER "set_public_account_updated_at" ON "public"."account" 
   IS 'trigger to set value of column "updated_at" to current timestamp on row update';
 
--- product table
-
-create extension if not exists postgres_fdw;
-
-create server if not exists catalogdb foreign data wrapper postgres_fdw options (host 'catalogdb', dbname 'postgres', port '5432');
-
-create user mapping if not exists for current_user server catalogdb options (user 'postgres', password 'postgres');
-
-import foreign schema public from server catalogdb into public;
-
 -- order table
 
 CREATE TABLE "public"."order" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "account_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("account_id") REFERENCES "public"."account"("id") ON UPDATE restrict ON DELETE restrict);
