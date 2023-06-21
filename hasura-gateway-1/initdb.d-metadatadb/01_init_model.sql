@@ -1,7 +1,9 @@
 -- -*- sql-product: postgres; -*-
 
+create database catalog;
+
 create database marketplace;
 
-create database catalog;
+create database mdm;
 
 create database gateway;
