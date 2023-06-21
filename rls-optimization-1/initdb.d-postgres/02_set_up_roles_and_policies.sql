@@ -1,5 +1,7 @@
 -- -*- sql-product: postgres; -*-
 
+reset role;
+
 create role "User";
 
 grant select on "Album" to "User";
@@ -11,11 +13,9 @@ alter table "Album" enable row level security;
 grant select on "Track" to "User";
 
 create policy album_rls_policy on "Track" for select to public
-using (
-  exists (
-    select 1 from "Album" where "Track"."AlbumId" = "Album"."AlbumId"
-  )
-);
+  using (
+    exists (select * from "Album" where "Album"."AlbumId" = "AlbumId")
+    );
 
 alter table "Track" enable row level security;
 
