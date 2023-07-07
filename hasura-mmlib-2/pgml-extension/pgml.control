@@ -1,0 +1,7 @@
+comment = 'pgml:  Created by the PostgresML team'
+default_version = '@CARGO_VERSION@'
+module_pathname = '$libdir/pgml'
+relocatable = false
+superuser = true
+schema = 'pgml'
+trusted = true

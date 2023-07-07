@@ -1,0 +1,89 @@
+@mixin admonition($primary-color) {
+    @extend .alert; 
+    @extend .my-4;
+
+    $sm-space: calc($spacer * 0.75);
+    $md-space: calc($spacer * 1.50);
+    $lg-space: calc($spacer * 1.75);
+
+    display: flex;
+    flex-direction: column;
+    gap: $md-space;
+
+    padding: 0 $lg-space $md-space $lg-space;
+    color: #{$gray-100};
+    border-color: $primary-color;
+
+    .admonition-title {
+        @extend .gap-2;
+
+        display: flex;
+        align-items: center;
+        border-radius: $border-radius $border-radius 0px 0px;
+        padding: $sm-space $lg-space;
+        background-color: #{$gray-700};
+        font-size: 24px;
+        margin: 0 -#{$lg-space};
+    }
+
+    // This is for icon containers, mostly used in admonition-title. 
+    .admonition-img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: calc($spacer * 0.5);
+        border-radius: var(--bs-border-radius-pill);
+        background-color: $primary-color;
+    }
+
+    pre {
+        margin: 0px;
+    }
+}
+
+.admonition-note, .admonition-abstract, .admonition-info {
+    @include admonition($neon-tint-200);
+}
+
+.admonition-tip, .admonition-example, .admonition-question {
+    @include admonition($violet-shade-100);
+}
+
+.admonition-success, .admonition-quote {
+    @include admonition($teal-tint-100);
+}
+
+.admonition-bug, .admonition-warning, .admonition-fail, .admonition-danger {
+    @include admonition($peach-tint-100);
+}
+
+.admonition-generic {
+    @include admonition($slate-tint-1000);
+    padding: 0px;
+    gap: 0;
+
+    .admonition-title {
+        display: none;
+    }
+
+    pre {
+        margin: 0px;
+    }
+
+    div.code-block {
+        border: none !important;
+        border-radius: $border-radius $border-radius 0px 0px !important;
+        margin: 0px 0px !important;
+        pre {
+            border-radius: inherit;
+        }
+    }
+
+    .execution-time {
+        border-top: 2px solid #{$gray-100};
+        border-bottom: 2px solid #{$gray-100};
+        background-color: #{$gray-600};
+        padding: 12px 12px;
+        margin: 0px !important;
+    }
+}
