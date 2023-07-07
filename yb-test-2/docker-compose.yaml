@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   yb-master:
-    image: yugabytedb/yugabyte:latest
+    image: yugabytedb/yugabyte:2.14.2.1-b1
     command: bin/yugabyted start --background=false --advertise_address=yb-master
     ports:
       - "5433:5433"
@@ -12,23 +12,23 @@ services:
   yb-tserver-1:
     depends_on:
       - yb-master
-    image: yugabytedb/yugabyte:latest
+    image: yugabytedb/yugabyte:2.14.2.1-b1
     command: bin/yugabyted start --background=false --join yb-master --advertise_address=yb-tserver-1
     restart: always
   yb-tserver-2:
     depends_on:
       - yb-master
-    image: yugabytedb/yugabyte:latest
+    image: yugabytedb/yugabyte:2.14.2.1-b1
     command: bin/yugabyted start --background=false --join yb-master --advertise_address=yb-tserver-2
     restart: always
   yb-tserver-3:
     depends_on:
       - yb-master
-    image: yugabytedb/yugabyte:latest
+    image: yugabytedb/yugabyte:2.14.2.1-b1
     command: bin/yugabyted start --background=false --join yb-master --advertise_address=yb-tserver-3
     restart: always
   graphql-engine:
-    image: hasura/graphql-engine:v2.13.0
+    image: hasura/graphql-engine:v2.21.0
     ports:
       - "8080:8080"
     depends_on:
