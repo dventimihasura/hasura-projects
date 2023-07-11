@@ -4,18 +4,15 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready" ]
+      test: ["CMD-SHELL", "pg_isready"]
       interval: 1s
       timeout: 5s
       retries: 100
-    image: pgml-extension
-    # build:
-    #   context: ./pgml-extension/
-    #   dockerfile: Dockerfile
+    image: ${PGML_EXTENSION_TAG}
     volumes:
       - "./initdb.d-postgres:/docker-entrypoint-initdb.d:ro"
     ports:
-      - "5433:5432"
+      - "${PGML_PORT}:5432"
     command:
       - sleep
       - infinity
@@ -23,10 +20,7 @@ services:
     depends_on:
        postgres:
          condition: service_healthy
-    image: pgml-dashboard
-    # build:
-    #   context: ./pgml-dashboard/
-    #   dockerfile: Dockerfile
+    image: ${PGML_DASHBOARD_TAG}
     restart: always
     ports:
       - "8000:8000"
@@ -34,3 +28,13 @@ services:
       ROCKET_ADDRESS: 0.0.0.0
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/pgml_development
     command: bash -c "sqlx migrate run && cargo run"
+  graphql-engine:
+    image: ${HASURA_TAG}
+    ports:
+      - "${HASURA_PORT}:8080"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/pgml_development
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"

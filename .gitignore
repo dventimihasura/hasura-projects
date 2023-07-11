@@ -29,3 +29,6 @@ postgres-fdw-jdbc-1/cloudbeaver/workspace/.data/
 postgres-fdw-jdbc-1/cloudbeaver/workspace/.metadata/.http-sessions/
 postgres-fdw-jdbc-1/cloudbeaver/workspace/.metadata
 hasura-mmlib-2/initdb.d-postgres/archive.zip
+hasura-mmlib-2/archive.zip
+*.zip
+*.csv
