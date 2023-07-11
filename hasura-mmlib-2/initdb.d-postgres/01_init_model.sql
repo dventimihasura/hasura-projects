@@ -18,3 +18,12 @@ create table application (
   candidate_id int references candidate (id),
   resume_url url,
   hiring_manager text);
+
+create table resume (
+  id int not null primary key generated always as identity,
+  resume_id int,
+  resume_str text,
+  resume_html text,
+  category text);
+  
+alter table resume add column embedding vector(1024) null;
