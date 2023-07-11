@@ -1,5 +1,7 @@
 -- -*- sql-product: postgres; -*-
 
+\timing
+
 create extension if not exists citext;
 
 create extension if not exists vector;
@@ -36,4 +38,4 @@ create index on resume using ivfflat (embedding vector_ip_ops) with (lists = 3);
 
 create index on resume using ivfflat (embedding vector_cosine_ops) with (lists = 3);
 
-copy resume(resume_id, resume_str, resume_html, category) from program 'unzip -p /docker-entrypoint-initdb.d/archive.zip Resume/Resume.csv' with (format csv, header true, quote '"');
+copy resume(resume_id, resume_str, resume_html, category) from '/docker-entrypoint-initdb.d/Resume.csv' with (format csv, header true, quote '"');
