@@ -32,10 +32,18 @@ create table resume (
 
 alter table resume add column embedding vector(1024) generated always as (pgml.embed('intfloat/e5-large', 'passage: ' || resume_str)) stored;
 
-create index on resume using ivfflat (embedding vector_l2_ops) with (lists = 3);
+create index on resume using ivfflat (embedding vector_l2_ops) with (lists = 100);
 
-create index on resume using ivfflat (embedding vector_ip_ops) with (lists = 3);
+create index on resume using ivfflat (embedding vector_ip_ops) with (lists = 100);
 
-create index on resume using ivfflat (embedding vector_cosine_ops) with (lists = 3);
+create index on resume using ivfflat (embedding vector_cosine_ops) with (lists = 100);
+
+create or replace function resume_search(search text, n int)
+  returns setof resume as $$
+  select resume.*
+  from resume
+  order by embedding <-> pgml.embed('intfloat/e5-large', 'query: ' || search)::vector(1024)
+  limit n
+  $$ language sql stable;
 
 copy resume(resume_id, resume_str, resume_html, category) from '/docker-entrypoint-initdb.d/Resume.csv' with (format csv, header true, quote '"');
