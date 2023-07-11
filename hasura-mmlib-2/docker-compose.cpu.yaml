@@ -8,9 +8,10 @@ services:
       interval: 1s
       timeout: 5s
       retries: 100
-    build:
-      context: ./pgml-extension/
-      dockerfile: Dockerfile
+    image: pgml-extension
+    # build:
+    #   context: ./pgml-extension/
+    #   dockerfile: Dockerfile
     volumes:
       - "./initdb.d-postgres:/docker-entrypoint-initdb.d:ro"
     ports:
@@ -22,9 +23,10 @@ services:
     depends_on:
        postgres:
          condition: service_healthy
-    build:
-      context: ./pgml-dashboard/
-      dockerfile: Dockerfile
+    image: pgml-dashboard
+    # build:
+    #   context: ./pgml-dashboard/
+    #   dockerfile: Dockerfile
     restart: always
     ports:
       - "8000:8000"
