@@ -1,13 +1,6 @@
 version: "3"
 services:
   postgres:
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [ gpu ]
     environment:
       POSTGRES_PASSWORD: postgres
     healthcheck:
@@ -32,6 +25,7 @@ services:
     build:
       context: ./pgml-dashboard/
       dockerfile: Dockerfile
+    restart: always
     ports:
       - "8000:8000"
     environment:

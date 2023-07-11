@@ -21,7 +21,8 @@ RUN apt-get update && \
     wget \
     git \
     gnupg \
-    lsb-release
+    lsb-release \
+    unzip
 
 # PostgreSQL
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \

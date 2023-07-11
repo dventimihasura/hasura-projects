@@ -28,3 +28,4 @@ postgres-fdw-jdbc-1/cloudbeaver/workspace/.metadata/.plugins/org.eclipse.core.ru
 postgres-fdw-jdbc-1/cloudbeaver/workspace/.data/
 postgres-fdw-jdbc-1/cloudbeaver/workspace/.metadata/.http-sessions/
 postgres-fdw-jdbc-1/cloudbeaver/workspace/.metadata
+hasura-mmlib-2/initdb.d-postgres/archive.zip
