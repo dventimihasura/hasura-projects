@@ -4,10 +4,7 @@ services:
     image: yugabytedb/yugabyte:2.14.2.1-b1
     command: bin/yugabyted start --background=false --advertise_address=yb-master
     ports:
-      - "5433:5433"
-      - "7000:7000"
-      - "9000:9000"
-      - "9042:9042"
+      - "${YB_MASTER_PORT}:5433"
     restart: always
   yb-tserver-1:
     depends_on:
@@ -30,15 +27,24 @@ services:
   graphql-engine:
     image: hasura/graphql-engine:v2.21.0
     ports:
-      - "8080:8080"
+      - "${GRAPHQL_ENGINE_PORT}:8080"
     depends_on:
       - "yb-tserver-3"
     restart: always
     environment:
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://yugabyte:yugabyte@yb-master:5433/yugabyte
       PG_DATABASE_URL: postgres://yugabyte:yugabyte@yb-master:5433/yugabyte
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-volumes:
-  db_data:
+  locust-master:
+    image: locustio/locust
+    ports:
+     - "${LOCUST_PORT}:8089"
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master -H http://graphql-engine:8080
+  locust-worker:
+    image: locustio/locust
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host locust-master
