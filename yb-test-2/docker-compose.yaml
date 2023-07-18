@@ -24,17 +24,26 @@ services:
     image: yugabytedb/yugabyte:2.14.2.1-b1
     command: bin/yugabyted start --background=false --join yb-master --advertise_address=yb-tserver-3
     restart: always
+  metadata:
+    image: postgres:15.3
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
   graphql-engine:
-    image: hasura/graphql-engine:v2.21.0
+    image: hasura/graphql-engine:v2.21.0.cli-migrations-v3
     ports:
       - "${GRAPHQL_ENGINE_PORT}:8080"
+    volumes:
+      - ./migrations:/hasura-migrations
+      - ./metadata:/hasura-metadata
     depends_on:
       - "yb-tserver-3"
     restart: always
     environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://yugabyte:yugabyte@yb-master:5433/yugabyte
+      HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT: 120
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata/postgres
       PG_DATABASE_URL: postgres://yugabyte:yugabyte@yb-master:5433/yugabyte
   locust-master:
     image: locustio/locust
