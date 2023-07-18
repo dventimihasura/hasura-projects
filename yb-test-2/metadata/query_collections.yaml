@@ -1,1 +1,10 @@
-[]
+- name: allowed-queries
+  definition:
+    queries:
+      - name: perftest
+        query: |
+          query MyQuery {
+            product(limit: 1) {
+              id
+            }
+          }

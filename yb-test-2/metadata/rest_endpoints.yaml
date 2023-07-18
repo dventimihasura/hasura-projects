@@ -1,1 +1,9 @@
-[]
+- comment: ""
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: perftest
+  methods:
+    - POST
+  name: perftest
+  url: perftest
