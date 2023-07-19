@@ -32,3 +32,6 @@ hasura-mmlib-2/initdb.d-postgres/archive.zip
 hasura-mmlib-2/archive.zip
 *.zip
 *.csv
+yb-test-2/__pycache__/locustfile.cpython-311.pyc
+__pycache__
+*.pyc
