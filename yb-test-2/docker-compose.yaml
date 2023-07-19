@@ -31,6 +31,10 @@ services:
       POSTGRES_PASSWORD: postgres
   graphql-engine:
     image: hasura/graphql-engine:v2.21.0.cli-migrations-v3
+    ulimits:
+      nofile:
+        hard: 15000
+        soft: 15000
     ports:
       - "${GRAPHQL_ENGINE_PORT}:8080"
     volumes:
