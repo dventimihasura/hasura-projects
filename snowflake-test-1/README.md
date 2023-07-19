@@ -71,3 +71,23 @@ Use the Hasura CLI to launch the Console and begin data modeling.
 ```bash
 hasura console --endpoint http://localhost:[HGE_PORT] --admin-secret [HASURA_GRAPHQL_ADMIN_SECRET]
 ```
+
+## Step 7 ##
+
+Examine the `databases.yaml` file in order to understand how the metadata must be written in order to templatize the JDBC connection string.
+
+```bash
+cat metadata/databases/databases.yaml
+```
+
+I.e. the configuration will look like this.
+
+```yaml
+- name: snowflake
+  kind: snowflake
+  configuration:
+    template: '{"fully_qualify_all_names": false, "jdbc_url": "{{getEnvironmentVariable("SNOWFLAKE_URL")}}"}'
+    timeout: null
+    value: {}
+  tables: "!include snowflake/tables/tables.yaml"
+```
