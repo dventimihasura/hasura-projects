@@ -39,7 +39,7 @@ cd snowflake-test-1
 Create a `.env` Docker Compose [environment](https://docs.docker.com/compose/environment-variables/set-environment-variables/) file.
 
 ```
-cat <EOF > .env
+cat <<EOF > .env
 HASURA_GRAPHQL_ADMIN_SECRET=<your Hasura admin secret>
 HASURA_GRAPHQL_EE_LICENSE_KEY=<your Hasura EE license key>
 HGE_PORT=<your Hasura exposed port>
