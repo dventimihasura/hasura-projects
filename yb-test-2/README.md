@@ -37,8 +37,7 @@ git clone https://github.com/dventimihasura/hasura-projects
 cd yb-test-2
 ```
 
-3. Launch the services (PostgreSQL with PostGIS, Hasura) using Docker
-   Compose.
+3. Launch the services using Docker Compose.
    
 ```bash
 docker-compose up -d
