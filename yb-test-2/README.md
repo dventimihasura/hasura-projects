@@ -1,23 +1,16 @@
 # Abstract #
 
-It's Hasura + Yugabyte!
+Hasura Load Testing with YugaByte
 
 # What #
 
 This project sets up a very basic 4-node Yugabyte database cluster in
 a local environment and configures it with Hasura and a simple
-illustrative data model.
+illustrative data model for load testing purposes.
 
 # Why #
 
-We wish to run automated test suites against a variety of database
-products, including Yugabyte.  While some vendors offer cloud-hosted
-products which might be used for testing purposes, it also is prudent
-to understand how to run these products "locally" in a way that fits
-in with automated test harnesses that produce consistent and reliable
-results. This project explores and illustrates how to run Yugabyte
-"locally" using Docker Compose, and also how to integrate it with a
-Hasura instance also running locally.
+We wish to benchmark Hasura performance on YugaByte.
 
 # How #
 
@@ -29,12 +22,6 @@ that launches these services:
 1. Yugabyte master node x 1
 2. Yugabyte worker ("tablet") nodes x 3
 3. Hasura graphql-engine node
-
-The project directory is also configured to be a Hasura CLI project
-with a `config.yaml` file and `metadata` and `migrations`
-directories.  These can be used to initialize a simple data model (an
-online grocery store).  In practice, automated test suites will use
-their own data models, of course.
 
 # Steps #
 
@@ -57,30 +44,19 @@ cd yb-test-2
 docker-compose up -d
 ```
 
-4. Use the Hasura CLI to apply the metadata, apply the migrations,
-   reload the data, and launch the Console.
-   
+4. Run a Locust load test.
+
 ```shell
-hasura deploy
+docker run \
+  -v ./:/mnt/locust \
+  --network yb-test-2_default \
+  --ulimit nofile=15000:15000 \
+  locustio/locust:2.15.1 \
+  --headless \
+  --only-summary \
+  -t 60s \
+  -f /mnt/locust/locustfile.py \
+  -H http://graphql-engine:8080 \
+  -u 10 \
+  FastPerfTest
 ```
-
-5. Run this query.
-   
-```graphql
-query MyQuery {
-  account(limit: 10) {
-    name
-    orders {
-      region
-      order_details {
-        units
-        product {
-          name
-          price
-        }
-      }
-    }
-  }
-}
-```
-
