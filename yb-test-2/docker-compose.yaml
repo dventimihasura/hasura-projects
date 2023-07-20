@@ -31,10 +31,6 @@ services:
       POSTGRES_PASSWORD: postgres
   graphql-engine:
     image: hasura/graphql-engine:v2.21.0.cli-migrations-v3
-    ulimits:
-      nofile:
-        hard: 15000
-        soft: 15000
     ports:
       - "${GRAPHQL_ENGINE_PORT}:8080"
     volumes:
@@ -42,6 +38,7 @@ services:
       - ./metadata:/hasura-metadata
     depends_on:
       - "yb-tserver-3"
+      - "metadata"
     restart: always
     environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
@@ -49,15 +46,3 @@ services:
       HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT: 120
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata/postgres
       PG_DATABASE_URL: postgres://yugabyte:yugabyte@yb-master:5433/yugabyte
-  locust-master:
-    image: locustio/locust
-    ports:
-     - "${LOCUST_PORT}:8089"
-    volumes:
-      - ./:/mnt/locust
-    command: -f /mnt/locust/locustfile.py --master -H http://graphql-engine:8080
-  locust-worker:
-    image: locustio/locust
-    volumes:
-      - ./:/mnt/locust
-    command: -f /mnt/locust/locustfile.py --worker --master-host locust-master
