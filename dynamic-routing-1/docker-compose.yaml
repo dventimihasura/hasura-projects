@@ -11,10 +11,13 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
   graphql-engine:
-    image: hasura/graphql-engine:v2.30.0
+    image: hasura/graphql-engine:v2.30.0.cli-migrations-v3
     ports:
       - "8080:8080"
     restart: always
+    volumes:
+      - ./metadata:/hasura-metadata
+      - ./migrations:/hasura-migrations
     environment:
       DATA_URL: postgres://postgres:postgres@data:5432/postgres
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
