@@ -9,20 +9,20 @@
     connection_set:
       - connection_info:
           database_url:
-            from_env: DATA_URL_READ_COMMITTED
+            from_env: DATA_URL
           isolation_level: read-committed
           use_prepared_statements: false
         name: default-read-committed
       - connection_info:
           database_url:
-            from_env: DATA_URL_REPEATABLE_READ
-          isolation_level: read-committed
+            from_env: DATA_URL
+          isolation_level: repeatable-read
           use_prepared_statements: false
         name: default-repeatable-read
       - connection_info:
           database_url:
-            from_env: DATA_URL_SERIALIZABLE
-          isolation_level: read-committed
+            from_env: DATA_URL
+          isolation_level: serializable
           use_prepared_statements: false
         name: default-serializable
     connection_template:
