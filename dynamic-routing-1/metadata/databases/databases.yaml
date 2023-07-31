@@ -6,5 +6,36 @@
         from_env: DATA_URL
       isolation_level: read-committed
       use_prepared_statements: false
+    connection_set:
+      - connection_info:
+          database_url:
+            from_env: DATA_URL_READ_COMMITTED
+          isolation_level: read-committed
+          use_prepared_statements: false
+        name: default-read-committed
+      - connection_info:
+          database_url:
+            from_env: DATA_URL_REPEATABLE_READ
+          isolation_level: read-committed
+          use_prepared_statements: false
+        name: default-repeatable-read
+      - connection_info:
+          database_url:
+            from_env: DATA_URL_SERIALIZABLE
+          isolation_level: read-committed
+          use_prepared_statements: false
+        name: default-serializable
+    connection_template:
+      template: |-
+        {{ if ($.request.session.x-hasura-role == "serializable")}}
+            {{$.connection_set.default-serializable}}
+        {{ elif ($.request.session.x-hasura-role == "read-committed")}}
+            {{$.connection_set.default-read-committed}}
+        {{ elif ($.request.session.x-hasura-role == "repeatable-read")}}
+            {{$.connection_set.default-repeatable-read}}
+        {{ else }}
+            {{$.default}}
+        {{ end }}
+      version: 1
   tables: "!include default/tables/tables.yaml"
   functions: "!include default/functions/functions.yaml"

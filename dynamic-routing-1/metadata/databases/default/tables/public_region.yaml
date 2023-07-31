@@ -9,3 +9,76 @@ array_relationships:
         table:
           name: order
           schema: public
+insert_permissions:
+  - role: read-committed
+    permission:
+      check: {}
+      columns:
+        - description
+        - value
+  - role: repeatable-read
+    permission:
+      check: {}
+      columns:
+        - description
+        - value
+  - role: serializable
+    permission:
+      check: {}
+      columns:
+        - description
+        - value
+select_permissions:
+  - role: read-committed
+    permission:
+      columns:
+        - description
+        - value
+      filter: {}
+      allow_aggregations: true
+  - role: repeatable-read
+    permission:
+      columns:
+        - description
+        - value
+      filter: {}
+      allow_aggregations: true
+  - role: serializable
+    permission:
+      columns:
+        - description
+        - value
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: read-committed
+    permission:
+      columns:
+        - description
+        - value
+      filter: {}
+      check: {}
+  - role: repeatable-read
+    permission:
+      columns:
+        - description
+        - value
+      filter: {}
+      check: {}
+  - role: serializable
+    permission:
+      columns:
+        - description
+        - value
+      filter: {}
+      check: {}
+delete_permissions:
+  - role: read-committed
+    permission:
+      filter: {}
+  - role: repeatable-read
+    permission:
+      filter: {}
+  - role: serializable
+    permission:
+      filter: {}

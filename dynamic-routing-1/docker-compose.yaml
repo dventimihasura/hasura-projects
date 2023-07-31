@@ -8,18 +8,23 @@ services:
   data:
     image: postgres:15
     restart: always
+    ports:
+      - "${POSTGRES_PORT}:5432"
     environment:
       POSTGRES_PASSWORD: postgres
   graphql-engine:
     image: hasura/graphql-engine:v2.30.0.cli-migrations-v3
     ports:
-      - "8080:8080"
+      - "${HASURA_PORT}:8080"
     restart: always
     volumes:
       - ./metadata:/hasura-metadata
       - ./migrations:/hasura-migrations
     environment:
-      DATA_URL: postgres://postgres:postgres@data:5432/postgres
+      DATA_URL: "postgres://postgres:postgres@data/postgres"
+      DATA_URL_READ_COMMITTED: "postgres://postgres:postgres@data/postgres?options=-c%20default_transaction_isolation%3Dread%20committed"
+      DATA_URL_REPEATABLE_READ: "postgres://postgres:postgres@data/postgres?options=-c%20default_transaction_isolation%3Drepeatable%20read"
+      DATA_URL_SERIALIZABLE: "postgres://postgres:postgres@data/postgres?options=-c%20default_transaction_isolation%3Dserializable"
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}

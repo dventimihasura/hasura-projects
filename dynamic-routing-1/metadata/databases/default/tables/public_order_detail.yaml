@@ -8,3 +8,112 @@ object_relationships:
   - name: product
     using:
       foreign_key_constraint_on: product_id
+insert_permissions:
+  - role: read-committed
+    permission:
+      check: {}
+      columns:
+        - units
+        - created_at
+        - updated_at
+        - id
+        - order_id
+        - product_id
+  - role: repeatable-read
+    permission:
+      check: {}
+      columns:
+        - units
+        - created_at
+        - updated_at
+        - id
+        - order_id
+        - product_id
+  - role: serializable
+    permission:
+      check: {}
+      columns:
+        - units
+        - created_at
+        - updated_at
+        - id
+        - order_id
+        - product_id
+select_permissions:
+  - role: read-committed
+    permission:
+      columns:
+        - units
+        - created_at
+        - updated_at
+        - id
+        - order_id
+        - product_id
+      filter: {}
+      allow_aggregations: true
+  - role: repeatable-read
+    permission:
+      columns:
+        - units
+        - created_at
+        - updated_at
+        - id
+        - order_id
+        - product_id
+      filter: {}
+      allow_aggregations: true
+  - role: serializable
+    permission:
+      columns:
+        - units
+        - created_at
+        - updated_at
+        - id
+        - order_id
+        - product_id
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: read-committed
+    permission:
+      columns:
+        - units
+        - created_at
+        - updated_at
+        - id
+        - order_id
+        - product_id
+      filter: {}
+      check: {}
+  - role: repeatable-read
+    permission:
+      columns:
+        - units
+        - created_at
+        - updated_at
+        - id
+        - order_id
+        - product_id
+      filter: {}
+      check: {}
+  - role: serializable
+    permission:
+      columns:
+        - units
+        - created_at
+        - updated_at
+        - id
+        - order_id
+        - product_id
+      filter: {}
+      check: {}
+delete_permissions:
+  - role: read-committed
+    permission:
+      filter: {}
+  - role: repeatable-read
+    permission:
+      filter: {}
+  - role: serializable
+    permission:
+      filter: {}

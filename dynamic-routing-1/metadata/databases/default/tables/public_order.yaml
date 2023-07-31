@@ -16,3 +16,112 @@ array_relationships:
         table:
           name: order_detail
           schema: public
+insert_permissions:
+  - role: read-committed
+    permission:
+      check: {}
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+  - role: repeatable-read
+    permission:
+      check: {}
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+  - role: serializable
+    permission:
+      check: {}
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+select_permissions:
+  - role: read-committed
+    permission:
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: repeatable-read
+    permission:
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: serializable
+    permission:
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: read-committed
+    permission:
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+      filter: {}
+      check: {}
+  - role: repeatable-read
+    permission:
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+      filter: {}
+      check: {}
+  - role: serializable
+    permission:
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+      filter: {}
+      check: {}
+delete_permissions:
+  - role: read-committed
+    permission:
+      filter: {}
+  - role: repeatable-read
+    permission:
+      filter: {}
+  - role: serializable
+    permission:
+      filter: {}

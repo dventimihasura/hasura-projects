@@ -9,3 +9,103 @@ array_relationships:
         table:
           name: order_detail
           schema: public
+insert_permissions:
+  - role: read-committed
+    permission:
+      check: {}
+      columns:
+        - price
+        - name
+        - created_at
+        - updated_at
+        - id
+  - role: repeatable-read
+    permission:
+      check: {}
+      columns:
+        - price
+        - name
+        - created_at
+        - updated_at
+        - id
+  - role: serializable
+    permission:
+      check: {}
+      columns:
+        - price
+        - name
+        - created_at
+        - updated_at
+        - id
+select_permissions:
+  - role: read-committed
+    permission:
+      columns:
+        - price
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: repeatable-read
+    permission:
+      columns:
+        - price
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: serializable
+    permission:
+      columns:
+        - price
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: read-committed
+    permission:
+      columns:
+        - price
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      check: {}
+  - role: repeatable-read
+    permission:
+      columns:
+        - price
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      check: {}
+  - role: serializable
+    permission:
+      columns:
+        - price
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      check: {}
+delete_permissions:
+  - role: read-committed
+    permission:
+      filter: {}
+  - role: repeatable-read
+    permission:
+      filter: {}
+  - role: serializable
+    permission:
+      filter: {}
