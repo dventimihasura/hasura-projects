@@ -91,7 +91,12 @@ I.e. the configuration will look like this.
 - name: snowflake
   kind: snowflake
   configuration:
-    template: '{"fully_qualify_all_names": false, "jdbc_url": "{{getEnvironmentVariable("SNOWFLAKE_URL")}}"}'
+    template: |
+      {{if (empty($session?['x-snowflake-user'])) || (empty($session?['x-snowflake-pass']))}}
+        {"jdbc_url": "jdbc:snowflake://{{getEnvironmentVariable("DEFAULT_HOST")}}/?user={{getEnvironmentVariable("DEFAULT_USER")}}&password={{getEnvironmentVariable("DEFAULT_PASS")}}"}
+      {{else}}
+        {"jdbc_url": "jdbc:snowflake://{{getEnvironmentVariable("DEFAULT_HOST")}}/?user={{$session['x-snowflake-user']}}&password={{$session['x-snowflake-pass']}}"}
+      {{end}}
     timeout: null
     value: {}
   tables: "!include snowflake/tables/tables.yaml"
