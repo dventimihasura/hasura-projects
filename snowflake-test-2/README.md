@@ -40,10 +40,12 @@ Create a `.env` Docker Compose [environment](https://docs.docker.com/compose/env
 
 ```
 cat <<EOF > .env
+DEFAULT_HOST=<your Snowflake hostname>
+DEFAULT_PASS=<your Snowflake password>
+DEFAULT_USER=<your Snowflake username>
 HASURA_GRAPHQL_ADMIN_SECRET=<your Hasura admin secret>
 HASURA_GRAPHQL_EE_LICENSE_KEY=<your Hasura EE license key>
-HGE_PORT=<your Hasura exposed port>
-SNOWFLAKE_URL=<your Snowflake JDBC URL>
+HGE_PORT=<your exposed Hasura port>
 EOF
 ```
 
@@ -55,6 +57,9 @@ Use a text editor to edit the `.env` file and replace the template values as app
   * `HASURA_GRAPHQL_EE_LICENSE_KEY` :: Snowflake requires [enterprise](https://hasura.io/docs/latest/enterprise/upgrade-ce-to-ee/).
   * `HGE_PORT` :: Port to expose Hasura on
   * `SNOWFLAKE_URL` :: See the Snowflake JDBC [docs](https://docs.snowflake.com/en/developer-guide/jdbc/jdbc-configure).
+  * `DEFAULT_HOST` :: See the Snowflake JDBC [docs](https://docs.snowflake.com/en/developer-guide/jdbc/jdbc-configure).
+  * `DEFAULT_USER` :: See the Snowflake JDBC [docs](https://docs.snowflake.com/en/developer-guide/jdbc/jdbc-configure).
+  * `DEFAULT_PASS` :: See the Snowflake JDBC [docs](https://docs.snowflake.com/en/developer-guide/jdbc/jdbc-configure).
   
 ## Step 5 ##
 
