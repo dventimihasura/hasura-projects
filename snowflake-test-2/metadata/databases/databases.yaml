@@ -3,9 +3,9 @@
   configuration:
     template: |
       {{if (empty($session?['x-hasura-role'])) || (empty($session?['x-hasura-user-id']))}}
-        {"jdbc_url": "jdbc:snowflake://sambsmm-ws19216.snowflakecomputing.com/?user={{getEnvironmentVariable("DEFAULT_USER")}}&password={{getEnvironmentVariable("DEFAULT_PASS")}}"}
+        {"jdbc_url": "jdbc:snowflake://{{getEnvironmentVariable("DEFAULT_HOST")}}/?user={{getEnvironmentVariable("DEFAULT_USER")}}&password={{getEnvironmentVariable("DEFAULT_PASS")}}"}
       {{else}}
-        {"jdbc_url": "jdbc:snowflake://sambsmm-ws19216.snowflakecomputing.com/?user={{$session['x-hasura-role']}}&password={{$session['x-hasura-user-id']}}"}
+        {"jdbc_url": "jdbc:snowflake://{{getEnvironmentVariable("DEFAULT_HOST")}}/?user={{$session['x-hasura-role']}}&password={{$session['x-hasura-user-id']}}"}
       {{end}}
     timeout: null
     value: {}

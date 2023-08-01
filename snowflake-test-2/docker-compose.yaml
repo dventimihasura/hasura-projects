@@ -17,9 +17,9 @@ services:
       HASURA_GRAPHQL_EE_LICENSE_KEY: "${HASURA_GRAPHQL_EE_LICENSE_KEY}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_METADATA_DEFAULTS: '{"backend_configs":{"dataconnector":{"snowflake":{"uri":"http://data-connector-agent:8081/api/v1/snowflake"}}}}'
-      SNOWFLAKE_URL: "${SNOWFLAKE_URL}"
       DEFAULT_USER: "${DEFAULT_USER}"
       DEFAULT_PASS: "${DEFAULT_PASS}"
+      DEFAULT_HOST: "${DEFAULT_HOST}"
     # volumes:
     #   - ./metadata:/hasura-metadata
     depends_on:
