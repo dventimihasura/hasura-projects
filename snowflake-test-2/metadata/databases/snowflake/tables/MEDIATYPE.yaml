@@ -1,0 +1,9 @@
+table:
+  - MEDIATYPE
+array_relationships:
+  - name: MEDIATYPE_TRACKs
+    using:
+      foreign_key_constraint_on:
+        column: MEDIATYPEID
+        table:
+          - TRACK

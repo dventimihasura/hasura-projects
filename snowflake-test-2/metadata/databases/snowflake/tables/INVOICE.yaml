@@ -1,0 +1,13 @@
+table:
+  - INVOICE
+object_relationships:
+  - name: INVOICE_CUSTOMER
+    using:
+      foreign_key_constraint_on: CUSTOMERID
+array_relationships:
+  - name: INVOICE_INVOICELINEs
+    using:
+      foreign_key_constraint_on:
+        column: INVOICEID
+        table:
+          - INVOICELINE

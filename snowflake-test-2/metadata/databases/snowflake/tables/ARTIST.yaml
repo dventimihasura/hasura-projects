@@ -1,0 +1,9 @@
+table:
+  - ARTIST
+array_relationships:
+  - name: ARTIST_ALBUMs
+    using:
+      foreign_key_constraint_on:
+        column: ARTISTID
+        table:
+          - ALBUM

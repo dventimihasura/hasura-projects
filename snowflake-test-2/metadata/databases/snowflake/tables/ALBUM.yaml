@@ -1,0 +1,13 @@
+table:
+  - ALBUM
+object_relationships:
+  - name: ALBUM_ARTIST
+    using:
+      foreign_key_constraint_on: ARTISTID
+array_relationships:
+  - name: ALBUM_TRACKs
+    using:
+      foreign_key_constraint_on:
+        column: ALBUMID
+        table:
+          - TRACK

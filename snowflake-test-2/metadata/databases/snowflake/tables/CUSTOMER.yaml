@@ -1,0 +1,13 @@
+table:
+  - CUSTOMER
+object_relationships:
+  - name: CUSTOMER_EMPLOYEE
+    using:
+      foreign_key_constraint_on: SUPPORTREPID
+array_relationships:
+  - name: CUSTOMER_INVOICEs
+    using:
+      foreign_key_constraint_on:
+        column: CUSTOMERID
+        table:
+          - INVOICE

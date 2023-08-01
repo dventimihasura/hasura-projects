@@ -1,0 +1,19 @@
+table:
+  - EMPLOYEE
+object_relationships:
+  - name: EMPLOYEE_EMPLOYEE
+    using:
+      foreign_key_constraint_on: REPORTSTO
+array_relationships:
+  - name: EMPLOYEE_CUSTOMERs
+    using:
+      foreign_key_constraint_on:
+        column: SUPPORTREPID
+        table:
+          - CUSTOMER
+  - name: EMPLOYEE_EMPLOYEEs
+    using:
+      foreign_key_constraint_on:
+        column: REPORTSTO
+        table:
+          - EMPLOYEE

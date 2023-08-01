@@ -1,0 +1,9 @@
+table:
+  - GENRE
+array_relationships:
+  - name: GENRE_TRACKs
+    using:
+      foreign_key_constraint_on:
+        column: GENREID
+        table:
+          - TRACK

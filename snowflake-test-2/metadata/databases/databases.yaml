@@ -1,0 +1,7 @@
+- name: snowflake
+  kind: snowflake
+  configuration:
+    template: '{"fully_qualify_all_names": false, "jdbc_url": "{{getEnvironmentVariable("SNOWFLAKE_URL")}}"}'
+    timeout: null
+    value: {}
+  tables: "!include snowflake/tables/tables.yaml"

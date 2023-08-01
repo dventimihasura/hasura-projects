@@ -1,0 +1,19 @@
+table:
+  - TRACK
+object_relationships:
+  - name: TRACK_ALBUM
+    using:
+      foreign_key_constraint_on: ALBUMID
+  - name: TRACK_GENRE
+    using:
+      foreign_key_constraint_on: GENREID
+  - name: TRACK_MEDIATYPE
+    using:
+      foreign_key_constraint_on: MEDIATYPEID
+array_relationships:
+  - name: TRACK_INVOICELINEs
+    using:
+      foreign_key_constraint_on:
+        column: TRACKID
+        table:
+          - INVOICELINE

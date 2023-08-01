@@ -1,0 +1,9 @@
+table:
+  - INVOICELINE
+object_relationships:
+  - name: INVOICELINE_INVOICE
+    using:
+      foreign_key_constraint_on: INVOICEID
+  - name: INVOICELINE_TRACK
+    using:
+      foreign_key_constraint_on: TRACKID
