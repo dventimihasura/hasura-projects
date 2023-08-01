@@ -1,0 +1,23 @@
+table:
+  - CHINOOK
+  - PUBLIC
+  - TRACK
+object_relationships:
+  - name: CHINOOK_PUBLIC_TRACK_CHINOOK_PUBLIC_ALBUM
+    using:
+      foreign_key_constraint_on: ALBUMID
+  - name: CHINOOK_PUBLIC_TRACK_CHINOOK_PUBLIC_GENRE
+    using:
+      foreign_key_constraint_on: GENREID
+  - name: CHINOOK_PUBLIC_TRACK_CHINOOK_PUBLIC_MEDIATYPE
+    using:
+      foreign_key_constraint_on: MEDIATYPEID
+array_relationships:
+  - name: CHINOOK_PUBLIC_TRACK_CHINOOK_PUBLIC_INVOICELINEs
+    using:
+      foreign_key_constraint_on:
+        column: TRACKID
+        table:
+          - CHINOOK
+          - PUBLIC
+          - INVOICELINE

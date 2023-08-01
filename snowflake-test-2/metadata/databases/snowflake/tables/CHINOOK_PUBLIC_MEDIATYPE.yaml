@@ -1,0 +1,13 @@
+table:
+  - CHINOOK
+  - PUBLIC
+  - MEDIATYPE
+array_relationships:
+  - name: CHINOOK_PUBLIC_MEDIATYPE_CHINOOK_PUBLIC_TRACKs
+    using:
+      foreign_key_constraint_on:
+        column: MEDIATYPEID
+        table:
+          - CHINOOK
+          - PUBLIC
+          - TRACK

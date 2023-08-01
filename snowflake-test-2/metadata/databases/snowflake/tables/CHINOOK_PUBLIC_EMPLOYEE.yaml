@@ -1,0 +1,25 @@
+table:
+  - CHINOOK
+  - PUBLIC
+  - EMPLOYEE
+object_relationships:
+  - name: CHINOOK_PUBLIC_EMPLOYEE_CHINOOK_PUBLIC_EMPLOYEE
+    using:
+      foreign_key_constraint_on: REPORTSTO
+array_relationships:
+  - name: CHINOOK_PUBLIC_EMPLOYEE_CHINOOK_PUBLIC_CUSTOMERs
+    using:
+      foreign_key_constraint_on:
+        column: SUPPORTREPID
+        table:
+          - CHINOOK
+          - PUBLIC
+          - CUSTOMER
+  - name: CHINOOK_PUBLIC_EMPLOYEE_CHINOOK_PUBLIC_EMPLOYEEs
+    using:
+      foreign_key_constraint_on:
+        column: REPORTSTO
+        table:
+          - CHINOOK
+          - PUBLIC
+          - EMPLOYEE

@@ -1,0 +1,13 @@
+table:
+  - CHINOOK
+  - PUBLIC
+  - GENRE
+array_relationships:
+  - name: CHINOOK_PUBLIC_GENRE_CHINOOK_PUBLIC_TRACKs
+    using:
+      foreign_key_constraint_on:
+        column: GENREID
+        table:
+          - CHINOOK
+          - PUBLIC
+          - TRACK

@@ -1,0 +1,17 @@
+table:
+  - CHINOOK
+  - PUBLIC
+  - CUSTOMER
+object_relationships:
+  - name: CHINOOK_PUBLIC_CUSTOMER_CHINOOK_PUBLIC_EMPLOYEE
+    using:
+      foreign_key_constraint_on: SUPPORTREPID
+array_relationships:
+  - name: CHINOOK_PUBLIC_CUSTOMER_CHINOOK_PUBLIC_INVOICEs
+    using:
+      foreign_key_constraint_on:
+        column: CUSTOMERID
+        table:
+          - CHINOOK
+          - PUBLIC
+          - INVOICE

@@ -1,0 +1,17 @@
+table:
+  - CHINOOK
+  - PUBLIC
+  - ALBUM
+object_relationships:
+  - name: CHINOOK_PUBLIC_ALBUM_CHINOOK_PUBLIC_ARTIST
+    using:
+      foreign_key_constraint_on: ARTISTID
+array_relationships:
+  - name: CHINOOK_PUBLIC_ALBUM_CHINOOK_PUBLIC_TRACKs
+    using:
+      foreign_key_constraint_on:
+        column: ALBUMID
+        table:
+          - CHINOOK
+          - PUBLIC
+          - TRACK

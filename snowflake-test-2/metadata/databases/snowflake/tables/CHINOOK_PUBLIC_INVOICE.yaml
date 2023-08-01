@@ -1,0 +1,17 @@
+table:
+  - CHINOOK
+  - PUBLIC
+  - INVOICE
+object_relationships:
+  - name: CHINOOK_PUBLIC_INVOICE_CHINOOK_PUBLIC_CUSTOMER
+    using:
+      foreign_key_constraint_on: CUSTOMERID
+array_relationships:
+  - name: CHINOOK_PUBLIC_INVOICE_CHINOOK_PUBLIC_INVOICELINEs
+    using:
+      foreign_key_constraint_on:
+        column: INVOICEID
+        table:
+          - CHINOOK
+          - PUBLIC
+          - INVOICELINE

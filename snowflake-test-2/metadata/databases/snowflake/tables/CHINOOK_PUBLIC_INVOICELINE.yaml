@@ -1,0 +1,11 @@
+table:
+  - CHINOOK
+  - PUBLIC
+  - INVOICELINE
+object_relationships:
+  - name: CHINOOK_PUBLIC_INVOICELINE_CHINOOK_PUBLIC_INVOICE
+    using:
+      foreign_key_constraint_on: INVOICEID
+  - name: CHINOOK_PUBLIC_INVOICELINE_CHINOOK_PUBLIC_TRACK
+    using:
+      foreign_key_constraint_on: TRACKID
