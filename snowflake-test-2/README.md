@@ -92,10 +92,10 @@ I.e. the configuration will look like this.
   kind: snowflake
   configuration:
     template: |
-      {{if (empty($session?['x-hasura-role'])) || (empty($session?['x-hasura-user-id']))}}
+      {{if (empty($session?['x-hasura-user-id']))}}
         {"jdbc_url": "jdbc:snowflake://{{getEnvironmentVariable("DEFAULT_HOST")}}/?user={{getEnvironmentVariable("DEFAULT_USER")}}&password={{getEnvironmentVariable("DEFAULT_PASS")}}"}
       {{else}}
-        {"jdbc_url": "jdbc:snowflake://{{getEnvironmentVariable("DEFAULT_HOST")}}/?user={{$session['x-hasura-role']}}&password={{$session['x-hasura-user-id']}}"}
+        {"jdbc_url": "jdbc:snowflake://{{getEnvironmentVariable("DEFAULT_HOST")}}/?user={{getEnvironmentVariable("DEFAULT_USER")}}&password={{$session['x-hasura-user-id']}}"}
       {{end}}
     timeout: null
     value: {}
