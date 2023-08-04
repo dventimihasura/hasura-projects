@@ -1,7 +1,7 @@
 * What
 
 This Proof-Of-Concept (POC) demonstrates asynchronous messaging with
-Hasura Custom Events and Hasura Subscriptions, operating in an auction
+Hasura Event Triggers and Hasura Subscriptions, operating in an auction
 involving truckers who want to receive message notifications when
 there are product deliveries whose origin and destination match the
 origin and destination of routes on their schedules, so that they can
@@ -16,8 +16,8 @@ an update when new data satisfies the search criteria.  This POC sets
 up a data model to support exploring different ways of implementing
 this in Hasura.  Some options are:
 
-- Hasura Custom Events
-- Hasura Subscriptions
+- Hasura [[https://hasura.io/docs/latest/event-triggers/overview/][Event Triggers]]
+- Hasura [[https://hasura.io/docs/latest/subscriptions/overview/][Subscriptions]]
 
 * How
 
@@ -33,7 +33,7 @@ The ~route_message~ table captures messages intended to notify a
 trucker with an ~account~ that there are matches among the origin
 ~region~ and ~destination~ region for ~delivery~ and ~route~ journeys
 starting within an overlapping date range.  It is this table that
-would be the target of Hasura Custom events.
+would be the target of Hasura event triggers.
 
 The ~generate_messages~ trigger function (and matching triggers) fires
 when rows are inserted into the ~route~ and/or ~delivery~ table, to
