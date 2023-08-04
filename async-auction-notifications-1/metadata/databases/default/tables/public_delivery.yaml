@@ -1,0 +1,21 @@
+table:
+  name: delivery
+  schema: public
+object_relationships:
+  - name: product
+    using:
+      foreign_key_constraint_on: product_id
+  - name: region
+    using:
+      foreign_key_constraint_on: destination
+  - name: regionByOrigin
+    using:
+      foreign_key_constraint_on: origin
+array_relationships:
+  - name: route_messages
+    using:
+      foreign_key_constraint_on:
+        column: delivery_id
+        table:
+          name: route_message
+          schema: public

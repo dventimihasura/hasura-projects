@@ -1,0 +1,39 @@
+table:
+  name: region
+  schema: public
+array_relationships:
+  - name: deliveries
+    using:
+      foreign_key_constraint_on:
+        column: destination
+        table:
+          name: delivery
+          schema: public
+  - name: deliveriesByOrigin
+    using:
+      foreign_key_constraint_on:
+        column: origin
+        table:
+          name: delivery
+          schema: public
+  - name: orders
+    using:
+      foreign_key_constraint_on:
+        column: region
+        table:
+          name: order
+          schema: public
+  - name: routes
+    using:
+      foreign_key_constraint_on:
+        column: destination
+        table:
+          name: route
+          schema: public
+  - name: routesByOrigin
+    using:
+      foreign_key_constraint_on:
+        column: origin
+        table:
+          name: route
+          schema: public

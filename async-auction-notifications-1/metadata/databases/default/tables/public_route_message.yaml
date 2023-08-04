@@ -1,0 +1,10 @@
+table:
+  name: route_message
+  schema: public
+object_relationships:
+  - name: delivery
+    using:
+      foreign_key_constraint_on: delivery_id
+  - name: route
+    using:
+      foreign_key_constraint_on: route_id
