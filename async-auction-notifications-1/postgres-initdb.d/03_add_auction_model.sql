@@ -7,6 +7,8 @@ create table route (
   origin text not null references region (value),
   destination text not null references region (value));
 
+comment on table route is 'A route represents a planned journey by a trucker between regions beginning within a date range.';
+
 create table delivery (
   id uuid primary key default gen_random_uuid(),
   product_id uuid not null references product (id),
@@ -14,10 +16,14 @@ create table delivery (
   origin text not null references region (value),
   destination text not null references region (value));
 
+comment on table delivery is 'A delivery represents a desired journey by a product between regions beginning within a date range.';
+
 create table route_message (
   id uuid primary key default gen_random_uuid(),
   route_id uuid not null references route (id),
   delivery_id uuid not null references delivery (id));
+
+comment on table route_message is 'A route_message represents a notification about a match between a route and a delivery.';
 
 create or replace function generate_messages ()
   returns trigger
@@ -39,6 +45,8 @@ as $plpgsql$
       return new;
     end
 $plpgsql$;
+
+comment on function generate_messages is 'The generate_messages function is a trigger function that creates route_message rows when matching conditions arise.';
 
 create trigger generate_messages after insert on delivery execute function generate_messages();
 
@@ -78,3 +86,5 @@ create or replace function run_simulation (ndeliveries int, nroutes int)
      and o.value != d.value order by random()
    limit nroutes;
   $sql$;
+
+comment on function run_simulation is 'The run_simulation function creates the desired number of deliveries and routes in order to demonstrate the creation of messages.';

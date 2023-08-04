@@ -22,6 +22,8 @@ CREATE TRIGGER "set_public_account_updated_at"
 COMMENT ON TRIGGER "set_public_account_updated_at" ON "public"."account" 
   IS 'trigger to set value of column "updated_at" to current timestamp on row update';
 
+comment on table account is 'An account represents a trucker.';
+
 -- product table
 
 CREATE TABLE "public"."product" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "name" text NOT NULL, "price" integer NOT NULL, PRIMARY KEY ("id") );
@@ -42,6 +44,8 @@ CREATE TRIGGER "set_public_product_updated_at"
 COMMENT ON TRIGGER "set_public_product_updated_at" ON "public"."product" 
   IS 'trigger to set value of column "updated_at" to current timestamp on row update';
 
+comment on table product is 'A product is a deliverable item.';
+
 -- order table
 
 CREATE TABLE "public"."order" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "account_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("account_id") REFERENCES "public"."account"("id") ON UPDATE restrict ON DELETE restrict);
@@ -61,6 +65,8 @@ CREATE TRIGGER "set_public_order_updated_at"
   EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
 COMMENT ON TRIGGER "set_public_order_updated_at" ON "public"."order" 
   IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+
+comment on table "order" is 'An order represents a request to purchase a set of products.';
 
 create index on "order" (account_id);
 
@@ -84,6 +90,8 @@ CREATE TRIGGER "set_public_order_detail_updated_at"
 COMMENT ON TRIGGER "set_public_order_detail_updated_at" ON "public"."order_detail" 
   IS 'trigger to set value of column "updated_at" to current timestamp on row update';
 
+comment on table order_detail is 'An order_detail represents an individual product item with an order.';
+
 create index on order_detail (order_id);
 
 create index on order_detail (product_id);
@@ -98,6 +106,8 @@ create or replace function product_search(search text)
   name ilike ('%' || search || '%')
 $$ language sql stable;
 
+comment on function product_search is 'The product_search function offers full-text search over products.';
+
 -- product_search_slow function
 
 create or replace function product_search_slow(search text, wait real)
@@ -107,6 +117,8 @@ create or replace function product_search_slow(search text, wait real)
   where
   name ilike ('%' || search || '%')
 $$ language sql stable;
+
+comment on function product_search_slow is 'The product_search_slow function offers full_text search over products, with the ability to add a delay in order to demonstrate query time-out security features.';
 
 -- non_negative_price constraint
 
@@ -118,7 +130,7 @@ create index if not exists account_name_idx on account (name);
 
 -- status enum
 
-CREATE TYPE status AS ENUM ('new', 'processing', 'fulfilled');
+create type status AS ENUM ('new', 'processing', 'fulfilled');
 
 -- add status to order table
 
@@ -131,6 +143,8 @@ create index on "order" (status);
 create table if not exists region (
   value text primary key,
   description text);
+
+comment on table region is 'The region table represents sales regions for products, as well as origins and destinations for deliveries and routes.';
 
 -- add region to order
 
