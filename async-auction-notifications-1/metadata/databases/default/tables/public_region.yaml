@@ -16,13 +16,6 @@ array_relationships:
         table:
           name: delivery
           schema: public
-  - name: orders
-    using:
-      foreign_key_constraint_on:
-        column: region
-        table:
-          name: order
-          schema: public
   - name: routes
     using:
       foreign_key_constraint_on:
