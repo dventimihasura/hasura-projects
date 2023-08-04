@@ -2004,46 +2004,6 @@ insert into product (name, price) values ('Wine - Prosecco Valdobienne', 220);
 insert into product (name, price) values ('Sproutsmustard Cress', 771);
 insert into product (name, price) values ('Spinach - Baby', 740);
 
--- with
---   account as (
---     select
---       account.id,
---       name,
---       (random()*5)::int orders
---       from account)
---     insert into "order" (account_id)
--- select
---   account_id
---   from (
---     select
---       account.id account_id,
---       row_number() over (partition by account.id order by account.name) ordinal
---       from account, generate_series(1, 5)) orders
---        join account on account.id = orders.account_id
--- 	   and orders.ordinal <= account.orders;
-
--- with
---   "order" as (
---     select
---       "order".id,
---       (random()*9 + 1)::int items
---       from "order")
---     insert into order_detail (order_id, product_id, units)
--- select
---   order_id,
---   product_id,
---   (random()*9 + 1)::int units
---   from (
---     select
---       "order".id order_id,
---       product.id product_id,
---       row_number() over (partition by "order".id) ordinal
---       from "order", product) user_item
---        join "order" on "order".id = user_item.order_id
--- 	   and user_item.ordinal <= "order".items;
-
--- update "order" set status = ((array['new', 'processing', 'fulfilled'])[floor(random()*3+1)])::status;
-
 insert into region (value, description)
 values
   ('NORTHEAST', 'New England'),
@@ -2055,17 +2015,5 @@ values
   ('NORTHWEST', 'Rainy'),
   ('WEST', 'California'),
   ('SOUTHWEST', 'Cacti');
-
--- update "order" set region = ((array[
---   'NORTHEAST',
---   'MIDWEST',
---   'SOUTH',
---   'PLAINS',
---   'APPALACHIA',
---   'MOUNTAIN',
---   'NORTHWEST',
---   'WEST',
---   'SOUTHWEST'
---   ])[floor(random()*9+1)])::text;
 
 commit;
