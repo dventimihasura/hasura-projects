@@ -89,6 +89,8 @@ subscription MyQuery {
 }
 ```
 
+[api_tab](file:///api_tab.png "api_tab")
+
 ## Step 8 ##
 
 In the Hasura Console Data tab "SQL" text area call the `run_simulation` function to simulate 100 random `delivery` entries and 100 random `route` entries.
@@ -97,3 +99,4 @@ In the Hasura Console Data tab "SQL" text area call the `run_simulation` functio
 select run_simulation(100, 100);
 ```
 
+[data_tab](file:///data_tab.png "data_tab")
