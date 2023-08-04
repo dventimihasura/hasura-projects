@@ -19,3 +19,15 @@ array_relationships:
         table:
           name: route_message
           schema: public
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - pickup_date
+        - destination
+        - origin
+        - id
+        - product_id
+      filter: {}
+      allow_aggregations: true
+    comment: ""

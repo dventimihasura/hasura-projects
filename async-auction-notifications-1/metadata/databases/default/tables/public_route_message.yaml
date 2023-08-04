@@ -8,3 +8,15 @@ object_relationships:
   - name: route
     using:
       foreign_key_constraint_on: route_id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - delivery_id
+        - id
+        - route_id
+      filter:
+        route:
+          account_id:
+            _eq: X-Hasura-User-Id
+    comment: ""
