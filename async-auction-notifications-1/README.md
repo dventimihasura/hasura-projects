@@ -69,3 +69,31 @@ Use the Hasura CLI to launch the Console and begin data modeling.
 ```bash
 hasura console --endpoint http://localhost:[HGE_PORT]
 ```
+
+## Step 7 ##
+
+In the Hasura Console API tab create a GraphQL Subscription to the `route_messages` field.
+
+```graphql
+subscription MyQuery {
+  route_message {
+    delivery_id
+    id
+    route_id
+    route {
+      origin
+      destination
+      account_id
+    }
+  }
+}
+```
+
+## Step 8 ##
+
+In the Hasura Console Data tab "SQL" text area call the `run_simulation` function to simulate 100 random `delivery` entries and 100 random `route` entries.
+
+```sql
+select run_simulation(100, 100);
+```
+
