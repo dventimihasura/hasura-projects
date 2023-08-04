@@ -2,9 +2,9 @@
 
 create table route (
   id uuid primary key default gen_random_uuid(),
-  account_id uuid not null references account (id),
-  departure_date daterange not null,
-  origin text not null references region (value),
+  account_id uuid not null references account (id), --Truckers have routes.
+  departure_date daterange not null,		    --Dates are modelled as date ranges in case we want to get fancy with overlaps.
+  origin text not null references region (value),   --TODO add constraint so that origin cannot = destination
   destination text not null references region (value));
 
 create index on route (account_id);
@@ -15,9 +15,9 @@ comment on table route is 'A route represents a planned journey by a trucker bet
 
 create table delivery (
   id uuid primary key default gen_random_uuid(),
-  product_id uuid not null references product (id),
-  pickup_date daterange not null,
-  origin text not null references region (value),
+  product_id uuid not null references product (id), --Products have deliveries.
+  pickup_date daterange not null,		    --Same thing as above with date ranges
+  origin text not null references region (value),   --TODO likewise add a constraint so that origin cannot = destination.
   destination text not null references region (value));
 
 create index on delivery (product_id);
@@ -28,8 +28,8 @@ comment on table delivery is 'A delivery represents a desired journey by a produ
 
 create table route_message (
   id uuid primary key default gen_random_uuid(),
-  route_id uuid not null references route (id),
-  delivery_id uuid not null references delivery (id));
+  route_id uuid not null references route (id), --Don't need anything other than route_id and delivery_id because everything else
+  delivery_id uuid not null references delivery (id)); --(e.g. account_id, product_id) is implied.  TODO:  add timestamp and status fields to the message.
 
 create index on route_message (route_id, delivery_id);
 
