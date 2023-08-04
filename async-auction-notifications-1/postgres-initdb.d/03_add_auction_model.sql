@@ -7,6 +7,10 @@ create table route (
   origin text not null references region (value),
   destination text not null references region (value));
 
+create index on route (account_id);
+
+create index on route (departure_date, origin, destination);
+
 comment on table route is 'A route represents a planned journey by a trucker between regions beginning within a date range.';
 
 create table delivery (
@@ -16,12 +20,18 @@ create table delivery (
   origin text not null references region (value),
   destination text not null references region (value));
 
+create index on delivery (product_id);
+
+create index on delivery (pickup_date, origin, destination);
+
 comment on table delivery is 'A delivery represents a desired journey by a product between regions beginning within a date range.';
 
 create table route_message (
   id uuid primary key default gen_random_uuid(),
   route_id uuid not null references route (id),
   delivery_id uuid not null references delivery (id));
+
+create index on route_message (route_id, delivery_id);
 
 comment on table route_message is 'A route_message represents a notification about a match between a route and a delivery.';
 

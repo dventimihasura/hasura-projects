@@ -46,80 +46,6 @@ COMMENT ON TRIGGER "set_public_product_updated_at" ON "public"."product"
 
 comment on table product is 'A product is a deliverable item.';
 
--- order table
-
-CREATE TABLE "public"."order" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "account_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("account_id") REFERENCES "public"."account"("id") ON UPDATE restrict ON DELETE restrict);
-CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
-  RETURNS TRIGGER AS $$
-  DECLARE
-    _new record;
-  BEGIN
-    _new := NEW;
-    _new."updated_at" = NOW();
-    RETURN _new;
-  END;
-$$ LANGUAGE plpgsql;
-CREATE TRIGGER "set_public_order_updated_at"
-  BEFORE UPDATE ON "public"."order"
-  FOR EACH ROW
-  EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
-COMMENT ON TRIGGER "set_public_order_updated_at" ON "public"."order" 
-  IS 'trigger to set value of column "updated_at" to current timestamp on row update';
-
-comment on table "order" is 'An order represents a request to purchase a set of products.';
-
-create index on "order" (account_id);
-
--- order_detail table
-
-CREATE TABLE "public"."order_detail" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "units" integer NOT NULL, "order_id" uuid NOT NULL, "product_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("order_id") REFERENCES "public"."order"("id") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("product_id") REFERENCES "public"."product"("id") ON UPDATE restrict ON DELETE restrict);
-CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
-  RETURNS TRIGGER AS $$
-  DECLARE
-    _new record;
-  BEGIN
-    _new := NEW;
-    _new."updated_at" = NOW();
-    RETURN _new;
-  END;
-$$ LANGUAGE plpgsql;
-CREATE TRIGGER "set_public_order_detail_updated_at"
-  BEFORE UPDATE ON "public"."order_detail"
-  FOR EACH ROW
-  EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
-COMMENT ON TRIGGER "set_public_order_detail_updated_at" ON "public"."order_detail" 
-  IS 'trigger to set value of column "updated_at" to current timestamp on row update';
-
-comment on table order_detail is 'An order_detail represents an individual product item with an order.';
-
-create index on order_detail (order_id);
-
-create index on order_detail (product_id);
-
--- product_search function
-
-create or replace function product_search(search text)
-  returns setof product as $$
-  select product.*
-  from product
-  where
-  name ilike ('%' || search || '%')
-$$ language sql stable;
-
-comment on function product_search is 'The product_search function offers full-text search over products.';
-
--- product_search_slow function
-
-create or replace function product_search_slow(search text, wait real)
-  returns setof product as $$
-  select product.*
-  from product, pg_sleep(wait)
-  where
-  name ilike ('%' || search || '%')
-$$ language sql stable;
-
-comment on function product_search_slow is 'The product_search_slow function offers full_text search over products, with the ability to add a delay in order to demonstrate query time-out security features.';
-
 -- non_negative_price constraint
 
 alter table "public"."product" add constraint "non_negative_price" check (price > 0);
@@ -132,12 +58,6 @@ create index if not exists account_name_idx on account (name);
 
 create type status AS ENUM ('new', 'processing', 'fulfilled');
 
--- add status to order table
-
-alter table "public"."order" add column "status" status null;
-
-create index on "order" (status);
-
 -- region dictionary table
 
 create table if not exists region (
@@ -145,16 +65,3 @@ create table if not exists region (
   description text);
 
 comment on table region is 'The region table represents sales regions for products, as well as origins and destinations for deliveries and routes.';
-
--- add region to order
-
-alter table "public"."order" add column "region" Text
- null;
-
-alter table "public"."order"
-  add constraint "order_region_fkey"
-  foreign key ("region")
-  references "public"."region"
-  ("value") on update restrict on delete restrict;
-
-create index on "order" (region);
