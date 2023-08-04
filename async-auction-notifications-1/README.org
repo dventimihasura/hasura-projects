@@ -18,6 +18,8 @@ The ~generate_messages~ trigger function (and matching triggers) fires when rows
 
 The ~run_simulation~ function randomly generates ~delivery~ and ~route~ journeys distributed over the next 10 days, for randomly chosen ~product~ entries and ~account~ truckers.  Because the data are random, it is not guaranteed that there will be matches between the ~route~ and ~delivery~ entries.  In practice, 100 each of ~route~ and ~delivery~ is sufficient for there to be a dozen or so matches so that messages can be added to the ~route_message~ table.
 
+See the [[file:postgres-initdb.d/01_init_model.sql]] [[file:postgres-initdb.d/02_init_data.sql]] and especially [[file:postgres-initdb.d/03_add_auction_model.sql]] files for details.
+
 * Steps
 
 ** Step 1
