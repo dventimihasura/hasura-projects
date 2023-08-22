@@ -8,3 +8,17 @@ object_relationships:
   - name: product
     using:
       foreign_key_constraint_on: product_id
+select_permissions:
+  - role: account_owner
+    permission:
+      columns:
+        - units
+        - created_at
+        - updated_at
+        - id
+        - order_id
+        - product_id
+      filter:
+        order:
+          order_details: {}
+    comment: ""

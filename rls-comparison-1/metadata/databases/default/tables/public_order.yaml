@@ -16,3 +16,16 @@ array_relationships:
         table:
           name: order_detail
           schema: public
+select_permissions:
+  - role: account_owner
+    permission:
+      columns:
+        - region
+        - created_at
+        - updated_at
+        - status
+        - account_id
+        - id
+      filter:
+        account: {}
+    comment: ""

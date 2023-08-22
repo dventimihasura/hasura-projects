@@ -9,3 +9,48 @@ array_relationships:
         table:
           name: order
           schema: public
+insert_permissions:
+  - role: account_owner
+    permission:
+      check:
+        id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - name
+        - created_at
+        - updated_at
+        - id
+    comment: ""
+select_permissions:
+  - role: account_owner
+    permission:
+      columns:
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+update_permissions:
+  - role: account_owner
+    permission:
+      columns:
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null
+    comment: ""
+delete_permissions:
+  - role: account_owner
+    permission:
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+    comment: ""
