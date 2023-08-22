@@ -13,6 +13,8 @@ services:
     image: hasura/graphql-engine:v2.32.0.cli-migrations-v3
     ports:
       - "8080:8080"
+    volumes:
+      - "./metadata:/hasura-metadata:ro"
     restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
