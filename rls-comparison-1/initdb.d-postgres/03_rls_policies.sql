@@ -13,3 +13,5 @@ create policy "order" on "order" using (exists (select 1 from account where acco
 create policy order_detail on order_detail using (exists (select 1 from "order" where "order".id = order_id));
 
 create role account_owner;
+
+grant all privileges on all tables in schema public to account_owner;
