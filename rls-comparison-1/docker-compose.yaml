@@ -4,7 +4,7 @@ services:
     image: postgres:14
     restart: always
     ports:
-      - "5432:5432"
+      - "${PGPORT}:5432"
     volumes:
       - "./initdb.d-postgres:/docker-entrypoint-initdb.d:ro"
     environment:
@@ -12,7 +12,7 @@ services:
   graphql-engine:
     image: hasura/graphql-engine:v2.32.0.cli-migrations-v3
     ports:
-      - "8080:8080"
+      - "${HGEPORT}:8080"
     volumes:
       - "./metadata:/hasura-metadata:ro"
     restart: always
