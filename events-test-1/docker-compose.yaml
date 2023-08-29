@@ -1,11 +1,11 @@
 version: "3.6"
 services:
   postgres:
-    image: postgres:15
+    build: .
     ports:
       - "${PGPORT}:5432"
     restart: always
-    command: postgres -c "log_statement=ddl"
+    command: postgres -c "log_statement=ddl" -c "logging_collector=on"
     environment:
       POSTGRES_PASSWORD: postgres
   metadata:
