@@ -5,13 +5,17 @@ services:
     ports:
       - "${PGPORT}:8080"
     restart: always
+    command: postgres -c "log_statement=ddl"
     environment:
       POSTGRES_PASSWORD: postgres
   graphql-engine:
-    image: hasura/graphql-engine:v2.32.0
+    image: hasura/graphql-engine:v2.32.1.cli-migrations-v3
     ports:
       - "${HGEPORT}:8080"
     restart: always
+    volumes:
+      - "./migrations:/hasura-migrations"
+      - "./metadata:/hasura-metadata"
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
       HASURA_GRAPHQL_DEV_MODE: "true"
