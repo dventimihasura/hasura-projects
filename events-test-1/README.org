@@ -48,24 +48,13 @@ endpoint.
 
 #+RESULTS:
 #+begin_example
-2023-08-29 19:19:24.596 UTC [48] LOG:  starting PostgreSQL 15.4 (Debian 15.4-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
-			       2023-08-29 19:19:24.648 UTC [48] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
-			       2023-08-29 19:19:24.727 UTC [52] LOG:  database system was shut down at 2023-08-29 19:19:20 UTC
-			       2023-08-29 19:19:24.731 UTC [48] LOG:  database system is ready to accept connections
-			       2023-08-29 19:19:24.811 UTC [48] LOG:  received fast shutdown request
-			       2023-08-29 19:19:24.817 UTC [48] LOG:  aborting any active transactions
-			       2023-08-29 19:19:24.817 UTC [48] LOG:  background worker "logical replication launcher" (PID 55) exited with exit code 1
-			       2023-08-29 19:19:24.817 UTC [50] LOG:  shutting down
-			       2023-08-29 19:19:24.822 UTC [50] LOG:  checkpoint starting: shutdown immediate
-			       2023-08-29 19:19:24.837 UTC [50] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.005 s, total=0.020 s; sync files=2, longest=0.003 s, average=0.003 s; distance=0 kB, estimate=0 kB
-			       2023-08-29 19:19:24.839 UTC [48] LOG:  database system is shut down
-			       2023-08-29 19:19:24.935 UTC [1] LOG:  starting PostgreSQL 15.4 (Debian 15.4-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
-			       2023-08-29 19:19:24.936 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
-			       2023-08-29 19:19:24.936 UTC [1] LOG:  listening on IPv6 address "::", port 5432
-			       2023-08-29 19:19:24.941 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
-			       2023-08-29 19:19:24.951 UTC [64] LOG:  database system was shut down at 2023-08-29 19:19:24 UTC
-			       2023-08-29 19:19:24.957 UTC [1] LOG:  database system is ready to accept connections
-			       2023-08-29 19:19:54.180 UTC [68] LOG:  statement: -- -*- sql-product: postgres; -*-
+2023-08-29 19:33:43.166 UTC [1] LOG:  starting PostgreSQL 15.4 (Debian 15.4-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+			       2023-08-29 19:33:43.166 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+			       2023-08-29 19:33:43.166 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+			       2023-08-29 19:33:43.171 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+			       2023-08-29 19:33:43.178 UTC [64] LOG:  database system was shut down at 2023-08-29 19:33:43 UTC
+			       2023-08-29 19:33:43.185 UTC [1] LOG:  database system is ready to accept connections
+			       2023-08-29 19:34:11.957 UTC [68] LOG:  statement: -- -*- sql-product: postgres; -*-
 			       	
 			       	CREATE EXTENSION IF NOT EXISTS pgcrypto;
 			       	
@@ -237,9 +226,181 @@ endpoint.
 			       	
 			       	create index on "order" (region);
 			       	
-			       2023-08-29 19:19:54.235 UTC [68] WARNING:  there is already a transaction in progress
-			       2023-08-29 19:19:55.914 UTC [68] WARNING:  there is no transaction in progress
-			       2023-08-29 19:24:25.051 UTC [62] LOG:  checkpoint starting: time
-			       2023-08-29 19:25:34.552 UTC [62] LOG:  checkpoint complete: wrote 695 buffers (4.2%); 1 WAL file(s) added, 0 removed, 0 recycled; write=69.426 s, sync=0.043 s, total=69.502 s; sync files=119, longest=0.015 s, average=0.001 s; distance=10526 kB, estimate=10526 kB
+			       2023-08-29 19:34:12.010 UTC [68] WARNING:  there is already a transaction in progress
+			       2023-08-29 19:34:13.747 UTC [68] WARNING:  there is no transaction in progress
+			       2023-08-29 19:37:51.122 UTC [78] LOG:  execute <unnamed>: CREATE SCHEMA hdb_catalog
+			       2023-08-29 19:37:51.125 UTC [78] LOG:  execute <unnamed>: CREATE EXTENSION IF NOT EXISTS pgcrypto SCHEMA public
+			       2023-08-29 19:37:51.125 UTC [78] LOG:  statement: /* We define our own uuid generator function that uses gen_random_uuid() underneath.
+			       	   Since the column default is not directly referencing gen_random_uuid(),
+			       	   it prevents the column default to be dropped when pgcrypto or public schema is dropped unwittingly.
+			       	
+			       	   See https://github.com/hasura/graphql-engine/issues/4217
+			       	
+			       	   There is another instance of this function, defined in `initialise.sql`. We
+			       	   need to define them in both places because the `gen_hasura_uuid` function is
+			       	   used as column defaults for various tables stored in both the metadata
+			       	   database and the event log table in user's (source) database. In the case
+			       	   where the metadata database is separate from the source database, we need to
+			       	   create these functions separately. Note that both of these definitions have
+			       	   to be the same.
+			       	 ,*/
+			       	CREATE OR REPLACE FUNCTION hdb_catalog.gen_hasura_uuid() RETURNS uuid AS
+			       	  -- We assume gen_random_uuid() is available in the search_path.
+			       	  -- This may not be true but we can't do much till https://github.com/hasura/graphql-engine/issues/3657
+			       	'select gen_random_uuid()' LANGUAGE SQL;
+			       	
+			       	CREATE TABLE hdb_catalog.hdb_source_catalog_version(
+			       	  version TEXT NOT NULL,
+			       	  upgraded_on TIMESTAMPTZ NOT NULL
+			       	);
+			       	
+			       	CREATE UNIQUE INDEX hdb_source_catalog_version_one_row
+			       	ON hdb_catalog.hdb_source_catalog_version((version IS NOT NULL));
+			       	
+			       	/* TODO: The columns `created_at` and `next_retry_at` does not contain timezone (TIMESTAMP type) while `locked` has a timezone
+			       	offset (TIMESTAMPTZ). The time repesented by TIMESTAMP is in the timezone of the Postgres server. If the
+			       	timezone of the PG server is changed, then the entries in the event_log table can be confusing since there is no
+			       	timezone offset to highlight the difference. A possible solution to it is to change the type of the two columns to
+			       	include the timezone offset and keep all the times in UTC. However, altering a column type is a time
+			       	taking process, hence not migrating the source to add a timezone offset */
+			       	CREATE TABLE hdb_catalog.event_log
+			       	(
+			       	  id TEXT DEFAULT hdb_catalog.gen_hasura_uuid() PRIMARY KEY,
+			       	  schema_name TEXT NOT NULL,
+			       	  table_name TEXT NOT NULL,
+			       	  trigger_name TEXT NOT NULL,
+			       	  payload JSONB NOT NULL,
+			       	  delivered BOOLEAN NOT NULL DEFAULT FALSE,
+			       	  error BOOLEAN NOT NULL DEFAULT FALSE,
+			       	  tries INTEGER NOT NULL DEFAULT 0,
+			       	  created_at TIMESTAMP DEFAULT NOW(),
+			       	  /* when locked IS NULL the event is unlocked and can be processed */
+			       	  locked TIMESTAMPTZ,
+			       	  next_retry_at TIMESTAMP,
+			       	  archived BOOLEAN NOT NULL DEFAULT FALSE
+			       	);
+			       	
+			       	/* This powers `archiveEvents` */
+			       	CREATE INDEX ON hdb_catalog.event_log (trigger_name);
+			       	/* This index powers `fetchEvents` */
+			       	CREATE INDEX event_log_fetch_events
+			       	  ON hdb_catalog.event_log (locked NULLS FIRST, next_retry_at NULLS FIRST, created_at)
+			       	  WHERE delivered = 'f'
+			       	    and error = 'f'
+			       	    and archived = 'f'
+			       	;
+			       	
+			       	
+			       	CREATE TABLE hdb_catalog.event_invocation_logs
+			       	(
+			       	  id TEXT DEFAULT hdb_catalog.gen_hasura_uuid() PRIMARY KEY,
+			       	  trigger_name TEXT,
+			       	  event_id TEXT,
+			       	  status INTEGER,
+			       	  request JSON,
+			       	  response JSON,
+			       	  created_at TIMESTAMP DEFAULT NOW()
+			       	);
+			       	
+			       	/* This index improves the performance of deletes by event_id, so that if somebody
+			       	tries to delete an event from the hdb_catalog.event_log along with the invocation log
+			       	it will be faster with an index compared to without an index. */
+			       	CREATE INDEX ON hdb_catalog.event_invocation_logs (event_id);
+			       	
+			       	CREATE OR REPLACE FUNCTION
+			       	  hdb_catalog.insert_event_log(schema_name text, table_name text, trigger_name text, op text, row_data json)
+			       	  RETURNS text AS $$
+			       	  DECLARE
+			       	    id text;
+			       	    payload json;
+			       	    session_variables json;
+			       	    server_version_num int;
+			       	    trace_context json;
+			       	  BEGIN
+			       	    id := gen_random_uuid();
+			       	    server_version_num := current_setting('server_version_num');
+			       	    IF server_version_num >= 90600 THEN
+			       	      session_variables := current_setting('hasura.user', 't');
+			       	      trace_context := current_setting('hasura.tracecontext', 't');
+			       	    ELSE
+			       	      BEGIN
+			       	        session_variables := current_setting('hasura.user');
+			       	      EXCEPTION WHEN OTHERS THEN
+			       	                  session_variables := NULL;
+			       	      END;
+			       	      BEGIN
+			       	        trace_context := current_setting('hasura.tracecontext');
+			       	      EXCEPTION WHEN OTHERS THEN
+			       	        trace_context := NULL;
+			       	      END;
+			       	    END IF;
+			       	    payload := json_build_object(
+			       	      'op', op,
+			       	      'data', row_data,
+			       	      'session_variables', session_variables,
+			       	      'trace_context', trace_context
+			       	    );
+			       	    INSERT INTO hdb_catalog.event_log
+			       	                (id, schema_name, table_name, trigger_name, payload)
+			       	    VALUES
+			       	    (id, schema_name, table_name, trigger_name, payload);
+			       	    RETURN id;
+			       	  END;
+			       	$$ LANGUAGE plpgsql;
+			       	
+			       	CREATE TABLE hdb_catalog.hdb_event_log_cleanups
+			       	(
+			       	  id TEXT DEFAULT hdb_catalog.gen_hasura_uuid() PRIMARY KEY,
+			       	  trigger_name TEXT NOT NULL,
+			       	  scheduled_at TIMESTAMP NOT NULL,
+			       	  deleted_event_logs INTEGER,
+			       	  deleted_event_invocation_logs INTEGER,
+			       	  status TEXT NOT NULL,
+			       	  CHECK (status IN ('scheduled', 'paused', 'completed', 'dead')),
+			       	
+			       	  UNIQUE (trigger_name, scheduled_at)
+			       	);
+			       	
+			       2023-08-29 19:37:51.191 UTC [78] LOG:  statement: CREATE OR REPLACE function hdb_catalog."notify_hasura_insert_order_INSERT"() RETURNS trigger
+			       	  LANGUAGE plpgsql
+			       	  AS $$
+			       	  DECLARE
+			       	    _old record;
+			       	    _new record;
+			       	    _data json;
+			       	  BEGIN
+			       	    IF TG_OP = 'UPDATE' THEN
+			       	      _old := row((SELECT  "e"  FROM  (SELECT  OLD."region" , OLD."account_id" , OLD."created_at" , OLD."id" , OLD."updated_at" , OLD."status"        ) AS "e"      ) );
+			       	      _new := row((SELECT  "e"  FROM  (SELECT  NEW."region" , NEW."account_id" , NEW."created_at" , NEW."id" , NEW."updated_at" , NEW."status"        ) AS "e"      ) );
+			       	    ELSE
+			       	    /* initialize _old and _new with dummy values for INSERT and UPDATE events*/
+			       	      _old := row((select 1));
+			       	      _new := row((select 1));
+			       	    END IF;
+			       	    _data := json_build_object(
+			       	      'old', NULL,
+			       	      'new', row_to_json((SELECT  "e"  FROM  (SELECT  NEW."region" , NEW."account_id" , NEW."created_at" , NEW."id" , NEW."updated_at" , NEW."status"        ) AS "e"      ) )
+			       	    );
+			       	    BEGIN
+			       	    /* NOTE: formerly we used TG_TABLE_NAME in place of tableName here. However in the case of
+			       	    partitioned tables this will give the name of the partitioned table and since we use the table name to
+			       	    get the event trigger configuration from the schema, this fails because the event trigger is only created
+			       	    on the original table.  */
+			       	      IF (TG_OP <> 'UPDATE') OR (_old <> _new) THEN
+			       	        PERFORM hdb_catalog.insert_event_log(CAST('public' AS text), CAST('order' AS text), CAST('insert_order' AS text), TG_OP, _data);
+			       	      END IF;
+			       	      EXCEPTION WHEN undefined_function THEN
+			       	        IF (TG_OP <> 'UPDATE') OR (_old *<> _new) THEN
+			       	          PERFORM hdb_catalog.insert_event_log(CAST('public' AS text), CAST('order' AS text), CAST('insert_order' AS text), TG_OP, _data);
+			       	        END IF;
+			       	    END;
+			       	
+			       	    RETURN NULL;
+			       	  END;
+			       	$$;
+			       	
+			       2023-08-29 19:37:51.193 UTC [78] LOG:  execute <unnamed>: 
+			       	         CREATE TRIGGER "notify_hasura_insert_order_INSERT" AFTER INSERT ON "public"."order" FOR EACH ROW EXECUTE PROCEDURE hdb_catalog."notify_hasura_insert_order_INSERT"()
+			       	      
 #+end_example
 
