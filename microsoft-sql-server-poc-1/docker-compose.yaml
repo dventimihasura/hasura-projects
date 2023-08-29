@@ -15,7 +15,7 @@ services:
       ACCEPT_EULA: y
       MSSQL_SA_PASSWORD: "password12345!"
   graphql-engine:
-    image: hasura/graphql-engine:v2.16.1
+    image: hasura/graphql-engine:v2.32.1
     ports:
       - "8080:8080"
     depends_on:
