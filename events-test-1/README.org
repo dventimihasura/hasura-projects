@@ -55,7 +55,7 @@ endpoint.
 
 ** Step 6:  Fetch the database logs and process with [[https://jqlang.github.io/jq/][jq]].
 
-#+begin_src bash :results output
+#+begin_src bash :results output :exports both
   curl -s http://localhost:8081/api/rest/log_file | jq -r '.v_log_file[].string_agg'
 #+end_src
 
