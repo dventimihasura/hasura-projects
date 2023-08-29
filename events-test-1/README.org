@@ -1,0 +1,245 @@
+* What
+
+This Proof-Of-Concept (POC) illustrates using [[https://github.com/aws/postgresql-logfdw][postgres-logfdw]] to fetch
+PostgreSQL log files as database tables and views, track them in
+Hasura, and make them available via REST endpoints.
+
+* Why
+
+1. to demonstrate ~postgres-logfdw~
+2. to get the DDL Hasura uses to support event triggers
+
+* How
+
+This project uses a [[file:Dockerfile][Dockerfile]] file to build a custom PostgreSQL Docker
+image with the ~postgres-logfdw~ extension installed.  It also uses a
+[[file:docker-compose.yaml][docker-compose.yaml]] file to launch servies for ~graphql-engine~, for
+~metadata~, and for ~postgres~.  The ~postgres~ database service has
+the ~postgres-logfdw~ extension installed.  The Hasura migrations then
+set up this extension to expose the database log file as a table, to
+track that table, to create a convenient database view for it, to
+track that view, and then to expose a useful GraphQL query as a REST
+endpoint. 
+
+* Steps
+** Step 1:  Clone the [[https://github.com/dventimihasura/hasura-projects][hasura-projects]] GitHub repository.
+
+#+begin_src bash
+  git clone https://github.com/dventimihasura/hasura-projects.git
+#+end_src
+
+** Step 2:  Change to the ~events-test-1~ project sub-directory.
+
+#+begin_src bash
+  cd events-test-1
+#+end_src
+
+** Step 3:  Use [[https://docs.docker.com/compose/][Docker Compose]] to launch the services.
+
+#+begin_src bash
+  docker compose up -d # Or docker-compose up -d
+#+end_src
+
+** Step 4:  Fetch the database logs and process with [[https://jqlang.github.io/jq/][jq]].
+
+#+begin_src bash :results output
+  curl -s http://localhost:8081/api/rest/log_file | jq -r '.v_log_file[].string_agg'
+#+end_src
+
+#+RESULTS:
+#+begin_example
+2023-08-29 19:19:24.596 UTC [48] LOG:  starting PostgreSQL 15.4 (Debian 15.4-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+			       2023-08-29 19:19:24.648 UTC [48] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+			       2023-08-29 19:19:24.727 UTC [52] LOG:  database system was shut down at 2023-08-29 19:19:20 UTC
+			       2023-08-29 19:19:24.731 UTC [48] LOG:  database system is ready to accept connections
+			       2023-08-29 19:19:24.811 UTC [48] LOG:  received fast shutdown request
+			       2023-08-29 19:19:24.817 UTC [48] LOG:  aborting any active transactions
+			       2023-08-29 19:19:24.817 UTC [48] LOG:  background worker "logical replication launcher" (PID 55) exited with exit code 1
+			       2023-08-29 19:19:24.817 UTC [50] LOG:  shutting down
+			       2023-08-29 19:19:24.822 UTC [50] LOG:  checkpoint starting: shutdown immediate
+			       2023-08-29 19:19:24.837 UTC [50] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.005 s, total=0.020 s; sync files=2, longest=0.003 s, average=0.003 s; distance=0 kB, estimate=0 kB
+			       2023-08-29 19:19:24.839 UTC [48] LOG:  database system is shut down
+			       2023-08-29 19:19:24.935 UTC [1] LOG:  starting PostgreSQL 15.4 (Debian 15.4-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+			       2023-08-29 19:19:24.936 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+			       2023-08-29 19:19:24.936 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+			       2023-08-29 19:19:24.941 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+			       2023-08-29 19:19:24.951 UTC [64] LOG:  database system was shut down at 2023-08-29 19:19:24 UTC
+			       2023-08-29 19:19:24.957 UTC [1] LOG:  database system is ready to accept connections
+			       2023-08-29 19:19:54.180 UTC [68] LOG:  statement: -- -*- sql-product: postgres; -*-
+			       	
+			       	CREATE EXTENSION IF NOT EXISTS pgcrypto;
+			       	
+			       	CREATE EXTENSION IF NOT EXISTS log_fdw;
+			       	
+			       	CREATE SERVER IF NOT EXISTS log_fdw_server FOREIGN DATA WRAPPER log_fdw;
+			       	
+			       	create or replace function create_foreign_table_for_log_file (fdw_server text) returns void
+			       	  language plpgsql
+			       	  volatile
+			       	  not leakproof
+			       	  parallel unsafe
+			       	as $plpgsql$
+			       	  declare
+			       	    log_files record;
+			       	begin
+			       	  for log_files in select file_name from list_postgres_log_files() limit 1 loop
+			       	    execute 'select create_foreign_table_for_log_file($1, $2, $3)' using 'log_file', fdw_server, log_files.file_name;
+			       	  end loop;
+			       	end;
+			       	$plpgsql$;
+			       	
+			       	select create_foreign_table_for_log_file('log_fdw_server');
+			       	
+			       	create or replace view v_log_file as
+			       	  select string_agg(log_entry, '
+			       				       ') from log_file;
+			       	
+			       	-- account table
+			       	
+			       	CREATE TABLE "public"."account" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "name" text NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), PRIMARY KEY ("id") );
+			       	CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
+			       	  RETURNS TRIGGER AS $$
+			       	  DECLARE
+			       	    _new record;
+			       	  BEGIN
+			       	    _new := NEW;
+			       	    _new."updated_at" = NOW();
+			       	    RETURN _new;
+			       	  END;
+			       	$$ LANGUAGE plpgsql;
+			       	CREATE TRIGGER "set_public_account_updated_at"
+			       	  BEFORE UPDATE ON "public"."account"
+			       	  FOR EACH ROW
+			       	  EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
+			       	COMMENT ON TRIGGER "set_public_account_updated_at" ON "public"."account" 
+			       	  IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+			       	
+			       	-- product table
+			       	
+			       	CREATE TABLE "public"."product" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "name" text NOT NULL, "price" integer NOT NULL, PRIMARY KEY ("id") );
+			       	CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
+			       	  RETURNS TRIGGER AS $$
+			       	  DECLARE
+			       	    _new record;
+			       	  BEGIN
+			       	    _new := NEW;
+			       	    _new."updated_at" = NOW();
+			       	    RETURN _new;
+			       	  END;
+			       	$$ LANGUAGE plpgsql;
+			       	CREATE TRIGGER "set_public_product_updated_at"
+			       	  BEFORE UPDATE ON "public"."product"
+			       	  FOR EACH ROW
+			       	  EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
+			       	COMMENT ON TRIGGER "set_public_product_updated_at" ON "public"."product" 
+			       	  IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+			       	
+			       	-- order table
+			       	
+			       	CREATE TABLE "public"."order" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "account_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("account_id") REFERENCES "public"."account"("id") ON UPDATE restrict ON DELETE restrict);
+			       	CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
+			       	  RETURNS TRIGGER AS $$
+			       	  DECLARE
+			       	    _new record;
+			       	  BEGIN
+			       	    _new := NEW;
+			       	    _new."updated_at" = NOW();
+			       	    RETURN _new;
+			       	  END;
+			       	$$ LANGUAGE plpgsql;
+			       	CREATE TRIGGER "set_public_order_updated_at"
+			       	  BEFORE UPDATE ON "public"."order"
+			       	  FOR EACH ROW
+			       	  EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
+			       	COMMENT ON TRIGGER "set_public_order_updated_at" ON "public"."order" 
+			       	  IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+			       	
+			       	create index on "order" (account_id);
+			       	
+			       	-- order_detail table
+			       	
+			       	CREATE TABLE "public"."order_detail" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), "units" integer NOT NULL, "order_id" uuid NOT NULL, "product_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("order_id") REFERENCES "public"."order"("id") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("product_id") REFERENCES "public"."product"("id") ON UPDATE restrict ON DELETE restrict);
+			       	CREATE OR REPLACE FUNCTION "public"."set_current_timestamp_updated_at"()
+			       	  RETURNS TRIGGER AS $$
+			       	  DECLARE
+			       	    _new record;
+			       	  BEGIN
+			       	    _new := NEW;
+			       	    _new."updated_at" = NOW();
+			       	    RETURN _new;
+			       	  END;
+			       	$$ LANGUAGE plpgsql;
+			       	CREATE TRIGGER "set_public_order_detail_updated_at"
+			       	  BEFORE UPDATE ON "public"."order_detail"
+			       	  FOR EACH ROW
+			       	  EXECUTE PROCEDURE "public"."set_current_timestamp_updated_at"();
+			       	COMMENT ON TRIGGER "set_public_order_detail_updated_at" ON "public"."order_detail" 
+			       	  IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+			       	
+			       	create index on order_detail (order_id);
+			       	
+			       	create index on order_detail (product_id);
+			       	
+			       	-- product_search function
+			       	
+			       	create or replace function product_search(search text)
+			       	  returns setof product as $$
+			       	  select product.*
+			       	  from product
+			       	  where
+			       	  name ilike ('%' || search || '%')
+			       	$$ language sql stable;
+			       	
+			       	-- product_search_slow function
+			       	
+			       	create or replace function product_search_slow(search text, wait real)
+			       	  returns setof product as $$
+			       	  select product.*
+			       	  from product, pg_sleep(wait)
+			       	  where
+			       	  name ilike ('%' || search || '%')
+			       	$$ language sql stable;
+			       	
+			       	-- non_negative_price constraint
+			       	
+			       	alter table "public"."product" add constraint "non_negative_price" check (price > 0);
+			       	
+			       	-- index account(name)
+			       	
+			       	create index if not exists account_name_idx on account (name);
+			       	
+			       	-- status enum
+			       	
+			       	CREATE TYPE status AS ENUM ('new', 'processing', 'fulfilled');
+			       	
+			       	-- add status to order table
+			       	
+			       	alter table "public"."order" add column "status" status null;
+			       	
+			       	create index on "order" (status);
+			       	
+			       	-- region dictionary table
+			       	
+			       	create table if not exists region (
+			       	  value text primary key,
+			       	  description text);
+			       	
+			       	-- add region to order
+			       	
+			       	alter table "public"."order" add column "region" Text
+			       	 null;
+			       	
+			       	alter table "public"."order"
+			       	  add constraint "order_region_fkey"
+			       	  foreign key ("region")
+			       	  references "public"."region"
+			       	  ("value") on update restrict on delete restrict;
+			       	
+			       	create index on "order" (region);
+			       	
+			       2023-08-29 19:19:54.235 UTC [68] WARNING:  there is already a transaction in progress
+			       2023-08-29 19:19:55.914 UTC [68] WARNING:  there is no transaction in progress
+			       2023-08-29 19:24:25.051 UTC [62] LOG:  checkpoint starting: time
+			       2023-08-29 19:25:34.552 UTC [62] LOG:  checkpoint complete: wrote 695 buffers (4.2%); 1 WAL file(s) added, 0 removed, 0 recycled; write=69.426 s, sync=0.043 s, total=69.502 s; sync files=119, longest=0.015 s, average=0.001 s; distance=10526 kB, estimate=10526 kB
+#+end_example
+
