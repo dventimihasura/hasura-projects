@@ -1,0 +1,3 @@
+table:
+  name: v_log_file
+  schema: public

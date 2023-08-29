@@ -1,1 +1,9 @@
-[]
+- comment: ""
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: log_file
+  methods:
+    - GET
+  name: log_file
+  url: log_file

@@ -2,6 +2,31 @@
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+CREATE EXTENSION IF NOT EXISTS log_fdw;
+
+CREATE SERVER IF NOT EXISTS log_fdw_server FOREIGN DATA WRAPPER log_fdw;
+
+create or replace function create_foreign_table_for_log_file (fdw_server text) returns void
+  language plpgsql
+  volatile
+  not leakproof
+  parallel unsafe
+as $plpgsql$
+  declare
+    log_files record;
+begin
+  for log_files in select file_name from list_postgres_log_files() limit 1 loop
+    execute 'select create_foreign_table_for_log_file($1, $2, $3)' using 'log_file', fdw_server, log_files.file_name;
+  end loop;
+end;
+$plpgsql$;
+
+select create_foreign_table_for_log_file('log_fdw_server');
+
+create or replace view v_log_file as
+  select string_agg(log_entry, '
+			       ') from log_file;
+
 -- account table
 
 CREATE TABLE "public"."account" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "name" text NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), PRIMARY KEY ("id") );

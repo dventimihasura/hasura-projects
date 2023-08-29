@@ -1,1 +1,10 @@
-[]
+- name: allowed-queries
+  definition:
+    queries:
+      - name: log_file
+        query: |
+          query MyQuery {
+            v_log_file {
+              string_agg
+            }
+          }
