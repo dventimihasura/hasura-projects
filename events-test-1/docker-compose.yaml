@@ -3,9 +3,14 @@ services:
   postgres:
     image: postgres:15
     ports:
-      - "${PGPORT}:8080"
+      - "${PGPORT}:5432"
     restart: always
     command: postgres -c "log_statement=ddl"
+    environment:
+      POSTGRES_PASSWORD: postgres
+  metadata:
+    image: postgres:15
+    restart: always
     environment:
       POSTGRES_PASSWORD: postgres
   graphql-engine:
@@ -13,11 +18,12 @@ services:
     ports:
       - "${HGEPORT}:8080"
     restart: always
-    volumes:
-      - "./migrations:/hasura-migrations"
-      - "./metadata:/hasura-metadata"
+    # volumes:
+    #   - "./migrations:/hasura-migrations"
+    #   - "./metadata:/hasura-metadata"
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata:5432/postgres
+      PG_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
