@@ -34,13 +34,26 @@ endpoint.
   cd events-test-1
 #+end_src
 
-** Step 3:  Use [[https://docs.docker.com/compose/][Docker Compose]] to launch the services.
+** Step 3:  Create a ~.env~ file.
+
+#+begin_src bash
+  cat <<EOF > .env
+  HGEPORT=8081
+  PGPORT=5433
+  EOF
+#+end_src
+
+#+RESULTS:
+
+** Step 4:  Edit the ~.env~ file specific to your environment.
+
+** Step 5:  Use [[https://docs.docker.com/compose/][Docker Compose]] to launch the services.
 
 #+begin_src bash
   docker compose up -d # Or docker-compose up -d
 #+end_src
 
-** Step 4:  Fetch the database logs and process with [[https://jqlang.github.io/jq/][jq]].
+** Step 6:  Fetch the database logs and process with [[https://jqlang.github.io/jq/][jq]].
 
 #+begin_src bash :results output
   curl -s http://localhost:8081/api/rest/log_file | jq -r '.v_log_file[].string_agg'
