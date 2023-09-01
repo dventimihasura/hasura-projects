@@ -1,0 +1,13 @@
+table:
+  name: product_private
+  schema: public
+array_relationships:
+  - name: order_details
+    using:
+      manual_configuration:
+        column_mapping:
+          id: product_id
+        insertion_order: null
+        remote_table:
+          name: order_detail
+          schema: public
