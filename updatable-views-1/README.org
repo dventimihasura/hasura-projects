@@ -77,8 +77,18 @@ or
   docker-compose up
 #+end_src
 
-** Step 6:  Open a browser to Hasura console.
+** Step 6:  Open a browser to Hasura console and try out mutations against the ~product_private~ field.
 
 [[http://localhost:HGEPORT]]
+
+#+begin_src graphql
+mutation MyMutation {
+  insert_product_private_one(object: {name: "Fruit Loops", price: 206}) {
+    id
+    name
+    price
+  }
+}
+#+end_src
 
 #  LocalWords:  PGPORT HGEPORT
