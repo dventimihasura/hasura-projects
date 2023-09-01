@@ -1,0 +1,84 @@
+* What
+
+This project demonstrates using rules and triggers to make updatable
+views in PostgreSQL.
+
+* Why
+
+PostgreSQL views are automatically updatable only under certain
+conditions, which among other things prohibits the use of joins.
+Views that are defined with joins are not automatically updatable.
+However, it is possible to make views updatable in PostgreSQL using
+rules or triggers.
+
+* How
+
+This project sets up a simple e-commerce data model in the
+[[file:initdb.d-postgres/01_init_model.sql][01_init_model.sql]] file and adds sample data in the [[file:initdb.d-postgres/02_init_data.sql][02_init_data.sql]]
+file.  It then modifies that model in the [[file:initdb.d-postgres/03_alter_model.sql][03_alter_model.sql]] file.
+The modifications are these.
+
+1. Split the ~product~ table out into ~product~, ~product_name~, and
+   ~product_price~ tables.
+2. Create a ~product_private~ view that joins these three tables back
+   together to restore the columns of the original table.  Note that
+   the ~_private~ suffix is an irrelevant detail.  It could be
+   anything.
+3. Create rules and triggers on the ~product_private~ view to handle
+   the ~insert~, ~update~, and ~delete~ cases.
+
+This project also has an instance of Hasura GraphQL Engine.  It also
+has metadata to track /most/ of the tables, but for demonstration
+purposes it avoids tracking the ~product~, ~product_price~, and
+~product_name~ tables.  Rather, it tracks the ~product_view~ view as if
+it were a table, and in so doing it is fully-updatable.  GraphQL
+mutations do work against this view.
+
+Note that the relationships between the ~order_detail~ and
+~product_private~ table and view do have to be created manually in
+Hasura, as views cannot participate in foreign key constraints and so
+consequently Hasura Console cannot recommend these relationships.
+
+* Steps
+** Step 1:  Clone this GitHub repository [[https://github.com/dventimihasura/hasura-projects][hasura-projects]].
+
+#+begin_src bash
+  git clone https://github.com/dventimihasura/hasura-projects.git
+#+end_src
+
+** Step 2:  Change to the [[file:README.org][updatable-views-1]] project sub-directory.
+
+#+begin_src bash
+  cd updatable-views-1
+#+end_src
+
+** Step 3:  Create a .env file.
+
+#+begin_src bash
+  cat <<EOF > .env
+  PGPORT=<an available port for PostgreSQL>
+  HGEPORT=<an available port for Hasura>
+  EOF
+#+end_src
+
+** Step 4:  Edit the .env file according to your needs.
+
+Choose appropriate ports for PostgreSQL and Hasura.
+
+** Step 5:  Use Docker Compose to launch the services.
+
+#+begin_src bash
+  docker compose up
+#+end_src
+
+or
+
+#+begin_src bash
+  docker-compose up
+#+end_src
+
+** Step 6:  Open a browser to Hasura console.
+
+[[http://localhost:HGEPORT]]
+
+#  LocalWords:  PGPORT HGEPORT
