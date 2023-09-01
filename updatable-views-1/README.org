@@ -1,7 +1,7 @@
 * What
 
-This project demonstrates using rules and triggers to make updatable
-views in PostgreSQL.
+This project demonstrates using [[https://www.postgresql.org/docs/current/sql-createrule.html][rules]] and [[https://www.postgresql.org/docs/current/sql-createtrigger.html][triggers]] to make updatable
+[[https://www.postgresql.org/docs/current/sql-createview.html][views]] in PostgreSQL.
 
 * Why
 
