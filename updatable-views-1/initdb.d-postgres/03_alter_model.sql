@@ -107,3 +107,27 @@ $plpgsql$;
 create or replace trigger insert_product_private instead of insert on product_private
   for each row
   execute function insert_product_private();
+
+-- This is pretty much unrelated, but we might as well fix up the
+-- product_search and product_search_slow functions to return not
+-- product, but rather product_private instead.
+
+drop function product_search;
+
+create or replace function product_search(search text)
+  returns setof product_private as $$
+  select product_private.*
+  from product_private
+  where
+  name ilike ('%' || search || '%')
+$$ language sql stable;
+
+drop function product_search_slow;
+
+create or replace function product_search_slow(search text, wait real)
+  returns setof product_private as $$
+  select product_private.*
+  from product_private, pg_sleep(wait)
+  where
+  name ilike ('%' || search || '%')
+$$ language sql stable;
