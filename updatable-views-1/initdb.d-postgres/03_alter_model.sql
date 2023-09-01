@@ -1,10 +1,11 @@
 -- -*- sql-product: postgres; -*-
 
-create table account_address (
-  id uuid primary key default gen_random_uuid(),
-  account_id uuid not null references account (id),
-  physical_address text,
-  email_address text);
+-- Split the product table out into separate tables for name and
+-- price, product_name and product_price.  The id uuid primary key is
+-- not null of course (by virtue of being a primary key) but we don't
+-- give it a default value because we want it to be identical to the
+-- related product.id value.  After we're done, the product table will
+-- only have "housekeeping" fields id, created_at, and updated_at.
 
 create table product_name (
   id uuid primary key,
@@ -20,6 +21,11 @@ insert into product_price select id, price from product;
 
 alter table product drop column name, drop column price;
 
+-- Now create a view product_private that joins these three tables
+-- back together.  Note that at this point, the product table doesn't
+-- bring much since the name and price are in other tables.  It does
+-- bring the created_at and update_at fields, though.
+
 create or replace view product_private as
   select
     product.id,
@@ -32,6 +38,20 @@ create or replace view product_private as
       join product_name on product_name.id = product.id
       join product_price on product_price.id = product.id;
 
+-- We can make a complicated view updatable that isn't automatically
+-- updatable by using either 'do instead' rules or triggers.  Rules
+-- are simpler and easier to use, though they probably can't be used
+-- in cases where you need to capture a value, like in an insert on a
+-- table that has columns with default values.  Note that you can have
+-- multiple statements in the rule, provided you enclose them in
+-- parentheses.  Note also the update on the product table.  That
+-- occurs for two reasons.  First, it's possible (if unlikely and
+-- arguably a bad practice) that the id, created_at, or updated_at
+-- fields could be manually updated.  We have to account for that.
+-- Second, even when they're not being updated (as they shouldn't be),
+-- we still need to do a trivial update on the product table in order
+-- for the trigger on the updated_at field to fire.
+
 create or replace rule update_product_private as on update
   to product_private
   do instead (
@@ -40,22 +60,33 @@ create or replace rule update_product_private as on update
     update product_price set id = new.id, price = new.price where id = old.id;
   );
 
+-- It should be possible to use a rule for the delete statement as
+-- well.  However, I encountered unpredictable behavior that I cannot
+-- explain at the moment, so I have to avoid the use of a rule in
+-- favor of a trigger.
+
 create or replace function delete_product_private ()
   returns trigger
   language plpgsql
 as
-  $plpgsql$
+  $plpgsql$			--define code block delimiters using dollar signs ($)
 begin
   delete from product_name where id = old.id;
   delete from product_price where id = old.id;
   delete from product where id = old.id;
-  return new;
+  return new;			--triggers must return old or new
 end;
-$plpgsql$;
+$plpgsql$;			--end code block
 
 create or replace trigger delete_product_private instead of delete on product_private
   for each row
   execute function delete_product_private();
+
+-- For the insert statement, a trigger function probably is necessary
+-- in order to capture the generated value of the primary key for the
+-- product table.  Trigger functions must be functions (they cannot be
+-- procedures) and they must be written in a procedural language like
+-- PL/pgSQL.
 
 create or replace function insert_product_private ()
   returns trigger
@@ -65,10 +96,10 @@ as
   declare
     product_id uuid;
 begin
-  insert into product default values returning id into product_id;
+  insert into product default values returning id into product_id; --we have no actual values to insert into product so just insert the default values so that we can get a generated id and capture it into the product_id variable
   insert into product_name values (product_id, new.name);
   insert into product_price values (product_id, new.price);
-  new.id = product_id;
+  new.id = product_id;		--set the captured product_id back onto the new record so that we return the generated primary key from the function
   return new;
 end;
 $plpgsql$;
