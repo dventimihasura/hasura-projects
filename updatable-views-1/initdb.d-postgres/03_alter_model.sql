@@ -68,6 +68,7 @@ begin
   insert into product default values returning id into product_id;
   insert into product_name values (product_id, new.name);
   insert into product_price values (product_id, new.price);
+  new.id = product_id;
   return new;
 end;
 $plpgsql$;
