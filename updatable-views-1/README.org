@@ -61,6 +61,8 @@ consequently Hasura Console cannot recommend these relationships.
   EOF
 #+end_src
 
+#+RESULTS:
+
 ** Step 4:  Edit the .env file according to your needs.
 
 Choose appropriate ports for PostgreSQL and Hasura.
