@@ -52,13 +52,26 @@ create or replace view product_private as
 -- we still need to do a trivial update on the product table in order
 -- for the trigger on the updated_at field to fire.
 
-create or replace rule update_product_private as on update
-  to product_private
-  do instead (
-    update product set id = new.id, created_at = new.created_at, updated_at = new.updated_at where id = old.id;
-    update product_name set id = new.id, name = new.name where id = old.id;
-    update product_price set id = new.id, price = new.price where id = old.id;
-  );
+-- NOTE:  The update rule below is now commented out because we have
+-- to abandon the rule approach for now.  The reason is that there are
+-- too many restrictions on rules, which interfere with the way that
+-- Hasura writes statements.  First, Hasura writes update statements
+-- with returning clauses.  This isn't a severe restriction because
+-- PostgreSQL DO INSTEAD update rules suppor returning clauses, though
+-- it does make the rule more complicated. More severe, however, is
+-- that multi-statement DO INSTEAD update rules cannot be used in
+-- update statements that use a Common Table Expression (CTE), but
+-- that's precisely how Hasura writes its update statements.
+-- Consequently, we have to switch from using a rule to using a
+-- trigger.  See below.
+
+-- create or replace rule update_product_private as on update
+--   to product_private
+--   do instead (
+--     update product set id = new.id, created_at = new.created_at, updated_at = new.updated_at where id = old.id;
+--     update product_name set id = new.id, name = new.name where id = old.id;
+--     update product_price set id = new.id, price = new.price where id = old.id;
+--   );
 
 -- It should be possible to use a rule for the delete statement as
 -- well.  However, I encountered unpredictable behavior that I cannot
@@ -107,6 +120,26 @@ $plpgsql$;
 create or replace trigger insert_product_private instead of insert on product_private
   for each row
   execute function insert_product_private();
+
+-- Now write a DO INSTEAD update trigger function just as we did for
+-- the insert case
+
+create or replace function update_product_private ()
+  returns trigger
+  language plpgsql
+as
+  $plpgsql$
+begin
+  update product set id = new.id, created_at = new.created_at, updated_at = new.updated_at where id = old.id;
+  update product_name set id = new.id, name = new.name where id = old.id;
+  update product_price set id = new.id, price = new.price where id = old.id;
+  return new;
+end;
+$plpgsql$;
+
+create or replace trigger update_product_private instead of update on product_private
+  for each row
+  execute function update_product_private();
 
 -- This is pretty much unrelated, but we might as well fix up the
 -- product_search and product_search_slow functions to return not
