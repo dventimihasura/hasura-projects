@@ -106,13 +106,10 @@ create or replace function insert_product_private ()
   language plpgsql
 as
   $plpgsql$
-  declare
-    product_id uuid;
 begin
-  insert into product default values returning id into product_id; --we have no actual values to insert into product so just insert the default values so that we can get a generated id and capture it into the product_id variable
-  insert into product_name values (product_id, new.name);
-  insert into product_price values (product_id, new.price);
-  new.id = product_id;		--set the captured product_id back onto the new record so that we return the generated primary key from the function
+  insert into product default values returning id into new.id;
+  insert into product_name values (new.id, new.name);
+  insert into product_price values (new.id, new.price);
   return new;
 end;
 $plpgsql$;

@@ -28,10 +28,10 @@ git clone https://github.com/dventimihasura/hasura-projects.git
 
 ## Step 2 ##
 
-Change to the `snowflake-test-1` project sub-directory.
+Change to the `snowflake-test-2` project sub-directory.
 
 ```bash
-cd snowflake-test-1
+cd snowflake-test-2
 ```
 
 ## Step 3 ##
