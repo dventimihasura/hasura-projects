@@ -5,3 +5,30 @@
     timeout: null
     value: {}
   tables: "!include snowflake/tables/tables.yaml"
+- name: snowflake2
+  kind: snowflake
+  configuration:
+    template: '{"fully_qualify_all_names": false, "jdbc_url": "{{getEnvironmentVariable("SNOWFLAKE_URL")}}"}'
+    timeout: null
+    value: {}
+  tables: "!include snowflake2/tables/tables.yaml"
+- name: snowflake3
+  kind: snowflake
+  configuration:
+    template: |
+      {"jdbc_url": "{{getEnvironmentVariable("SNOWFLAKE_URL")}}"}
+    timeout: null
+    value:
+      fully_qualify_all_names: false
+      jdbc_url: foo
+  tables: "!include snowflake3/tables/tables.yaml"
+- name: snowflake4
+  kind: snowflake
+  configuration:
+    template: |
+      {"jdbc_url": "{{getEnvironmentVariable("SNOWFLAKE_URL")}}"}
+    timeout: null
+    value:
+      fully_qualify_all_names: false
+      jdbc_url: foo
+  tables: "!include snowflake4/tables/tables.yaml"
