@@ -26,7 +26,6 @@ select_permissions:
         - created_at
         - email
         - id
-        - name
         - updated_at
       filter:
         id:
