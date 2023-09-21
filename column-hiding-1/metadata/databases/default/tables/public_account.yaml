@@ -1,6 +1,16 @@
 table:
   name: account
   schema: public
+object_relationships:
+  - name: ext
+    using:
+      manual_configuration:
+        column_mapping:
+          id: id
+        insertion_order: null
+        remote_table:
+          name: account_limited
+          schema: public
 array_relationships:
   - name: orders
     using:
