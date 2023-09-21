@@ -1,0 +1,100 @@
+@startuml
+!pragma useVerticalIf on
+
+start
+
+if ([[https://hasura.io/docs/latest/deployment/deployment-guides/docker/#docker-secure Secured with Admin Secret?]]) then (yes)
+  if (X-HASURA-ADMIN-SECRET header?) then (yes)
+    partition #plum "PRIVILEGED MODE" {
+      if (X-HASURA-ROLE header?) then (yes)
+	:x-hasura-role = X-HASURA-ROLE;
+	stop
+	else (no)
+	:x-hasura-role = admin;
+	stop
+	endif
+	}
+      else (no)
+	if (JWT Mode?) then (yes)
+	partition #cornFlowerBlue "JWT MODE" {
+	  if (JWT present\n with custom claims? \n x-hasura-default-role \n x-hasura-allowed-roles) then (yes)
+	  if (X-HASURA-ROLE header?) then (yes)
+	  if (X-HASURA-ROLE in X-HASURA-ALLOWED-ROLES?) then (yes)
+	  :x-hasura-role = X-HASURA-ROLE;
+	  stop
+	  else (no)
+	  end
+	  endif
+	  else (no)
+	  if (x-hasura-default-role in x-hasura-allowed-roles?) then (yes)
+  	  :x-hasura-role = x-hasura-default-role;
+	  stop
+	  else (no)
+	  end
+	  endif
+	  endif
+	  else (no)
+	  if (HASURA_GRAPHQL_UNAUTHORIZED_ROLE?) then (yes)
+	  partition #lightGreen "UNAUTHENTICATED MODE" {
+	    :x-hasura-role = HASURA_GRAPHQL_UNAUTHORIZED_ROLE;
+	    note
+	    See Unauthenticated request
+	    [[https://hasura.io/docs/latest/auth/authentication/unauthenticated-access/#unauthenticated-request-definitions definitions]]
+	    end note
+	    stop
+	    }
+	    else (no)
+	    end
+	    endif
+	    endif
+	    }
+	    else (no)
+	    if (Webhook Mode?) then (yes)
+	    partition #darkSalmon "WEBHOOK MODE" {
+	      if (HTTP/1.1 200 OK) then (yes)
+	      if (X-HASURA-ROLE in response?) then (yes)
+	      if (HASURA_GRAPHQL_UNAUTHORIZED_ROLE?) then (yes)
+	      partition #lightGreen "UNAUTHENTICATED MODE" {
+		if (X-HASURA-ROLE = anonymous?) then (yes)
+		:x-hasura-role = HASURA_GRAPHQL_UNAUTHORIZED_ROLE;
+		note
+		See Unauthenticated request
+		[[https://hasura.io/docs/latest/auth/authentication/unauthenticated-access/#unauthenticated-request-definitions definitions]]
+		end note
+		stop
+		else (no)
+		end
+		endif
+		}
+		else (no)
+		:x-hasura-role = X-HASURA-ROLE;
+		stop
+		endif
+		else (no)
+		end
+		endif
+		else (no)
+		end
+		endif
+		}
+		else (no)
+		end
+		endif
+		endif
+		endif
+		else (no)
+		partition #plum "PRIVILEGED MODE" {
+		  note
+		  Only Hasura Community Edition (CE)
+		  can be run without an admin secret.
+		  end note
+		  if (X-HASURA-ROLE header?) then (yes)
+		  :x-hasura-role = X-HASURA-ROLE;
+		  stop
+		  else (no)
+		  :x-hasura-role = admin;
+		  stop
+		  endif
+		  }
+		  endif
+@enduml
