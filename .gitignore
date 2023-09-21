@@ -35,3 +35,6 @@ hasura-mmlib-2/archive.zip
 yb-test-2/__pycache__/locustfile.cpython-311.pyc
 __pycache__
 *.pyc
+supergraph-challenge/docker-compose-api.yaml
+supergraph-challenge/docker-compose-db.yaml
+supergraph-challenge/db/
