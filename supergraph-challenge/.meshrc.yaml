@@ -1,0 +1,56 @@
+sources:
+  - name: MyGraphQLApi
+    handler:
+      graphql:
+        endpoint: http://postgraphile:5000/graphql
+transforms:
+  - rename:
+      renames:
+        - from:
+            type: Query
+            field: allThreadsList
+          to:
+            type: Query
+            field: threads
+        - from:
+            type: Query
+            field: allPostsList
+          to:
+            type: Query
+            field: posts
+        - from:
+            type: Thread
+            field: postsByThreadIdList
+          to:
+            type: Thread
+            field: posts
+        - from:
+            type: Post
+            field: threadByThreadId
+          to:
+            type: Query
+            field: thread
+        - from:
+            type: Query
+            field: threads
+            argument: first
+          to:
+            type: Query
+            field: threads
+            argument: limit
+        - from:
+            type: Query
+            field: posts
+            argument: first
+          to:
+            type: Query
+            field: posts
+            argument: limit
+        - from:
+            type: Thread
+            field: posts
+            argument: first
+          to:
+            type: Thread
+            field: posts
+            argument: limit
