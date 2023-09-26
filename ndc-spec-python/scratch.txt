@@ -1,22 +1,24 @@
 # -*- mode: restclient; -*-
 
-#
-GET http://localhost:5000/
+:PORT = 8080
 
 #
-GET http://localhost:5000/capabilities
+GET http://localhost::PORT/
 
 #
-GET http://localhost:5000/healthz
+GET http://localhost::PORT/capabilities
 
 #
-GET http://localhost:5000/metrics
+GET http://localhost::PORT/healthz
 
 #
-GET http://localhost:5000/schema
+GET http://localhost::PORT/metrics
 
 #
-POST http://localhost:5000/query
+GET http://localhost::PORT/schema
 
 #
-POST http://localhost:5000/explain
+POST http://localhost::PORT/query
+
+#
+POST http://localhost::PORT/explain
