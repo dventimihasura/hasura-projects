@@ -1,0 +1,22 @@
+# -*- mode: restclient; -*-
+
+#
+GET http://localhost:5000/
+
+#
+GET http://localhost:5000/capabilities
+
+#
+GET http://localhost:5000/healthz
+
+#
+GET http://localhost:5000/metrics
+
+#
+GET http://localhost:5000/schema
+
+#
+POST http://localhost:5000/query
+
+#
+POST http://localhost:5000/explain
