@@ -1,0 +1,35 @@
+table:
+  name: account
+  schema: public
+object_relationships:
+  - name: ext
+    using:
+      manual_configuration:
+        column_mapping:
+          id: id
+        insertion_order: null
+        remote_table:
+          name: account_limited
+          schema: public
+array_relationships:
+  - name: orders
+    using:
+      foreign_key_constraint_on:
+        column: account_id
+        table:
+          name: order
+          schema: public
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - created_at
+        - email
+        - id
+        - updated_at
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      limit: 1
+      allow_aggregations: true
+    comment: ""
