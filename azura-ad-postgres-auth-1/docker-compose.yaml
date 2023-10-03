@@ -3,12 +3,14 @@ services:
   postgres:
     image: postgres:16
     restart: always
+    volumes:
+      - "./initdb.d-postgres:/docker-entrypoint-initdb.d:ro"
     ports:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
-    image: hasura/graphql-engine:v2.33.0
+    image: hasura/graphql-engine:v2.33.0.cli-migrations-v3
     ports:
       - "8080:8080"
     restart: always
