@@ -1,6 +1,4 @@
 version: "3"
-include:
-  - docker-compose-db.yaml
 services:  
   postgres:
     image: postgres:16.0
@@ -11,6 +9,11 @@ services:
       POSTGRES_PASSWORD: postgrespassword
     ports:
       - "9432:5432"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "1G"
   postgraphile:
     image: graphile/postgraphile:4
     restart: always
@@ -21,6 +24,11 @@ services:
     command: "--watch --simple-collections only"
     environment:
       DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "1G"
   graphql-mesh:
     build: .
     restart: always
@@ -32,3 +40,8 @@ services:
       - "./.meshrc.yaml:/root/.meshrc.yaml:ro"
     environment:
       DEBUG: 1
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "1G"
