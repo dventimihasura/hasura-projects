@@ -52,11 +52,20 @@ field on each of those tables.
 
 As there are 5 graphql-engine back-ends listening on 5 mapped ports
 8081 through 8085, it is convenient to configure their endoints and
-admin secrets in local ~.env~ files.  These are generated using the
-Bash script ~setup.bash~.
+admin secrets in a local ~.env~ file.  This can be generated in the
+following way.  Naturally, take care to change the ports to ones that
+are available on your system.
 
-#+begin_src shell
-  bash setup.bash
+#+begin_src bash
+  cat <<EOF > .env
+  PGPORT=5433
+  NGINXPORT=8080
+  HGEPORT1=8081
+  HGEPORT2=8082
+  HGEPORT3=8083
+  HGEPORT4=8084
+  HGEPORT5=8085
+  EOF
 #+end_src
 
 *** Apply Metadata
