@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: order_detail
+  schema: public
 object_relationships:
   - name: order
     using:

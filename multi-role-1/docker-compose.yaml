@@ -20,12 +20,12 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - "./hasura/metadata:/hasura-metadata:ro"
+      - "./metadata:/hasura-metadata:ro"
     environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/metadata1
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       PG_DATABASE_URL: postgres://hasurauser_1:hasurauser_1@postgres:5432/postgres
   graphql-engine-2:
     image: hasura/graphql-engine:v2.35.0-ce.cli-migrations-v3
@@ -36,12 +36,12 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - "./hasura/metadata:/hasura-metadata:ro"
+      - "./metadata:/hasura-metadata:ro"
     environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/metadata2
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       PG_DATABASE_URL: postgres://hasurauser_2:hasurauser_2@postgres:5432/postgres
   graphql-engine-3:
     image: hasura/graphql-engine:v2.35.0-ce.cli-migrations-v3
@@ -52,12 +52,12 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - "./hasura/metadata:/hasura-metadata:ro"
+      - "./metadata:/hasura-metadata:ro"
     environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/metadata3
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       PG_DATABASE_URL: postgres://hasurauser_3:hasurauser_3@postgres:5432/postgres
   graphql-engine-4:
     image: hasura/graphql-engine:v2.35.0-ce.cli-migrations-v3
@@ -68,12 +68,12 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - "./hasura/metadata:/hasura-metadata:ro"
+      - "./metadata:/hasura-metadata:ro"
     environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/metadata4
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       PG_DATABASE_URL: postgres://hasurauser_4:hasurauser_4@postgres:5432/postgres
   graphql-engine-5:
     image: hasura/graphql-engine:v2.35.0-ce.cli-migrations-v3
@@ -84,12 +84,12 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - "./hasura/metadata:/hasura-metadata:ro"
+      - "./metadata:/hasura-metadata:ro"
     environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/metadata5
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       PG_DATABASE_URL: postgres://hasurauser_5:hasurauser_5@postgres:5432/postgres
   proxy:
     image: nginx

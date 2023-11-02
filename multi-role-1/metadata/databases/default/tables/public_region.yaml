@@ -1,11 +1,11 @@
 table:
+  name: region
   schema: public
-  name: product
 array_relationships:
-  - name: order_details
+  - name: orders
     using:
       foreign_key_constraint_on:
-        column: product_id
+        column: region
         table:
+          name: order
           schema: public
-          name: order_detail

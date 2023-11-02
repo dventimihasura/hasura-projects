@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: order
+  schema: public
 object_relationships:
   - name: account
     using:
@@ -14,5 +14,5 @@ array_relationships:
       foreign_key_constraint_on:
         column: order_id
         table:
-          schema: public
           name: order_detail
+          schema: public
