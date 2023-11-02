@@ -86,7 +86,6 @@ for the other 4 servers.
   curl \
       -s \
       'http://localhost:8080/v1/graphql' \
-      -H 'x-hasura-admin-secret: myadminsecretkey' \
       -H 'x-database-role: hasurauser_1' \
       --data '{"query":"query MyQuery {account_aggregate {aggregate {count}}}","variables":{}}' | jq -r '.'
 #+end_src
@@ -96,7 +95,7 @@ for the other 4 servers.
 :   "data": {
 :     "account_aggregate": {
 :       "aggregate": {
-:         "count": 249
+:         "count": 246
 :       }
 :     }
 :   }
@@ -106,7 +105,6 @@ for the other 4 servers.
   curl \
       -s \
       'http://localhost:8080/v1/graphql' \
-      -H 'x-hasura-admin-secret: myadminsecretkey' \
       -H 'x-database-role: hasurauser_2' \
       --data '{"query":"query MyQuery {account_aggregate {aggregate {count}}}","variables":{}}' | jq -r '.'
 #+end_src
@@ -116,7 +114,7 @@ for the other 4 servers.
 :   "data": {
 :     "account_aggregate": {
 :       "aggregate": {
-:         "count": 239
+:         "count": 258
 :       }
 :     }
 :   }
@@ -126,7 +124,6 @@ for the other 4 servers.
   curl \
       -s \
       'http://localhost:8080/v1/graphql' \
-      -H 'x-hasura-admin-secret: myadminsecretkey' \
       -H 'x-database-role: hasurauser_3' \
       --data '{"query":"query MyQuery {account_aggregate {aggregate {count}}}","variables":{}}' | jq -r '.'
 #+end_src
@@ -136,7 +133,7 @@ for the other 4 servers.
 :   "data": {
 :     "account_aggregate": {
 :       "aggregate": {
-:         "count": 249
+:         "count": 219
 :       }
 :     }
 :   }
@@ -146,7 +143,6 @@ for the other 4 servers.
   curl \
       -s \
       'http://localhost:8080/v1/graphql' \
-      -H 'x-hasura-admin-secret: myadminsecretkey' \
       -H 'x-database-role: hasurauser_4' \
       --data '{"query":"query MyQuery {account_aggregate {aggregate {count}}}","variables":{}}' | jq -r '.'
 #+end_src
@@ -166,7 +162,6 @@ for the other 4 servers.
   curl \
       -s \
       'http://localhost:8080/v1/graphql' \
-      -H 'x-hasura-admin-secret: myadminsecretkey' \
       -H 'x-database-role: hasurauser_5' \
       --data '{"query":"query MyQuery {account_aggregate {aggregate {count}}}","variables":{}}' | jq -r '.'
 #+end_src
