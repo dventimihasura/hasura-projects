@@ -1,0 +1,9 @@
+sources:
+  - name: postgREST
+    handler:
+      openapi:
+        source: 'http://postgrest:3000'
+        fallbackFormat: 'json'
+ 
+
+ 
