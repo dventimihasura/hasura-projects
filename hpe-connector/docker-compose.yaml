@@ -26,6 +26,7 @@ services:
       - "${PGRST_SERVER_PORT}:3000"
     environment:
       PGRST_DB_ANON_ROLE: "postgres"
+      PGRST_DB_ROOT_SPEC: "root"
       PGRST_DB_URI: "postgres://postgres:postgrespassword@postgres:5432/postgres"
       PGRST_OPENAPI_SERVER_PROXY_URI: "http://127.0.0.1:3001"
     depends_on:
