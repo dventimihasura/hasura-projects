@@ -1,0 +1,11 @@
+#+begin_src bash
+  cat <<EOF > .env
+  CONVERTERPORT=8082
+  HGEPORT=8081
+  PGPORT=5433
+  PGRST_SERVER_PORT=3001
+  PRISMPORT=4011
+  EOF
+#+end_src
+
+#+RESULTS:
