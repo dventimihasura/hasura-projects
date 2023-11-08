@@ -1,0 +1,8 @@
+#+begin_src bash
+  cat <<EOF > .env
+  HGEPORT=8081
+  PGPORT=5433
+  EOF
+#+end_src
+
+#+RESULTS:
