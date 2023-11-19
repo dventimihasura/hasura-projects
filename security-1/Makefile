@@ -1,4 +1,8 @@
+# Bash is a more useful shell than vanilla sh.
+
 SHELL=bash
+
+# Dynmically generate secrets and passwords.
 
 export HASURA_GRAPHQL_ADMIN_SECRET=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
 export METADATA_PASSWORD=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
