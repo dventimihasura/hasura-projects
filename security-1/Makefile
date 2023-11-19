@@ -1,16 +1,8 @@
 SHELL=bash
 
-export POSTGRES_USER=postgres
-export POSTGRES_PASSWORD=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
-export METADATA_USER=metadata
-export METADATA_PASSWORD=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
-export DATA_HASURA_USER=data_hasura
-export DATA_HASURA_PASSWORD=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
-export DATA_ADMIN_USER=data_admin
-export DATA_ADMIN_PASSWORD=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
-export DATA_DEFAULT_USER=data_default
-export DATA_DEFAULT_PASSWORD=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
 export HASURA_GRAPHQL_ADMIN_SECRET=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
+export METADATA_PASSWORD=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
+export POSTGRES_PASSWORD=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
 
 .PHONY: prod-up dev-up up down migrate
 
