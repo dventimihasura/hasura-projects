@@ -1,0 +1,36 @@
+#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+options: author:t broken-links:nil c:nil creator:nil
+#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+options: timestamp:t title:t toc:t todo:t |:t
+#+title: Hasura Security
+#+date: <2023-11-19 Sun>
+#+author: David A. Ventimiglia
+#+email: davidaventimiglia@hasura.io
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 29.1 (Org mode 9.6.6)
+#+cite_export:
+
+* Step 1:  Create a ~.env~ file.
+
+#+begin_src shell
+  cat <<-EOF > .env
+  PGPORT=5433
+  HGEPORT=8081
+  POSTGRES_USER=postgres
+  POSTGRES_PASSWORD=password
+  METADATA_USER=metadata
+  METADATA_PASSWORD=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;)
+  DATA_HASURA_USER=data_hasura
+  DATA_HASURA_PASSWORD=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;)
+  DATA_ADMIN_USER=data_admin
+  DATA_ADMIN_PASSWORD=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;)
+  DATA_DEFAULT_USER=data_default
+  DATA_DEFAULT_PASSWORD=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;)
+  HASURA_GRAPHQL_ADMIN_SECRET=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;)
+  EOF
+#+end_src
+
+#+RESULTS:
