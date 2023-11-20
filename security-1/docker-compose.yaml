@@ -6,9 +6,7 @@ services:
     ports:
       - "${PGPORT}:5432"
     environment:
-      METADATA_PASSWORD: ${METADATA_PASSWORD}
-      METADATA_USER: metadata
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: postgres
     volumes:
       - "./initdb.d-postgres:/docker-entrypoint-initdb.d:ro"
     healthcheck:
@@ -22,15 +20,11 @@ services:
     ports:
       - "${HGPORT}:8080"
     environment:
-      DEFAULT_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres/postgres
       HASURA_GRAPHQL_ADMIN_INTERNAL_ERRORS: false
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
       HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
       HASURA_GRAPHQL_CORS_DOMAIN: "*"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ENABLE_CONSOLE: ${HASURA_GRAPHQL_ENABLE_CONSOLE}
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://metadata:${METADATA_PASSWORD}@postgres:5432/metadata
-      METADATA_PASSWORD: ${METADATA_PASSWORD}
-      METADATA_USER: metadata
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
