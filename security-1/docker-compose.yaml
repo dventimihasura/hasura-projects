@@ -20,7 +20,7 @@ services:
       postgres:
         condition: service_healthy
     ports:
-      - "${HGEPORT}:8080"
+      - "${HGPORT}:8080"
     environment:
       DEFAULT_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres/postgres
       HASURA_GRAPHQL_ADMIN_INTERNAL_ERRORS: false
