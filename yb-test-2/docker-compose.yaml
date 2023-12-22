@@ -13,21 +13,3 @@ services:
     image: yugabytedb/yugabyte:2.20.0.2-b1
     command: bin/yugabyted start --background=false --join yb-master
     restart: always
-  metadata:
-    image: postgres:15.3
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: postgres
-  graphql-engine:
-    image: hasura/graphql-engine:v2.21.0.cli-migrations-v3
-    ports:
-      - "${GRAPHQL_ENGINE_PORT}:8080"
-    depends_on:
-      - "metadata"
-    restart: always
-    environment:
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT: 120
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata/postgres
-      PG_DATABASE_URL: postgres://yugabyte:yugabyte@yb-master:5433/yugabyte
