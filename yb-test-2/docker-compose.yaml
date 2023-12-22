@@ -1,11 +1,17 @@
 version: '3.6'
 services:
   yb-master:
-    image: yugabytedb/yugabyte:2.18.2.1-b1
-    command: bin/yugabyted start --background=false
+    image: yugabytedb/yugabyte:2.20.0.2-b1
+    command: bin/yugabyted start --background=false --advertise_address=yb-master
     ports:
       - "${YB_MASTER_PORT}:5433"
       - "${YB_MASTER_UI_PORT}:7000"
+    restart: always
+  yb-tserver-1:
+    depends_on:
+      - yb-master
+    image: yugabytedb/yugabyte:2.20.0.2-b1
+    command: bin/yugabyted start --background=false --join yb-master
     restart: always
   metadata:
     image: postgres:15.3
