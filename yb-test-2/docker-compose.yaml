@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   yb-master:
-    image: yugabytedb/yugabyte:2.14.2.1-b1
+    image: yugabytedb/yugabyte:2.20.0.2-b1
     command: bin/yugabyted start --background=false --advertise_address=yb-master
     ports:
       - "${YB_MASTER_PORT}:5433"
@@ -10,49 +10,6 @@ services:
   yb-tserver-1:
     depends_on:
       - yb-master
-    image: yugabytedb/yugabyte:2.14.2.1-b1
-    command: bin/yugabyted start --background=false --join yb-master --advertise_address=yb-tserver-1
-    ports:
-      - "${YB_TSERVER_PORT_1}:5433"
-      - "${YB_TSERVER_UI_PORT_1}:7000"
+    image: yugabytedb/yugabyte:2.20.0.2-b1
+    command: bin/yugabyted start --background=false --join yb-master
     restart: always
-  yb-tserver-2:
-    depends_on:
-      - yb-master
-    image: yugabytedb/yugabyte:2.14.2.1-b1
-    command: bin/yugabyted start --background=false --join yb-master --advertise_address=yb-tserver-2
-    ports:
-      - "${YB_TSERVER_PORT_2}:5433"
-      - "${YB_TSERVER_UI_PORT_2}:7000"
-    restart: always
-  yb-tserver-3:
-    depends_on:
-      - yb-master
-    image: yugabytedb/yugabyte:2.14.2.1-b1
-    command: bin/yugabyted start --background=false --join yb-master --advertise_address=yb-tserver-3
-    ports:
-      - "${YB_TSERVER_PORT_3}:5433"
-      - "${YB_TSERVER_UI_PORT_3}:7000"
-    restart: always
-  metadata:
-    image: postgres:15.3
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: postgres
-  graphql-engine:
-    image: hasura/graphql-engine:v2.32.1.cli-migrations-v3
-    ports:
-      - "${GRAPHQL_ENGINE_PORT}:8080"
-    volumes:
-      - ./migrations:/hasura-migrations
-      - ./metadata:/hasura-metadata
-    depends_on:
-      - "yb-tserver-3"
-      - "metadata"
-    restart: always
-    environment:
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT: 120
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@metadata/postgres
-      PG_DATABASE_URL: postgres://yugabyte:yugabyte@yb-master:5433/yugabyte
