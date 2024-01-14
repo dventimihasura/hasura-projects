@@ -5,7 +5,7 @@ select * from pg_create_logical_replication_slot('test', 'wal2json', false, fals
 create or replace view change as
   select
     lsn,
-    xid,
+    (xid::text)::bigint as xid,
     data::jsonb as payload
     from
       pg_logical_slot_peek_changes(
