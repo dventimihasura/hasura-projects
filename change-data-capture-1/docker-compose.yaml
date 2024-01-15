@@ -7,7 +7,16 @@ services:
     restart: always
     volumes:
       - "./initdb.d-postgres:/docker-entrypoint-initdb.d:ro"
-    command: "postgres -c max_replication_slots=10 -c wal_level=logical -c shared_preload_libraries=pg_cron -c cron.use_background_workers=on -c max_worker_processes=20"
+    command: [
+    "postgres",
+    "-c", "cron.log_run=on",
+    "-c", "cron.use_background_workers=on",
+    "-c", "max_replication_slots=10",
+    "-c", "max_slot_wal_keep_size=8",
+    "-c", "max_worker_processes=20",
+    "-c", "shared_preload_libraries=pg_cron",
+    "-c", "wal_level=logical"
+    ]
     environment:
       POSTGRES_PASSWORD: postgres
   graphql-engine:
