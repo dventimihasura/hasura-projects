@@ -21,12 +21,12 @@ select * from pg_create_logical_replication_slot('cdc', 'wal2json', false, false
 --      jsonb_array_length(data::jsonb->'change')>0;
 
 create unlogged table change (
-  lsn pg_lsn primary key,
-  xid bigint not null,
+  lsn pg_lsn not null,
+  xid bigint primary key,
   payload jsonb
 );
 
-create index on change (xid);
+create index on change (lsn);
 
 create extension pg_cron;
 
@@ -43,10 +43,14 @@ select
       'cdc',
       null,
       null,
-      'filter-tables', 'cron.*,hdb_catalog.*',
+      'filter-tables', 'public.change,cron.*,hdb_catalog.*,faker.*',
       'format-version', '1',
       'include-pk', 'true',
       'include-timestamp', 'true'
     )
-    where jsonb_array_length(data::jsonb->'change')>0
+    where jsonb_array_length(data::jsonb->'change')>0;
+    select pg_replication_slot_advance(
+      'cdc',
+      confirmed_flush_lsn
+    ) from pg_replication_slots;
     $sql$);
