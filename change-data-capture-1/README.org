@@ -41,12 +41,27 @@ tables.
 - region :: sales regions associated with an ~order~
 
 This POC sets up the CDC machinery in [[file:initdb.d-postgres/03_cdc.sql][03_cdc.sql]].  Among other things,
-that creates a ~change~ table .  Finally, it has Hasura metadata in
-the [[file:metadata/actions.graphql][metadata]] directory which tracks all of the user tables, including
-the CDC ~change~ table.  That metadata is [[https://hasura.io/docs/latest/migrations-metadata-seeds/auto-apply-migrations/][automatically applied]] by the
-Hasura Docker image.
+that creates a ~change~ table with the following structure.
 
-**NOTE**:  This POC uses two libraries, one of which is optional:  the
+#+begin_src sql
+create unlogged table change (
+  lsn pg_lsn not null,
+  xid bigint primary key,
+  payload jsonb
+);
+#+end_src
+
+- ~lsn~ :: a [[https://www.postgresql.org/docs/current/datatype-pg-lsn.html][pg_lsn]] which is incidental housekeeping info
+- ~xid~ :: a ~bigint~ cast of a [[https://www.postgresql.org/docs/current/transaction-id.html][TransactionId]], a monotonically
+  increasing and unique identifier suitable as a primary key
+- ~payload~ :: a ~jsonb~ binary [[https://www.postgresql.org/docs/current/datatype-json.html][JSON data type]] storing the actual
+  change event data
+
+Finally, this POC has Hasura metadata in the [[file:metadata/actions.graphql][metadata]] directory which
+tracks all of the user tables, including the CDC ~change~ table.  That
+metadata is [[https://hasura.io/docs/latest/migrations-metadata-seeds/auto-apply-migrations/][automatically applied]] by the Hasura Docker image.
+
+*NOTE*:  This POC uses two libraries, one of which is optional:  the
 ~wal2json~ output plugin, and the ~pg_cron~ extension.  The ~pg_cron~
 extension is optional.  This POC uses it to move change event data
 from the logical decoding slot to the ~change~ table periodically, but
