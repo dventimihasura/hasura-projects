@@ -46,6 +46,18 @@ the [[file:metadata/actions.graphql][metadata]] directory which tracks all of th
 the CDC ~change~ table.  That metadata is [[https://hasura.io/docs/latest/migrations-metadata-seeds/auto-apply-migrations/][automatically applied]] by the
 Hasura Docker image.
 
+**NOTE**:  This POC uses two libraries, one of which is optional:  the
+~wal2json~ output plugin, and the ~pg_cron~ extension.  The ~pg_cron~
+extension is optional.  This POC uses it to move change event data
+from the logical decoding slot to the ~change~ table periodically, but
+this could be accomplished in other ways:
+
+- [[https://www.postgresql.org/docs/current/app-pgrecvlogical.html][pg_recvlogical]] :: a separate process could pipe the data back into
+  the database as described in [[https://stackoverflow.com/questions/77808615/how-to-use-logical-decoding-with-pg-recvlogical-to-pass-changes-through-a-non-tr][this Stack Overflow question and answer]]
+- [[https://hasura.io/docs/latest/scheduled-triggers/create-cron-trigger/][Scheduled Triggers]] :: Hasura event triggers could periodically do a
+  self-call to a [[https://hasura.io/docs/latest/restified/overview/][RESTified endpoint]] which calls a tracked [[https://hasura.io/docs/latest/schema/postgres/custom-functions/][function]]
+  which does the work of copying change data into the ~change~ table. 
+
 * Steps
 
 ** Step 1:  Checkout the [[https://github.com/dventimihasura/hasura-projects][hasura-projects]] GitHub repository.
@@ -112,5 +124,57 @@ or
 ** Step 8:  Observe subscription events as data are changed in user tables.
 
 #+begin_src json
+{
+  "data": {
+    "change_stream": [
+      {
+        "lsn": "0/1F5AE10",
+        "payload": {
+          "change": [
+            {
+              "pk": {
+                "pknames": [
+                  "id"
+                ],
+                "pktypes": [
+                  "uuid"
+                ]
+              },
+              "kind": "insert",
+              "table": "order",
+              "schema": "public",
+              "columnnames": [
+                "id",
+                "created_at",
+                "updated_at",
+                "account_id",
+                "status",
+                "region"
+              ],
+              "columntypes": [
+                "uuid",
+                "timestamp with time zone",
+                "timestamp with time zone",
+                "uuid",
+                "status",
+                "text"
+              ],
+              "columnvalues": [
+                "34f37880-c6ef-4e28-a0ee-7fbe1cfdcedd",
+                "2024-01-16 15:39:58.801389+00",
+                "2024-01-16 15:39:58.801389+00",
+                "1c430413-889c-4013-9489-3d9136497971",
+                "new",
+                "NORTHEAST"
+              ]
+            }
+          ],
+          "timestamp": "2024-01-16 15:39:58.802545+00"
+        },
+        "xid": 790
+      }
+    ]
+  }
+}
 #+end_src
 
