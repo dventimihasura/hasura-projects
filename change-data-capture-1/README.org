@@ -7,7 +7,7 @@ Hasura [[https://hasura.io/docs/latest/subscriptions/postgres/index/][Subscripti
 
 * Why
 
-Hasura users may need to update a `change` table that has a holistic
+Hasura users may need to update a ~change~ table that has a holistic
 view of the changes made across many tables and then offer the ability
 for other users to subscribe to those changes.
 
