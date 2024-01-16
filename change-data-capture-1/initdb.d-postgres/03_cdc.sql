@@ -30,27 +30,27 @@ create index on change (lsn);
 
 create extension pg_cron;
 
-select
-  cron.schedule(
-    '* * * * *',
-    $sql$
-    insert into change
-    select
-    lsn,
-    (xid::text)::bigint,
-    data::jsonb
-    from pg_logical_slot_get_changes(
-      'cdc',
-      null,
-      null,
-      'filter-tables', 'public.change,cron.*,hdb_catalog.*,faker.*',
-      'format-version', '1',
-      'include-pk', 'true',
-      'include-timestamp', 'true'
-    )
-    where jsonb_array_length(data::jsonb->'change')>0;
-    select pg_replication_slot_advance(
-      'cdc',
-      confirmed_flush_lsn
-    ) from pg_replication_slots;
-    $sql$);
+-- select
+--   cron.schedule(
+--     '* * * * *',
+--     $sql$
+--     insert into change
+--     select
+--     lsn,
+--     (xid::text)::bigint,
+--     data::jsonb
+--     from pg_logical_slot_get_changes(
+--       'cdc',
+--       null,
+--       null,
+--       'filter-tables', 'public.change,cron.*,hdb_catalog.*,faker.*',
+--       'format-version', '1',
+--       'include-pk', 'true',
+--       'include-timestamp', 'true'
+--     )
+--     where jsonb_array_length(data::jsonb->'change')>0;
+--     select pg_replication_slot_advance(
+--       'cdc',
+--       confirmed_flush_lsn
+--     ) from pg_replication_slots;
+--     $sql$);
