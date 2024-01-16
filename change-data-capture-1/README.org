@@ -14,7 +14,7 @@ for other users to subscribe to those changes.
 * How
 
 This POC uses Logical Decoding along with the [[https://github.com/eulerto/wal2json][wal2json]] [[https://www.postgresql.org/docs/current/logicaldecoding-explanation.html#LOGICALDECODING-EXPLANATION-OUTPUT-PLUGINS][output plugin]]
-and the [[https://github.com/citusdata/pg_cron][pg_cron]] [[https://www.postgresql.org/docs/current/sql-createextension.html][extension]].  Logical Decoding leverages the PostgreSQL
++and the [[https://github.com/citusdata/pg_cron][pg_cron]] [[https://www.postgresql.org/docs/current/sql-createextension.html][extension]].+  Logical Decoding leverages the PostgreSQL
 [[https://www.postgresql.org/docs/current/wal-intro.html][Write-Ahead Log]] (WAL) to support [[https://www.postgresql.org/docs/current/logical-replication.html][Logical Replication]] and other
 applications.  Extra metadata in [[https://www.postgresql.org/docs/current/logicaldecoding-explanation.html#LOGICALDECODING-REPLICATION-SLOTS][replication slots]] causes PostgreSQL
 to retain WAL segments instead of cleaning them up, processes change
@@ -24,11 +24,12 @@ clean-up of WAL segments.
 
 This POC uses Logical Decoding to capture /all/ changes to user
 tables.  It uses the ~wal2json~ output plugin to shape the change
-event data into a uniform JSON representation.  And, it uses the
-~pg_cron~ extension along with PostgreSQL [[https://www.postgresql.org/docs/current/bgworker.html][background worker processes]]
-to write the change event data in JSON form to a user ~change~ table
-and to clean up WAL segments whose change event data has already been
-processed in this way.
+event data into a uniform JSON representation.  +And, it uses
+the~pg_cron~ extension+ And, it use [[https://hasura.io/docs/latest/scheduled-triggers/overview/][Hasura scheduled event triggers]]
+along with PostgreSQL [[https://www.postgresql.org/docs/current/bgworker.html][background worker processes]] to write the change
+event data in JSON form to a user ~change~ table and to clean up WAL
+segments whose change event data has already been processed in this
+way.
 
 This POC uses a simple data model in [[file:initdb.d-postgres/01_init_model.sql][01_init_model.sql]] with sample
 data in [[file:initdb.d-postgres/02_init_data.sql][02_init_data.sql]] for a retail grocery store, with these
@@ -61,11 +62,11 @@ Finally, this POC has Hasura metadata in the [[file:metadata/actions.graphql][me
 tracks all of the user tables, including the CDC ~change~ table.  That
 metadata is [[https://hasura.io/docs/latest/migrations-metadata-seeds/auto-apply-migrations/][automatically applied]] by the Hasura Docker image.
 
-*NOTE*:  This POC uses two libraries, one of which is optional:  the
-~wal2json~ output plugin, and the ~pg_cron~ extension.  The ~pg_cron~
-extension is optional.  This POC uses it to move change event data
-from the logical decoding slot to the ~change~ table periodically, but
-this could be accomplished in other ways:
+*NOTE*: This POC uses +two libraries+ one library +, one of which is
+optional+: the ~wal2json~ output plugin. +, and the ~pg_cron~ extension.+
++The ~pg_cron~ extension is optional.+  This POC uses it to move change
+event data from the logical decoding slot to the ~change~ table
+periodically, but this could be accomplished in other ways:
 
 - [[https://www.postgresql.org/docs/current/app-pgrecvlogical.html][pg_recvlogical]] :: a separate process could pipe the data back into
   the database as described in [[https://stackoverflow.com/questions/77808615/how-to-use-logical-decoding-with-pg-recvlogical-to-pass-changes-through-a-non-tr][this Stack Overflow question and answer]]
