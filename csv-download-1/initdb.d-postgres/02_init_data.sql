@@ -2009,7 +2009,7 @@ with
     select
       account.id,
       name,
-      (random()*5)::int orders
+      (random()*300)::int orders
       from account)
     insert into "order" (account_id)
 select
@@ -2018,7 +2018,7 @@ select
     select
       account.id account_id,
       row_number() over (partition by account.id order by account.name) ordinal
-      from account, generate_series(1, 5)) orders
+      from account, generate_series(1, 300)) orders
        join account on account.id = orders.account_id
 	   and orders.ordinal <= account.orders;
 
@@ -2026,13 +2026,13 @@ with
   "order" as (
     select
       "order".id,
-      (random()*9 + 1)::int items
+      (random()*10 + 1)::int items
       from "order")
     insert into order_detail (order_id, product_id, units)
 select
   order_id,
   product_id,
-  (random()*9 + 1)::int units
+  (random()*10 + 1)::int units
   from (
     select
       "order".id order_id,

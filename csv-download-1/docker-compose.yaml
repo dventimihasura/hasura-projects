@@ -9,6 +9,11 @@ services:
       - "./initdb.d-postgres:/docker-entrypoint-initdb.d:ro"
     environment:
       POSTGRES_PASSWORD: postgres
+    healthcheck:
+      interval: 10s
+      retries: 100
+      test: ["CMD-SHELL", "psql -h localhost -U postgres -d postgres -c 'select count(*) from order_detail'"]
+      timeout: 300s
   graphql-engine:
     image: hasura/graphql-engine:v2.36.0.cli-migrations-v3
     ports:
@@ -21,3 +26,6 @@ services:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+    depends_on:
+       postgres:
+         condition: service_healthy
