@@ -21,6 +21,8 @@ services:
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@postgres:5432/graphql_engine_1
       PG_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+    environment:
+      - "./graphql-engine-1/metadata:/hasura-metadata:ro"
     depends_on:
        postgres:
          condition: service_healthy
@@ -34,6 +36,8 @@ services:
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@postgres:5432/graphql_engine_2
       PG_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+    environment:
+      - "./graphql-engine-2/metadata:/hasura-metadata:ro"
     depends_on:
        postgres:
          condition: service_healthy
@@ -45,8 +49,9 @@ services:
     environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@postgres:5432/graphql_engine_3
-      PG_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/graphql_engine_3
+    environment:
+      - "./graphql-engine-3/metadata:/hasura-metadata:ro"
     depends_on:
        postgres:
          condition: service_healthy
