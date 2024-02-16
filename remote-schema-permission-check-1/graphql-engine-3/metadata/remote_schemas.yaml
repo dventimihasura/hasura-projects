@@ -5,3 +5,10 @@
     customization: {}
     forward_client_headers: true
   comment: ""
+- name: fulfillment
+  definition:
+    url: http://graphql-engine-2:8080/v1/graphql
+    timeout_seconds: 60
+    customization: {}
+    forward_client_headers: true
+  comment: ""
