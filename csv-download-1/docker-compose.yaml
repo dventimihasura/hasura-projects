@@ -17,7 +17,7 @@ services:
   graphql-engine:
     image: hasura/graphql-engine:v2.36.0.cli-migrations-v3
     ports:
-      - "${HASURA_GRAPHQL_ENDPOINT}:8080"
+      - "${HGEPORT}:8080"
     restart: always
     volumes:
       - "./metadata:/hasura-metadata:ro"
