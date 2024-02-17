@@ -38,3 +38,6 @@ __pycache__
 supergraph-challenge/docker-compose-api.yaml
 supergraph-challenge/docker-compose-db.yaml
 supergraph-challenge/db/
+netflix-dgs-java-1/target/classes/io/hasura/App.class
+*.class
+*.lst
