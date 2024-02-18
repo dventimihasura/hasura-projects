@@ -17,17 +17,21 @@
   <description>Netflix DGS Java Demo Project</description>
 
   <properties>
+    <h2.version>2.2.224</h2.version>
+    <hibernate.version>6.0.0-SNAPSHOT</hibernate.version>
+    <hibernate-tools.version>6.4.4.Final</hibernate-tools.version>
     <java.version>17</java.version>
+    <sql.version>1.5</sql.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.netflix.graphql.dgs</groupId>
-        <artifactId>graphql-dgs-platform-dependencies</artifactId>
-        <version>4.9.16</version>
-        <type>pom</type>
-        <scope>import</scope>
+	<groupId>com.netflix.graphql.dgs</groupId>
+	<artifactId>graphql-dgs-platform-dependencies</artifactId>
+	<version>4.9.16</version>
+	<type>pom</type>
+	<scope>import</scope>
       </dependency>
       <dependency>
 	<groupId>org.hibernate.orm</groupId>
@@ -65,6 +69,64 @@
 
   <build>
     <plugins>
+      <plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>sql-maven-plugin</artifactId>
+	<version>${sql.version}</version>
+	<dependencies>
+	  <dependency>
+	    <groupId>com.h2database</groupId>
+	    <artifactId>h2</artifactId>
+	    <version>${h2.version}</version>
+	  </dependency>
+	</dependencies>
+	<executions>
+	  <execution>
+	    <id>create-database</id>
+	    <phase>initialize</phase>
+	    <goals>
+	      <goal>execute</goal>
+	    </goals>
+	    <configuration>
+	      <driver>org.h2.Driver</driver>
+	      <url>jdbc:h2:${project.build.directory}/database/bardb</url>
+	      <username>sa</username>
+	      <password></password>
+	      <autocommit>true</autocommit>
+	      <sqlCommand>create table foo (id int not null primary key, baz varchar(256))</sqlCommand>
+	    </configuration>
+	  </execution>
+	</executions>
+      </plugin>
+      <plugin>
+	<groupId>org.hibernate.tool</groupId>
+	<artifactId>hibernate-tools-maven</artifactId>
+	<version>${hibernate-tools.version}</version>
+	<dependencies>
+	  <dependency>
+	    <groupId>org.hibernate.tool</groupId>
+	    <artifactId>hibernate-tools-orm</artifactId>
+	    <version>${hibernate-tools.version}</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>com.h2database</groupId>
+	    <artifactId>h2</artifactId>
+	    <version>${h2.version}</version>
+	  </dependency>
+	</dependencies>
+	<executions>
+	  <execution>
+	    <id>entity-generation</id>
+	    <phase>generate-sources</phase>
+	    <goals>
+	      <goal>hbm2java</goal>
+	    </goals>
+	    <configuration>
+	      <ejb3>true</ejb3>
+	    </configuration>
+	  </execution>
+	</executions>
+      </plugin>
       <plugin>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-maven-plugin</artifactId>
