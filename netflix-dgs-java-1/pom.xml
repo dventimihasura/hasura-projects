@@ -17,8 +17,7 @@
   <description>Netflix DGS Java Demo Project</description>
 
   <properties>
-    <hibernate.version>6.0.0-SNAPSHOT</hibernate.version>
-    <hibernate-tools.version>6.4.4.Final</hibernate-tools.version>
+    <hibernate.version>6.4.4.Final</hibernate.version>
     <java.version>17</java.version>
     <sql.version>1.5</sql.version>
   </properties>
@@ -76,13 +75,8 @@
       <plugin>
 	<groupId>org.hibernate.tool</groupId>
 	<artifactId>hibernate-tools-maven</artifactId>
-	<version>${hibernate-tools.version}</version>
+	<version>${hibernate.version}</version>
 	<dependencies>
-	  <dependency>
-	    <groupId>org.hibernate.tool</groupId>
-	    <artifactId>hibernate-tools-orm</artifactId>
-	    <version>${hibernate-tools.version}</version>
-	  </dependency>
 	  <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
