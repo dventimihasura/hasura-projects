@@ -7,7 +7,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>3.2.2</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <relativePath/>
   </parent>
 
   <groupId>io.hasura</groupId>
@@ -17,7 +17,6 @@
   <description>Netflix DGS Java Demo Project</description>
 
   <properties>
-    <h2.version>2.2.224</h2.version>
     <hibernate.version>6.0.0-SNAPSHOT</hibernate.version>
     <hibernate-tools.version>6.4.4.Final</hibernate-tools.version>
     <java.version>17</java.version>
@@ -39,6 +38,11 @@
 	<version>6.4.4.Final</version>
 	<type>pom</type>
 	<scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>42.6.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -70,35 +74,6 @@
   <build>
     <plugins>
       <plugin>
-	<groupId>org.codehaus.mojo</groupId>
-	<artifactId>sql-maven-plugin</artifactId>
-	<version>${sql.version}</version>
-	<dependencies>
-	  <dependency>
-	    <groupId>com.h2database</groupId>
-	    <artifactId>h2</artifactId>
-	    <version>${h2.version}</version>
-	  </dependency>
-	</dependencies>
-	<executions>
-	  <execution>
-	    <id>create-database</id>
-	    <phase>initialize</phase>
-	    <goals>
-	      <goal>execute</goal>
-	    </goals>
-	    <configuration>
-	      <driver>org.h2.Driver</driver>
-	      <url>jdbc:h2:${project.build.directory}/database/bardb</url>
-	      <username>sa</username>
-	      <password></password>
-	      <autocommit>true</autocommit>
-	      <sqlCommand>create table foo (id int not null primary key, baz varchar(256))</sqlCommand>
-	    </configuration>
-	  </execution>
-	</executions>
-      </plugin>
-      <plugin>
 	<groupId>org.hibernate.tool</groupId>
 	<artifactId>hibernate-tools-maven</artifactId>
 	<version>${hibernate-tools.version}</version>
@@ -109,9 +84,9 @@
 	    <version>${hibernate-tools.version}</version>
 	  </dependency>
 	  <dependency>
-	    <groupId>com.h2database</groupId>
-	    <artifactId>h2</artifactId>
-	    <version>${h2.version}</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
 	  </dependency>
 	</dependencies>
 	<executions>
