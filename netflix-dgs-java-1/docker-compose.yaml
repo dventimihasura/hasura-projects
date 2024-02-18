@@ -1,0 +1,12 @@
+version: "3.6"
+services:
+  postgres:
+    image: postgres:16
+    ports:
+      - "${PGPORT}:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+    volumes:
+      - "./initdb.d-postgres:/docker-entrypoint-initdb.d:ro"
+
