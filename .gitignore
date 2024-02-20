@@ -41,3 +41,7 @@ supergraph-challenge/db/
 netflix-dgs-java-1/target/classes/io/hasura/App.class
 *.class
 *.lst
+netflix-dgs-java-1/README.html
+netflix-dgs-java-1/README.odt
+*.html
+*.odt

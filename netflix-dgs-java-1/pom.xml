@@ -20,6 +20,7 @@
     <hibernate.version>6.4.4.Final</hibernate.version>
     <java.version>17</java.version>
     <sql.version>1.5</sql.version>
+    <hbm.template.path>hbm_template_path</hbm.template.path>
   </properties>
 
   <dependencyManagement>
@@ -92,6 +93,8 @@
 	    </goals>
 	    <configuration>
 	      <ejb3>true</ejb3>
+	      <packageName>io.hasura.netflixdgsjava1.model.generated</packageName>
+	      <templatePath>${hbm.template.path}</templatePath>
 	    </configuration>
 	  </execution>
 	</executions>
