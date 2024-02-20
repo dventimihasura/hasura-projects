@@ -2076,4 +2076,48 @@ update "order" set region = ((array[
   'SOUTHWEST'
   ])[floor(random()*9+1)])::text;
 
+insert into resource (name) values
+('product'),
+('product_search'),
+('product_search_slow');
+
+insert into action (name) values
+			    ('create'),
+			    ('read'),
+			    ('update'),
+			    ('delete');
+
+
+with
+  cta1 as (
+    select
+      id as principal,
+      (
+	array[
+	  'product',
+	  'product_search',
+	  'product_search_slow'])[ceil(random()*3)] as resource_type
+      from
+	account),
+  cta2 as (
+    select
+      principal,
+      resource_type,
+      case when resource_type = 'product'
+	then (
+	  array[
+	    'create',
+	    'read',
+	    'update',
+	    'delete'])[ceil(random()*4)] else 'read' end as action
+      from
+	cta1)
+    insert into permission
+select
+  principal,
+  action,
+  resource_type
+  from
+    cta2;
+
 commit;

@@ -163,3 +163,26 @@ create or replace function product_sku(product_row product)
 returns text as $$
   select md5(product_row.name)
 $$ language sql stable;
+
+create table resource (
+  name text primary key
+);
+
+create table action (
+  name text primary key
+);
+
+create table permission (
+  principal uuid not null references account (id),
+  action text not null references action (name),
+  resource_type text not null references resource (name),
+  primary key (principal, action, resource_type)
+);
+
+create or replace function permission_check (principal UUID, action text, resource_type text)
+  returns boolean
+  language sql
+  stable
+as $function$
+  select exists (select * from permission where principal = $1 and action = $2 and resource_type = $3)
+  $function$;

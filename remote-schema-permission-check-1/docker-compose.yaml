@@ -19,6 +19,7 @@ services:
     environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@postgres:5432/graphql_engine_1
       PG_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
     volumes:
@@ -34,6 +35,7 @@ services:
     environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@postgres:5432/graphql_engine_2
       PG_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
     volumes:
@@ -47,9 +49,10 @@ services:
       - "${HGEPORT3}:8080"
     restart: always
     environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/graphql_engine_3
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/graphql_engine_3
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
     volumes:
       - "./graphql-engine-3/metadata:/hasura-metadata:ro"
     depends_on:
