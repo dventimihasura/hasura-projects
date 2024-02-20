@@ -1,0 +1,51 @@
+# -*- mode: org; -*-
+
+#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+options: author:t broken-links:nil c:nil creator:nil
+#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+options: timestamp:t title:t toc:nil todo:t |:t
+#+title: README
+#+date: <2024-02-19 Mon>
+#+author: Hasura
+#+email: hasura@dventimi-ThinkPad-T570
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 29.1 (Org mode 9.6.6)
+#+cite_export:
+
+#+STARTUP: indent
+
+* Abstract
+
+The maintainers of the [[https://netflix.github.io/dgs/][Netflix DGS]] library [[https://netflix.github.io/dgs/advanced/dynamic-schemas/][strongly recommend]] what is
+commonly-referred to as "schema-first" development of GraphQL servers.
+So do the maintainers of the core [[https://www.graphql-java.com/][graphql-java]] library who write in
+[[https://leanpub.com/graphql-java][their book]]
+
+#+BEGIN_QUOTE
+“Schema-first” refers to the idea that the design of a GraphQL schema
+should be done on its own, and should not be generated or inferred
+from something else. The schema should not be generated from a
+database schema, Java domain classes, nor a REST API.
+
+Schemas ought to be schema-first because they should be created in a
+deliberate way and not merely generated. Although a GraphQL API will
+have much in common with the database schema or REST API being used to
+fetch data, the schema should still be deliberately constructed.
+
+We strongly believe that this is the only viable approach for any
+real-life GraphQL API and we will only focus on this approach. Both
+Spring for GraphQL and GraphQL Java only support “schema-first”.
+#+END_QUOTE
+
+[[https://graphql.org/conf/sessions/118f99976647d953d6554bac33dbf3bf/][Other's]] [[https://www.apollographql.com/blog/schema-first-vs-code-only-graphql#conclusion][are]] [[https://xuorig.medium.com/sdl-or-code-first-graphql-schemas-16e7dbdab2f5][not]] [[https://2022.stateofgraphql.com/en-US/usage/#code_generation_type][so]] [[https://lo-victoria.com/graphql-for-beginners-schema-first-vs-code-first][sure]], however, including [[https://www.graphql-java.com/documentation/schema][the maintainers]] of the
+/documentation/ for graphql-java who write that their library "offers
+two different ways of defining the schema /[code-first and schema-first]/."
+
+As advocates of a third way of [[https://hasura.io/blog/hasura-for-the-low-code-ecosystem/][low-code]] and [[https://hasura.io/docs/latest/schema/postgres/using-existing-database/][/database/ schema-first]]
+development, we at [[https://hasura.io/][Hasura]] in this article step out of our comfort
+zone, follow orthodox schema-first development of a demo GraphQL
+server with the state-of-the-art [[https://netflix.github.io/dgs/][Netflix DGS]] library in Java, and
+report back on the experience.
