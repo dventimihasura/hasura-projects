@@ -92,6 +92,7 @@
 	      <goal>hbm2java</goal>
 	    </goals>
 	    <configuration>
+	      <revengFile>${project.basedir}/src/main/hibernate/hibernate.reveng.xml</revengFile>
 	      <ejb3>true</ejb3>
 	      <packageName>io.hasura.netflixdgsjava1.model.generated</packageName>
 	      <templatePath>${hbm.template.path}</templatePath>
