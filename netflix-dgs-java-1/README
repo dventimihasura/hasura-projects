@@ -49,3 +49,398 @@ development, we at [[https://hasura.io/][Hasura]] in this article step out of ou
 zone, follow orthodox schema-first development of a demo GraphQL
 server with the state-of-the-art [[https://netflix.github.io/dgs/][Netflix DGS]] library in Java, and
 report back on the experience.
+
+* Netflix DGS
+
+#+BEGIN_QUOTE
+Build a full-featured GraphQL server with Java or Kotlin in record time.
+#+END_QUOTE
+
+[[https://netflix.github.io/dgs/][Netflix DGS]] is a framework for building GraphQL servers with Java or
+Kotlin, but what is a "GraphQL server" and what are its features?  In
+our experience a GraphQL server /must/ have these features?
+
+** Functional Concerns
+
+Primary software functionality that satisfies use-cases for end-users:
+
+- queries :: flexible, general-purpose language for getting data from
+  a data model, part of the GraphQL specification
+
+- mutations :: flexible, general-purpose language for changing data in
+  a data model, part of the GraphQL specification
+
+- subscriptions :: flexible, general-purpose language for getting
+  real-time or soft real-time data from a data model, part of the
+  GraphQL specification
+
+- business logic :: a model for expressing the most common forms of
+  application logic: authorization, validation, and side-effects
+
+- integration :: an ability to merge in data and functionality from
+  other services
+
+** Non-Functional Concerns
+
+Secondary software functionality that supports the *functiona concerns*
+with Quality-of-Service (QoW) guarantees for operators:
+
+- caching :: configurable time-vs-space trade-off for obtaining better
+  performance for certain classes of operations
+
+- security :: protections from attacks and threat vectors
+
+- observability :: the emission of diagnostic information such as
+  metrics, logs, and traces to aid in operations and troubleshooting
+
+- reliability :: high-quality engineering that promotes efficient and
+  correct operation
+
+* Netflix DGS In-Action
+
+Take those features as our definition of a "GraphQL server" such that
+they comprise our ideal end-state.  That's our goal.  How do we get
+there with Netflix DGS?  It's a tall order with many features, so take
+baby steps.  How do we get to get to the goal of having a more modest
+version of the very first feature?
+
+- queries :: +flexible, general-purpose+ language for getting data from
+  a data model, part of the GraphQL specification
+
+How do we implement a Netflix DGS GraphQL server to get /some/ data
+from a data model?  To make this more "concrete", take "a data model"
+to be a database.  As one handy reference point, make it a relational
+database with a SQL API.  How do we [[https://netflix.github.io/dgs/getting-started/][get started]]?
+
+** Get Spring Boot
+
+The Netflix DGS framework is "based on Spring Boot 3.0", so choosing
+DGS means choosing [[https://spring.io/projects/spring-boot][Spring Boot]] over alternatives like [[https://quarkus.io/][Quarkus]] or
+[[https://vertx.io/][Vert.x]], two popular alternatives to [[https://spring.io/][Spring]], the Java application
+framework foundation for Spring Boot.  Absent an existing Spring Boot
+application to build upon, [[https://netflix.github.io/dgs/getting-started/#create-a-new-spring-boot-application][create a new Spring Boot application]] with
+the web-based [[https://start.spring.io/][spring initializr]].  Mature Java and Spring Boot shops
+likely substitute their own optimized inception process, but the
+initializr is the best way to fulfil the [[https://netflix.github.io/dgs/][promise]] of moving fast.
+
+[[file:initializr.png]]
+
+** Get Netflix DGS
+
+Being [[https://spring.io/projects/spring-boot]["opinionated"]], Spring Boot includes some but not all
+"batteries."  Naturally, one battery we must add either to the Gradle
+build file or to the Maven [[https://maven.apache.org/pom.html][POM]] file is [[https://netflix.github.io/dgs/getting-started/#adding-the-dgs-framework-dependency][DGS itself]].
+
+#+begin_src xml
+  <dependencyManagement>
+      <dependencies>
+        ...
+          <dependency>
+              <groupId>com.netflix.graphql.dgs</groupId>
+              <artifactId>graphql-dgs-platform-dependencies</artifactId>
+              <version>4.9.16</version>
+              <type>pom</type>
+              <scope>import</scope>
+          </dependency>
+        ...
+      </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    ...
+      <dependency>
+          <groupId>com.netflix.graphql.dgs</groupId>
+          <artifactId>graphql-dgs-spring-boot-starter</artifactId>
+      </dependency>
+    ...
+  </dependencies>
+#+end_src
+
+** Get a GraphQL Schema
+
+Being [[https://netflix.github.io/dgs/advanced/dynamic-schemas/]["opinionated"]], the DGS framework "is designed for schema first
+development" and so it is necessary first to [[https://netflix.github.io/dgs/getting-started/#creating-a-schema][create a schema]] file.
+This is for the GraphQL API, but that API is over a data model so the
+schema essentially is a data model.  While it might be tempting to
+[[https://github.com/taviroquai/db2graphql][generate the schema]] from the fundamental data model--the
+database--choosing DGS means choosing to write a new data model from
+scratch.  Note that if this new GraphQL data model strongly resembles
+the foundational database data model, this step may feel like
+repetition.  Ignore that feeling.
+
+#+begin_src graphql
+  type Query {
+      shows(titleFilter: String): [Show]
+      secureNone: String
+      secureUser: String
+      secureAdmin: String
+  }
+
+  type Mutation {
+      addReview(review: SubmittedReview): [Review]
+      addReviews(reviews: [SubmittedReview]): [Review]
+      addArtwork(showId: Int!, upload: Upload!): [Image]! @skipcodegen
+  }
+
+  type Subscription {
+      reviewAdded(showId: Int!): Review
+  }
+
+  type Show {
+      id: Int
+      title: String @uppercase
+      releaseYear: Int
+      reviews(minScore:Int): [Review]
+      artwork: [Image]
+  }
+
+  type Review {
+      username: String
+      starScore: Int
+      submittedDate: DateTime
+  }
+
+  input SubmittedReview {
+      showId: Int!
+      username: String!
+      starScore: Int!
+  }
+
+  type Image {
+      url: String
+  }
+
+  scalar DateTime
+  scalar Upload
+  directive @skipcodegen on FIELD_DEFINITION
+  directive @uppercase on FIELD_DEFINITION
+#+end_src
+
+** Get Data Fetchers
+
+The [[https://netflix.github.io/dgs/datafetching/][DataFetcher]] is the fundamental abstraction within DGS.  It plays
+the role of a [[https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller#Controller][Controller]] in a [[https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller][Model-View-Controller]] (MVC)
+architecture. A DataFetcher is a Java or Kotlin method adorned with
+the ~@DgsQuery~ or ~@DgsData~ annotations, in a class adorned with the
+~@DgsComponent~ annotation.  The function of the annotations is to
+instruct the DGS runtime to treat the method as a [[https://graphql.org/learn/execution/][resolver]] for a field
+on a type in the GraphQL schema, to invoke the method when executing
+queries that involve that field, and to include that field's data as
+it marshals the response payload for the query.  Typically, there will
+be a DataFetcher for every Type and top-level Query field in the
+schema.  Given that the types and fields were already [[* * Get a GraphQL Schema][defined in the
+schema]], this step may also feel like repetition.  Ignore that
+feeling as well.
+
+#+begin_src java
+  package com.example.demo.datafetchers;
+
+  import com.example.demo.generated.types.Show;
+  import com.example.demo.services.ShowsService;
+  import com.netflix.graphql.dgs.DgsComponent;
+  import com.netflix.graphql.dgs.DgsQuery;
+  import com.netflix.graphql.dgs.InputArgument;
+
+  import java.util.List;
+  import java.util.stream.Collectors;
+
+  @DgsComponent			// Mark this class as DGS Component
+  public class ShowsDataFetcher {
+      private final ShowsService showsService;
+
+      public ShowsDataFetcher(ShowsService showsService) {
+          this.showsService = showsService;
+      }
+
+      /**
+       ,* This dataFetcher resolves the shows field on Query.
+       ,* It uses an @InputArgument to get the titleFilter from the Query if one is defined.
+       ,*/
+      @DgsQuery			// Mark this class as a DGS DataFetcher
+      public List<Show> shows(@InputArgument("titleFilter") String titleFilter) {
+          if (titleFilter == null) {
+              return showsService.shows();
+          }
+
+          return showsService.shows().stream().filter(s -> s.getTitle().contains(titleFilter)).collect(Collectors.toList());
+      }
+  }
+#+end_src
+
+** Get POJOs (Optional)
+
+If the DataFetchers play the role of Controllers in an MVC
+architecture, typically there will be corresponding components for the
+[[https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller#Model][Models]].  DGS does not require them so they can be regarded as
+"optional", though the DGS examples have them as do typical Spring
+applications.  They can be Java [[https://docs.oracle.com/en/java/javase/17/language/records.html#GUID-6699E26F-4A9B-4393-A08B-1E47D4B2D263][Records]] or even Java [[https://docs.oracle.com/javase/8/docs/api/java/util/Map.html][Maps]] (more on
+this later), but typically they are [[https://en.wikipedia.org/wiki/Plain_old_Java_object][Plain Old Java Objects]] (POJOs) and
+are the fundamental units of the in-memory application-layer data
+model, which often mirrors the foundational persistent database data
+model.  The one-to-one correspondence between database tables, GraphQL
+schema types, GraphQL schema top-level Query fields, DGS DataFetchers,
+and POJOs may feel like yet more repetition.  Continue to ignore these
+feelings.
+
+#+begin_src java
+  public class Show {
+      private final UUID id;
+      private final String title;
+      private final Integer releaseYear;
+
+      public Show(UUID id, String title, Integer releaseYear) {
+          this.id = id;
+          this.title = title;
+          this.releaseYear = releaseYear;
+      }
+
+      public UUID getId() {
+          return id;
+      }
+
+      public String getTitle() {
+          return title;
+      }
+
+      public Integer getReleaseYear() {
+          return releaseYear;
+      }
+  }  
+#+end_src
+
+** Get Real Data (Not Optional)
+
+The road laid out by the DGS [[https://netflix.github.io/dgs/getting-started/][Getting Started]] guide unfortunately turns
+to gravel at this point in the journey, with its [[https://github.com/Netflix/dgs-examples-java/blob/d25df806c587402d3d8ac3fa93385f0a6fe34276/src/main/java/com/example/demo/services/ShowsServiceImpl.java][examples]] merely
+returning hard-coded in-memory data.  This is not an option for a real
+application whose data is persisted in a relational database with a
+SQL API, as was stipulated above.
+
+Of course, the Model and Controller layers of a multi-layered MVC
+architecture being independent of the View layer, they need not be
+GraphQL or DGS specific and so it is appropriate that the opinionated
+DGS guide withold opinions on how exactly to map data between model
+objects and a relational database.  Without that luxury real
+applications typically will use Object Relational Mapping ([[https://blog.codinghorror.com/object-relational-mapping-is-the-vietnam-of-computer-science/][ORM]])
+frameworks like [[https://hibernate.org/][Hibernate]] or [[https://www.jooq.org/][JOOQ]], but those tools have /their own/
+"Getting Started" guides:
+
+- [[https://docs.jboss.org/hibernate/orm/6.4/quickstart/html_single/][Getting Started with Hibernate]]
+- [[https://www.jooq.org/doc/3.19/manual/getting-started/][Getting Started with JOOQ]]
+
+Consider choosing Hibernate if its greater popularity, broader
+industry support, larger volume of learning resources, and slightly
+greater integration with the Spring ecosystem are important.  In that
+case, here are some of the remaining steps.
+
+** Get Hibernate
+
+As it is time to add another "battery" to the application, like with
+Spring and DGS, Hibernate is added either to the Gradle build file or
+to the Maven POM file.
+
+#+begin_src xml
+  <dependencyManagement>
+    <dependencies>
+      ...
+      <dependency>
+        <groupId>org.hibernate.orm</groupId>
+        <artifactId>hibernate-platform</artifactId>
+        <version>6.4.4.Final</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      ...
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    ...
+    <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+    ...
+  </dependencies>
+#+end_src
+
+** Get Access to the Database
+
+Naturally, the application needs access to the database, which can be
+[[https://docs.jboss.org/hibernate/orm/6.4/quickstart/html_single/#hibernate-gsg-tutorial-annotations-config][configured]] into Hibernate via a simple ~hibernate.properties~ file in
+the ~${project.basedir}/src/main/resources~ directory.
+
+#+begin_src text
+hibernate.connection.url=<JDBC url>
+hibernate.connection.username=<DB role name>
+hibernate.connection.password=<DB credential secret>
+#+end_src
+
+** Get Mappings between POJOs and Tables
+
+Hibernate can [[https://docs.jboss.org/hibernate/orm/6.4/quickstart/html_single/#hibernate-gsg-tutorial-annotations-entity][map]] the tables to POJOs--which again are the Models in
+the MVC architecture--to database tables (or views) by annotating
+those classes with ~@Entity~, ~@Table~, ~@Id~, and other annotations
+that the Hibernate framework defines.  The function of these
+annotations is to instruct the Hibernate runtime to treat the classes
+as targets for [[https://docs.jboss.org/hibernate/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#fetching][fetching]] corresponding data from the database (as well
+as [[https://docs.jboss.org/hibernate/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#flushing][flushing]] changes back to the database).
+
+#+begin_src java
+  @Entity				// Mark this as a persistent Entity
+  @Table(name = "shows")		// Name its table if different
+  public class Show {
+      @Id				// Mark the field as a primary key
+      @GeneratedValue		// Specify that the db generates this
+      private final UUID id;
+      private final String title;
+      private final Integer releaseYear;
+
+      public Show(UUID id, String title, Integer releaseYear) {
+          this.id = id;
+          this.title = title;
+          this.releaseYear = releaseYear;
+      }
+
+      public UUID getId() {
+          return id;
+      }
+
+      public String getTitle() {
+          return title;
+      }
+
+      public Integer getReleaseYear() {
+          return releaseYear;
+      }
+  }  
+#+end_src
+
+Hibernate can also [[https://docs.jboss.org/hibernate/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#dynamic-model][map]] the tables Java [[https://docs.oracle.com/javase/8/docs/api/java/util/Map.html][Map]] instances ([[https://en.wikipedia.org/wiki/Hash_table][hash tables]]) in
+lieu of POJOs, as mentioned above.  This is done via [[https://docs.jboss.org/hibernate/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#mapping-model-dynamic][dynamic mapping]]
+in what are called [[https://docs.jboss.org/hibernate/orm/3.6/quickstart/en-US/html/hibernate-gsg-tutorial-basic.html#hibernate-gsg-tutorial-basic-mapping][mapping files]].  Typically there will be an XML
+mapping file for every Model in the application, with the naming
+convention ~modelname.hbm.xml~, in the
+~${project.basedir}/main/resources~ directory. This substitutes the
+labor of writing Java POJO files for the Models and annotating them
+with Hibernate annotations, with the labor of writing XML mapping
+files for the Models and embedding the equivalent metadata there.  It
+may feel like little was gained in the bargain, but ignoring those
+feelings should be second nature by now.
+
+#+begin_src xml
+  <!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+      "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+  <hibernate-mapping>
+      <class entity-name="Show">
+        <id name="id" column="id" length="32" type="string"/> <!--no native UUID type in Hibernate mapping-->
+        <property name="title" not-null="true" length="50" type="string"/>
+        <property name="releaseYear" not-null="true" length="50" type="integer"/>
+      </class>
+  </hibernate-mapping>
+#+end_src
+
+** Get Fetching
+
+
