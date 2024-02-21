@@ -86,8 +86,8 @@ Primary software functionality that satisfies use-cases for end-users:
 
 ** Non-Functional Concerns
 
-Secondary software functionality that supports the *functiona concerns*
-with Quality-of-Service (QoW) guarantees for operators:
+Secondary software functionality that supports the *functional concerns*
+with Quality-of-Service (QoS) guarantees for operators:
 
 - caching :: configurable time-vs-space trade-off for obtaining better
   performance for certain classes of operations
@@ -125,7 +125,7 @@ framework foundation for Spring Boot.  Absent an existing Spring Boot
 application to build upon, [[https://netflix.github.io/dgs/getting-started/#create-a-new-spring-boot-application][create a new Spring Boot application]] with
 the web-based [[https://start.spring.io/][spring initializr]].  Mature Java and Spring Boot shops
 likely substitute their own optimized inception process, but the
-initializr is the best way to fulfil the [[https://netflix.github.io/dgs/][promise]] of moving fast.
+initializr is the best way to fulfill the [[https://netflix.github.io/dgs/][promise]] of moving fast.
 
 [[file:initializr.png]]
 
@@ -227,7 +227,7 @@ the role of a [[https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93control
 architecture. A DataFetcher is a Java or Kotlin method adorned with
 the ~@DgsQuery~ or ~@DgsData~ annotations, in a class adorned with the
 ~@DgsComponent~ annotation.  The function of the annotations is to
-instruct the DGS runtime to treat the method as a [[https://graphql.org/learn/execution/][resolver]] for a field
+instruct the DGS run-time to treat the method as a [[https://graphql.org/learn/execution/][resolver]] for a field
 on a type in the GraphQL schema, to invoke the method when executing
 queries that involve that field, and to include that field's data as
 it marshals the response payload for the query.  Typically, there will
@@ -239,14 +239,11 @@ feeling as well.
 #+begin_src java
   package com.example.demo.datafetchers;
 
-  import com.example.demo.generated.types.Show;
-  import com.example.demo.services.ShowsService;
-  import com.netflix.graphql.dgs.DgsComponent;
-  import com.netflix.graphql.dgs.DgsQuery;
-  import com.netflix.graphql.dgs.InputArgument;
-
-  import java.util.List;
-  import java.util.stream.Collectors;
+  import com.example.demo.generated.types.*;
+  import com.example.demo.services.*;
+  import com.netflix.graphql.dgs.*;
+  import java.util.*;
+  import java.util.stream.*;
 
   @DgsComponent			// Mark this class as DGS Component
   public class ShowsDataFetcher {
@@ -256,16 +253,9 @@ feeling as well.
           this.showsService = showsService;
       }
 
-      /**
-       ,* This dataFetcher resolves the shows field on Query.
-       ,* It uses an @InputArgument to get the titleFilter from the Query if one is defined.
-       ,*/
       @DgsQuery			// Mark this class as a DGS DataFetcher
       public List<Show> shows(@InputArgument("titleFilter") String titleFilter) {
-          if (titleFilter == null) {
-              return showsService.shows();
-          }
-
+          if (titleFilter == null) return showsService.shows();
           return showsService.shows().stream().filter(s -> s.getTitle().contains(titleFilter)).collect(Collectors.toList());
       }
   }
@@ -323,7 +313,7 @@ SQL API, as was stipulated above.
 Of course, the Model and Controller layers of a multi-layered MVC
 architecture being independent of the View layer, they need not be
 GraphQL or DGS specific and so it is appropriate that the opinionated
-DGS guide withold opinions on how exactly to map data between model
+DGS guide withhold opinions on how exactly to map data between model
 objects and a relational database.  Without that luxury real
 applications typically will use Object Relational Mapping ([[https://blog.codinghorror.com/object-relational-mapping-is-the-vietnam-of-computer-science/][ORM]])
 frameworks like [[https://hibernate.org/][Hibernate]] or [[https://www.jooq.org/][JOOQ]], but those tools have /their own/
@@ -386,7 +376,7 @@ Hibernate can [[https://docs.jboss.org/hibernate/orm/6.4/quickstart/html_single/
 the MVC architecture--to database tables (or views) by annotating
 those classes with ~@Entity~, ~@Table~, ~@Id~, and other annotations
 that the Hibernate framework defines.  The function of these
-annotations is to instruct the Hibernate runtime to treat the classes
+annotations is to instruct the Hibernate run-time to treat the classes
 as targets for [[https://docs.jboss.org/hibernate/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#fetching][fetching]] corresponding data from the database (as well
 as [[https://docs.jboss.org/hibernate/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#flushing][flushing]] changes back to the database).
 
@@ -447,4 +437,302 @@ feelings should be second nature by now.
 
 ** Get Fetching
 
+As described above, the DGS demo [[https://raw.githubusercontent.com/Netflix/dgs-examples-java/d25df806c587402d3d8ac3fa93385f0a6fe34276/src/main/java/com/example/demo/services/ShowsServiceImpl.java][example]] Controller class fetches
+hard-coded in-memory data.  To fetch data from the database in a real
+application, replace this implementation with one that establishes the
+crucial link between the three key frameworks: DGS, Spring, and
+Hibernate.
 
+#+begin_src java
+  package com.example.demo.services;
+
+  import com.example.demo.generated.types.*;
+  import java.util.*;
+  import org.hibernate.cfg.*;
+  import org.springframework.stereotype.*;
+  import static org.hibernate.cfg.AvailableSettings.*;
+
+  @Service
+  public class ShowsServiceImpl implements ShowsService {
+      private StandardServiceRegistry registry;
+      private SessionFactory sessionFactory;
+
+      public ShowsServiceImpl() {
+          try {
+              this.registry = new StandardServiceRegistryBuilder().build();
+              this.sessionFactory = 
+                  new MetadataSources(this.registry)             
+                  .addAnnotatedClass(Show.class) // Add every Model class to the Hibernate metadata
+                  .buildMetadata()                  
+                  .buildSessionFactory();           
+          }
+          catch (Exception e) {
+              StandardServiceRegistryBuilder.destroy(this.registry);
+          }
+      }
+
+      @Override
+      public List<Show> shows() {
+          List<Show> shows = new ArrayList<>();
+          sessionFactory.inTransaction(session -> {
+                  session.createSelectionQuery("from Show", Show.class) // 'Show' is mentioned twice
+                      .getResultList()   
+                      .forEach(show -> shows.add(show));
+              });
+          return shows;
+      }
+  }
+#+end_src
+
+** Get Iterating
+
+At this point there already is a fair amount of code and other
+software artifacts
+
+- GraphQL schema files (~*.sdl~)
+- Project build files (~build.gradle~ or ~pom.xml~)
+- Configuration files (~hibernate.properties~)
+- DGS DataFetcher files (~*.java~)
+- POJO files (~*.java~)
+- Additional Controller files (~*.java~)
+
+along with packages, symbols, and annotations from three frameworks
+
+- DGS
+- Spring
+- Hibernate
+
+and yet it would be a stroke of luck if it even compiled let alone
+functioned properly at first.  In order to iterate on the project
+rapidly and with confidence until it builds and functions properly,
+repeatable unit tests-as-code are needed.  Fortunately, the spring
+initialzr will already have added the [[https://junit.org/junit4/][JUnit]] and [[https://docs.spring.io/spring-boot/docs/2.0.4.RELEASE/reference/html/boot-features-testing.html][SpringBoot]] testing
+components to the project build files.  To use mock data with a
+framework such as [[https://site.mockito.org/][mockito]], however, its components must be added to
+the project build file.
+
+#+begin_src xml
+  <dependencies>
+    ...
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>{mockitoversion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>{mockitoversion}</version>
+      <scope>test</scope>
+    </dependency>
+    ...
+  </dependencies>
+#+end_src
+
+All that is needed now is to create unit test class files for every
+DataFetcher, taking care to set up mock data as needed.
+
+#+begin_src java
+  import com.netflix.graphql.dgs.*;
+  import com.netflix.graphql.dgs.autoconfig.*;
+  import java.util.*;
+  import org.junit.jupiter.api.*;
+  import org.mockito.*;
+  import org.springframework.beans.factory.annotation.*;
+  import org.springframework.boot.test.context.*;
+  import static org.assertj.core.api.Assertions.assertThat;
+
+  @SpringBootTest(classes = {DgsAutoConfiguration.class, ShowsDataFetcher.class})
+  public class ShowsDataFetcherTests {
+      @Autowired
+      DgsQueryExecutor dgsQueryExecutor;
+
+      @MockBean
+      ShowsService showsService;
+
+      @BeforeEach
+      public void before() {
+          Mockito.when(showsService.shows()).thenAnswer(invocation -> List.of(new Show("mock title", 2020)));
+      }
+
+      @Test
+      public void showsWithQueryApi() {
+          GraphQLQueryRequest graphQLQueryRequest = new GraphQLQueryRequest(
+                  new ShowsGraphQLQuery.Builder().build(),
+                  new ShowsProjectionRoot().title()
+          );
+          List<String> titles = dgsQueryExecutor.executeAndExtractJsonPath(graphQLQueryRequest.serialize(), "data.shows[*].title");
+          assertThat(titles).containsExactly("mock title");
+      }
+  }
+#+end_src
+
+** Get to a Milestone
+
+After iterating on the implementation by writing test cases in tandem,
+eventually a milestone is reached.  There is a functioning Netflix DGS
+GraphQL server to get /some/ data from a foundational data model in a
+relational database.  Building on this success, take stock of what has
+been accomplished so far so that planning can begin for what still
+needs to be done.
+
+Recall our definition of a "GraphQL Server" as one which has the
+[[* Functional Concerns][Functional]] and [[* Non-Functional Concerns][Non-Functional]] concerns listed above, and note which
+features have and have not yet been implemented.
+
+- [X] queries
+- [ ] flexible, general-purpose queries
+- [ ] mutations
+- [ ] subscriptions
+- [ ] business logic
+- [ ] integration
+- [ ] caching
+- [ ] security
+- [ ] reliability & error handling
+
+Clearly, there still is a long way to go.  Granted, the providers of
+frameworks like [[https://spring.io/projects/spring-framework][Spring]], [[https://hibernate.org/][Hibernate]], and [[https://netflix.github.io/dgs/][Netflix DGS]] /have/ thought of
+this.  A benefit of frameworks like these is that they /are
+frameworks/: they organize the code, they furnish mental models for
+reasoning about it, they offer guidance in the form of opinions
+derived from experience, /and/ they provide "lighted pathways" for
+adding these other features and fulfilling the promise of a
+"full-featured GraphQL server."
+
+For instance, some of the flexibility we seek can be recovered within
+Hibernate by switching to [[https://docs.jboss.org/hibernate/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#fetching-strategies-dynamic-fetching-entity-graph][JPA entity graph]] fetching.  Alternatively,
+instead of fetching the data "directly" through Hibernate, the DGS
+DataFetchers could compose [[https://docs.jboss.org/hibernate/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#query-language][Hibernate Query Language]] (HQL) queries,
+which are then executed by Hibernate in order to retrieve the data.
+This bears a strong resemblance to compiling SQL (perhaps even from
+GraphQL), but it has the virtue of being abstracted away from the
+details of the underlying database SQL dialect.
+
+Likewise, caching can be configured in [[https://docs.jboss.org/hibernate/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#caching][Hibernate]] (or in [[https://www.jooq.org/doc/3.19/manual/coming-from-jpa/from-jpa-caches/][JOOQ]] if that
+is the ORM).  It can also be configured in [[https://docs.spring.io/spring-boot/docs/2.1.6.RELEASE/reference/html/boot-features-caching.html][Spring Boot]].  Other
+features such as security can be added into Spring with tools like
+[[https://www.baeldung.com/spring-bucket4j][Bucket4j]].  As for business logic, the code itself (Java or Kotlin) in
+the DataFetchers, the Controllers, and the Model POJOs provides
+obvious sites for installing business logic.  Naturally, Spring has
+affordances to help with some of this, such as for [[https://docs.spring.io/spring-security/reference/servlet/authorization/index.html][authorization]], data
+[[https://docs.spring.io/spring-framework/docs/4.1.x/spring-framework-reference/html/validation.html][validation]].
+
+Consequently, a "full-featured GraphQL server" probably /can/ be built
+in Java or Kotlin by cobbling together Netflix DGS, Spring Boot, an
+ORM, and other frameworks and libraries.
+
+- Can this be accomplished /"in record time"/?
+- /Should/ a "full-featured GraphQL server" be attempted this way?
+- /Is there/ a better way?
+
+** Get Back to Basics
+
+Remembering that the goal never was to write Java or Kotlin code,
+juggle frameworks, endure relentless context switching, or generate
+boilerplate.  The goal was
+
+#+BEGIN_QUOTE
+Build a full-featured GraphQL server +with Java or Kotlin in record time+
+#+END_QUOTE
+
+Getting back to basics, it is possible to answer the third question
+above, "/Is there/ a better way?"  There is.
+
+* GraphQL
+
+What is GraphQL?  One way to answer that is by listing its features.
+/Some/ of those features are:
+
+- GraphQL is a flexible, general-purpose query language over types.
+- Types have fields.
+- Fields can relate to other Types.
+
+If that sounds familiar, it should, because other ways of organizing
+data have these same features.  SQL is one of them.  It is not the
+/only/ one, but it is a very common one.  On the other hand, GraphQL
+has several secondary, related features.
+
+- GraphQL has very simple semantics.
+- GraphQL has a highly-regular machine-readable input format.
+- GraphQL has a highly-regular machine-readable output format.
+
+If SQL is more powerful than GraphQL, GraphQL is more uniform and is
+easier to work with than SQL.  They /seem/ like a match made in Heaven
+and this raises some obvious questions.
+
+- Can GraphQL be compiled to SQL (and other query languages)?
+- /Should/ GraphQL be compiled to SQL?
+- What would be the trade-offs involved?
+
+** GraphQL to SQL:  Compilers over Resolvers
+
+The answer to the first question is a categorical "yes."  [[https://hasura.io/][Hasura]] does
+it.  [[https://www.graphile.org/postgraphile/][PostGraphile]] does it.  [[https://www.prisma.io/][Prisma]] does it.  [[https://supabase.com/blog/pg-graphql][supabase]] does it.
+[[https://postgrest.org/][PostgREST]] even does something similar, albeit not for GraphQL.
+
+The answer to the second question surely must depend on the answers to
+the third question.
+
+So what are the trade-offs of adopting a compiler approach over a
+resolver approach?  First, what are some of the benefits?
+
+|------------+----------------------------------------------------------------|
+| Benefit    | Comment                                                        |
+|------------+----------------------------------------------------------------|
+| Fast       | Truly deliver in "record time".                                |
+| Uniform    | Solve the data-fetching problem once and for all.              |
+| Features   | Build functional and non-functional concerns around that core. |
+| Efficiency | Avoid the [[https://netflix.github.io/dgs/data-loaders/][N+1 problem]] naturally.                               |
+| Leverage   | Exploit all of the power of the underlying database.           |
+| Operate    | Easily deploy, monitor, and maintain the application.          |
+|------------+----------------------------------------------------------------|
+
+Second, what are some of the drawbacks, but also how can they be
+mitigated?
+
+|----------------+-----------------------------------------------------+--------------------------------------------------------------|
+| Drawback       | Comment                                             | Mitigation Strategy                                          |
+|----------------+-----------------------------------------------------+--------------------------------------------------------------|
+| Coupling       | API tied to Data Model                              | Database views other forms of [[https://hasura.io/docs/latest/schema/postgres/native-queries/][indirection]]                    |
+| Business Logic | Code is a natural place to implement business logic | Database views, functions, and [[https://hasura.io/docs/latest/actions/overview/][other]] [[https://hasura.io/docs/latest/event-triggers/overview/][escape]] [[https://hasura.io/docs/latest/schema/postgres/input-validations/][hatches]]          |
+| Heterodoxy     | difficulty of defying conventional wisdom           | Truly "build a full-featured GraphQL server" in record time. |
+|----------------+-----------------------------------------------------+--------------------------------------------------------------|
+
+* Summary
+
+The /current/ conventional wisdom in the GraphQL community is to adopt
+a schema-first approach, hand-writing resolvers over in-memory data
+models in code, typically with Java, Kotlin, Python, Ruby, or
+Javascript.  Stacked against this wisdom is the experience of lengthy
+development cycles, shallow APIs, superficial implementations, tight
+coupling to the data model, brittleness and unreliability, and
+operational inefficiency.  This is arguably a very naive approach.
+
+As the /current/ conventional wisdom relaxes to allow for a more
+diverse set of strategies for building full-featured GraphQL servers,
+a more sophisticated data-first approach /will/ adopted.  It has to.
+The volume, velocity, and variety of data are only growing.  It is not
+uncommon for enterprises to have hundreds of data sources and
+thousands of tables.  Manually curating GraphQL schema which nominally
+are independent of those elements but practically are mirrors of them,
+and then manually repeating that work in multiple layers of the
+architecture, manually writing code to marshal data between
+representations, while neglecting non-functional concerns like
+security and observability is simply a non-starter in that setting.
+
+
+#  LocalWords:  addReview SubmittedReview addReviews addArtwork UUID
+#  LocalWords:  showId skipcodegen reviewAdded releaseYear minScore
+#  LocalWords:  starScore submittedDate DateTime DgsComponent getId
+#  LocalWords:  ShowsDataFetcher ShowsService showsService DgsQuery
+#  LocalWords:  getTitle getReleaseYear config basedir GeneratedValue
+#  LocalWords:  ShowsServiceImpl StandardServiceRegistry ArrayList
+#  LocalWords:  SessionFactory sessionFactory MetadataSources forEach
+#  LocalWords:  StandardServiceRegistryBuilder addAnnotatedClass
+#  LocalWords:  buildMetadata buildSessionFactory inTransaction junit
+#  LocalWords:  createSelectionQuery getResultList mockitoversion
+#  LocalWords:  jupiter SpringBootTest DgsAutoConfiguration Autowired
+#  LocalWords:  ShowsDataFetcherTests DgsQueryExecutor MockBean
+#  LocalWords:  dgsQueryExecutor BeforeEach showsWithQueryApi
+#  LocalWords:  GraphQLQueryRequest graphQLQueryRequest assertThat
+#  LocalWords:  ShowsProjectionRoot containsExactly
