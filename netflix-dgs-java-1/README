@@ -127,6 +127,8 @@ the web-based [[https://start.spring.io/][spring initializr]].  Mature Java and 
 likely substitute their own optimized inception process, but the
 initializr is the best way to fulfill the [[https://netflix.github.io/dgs/][promise]] of moving fast.
 
+#+CAPTION: springboot initialzr
+#+ATTR_HTML: :alt springboot initialzr :width 600
 [[file:initializr.png]]
 
 ** Get Netflix DGS
@@ -619,7 +621,8 @@ affordances to help with some of this, such as for [[https://docs.spring.io/spri
 
 Consequently, a "full-featured GraphQL server" probably /can/ be built
 in Java or Kotlin by cobbling together Netflix DGS, Spring Boot, an
-ORM, and other frameworks and libraries.
+ORM, and other frameworks and libraries.  But, several questions leap
+out. 
 
 - Can this be accomplished /"in record time"/?
 - /Should/ a "full-featured GraphQL server" be attempted this way?
@@ -719,6 +722,17 @@ and then manually repeating that work in multiple layers of the
 architecture, manually writing code to marshal data between
 representations, while neglecting non-functional concerns like
 security and observability is simply a non-starter in that setting.
+
+We don't build database servers from scratch every time we enter a
+business domain that demands solving problems using data.  Instead, we
+reach for full-featured general-purpose purpose-built database
+products and adapt them to our needs in order to solve these problems
+quickly and confidently so that we can move onto the next problems.
+
+Likewise we shouldn't build API servers from scratch every time we
+enter a business domain that demands solving problems using APIs.
+Instead, we should reach for a [[https://hasura.io/][full-featured general-purpose purpose-built API product]] and adapt it to our needs in order to solve
+these problems quickly and confidently, and get on with our lives.
 
 
 #  LocalWords:  addReview SubmittedReview addReviews addArtwork UUID
