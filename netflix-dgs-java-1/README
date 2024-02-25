@@ -5,7 +5,7 @@
 #+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
 #+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
 #+options: timestamp:t title:t toc:nil todo:t |:t
-#+title: Hasura GraphQL
+#+title: Netflix DGS Blog Article
 #+date: <2024-02-19 Mon>
 #+author: David A. Ventimiglia
 #+email: davidaventimiglia@hasura.io
@@ -19,15 +19,32 @@
 #+reveal_mathjax_url: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 #+reveal_highlight_css: %r/plugin/highlight/zenburn.css
 
+#+odt_extra_styles: <style:style style:name="MyFrame" style:family="graphic">
+#+odt_extra_styles:  <style:graphic-properties svg:width="16.15cm" style:rel-width="95%" fo:min-height="0.34cm" text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" fo:margin-left="0.201cm" fo:margin-right="0.201cm" fo:margin-top="0.201cm" fo:margin-bottom="0.201cm" style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph-content" style:horizontal-pos="left" style:horizontal-rel="paragraph-content" fo:padding="0.15cm" fo:border="0.06pt solid #000000" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true" loext:rel-width-rel="paragraph">
+#+odt_extra_styles:   <style:columns fo:column-count="1" fo:column-gap="0cm"/>
+#+odt_extra_styles:  </style:graphic-properties>
+#+odt_extra_styles: </style:style>
+		    
+#+odt_extra_styles: <style:style style:name="OrgSrcblockFrame" style:family="graphic" style:parent-style-name="MyFrame">
+#+odt_extra_styles:  <style:graphic-properties style:vertical-pos="top" style:vertical-rel="paragraph-content" style:horizontal-pos="left" style:horizontal-rel="paragraph-content" loext:rel-width-rel="paragraph"/>
+#+odt_extra_styles: </style:style>
+
+#+odt_extra_styles: <style:style style:name="OrgQuoteBlock" style:family="paragraph" style:parent-style-name="Text_20_body">
+#+odt_extra_styles:  <style:paragraph-properties fo:margin-left="0.4cm" fo:margin-right="0cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
+#+odt_extra_styles:  <style:text-properties fo:font-style="italic"/>
+#+odt_extra_styles: </style:style>
+
 #+STARTUP: indent
 
-* Abstract
+* Introduction
 
 The maintainers of the [[https://netflix.github.io/dgs/][Netflix DGS]] library [[https://netflix.github.io/dgs/advanced/dynamic-schemas/][strongly recommend]] what is
 commonly-referred to as "schema-first" development of GraphQL servers.
 So do the maintainers of the core [[https://www.graphql-java.com/][graphql-java]] library who write in
 [[https://leanpub.com/graphql-java][their book]]
 
+#+BEGIN_TEXTBOX
+#+ATTR_ODT: :style "OrgQuoteBlock"
 #+BEGIN_QUOTE
 “Schema-first” refers to the idea that the design of a GraphQL schema
 should be done on its own, and should not be generated or inferred
@@ -43,16 +60,18 @@ We strongly believe that this is the only viable approach for any
 real-life GraphQL API and we will only focus on this approach. Both
 Spring for GraphQL and GraphQL Java only support “schema-first”.
 #+END_QUOTE
+#+END_TEXTBOX
 
 [[https://graphql.org/conf/sessions/118f99976647d953d6554bac33dbf3bf/][Other's]] [[https://www.apollographql.com/blog/schema-first-vs-code-only-graphql#conclusion][are]] [[https://xuorig.medium.com/sdl-or-code-first-graphql-schemas-16e7dbdab2f5][not]] [[https://2022.stateofgraphql.com/en-US/usage/#code_generation_type][so]] [[https://lo-victoria.com/graphql-for-beginners-schema-first-vs-code-first][sure]], however, including [[https://www.graphql-java.com/documentation/schema][the maintainers]] of the
 /documentation/ for graphql-java who write that their library "offers
-two different ways of defining the schema /[code-first and schema-first]/."
+two different ways of defining the schema /[code-first and
+schema-first]/."
 
-As advocates of a third way of [[https://hasura.io/blog/hasura-for-the-low-code-ecosystem/][low-code]] and [[https://hasura.io/docs/latest/schema/postgres/using-existing-database/][/database/ schema-first]]
-development, we at [[https://hasura.io/][Hasura]] in this article step out of our comfort
-zone, follow orthodox schema-first development of a demo GraphQL
-server with the state-of-the-art [[https://netflix.github.io/dgs/][Netflix DGS]] library in Java, and
-report back on the experience.
+As advocates of a third way of [[https://hasura.io/blog/hasura-for-the-low-code-ecosystem/][low-code]] and [[https://hasura.io/docs/latest/schema/postgres/using-existing-database/][/data/-first]] development,
+we at [[https://hasura.io/][Hasura]] in this article follow the trail of orthodox schema-first
+development of a demo GraphQL server with the state-of-the-art [[https://netflix.github.io/dgs/][Netflix
+DGS]] library in Java, see where it leads, report on the experience,
+and compare it to the alternatives.
 
 * Netflix DGS
 
