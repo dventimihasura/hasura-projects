@@ -11,5 +11,10 @@
         max_connections: 50
         retries: 1
       use_prepared_statements: true
+    read_replicas:
+      - database_url:
+          from_env: HASURA_GRAPHQL_DATABASE_READONLY_URL
+        isolation_level: read-committed
+        use_prepared_statements: false
   tables: "!include default/tables/tables.yaml"
   functions: "!include default/functions/functions.yaml"
