@@ -18,6 +18,7 @@ services:
       - ${HGEPORT1:-8080}:8080
     restart: always
     environment:
+      ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
       DATABASE_URL: postgres://${PGUSER:-postgres}:${PGPASSWORD:-postgres}@postgres/${PGDATABASE}
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
       HASURA_GRAPHQL_DATABASE_READONLY_URL: postgres://${PGREADUSER:-postgres}:${PGREADPASSWORD:-postgres}@postgres/${PGDATABASE}
@@ -37,6 +38,7 @@ services:
       - ${HGEPORT2:-8080}:8080
     restart: always
     environment:
+      ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
       DATABASE_URL: postgres://${PGUSER:-postgres}:${PGPASSWORD:-postgres}@postgres/${PGDATABASE}
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
       HASURA_GRAPHQL_DEV_MODE: true
@@ -44,8 +46,8 @@ services:
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: true
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://${PGUSER:-postgres}:${PGPASSWORD:-postgres}@postgres/graphql_engine_2
-    # volumes:
-    #   - ./graphql-engine-2/metadata:/hasura-metadata:ro
+    volumes:
+      - ./graphql-engine-2/metadata:/hasura-metadata:ro
     depends_on:
        postgres:
          condition: service_healthy

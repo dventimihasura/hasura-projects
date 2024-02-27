@@ -1,10 +1,14 @@
-- name: graphql-engine-1
+- name: graphql_engine_1
   definition:
     url: http://graphql-engine-1:8080/v1/graphql
     timeout_seconds: 60
-    customization: {}
+    customization:
+      root_fields_namespace: graphql_engine_1
+      type_names:
+        mapping: {}
+        prefix: ge1_
     headers:
       - name: x-hasura-admin-secret
-        value: admin
+        value_from_env: ADMIN_SECRET
     forward_client_headers: true
   comment: ""
