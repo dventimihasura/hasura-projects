@@ -6,6 +6,9 @@
         from_env: DATABASE_URL
       isolation_level: read-committed
       use_prepared_statements: false
+    connection_template:
+      template: "{{ if (($.request.query.operation_type == \"query\") \n|| ($.request.query.operation_type == \"subscription\")) \n&& ($.request.headers?.x-query-read-no-stale == \"true\") }}\n    {{$.primary}}\n{{ else }}\n    {{$.default}}\n{{ end }}"
+      version: 1
     read_replicas:
       - database_url:
           from_env: DATABASE_URL_READONLY

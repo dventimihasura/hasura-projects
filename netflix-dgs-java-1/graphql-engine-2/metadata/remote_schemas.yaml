@@ -7,8 +7,66 @@
       type_names:
         mapping: {}
         prefix: ge1_
-    headers:
-      - name: x-hasura-admin-secret
-        value_from_env: ADMIN_SECRET
     forward_client_headers: true
   comment: ""
+  remote_relationships:
+    - relationships:
+        - definition:
+            to_source:
+              field_mapping:
+                id: id
+              relationship_type: object
+              source: default
+              table:
+                name: account
+                schema: public
+          name: nsr
+      type_name: account
+    - relationships:
+        - definition:
+            to_source:
+              field_mapping:
+                id: id
+              relationship_type: object
+              source: default
+              table:
+                name: order
+                schema: public
+          name: nsr
+      type_name: order
+    - relationships:
+        - definition:
+            to_source:
+              field_mapping:
+                id: id
+              relationship_type: object
+              source: default
+              table:
+                name: order_detail
+                schema: public
+          name: nsr
+      type_name: order_detail
+    - relationships:
+        - definition:
+            to_source:
+              field_mapping:
+                id: id
+              relationship_type: object
+              source: default
+              table:
+                name: product
+                schema: public
+          name: nsr
+      type_name: product
+    - relationships:
+        - definition:
+            to_source:
+              field_mapping:
+                value: value
+              relationship_type: object
+              source: default
+              table:
+                name: region
+                schema: public
+          name: nsr
+      type_name: region

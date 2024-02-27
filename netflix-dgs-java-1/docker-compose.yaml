@@ -20,7 +20,6 @@ services:
     environment:
       ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
       DATABASE_URL: postgres://write_user:write_user@postgres/${PGDATABASE}
-      DATABASE_URL_READONLY: postgres://read_user:read_user@postgres/${PGDATABASE}
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
