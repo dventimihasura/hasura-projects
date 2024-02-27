@@ -28,18 +28,6 @@ insert_permissions:
         - account_id
         - id
     comment: ""
-select_permissions:
-  - role: user
-    permission:
-      columns:
-        - region
-        - created_at
-        - updated_at
-        - status
-        - account_id
-        - id
-      filter: {}
-    comment: ""
 update_permissions:
   - role: user
     permission:

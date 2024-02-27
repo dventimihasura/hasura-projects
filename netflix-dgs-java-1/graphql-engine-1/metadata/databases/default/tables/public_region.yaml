@@ -17,14 +17,6 @@ insert_permissions:
         - description
         - value
     comment: ""
-select_permissions:
-  - role: user
-    permission:
-      columns:
-        - description
-        - value
-      filter: {}
-    comment: ""
 update_permissions:
   - role: user
     permission:

@@ -20,18 +20,6 @@ insert_permissions:
         - order_id
         - product_id
     comment: ""
-select_permissions:
-  - role: user
-    permission:
-      columns:
-        - units
-        - created_at
-        - updated_at
-        - id
-        - order_id
-        - product_id
-      filter: {}
-    comment: ""
 update_permissions:
   - role: user
     permission:

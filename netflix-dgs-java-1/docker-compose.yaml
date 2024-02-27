@@ -30,9 +30,9 @@ services:
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: user
     volumes:
       - ./graphql-engine-1/metadata:/hasura-metadata:ro
-    healthcheck:
-      test: >
-        curl 'http://localhost:8080/v1/graphql' -H 'x-hasura-admin-secret: admin' -d '{"query":"query{order_detail(limit:10){id}}","variables":{}}
+    # healthcheck:
+    #   test: >
+    #     curl 'http://localhost:8080/v1/graphql' -H 'x-hasura-admin-secret: admin' -d '{"query":"query{order_detail(limit:10){id}}","variables":{}}
     depends_on:
        postgres:
          condition: service_healthy
@@ -54,6 +54,6 @@ services:
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: user
     volumes:
       - ./graphql-engine-2/metadata:/hasura-metadata:ro
-    # depends_on:
-    #    graphql-engine-1:
-    #      condition: service_healthy
+    depends_on:
+      - graphql-engine-1
+         # condition: service_healthy
