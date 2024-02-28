@@ -1,5 +1,15 @@
 package io.hasura.netflixdgsjava1.model;
 
-public class Account extends io.hasura.netflixdgsjava1.model.generated.Account {
+import jakarta.persistence.*;
+import java.time.*;
+import java.util.*;
 
+@Entity
+public class Account {
+    @Id @GeneratedValue
+    public UUID id;
+    public String name;
+    public LocalDateTime createdAt;
+    public LocalDateTime updatedAt;
+    public List<Order> orders;
 }

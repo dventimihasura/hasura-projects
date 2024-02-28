@@ -6,7 +6,7 @@ services:
       - ${PGPORT:-5432}:5432
     restart: always
     environment:
-      POSTGRES_PASSWORD: ${PGPASSWORD:-postgres}
+      POSTGRES_PASSWORD: postgres
     volumes:
       - ./initdb.d-postgres:/docker-entrypoint-initdb.d:ro
     command: postgres -c 'shared_preload_libraries=pg_stat_statements'
@@ -19,19 +19,19 @@ services:
     restart: always
     environment:
       ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      DATABASE_URL: postgres://write_user:write_user@postgres/${PGDATABASE}
+      DATABASE_URL: postgres://write_user:write_user@postgres/postgres
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: true
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://${PGUSER:-postgres}:${PGPASSWORD:-postgres}@postgres/graphql_engine_1
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@postgres/graphql_engine_1
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: user
     volumes:
       - ./graphql-engine-1/metadata:/hasura-metadata:ro
-    # healthcheck:
-    #   test: >
-    #     curl 'http://localhost:8080/v1/graphql' -H 'x-hasura-admin-secret: admin' -d '{"query":"query{order_detail(limit:10){id}}","variables":{}}
+    healthcheck:
+      test: >
+        curl 'http://localhost:8080/v1/graphql' -H 'x-hasura-admin-secret: admin' -d '{"query":"query{order_detail(limit:10){id}}","variables":{}}'
     depends_on:
        postgres:
          condition: service_healthy
@@ -42,17 +42,17 @@ services:
     restart: always
     environment:
       ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      DATABASE_URL: postgres://write_user:write_user@postgres/${PGDATABASE}
-      DATABASE_URL_READONLY: postgres://read_user:read_user@postgres/${PGDATABASE}
+      DATABASE_URL: postgres://write_user:write_user@postgres/postgres
+      DATABASE_URL_READONLY: postgres://read_user:read_user@postgres/postgres
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: true
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://${PGUSER:-postgres}:${PGPASSWORD:-postgres}@postgres/graphql_engine_2
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@postgres/graphql_engine_2
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: user
     volumes:
       - ./graphql-engine-2/metadata:/hasura-metadata:ro
     depends_on:
-      - graphql-engine-1
-         # condition: service_healthy
+      graphql-engine-1:
+        condition: service_healthy

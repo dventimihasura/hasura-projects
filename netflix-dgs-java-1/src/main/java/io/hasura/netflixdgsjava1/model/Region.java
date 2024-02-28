@@ -1,4 +1,12 @@
 package io.hasura.netflixdgsjava1.model;
 
-public class Region extends io.hasura.netflixdgsjava1.model.generated.Region {
+import jakarta.persistence.*;
+import java.util.*;
+
+@Entity
+public class Region {
+    @Id
+    public String value;
+    public String description;
+    public List<Order> orders;
 }
