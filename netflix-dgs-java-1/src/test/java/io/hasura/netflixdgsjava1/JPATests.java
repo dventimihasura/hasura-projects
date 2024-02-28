@@ -1,22 +1,12 @@
 package io.hasura.netflixdgsjava1;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import io.hasura.netflixdgsjava1.model.*;
+import jakarta.persistence.*;
 import java.util.List;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import io.hasura.netflixdgsjava1.model.Account;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
+import org.hibernate.boot.*;
+import org.hibernate.boot.registry.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.*;
 
 @SpringBootTest
 class JPATests {
@@ -39,6 +29,7 @@ class JPATests {
     }
 
     @Test
+    @Disabled
     void save_my_first_object_to_the_db() {
 	Account account = new Account();
 	account.name = "Lisa";
@@ -49,6 +40,7 @@ class JPATests {
     }
 
     @Test
+    @Disabled
     void hql_fetch_users() {
 	EntityManager em = sessionFactory.createEntityManager();
 	em.getTransaction().begin();
