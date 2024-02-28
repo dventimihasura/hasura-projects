@@ -9,7 +9,7 @@ import org.hibernate.cfg.*;
 import org.junit.jupiter.api.*;
 import org.testcontainers.containers.*;
 
-class CustomerServiceTest {
+class TestContainersTest {
     private SessionFactory sessionFactory;
     
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine")
@@ -65,15 +65,12 @@ class CustomerServiceTest {
     void hql_fetch_users() {
 	EntityManager session = sessionFactory.createEntityManager();
 	session.getTransaction().begin();
-
 	for (int i = 0; i<10; i++) {
 	    Account account = new Account();
 	    account.name = String.format("Lisa %s", i);
 	    session.persist(account);
 	}
-
 	session.getTransaction().commit();
-
 	EntityManager em = sessionFactory.createEntityManager();
 	em.getTransaction().begin();
 	em.getTransaction().commit();
