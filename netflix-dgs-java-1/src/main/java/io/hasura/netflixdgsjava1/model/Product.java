@@ -13,5 +13,4 @@ public class Product {
     public int price;
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
-    public OrderDetail orderDetail;
 }

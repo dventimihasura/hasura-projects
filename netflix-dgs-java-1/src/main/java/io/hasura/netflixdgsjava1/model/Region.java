@@ -8,5 +8,4 @@ public class Region {
     @Id
     public String value;
     public String description;
-    public List<Order> orders;
 }

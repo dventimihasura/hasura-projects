@@ -13,6 +13,4 @@ public class OrderDetail {
     public int units;
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
-    public Order order;
-    public Product product;
 }

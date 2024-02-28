@@ -13,6 +13,4 @@ public class Order {
     public String value;
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
-    public List<OrderDetail> orderDetails;
-    public Region region;
 }
