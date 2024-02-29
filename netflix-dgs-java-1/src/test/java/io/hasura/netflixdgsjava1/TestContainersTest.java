@@ -2,6 +2,11 @@ package io.hasura.netflixdgsjava1;
 
 import io.hasura.netflixdgsjava1.model.*;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
+
 import java.util.*;
 import org.hibernate.*;
 import org.hibernate.boot.registry.*;
@@ -52,6 +57,8 @@ class TestContainersTest {
     }
 
     @Test
+    @Transactional
+    @Disabled
     void save_my_first_object_to_the_db() {
 	Account account = new Account();
 	account.name = "Lisa";
@@ -62,19 +69,38 @@ class TestContainersTest {
     }
 
     @Test
+    @Transactional
+    @Disabled
     void hql_fetch_users() {
-	EntityManager session = sessionFactory.createEntityManager();
-	session.getTransaction().begin();
+	EntityManager em = sessionFactory.createEntityManager();
+	em.getTransaction().begin();
 	for (int i = 0; i<10; i++) {
 	    Account account = new Account();
 	    account.name = String.format("Lisa %s", i);
-	    session.persist(account);
+	    em.persist(account);
 	}
-	session.getTransaction().commit();
-	EntityManager em = sessionFactory.createEntityManager();
-	em.getTransaction().begin();
 	em.getTransaction().commit();
 	List<Account> accounts = em.createQuery("select u from Account u", Account.class).getResultList();
+	accounts.forEach(System.out::println);
+    }
+
+    @Test
+    @Transactional
+    void criteria_api() {
+	EntityManager em = sessionFactory.createEntityManager();
+	em.getTransaction().begin();
+	for (int i = 0; i<10; i++) {
+	    Account account = new Account();
+	    account.name = String.format("James %s", i);
+	    em.persist(account);
+	}
+	em.getTransaction().commit();
+	CriteriaBuilder cb = em.getCriteriaBuilder();
+	CriteriaQuery<Account> criteriaQuery = cb.createQuery(Account.class);
+	Root<Account> root = criteriaQuery.from(Account.class);
+	criteriaQuery.select(root).where(cb.like(root.get(Account_.name), "James %"));
+	TypedQuery<Account> query = em.createQuery(criteriaQuery);
+	List<Account> accounts = query.getResultList();
 	accounts.forEach(System.out::println);
     }
 }

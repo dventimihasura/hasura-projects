@@ -80,6 +80,14 @@
       <groupId>org.hibernate.orm</groupId>
       <artifactId>hibernate-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-jpamodelgen</artifactId>
+      <version>6.4.4.Final</version>
+      <!-- <type>pom</type> -->
+      <!-- <scope>provided</scope> -->
+    </dependency>
+
   </dependencies>
 
   <build>
