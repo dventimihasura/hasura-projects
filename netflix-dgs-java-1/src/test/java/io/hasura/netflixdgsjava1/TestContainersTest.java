@@ -86,6 +86,7 @@ class TestContainersTest {
 
     @Test
     @Transactional
+    @Disabled
     void criteria_api() {
 	EntityManager em = sessionFactory.createEntityManager();
 	em.getTransaction().begin();

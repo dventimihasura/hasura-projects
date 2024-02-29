@@ -1,13 +1,22 @@
 package io.hasura.netflixdgsjava1.model;
 
-import jakarta.persistence.*;
-
 import java.lang.reflect.Field;
-import java.time.*;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Account {
@@ -18,6 +27,8 @@ public class Account {
     public LocalDateTime createdAt;
     @Column(name = "updated_at") @UpdateTimestamp
     public LocalDateTime updatedAt;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<Order> orders = new ArrayList<>();
     public String toString() {
 	Class<Account> aClass = Account.class;
 	Properties props = new Properties();
