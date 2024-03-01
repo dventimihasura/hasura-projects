@@ -84,13 +84,14 @@ or
 [[http://localhost:HGEPORT]]
 
 #+begin_src graphql
-mutation MyMutation {
-  insert_product_private_one(object: {name: "Fruit Loops", price: 206}) {
-    id
-    name
-    price
+  mutation MyMutation {
+    insert_product_private_one(object: {name: "Fruit Loops", price: 206}) {
+      id
+      name
+
+      price
+    }
   }
-}
 #+end_src
 
 #  LocalWords:  PGPORT HGEPORT

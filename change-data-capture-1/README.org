@@ -1,0 +1,196 @@
+* What
+
+This is a Proof-Of-Concept (POC) for using [[https://www.postgresql.org/docs/current/logicaldecoding.html][Logical Decoding]] in
+PostgreSQL to perform [[https://en.wikipedia.org/wiki/Change_data_capture][Change Data Capture]] (CDC) and store the change
+events back in the database.  The change events are then available for
+Hasura [[https://hasura.io/docs/latest/subscriptions/postgres/index/][Subscriptions]]. 
+
+* Why
+
+Hasura users may need to update a ~change~ table that has a holistic
+view of the changes made across many tables and then offer the ability
+for other users to subscribe to those changes.
+
+* How
+
+This POC uses Logical Decoding along with the [[https://github.com/eulerto/wal2json][wal2json]] [[https://www.postgresql.org/docs/current/logicaldecoding-explanation.html#LOGICALDECODING-EXPLANATION-OUTPUT-PLUGINS][output plugin]]
++and the [[https://github.com/citusdata/pg_cron][pg_cron]] [[https://www.postgresql.org/docs/current/sql-createextension.html][extension]].+  Logical Decoding leverages the PostgreSQL
+[[https://www.postgresql.org/docs/current/wal-intro.html][Write-Ahead Log]] (WAL) to support [[https://www.postgresql.org/docs/current/logical-replication.html][Logical Replication]] and other
+applications.  Extra metadata in [[https://www.postgresql.org/docs/current/logicaldecoding-explanation.html#LOGICALDECODING-REPLICATION-SLOTS][replication slots]] causes PostgreSQL
+to retain WAL segments instead of cleaning them up, processes change
+events through custom output plugins to shape the data for downstream
+applications, and offers applications the ability to control the
+clean-up of WAL segments.
+
+This POC uses Logical Decoding to capture /all/ changes to user
+tables.  It uses the ~wal2json~ output plugin to shape the change
+event data into a uniform JSON representation.  +And, it uses
+the~pg_cron~ extension+ And, it use [[https://hasura.io/docs/latest/scheduled-triggers/overview/][Hasura scheduled event triggers]]
+along with PostgreSQL [[https://www.postgresql.org/docs/current/bgworker.html][background worker processes]] to write the change
+event data in JSON form to a user ~change~ table and to clean up WAL
+segments whose change event data has already been processed in this
+way.
+
+This POC uses a simple data model in [[file:initdb.d-postgres/01_init_model.sql][01_init_model.sql]] with sample
+data in [[file:initdb.d-postgres/02_init_data.sql][02_init_data.sql]] for a retail grocery store, with these
+tables.
+
+- account :: user account data
+- order :: order invoices that belong to an ~account~
+- order_detail :: order line items that associate a ~product~ with an ~order~
+- product :: a catalog of grocery items that can be part of an ~order~
+- region :: sales regions associated with an ~order~
+
+This POC sets up the CDC machinery in [[file:initdb.d-postgres/03_cdc.sql][03_cdc.sql]].  Among other things,
+that creates a ~change~ table with the following structure.
+
+#+begin_src sql
+create unlogged table change (
+  lsn pg_lsn not null,
+  xid bigint primary key,
+  payload jsonb
+);
+#+end_src
+
+- ~lsn~ :: a [[https://www.postgresql.org/docs/current/datatype-pg-lsn.html][pg_lsn]] which is incidental housekeeping info
+- ~xid~ :: a ~bigint~ cast of a [[https://www.postgresql.org/docs/current/transaction-id.html][TransactionId]], a monotonically
+  increasing and unique identifier suitable as a primary key
+- ~payload~ :: a ~jsonb~ binary [[https://www.postgresql.org/docs/current/datatype-json.html][JSON data type]] storing the actual
+  change event data
+
+Finally, this POC has Hasura metadata in the [[file:metadata/actions.graphql][metadata]] directory which
+tracks all of the user tables, including the CDC ~change~ table.  That
+metadata is [[https://hasura.io/docs/latest/migrations-metadata-seeds/auto-apply-migrations/][automatically applied]] by the Hasura Docker image.
+
+*NOTE*: This POC uses +two libraries+ one library +, one of which is
+optional+: the ~wal2json~ output plugin. +, and the ~pg_cron~ extension.+
++The ~pg_cron~ extension is optional.+  This POC uses it to move change
+event data from the logical decoding slot to the ~change~ table
+periodically, but this could be accomplished in other ways:
+
+- [[https://www.postgresql.org/docs/current/app-pgrecvlogical.html][pg_recvlogical]] :: a separate process could pipe the data back into
+  the database as described in [[https://stackoverflow.com/questions/77808615/how-to-use-logical-decoding-with-pg-recvlogical-to-pass-changes-through-a-non-tr][this Stack Overflow question and answer]]
+- [[https://hasura.io/docs/latest/scheduled-triggers/create-cron-trigger/][Scheduled Triggers]] :: Hasura event triggers could periodically do a
+  self-call to a [[https://hasura.io/docs/latest/restified/overview/][RESTified endpoint]] which calls a tracked [[https://hasura.io/docs/latest/schema/postgres/custom-functions/][function]]
+  which does the work of copying change data into the ~change~ table. 
+
+* Steps
+
+** Step 1:  Checkout the [[https://github.com/dventimihasura/hasura-projects][hasura-projects]] GitHub repository.
+
+#+begin_src bash
+  git clone https://github.com/dventimihasura/hasura-projects.git
+#+end_src
+
+** Step 2:  Change to the [[file:README.org][change-data-capture-1]] project directory.
+
+#+begin_src bash
+  cd hasura-projects/change-data-capture-1
+#+end_src
+
+** Step 3:  Create a ~.env~ file with suitable environment variable.
+
+#+begin_src bash
+ cat <<EOF > .env
+ HGEPORT~<your exposed Hasura port>
+ PGPORT~<your exposed PostgreSQL port>
+ EOF
+#+end_src
+
+** Step 4:  Use [[https://docs.docker.com/compose/][Docker Compose]] to launch the services.
+
+#+begin_src bash
+  docker-compose up -d
+#+end_src
+
+or
+
+#+begin_src
+  docker compose up -d
+#+end_src
+
+** Step 5:  Use the [[https://hasura.io/docs/latest/hasura-cli/overview/][Hasura CLI]] to launch Console.
+
+#+begin_src
+  hasura console
+#+end_src
+
+** Step 6:  Create a [[https://hasura.io/docs/latest/subscriptions/postgres/streaming/index/][streaming subscription]] to the ~change~ top-level field.
+
+#+begin_src graphql
+  subscription {
+    change_stream(cursor: {initial_value: {xid: 1}}, batch_size: 10) {
+      lsn
+      payload
+      xid
+    }
+  }
+#+end_src
+
+** Step 7:  Use a SQL client like ~psql~ to make changes to user tables.
+
+#+begin_src sql
+  insert into "order" (account_id, status, region)
+  values (
+    (select id from account order by random() limit 1),
+    'new',
+    (select value from region order by random() limit 1));
+#+end_src
+
+** Step 8:  Observe subscription events as data are changed in user tables.
+
+#+begin_src json
+{
+  "data": {
+    "change_stream": [
+      {
+        "lsn": "0/1F5AE10",
+        "payload": {
+          "change": [
+            {
+              "pk": {
+                "pknames": [
+                  "id"
+                ],
+                "pktypes": [
+                  "uuid"
+                ]
+              },
+              "kind": "insert",
+              "table": "order",
+              "schema": "public",
+              "columnnames": [
+                "id",
+                "created_at",
+                "updated_at",
+                "account_id",
+                "status",
+                "region"
+              ],
+              "columntypes": [
+                "uuid",
+                "timestamp with time zone",
+                "timestamp with time zone",
+                "uuid",
+                "status",
+                "text"
+              ],
+              "columnvalues": [
+                "34f37880-c6ef-4e28-a0ee-7fbe1cfdcedd",
+                "2024-01-16 15:39:58.801389+00",
+                "2024-01-16 15:39:58.801389+00",
+                "1c430413-889c-4013-9489-3d9136497971",
+                "new",
+                "NORTHEAST"
+              ]
+            }
+          ],
+          "timestamp": "2024-01-16 15:39:58.802545+00"
+        },
+        "xid": 790
+      }
+    ]
+  }
+}
+#+end_src
+

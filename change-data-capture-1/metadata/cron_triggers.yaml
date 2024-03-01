@@ -1,0 +1,15 @@
+- name: cdc
+  webhook: http://localhost:8080/api/rest/cdc
+  schedule: '* * * * *'
+  include_in_metadata: true
+  payload: {}
+  comment: ""
+  request_transform:
+    body:
+      action: transform
+      template: |-
+        {
+        }
+    query_params: {}
+    template_engine: Kriti
+    version: 2

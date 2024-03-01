@@ -1,0 +1,6 @@
+function:
+  name: cdc
+  schema: public
+configuration:
+  custom_root_fields: {}
+  exposed_as: query

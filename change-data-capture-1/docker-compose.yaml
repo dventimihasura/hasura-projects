@@ -1,0 +1,33 @@
+version: "3.6"
+services:
+  postgres:
+    build: .
+    ports:
+      - "${PGPORT}:5432"
+    restart: always
+    volumes:
+      - "./initdb.d-postgres:/docker-entrypoint-initdb.d:ro"
+    command: [
+    "postgres",
+    "-c", "cron.log_run=on",
+    "-c", "cron.use_background_workers=on",
+    "-c", "max_replication_slots=10",
+    "-c", "max_slot_wal_keep_size=8",
+    "-c", "max_worker_processes=20",
+    "-c", "shared_preload_libraries=pg_cron",
+    "-c", "wal_level=logical"
+    ]
+    environment:
+      POSTGRES_PASSWORD: postgres
+  graphql-engine:
+    image: hasura/graphql-engine:v2.36.0.cli-migrations-v3
+    ports:
+      - "${HGEPORT}:8080"
+    restart: always
+    volumes:
+      - "./metadata:/hasura-metadata:ro"
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"

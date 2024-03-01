@@ -1,0 +1,11 @@
+- name: allowed-queries
+  definition:
+    queries:
+      - name: cdc
+        query: |
+          query cdc {
+            cdc {
+              lsn
+              xid
+            }
+          }

@@ -1,0 +1,12 @@
+table:
+  name: account_summary
+  schema: public
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - sum
+        - id
+      filter: {}
+      allow_aggregations: true
+    comment: ""
