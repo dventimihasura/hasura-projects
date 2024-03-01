@@ -44,12 +44,6 @@ permission.  The is implemented in two alternative ways.
 	docker-compose up -d
 	```
 
-4. Create the Hasura application.
-
-	```shell
-	hasura deploy
-	```
-
 5. Launch the Hasura Console.
 
 	```shell

@@ -7,8 +7,6 @@ services:
     restart: always
     volumes:
       - "./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
-      - "./hasura/migrations:/hasura-migrations:ro"
-      - "./hasura/metadata:/hasura-metadata:ro"
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine-manager:
@@ -19,28 +17,24 @@ services:
       - "postgres"
     restart: always
     volumes:
-      - "./hasura/migrations:/hasura-migrations:ro"
       - "./hasura/metadata:/hasura-metadata:ro"
     environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://hasura_metadata_user:hasura_metadata_user_password@postgres:5432/postgres
-      PG_DATABASE_URL: postgres://hasuramanager:hasuramanager@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
   graphql-engine-user:
-    image: hasura/graphql-engine:v2.35.0-ce.cli-migrations-v3
+    image: hasura/graphql-engine:v2.35.0-ce
     ports:
       - "${HGEPORT2}:8080"
     depends_on:
       - "postgres"
     restart: always
     volumes:
-      - "./hasura/migrations:/hasura-migrations:ro"
       - "./hasura/metadata:/hasura-metadata:ro"
     environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://hasura_metadata_user:hasura_metadata_user_password@postgres:5432/postgres
-      PG_DATABASE_URL: postgres://hasurauser:hasurauser@postgres:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
 
