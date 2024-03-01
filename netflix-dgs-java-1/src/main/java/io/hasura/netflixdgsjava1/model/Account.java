@@ -4,8 +4,10 @@ import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,7 +18,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Account {
@@ -27,8 +31,8 @@ public class Account {
     public LocalDateTime createdAt;
     @Column(name = "updated_at") @UpdateTimestamp
     public LocalDateTime updatedAt;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    public List<Order> orders = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "order")
+    public Set<Order> orders = new HashSet<>();
     public String toString() {
 	Class<Account> aClass = Account.class;
 	Properties props = new Properties();
