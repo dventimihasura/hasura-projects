@@ -1,53 +1,40 @@
 version: '3.6'
 services:
   postgres:
-    image: postgres:14
+    image: postgres:16
     ports:
-      - "5432:5432"
+      - "${PGPORT}:5432"
     restart: always
     volumes:
-      - db_data:/var/lib/postgresql/data
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - "./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine-manager:
-    image: hasura/graphql-engine:v2.8.4
+    image: hasura/graphql-engine:v2.35.0-ce.cli-migrations-v3
     ports:
-      - "8080:8080"
+      - "${HGEPORT1}:8080"
     depends_on:
       - "postgres"
     restart: always
+    volumes:
+      - "./hasura/metadata:/hasura-metadata:ro"
     environment:
-      ## postgres database to store Hasura metadata
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://hasura_metadata_user:hasura_metadata_user_password@postgres:5432/postgres
-      ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
-      PG_DATABASE_URL: postgres://hasuramanager:hasuramanager@postgres:5432/postgres
-      ## enable the console served by server
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
-      ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      ## uncomment next line to set an admin secret
-      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
   graphql-engine-user:
-    image: hasura/graphql-engine:v2.8.4
+    image: hasura/graphql-engine:v2.35.0-ce
     ports:
-      - "8081:8080"
+      - "${HGEPORT2}:8080"
     depends_on:
       - "postgres"
     restart: always
+    volumes:
+      - "./hasura/metadata:/hasura-metadata:ro"
     environment:
-      ## postgres database to store Hasura metadata
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://hasura_metadata_user:hasura_metadata_user_password@postgres:5432/postgres
-      ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
-      PG_DATABASE_URL: postgres://hasurauser:hasurauser@postgres:5432/postgres
-      ## enable the console served by server
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "false" # set to "false" to disable console
-      ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      ## uncomment next line to set an admin secret
-      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-volumes:
-  db_data:
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
 

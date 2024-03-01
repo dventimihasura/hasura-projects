@@ -1,40 +1,40 @@
 -- -*- sql-product: postgres; -*-
 
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
+create extension if not exists pgcrypto;
 
-CREATE USER hasura_metadata_user WITH PASSWORD 'hasura_metadata_user_password';
-CREATE SCHEMA IF NOT EXISTS hdb_catalog;
-ALTER SCHEMA hdb_catalog OWNER TO hasura_metadata_user;
-ALTER ROLE hasura_metadata_user SET search_path TO hdb_catalog;
+create user hasurauser_1 with password 'hasurauser_1';
+grant create on database postgres to hasurauser_1;
+grant usage on schema public to hasurauser_1;
+grant all on all tables in schema public to hasurauser_1;
+grant all on all sequences in schema public to hasurauser_1;
+grant all on all functions in schema public to hasurauser_1;
 
-CREATE USER hasurauser_1 WITH PASSWORD 'hasurauser_1';
-GRANT USAGE ON SCHEMA public TO hasurauser_1;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO hasurauser_1;
-GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO hasurauser_1;
-GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO hasurauser_1;
+create user hasurauser_2 with password 'hasurauser_2';
+grant create on database postgres to hasurauser_2;
+grant usage on schema public to hasurauser_2;
+grant all on all tables in schema public to hasurauser_2;
+grant all on all sequences in schema public to hasurauser_2;
+grant all on all functions in schema public to hasurauser_2;
 
-CREATE USER hasurauser_2 WITH PASSWORD 'hasurauser_2';
-GRANT USAGE ON SCHEMA public TO hasurauser_2;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO hasurauser_2;
-GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO hasurauser_2;
-GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO hasurauser_2;
+create user hasurauser_3 with password 'hasurauser_3';
+grant create on database postgres to hasurauser_3;
+grant usage on schema public to hasurauser_3;
+grant all on all tables in schema public to hasurauser_3;
+grant all on all sequences in schema public to hasurauser_3;
+grant all on all functions in schema public to hasurauser_3;
 
-CREATE USER hasurauser_3 WITH PASSWORD 'hasurauser_3';
-GRANT USAGE ON SCHEMA public TO hasurauser_3;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO hasurauser_3;
-GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO hasurauser_3;
-GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO hasurauser_3;
+create user hasurauser_4 with password 'hasurauser_4';
+grant create on database postgres to hasurauser_4;
+grant usage on schema public to hasurauser_4;
+grant all on all tables in schema public to hasurauser_4;
+grant all on all sequences in schema public to hasurauser_4;
+grant all on all functions in schema public to hasurauser_4;
 
-CREATE USER hasurauser_4 WITH PASSWORD 'hasurauser_4';
-GRANT USAGE ON SCHEMA public TO hasurauser_4;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO hasurauser_4;
-GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO hasurauser_4;
-GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO hasurauser_4;
+create user hasurauser_5 with password 'hasurauser_5';
+grant create on database postgres to hasurauser_5;
+grant usage on schema public to hasurauser_5;
+grant all on all tables in schema public to hasurauser_5;
+grant all on all sequences in schema public to hasurauser_5;
+grant all on all functions in schema public to hasurauser_5;
 
-CREATE USER hasurauser_5 WITH PASSWORD 'hasurauser_5';
-GRANT USAGE ON SCHEMA public TO hasurauser_5;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO hasurauser_5;
-GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO hasurauser_5;
-GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO hasurauser_5;
-
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO PUBLIC;
+alter default privileges in schema public grant all on tables to public;

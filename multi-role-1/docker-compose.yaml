@@ -1,99 +1,109 @@
 version: '3.6'
 services:
   postgres:
-    image: postgres:14
+    image: postgres:16
     ports:
-      - "5432:5432"
+      - "${PGPORT}:5432"
     restart: always
     volumes:
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -d metadata5
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine-1:
-    image: hasura/graphql-engine:v2.8.3
+    image: hasura/graphql-engine:v2.35.0-ce.cli-migrations-v3
     ports:
-      - "8081:8080"
+      - "${HGEPORT1}:8080"
     depends_on:
-      - "postgres"
+      postgres:
+        condition: service_healthy
     restart: always
+    volumes:
+      - "./metadata:/hasura-metadata:ro"
     environment:
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       PG_DATABASE_URL: postgres://hasurauser_1:hasurauser_1@postgres:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+  graphql-engine-2:
+    image: hasura/graphql-engine:v2.35.0-ce.cli-migrations-v3
+    ports:
+      - "${HGEPORT2}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - "./metadata:/hasura-metadata:ro"
+    environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-  graphql-engine-2:
-    image: hasura/graphql-engine:v2.8.3
-    ports:
-      - "8082:8080"
-    depends_on:
-      - "postgres"
-    restart: always
-    environment:
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       PG_DATABASE_URL: postgres://hasurauser_2:hasurauser_2@postgres:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+  graphql-engine-3:
+    image: hasura/graphql-engine:v2.35.0-ce.cli-migrations-v3
+    ports:
+      - "${HGEPORT3}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - "./metadata:/hasura-metadata:ro"
+    environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-  graphql-engine-3:
-    image: hasura/graphql-engine:v2.8.3
-    ports:
-      - "8083:8080"
-    depends_on:
-      - "postgres"
-    restart: always
-    environment:
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       PG_DATABASE_URL: postgres://hasurauser_3:hasurauser_3@postgres:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+  graphql-engine-4:
+    image: hasura/graphql-engine:v2.35.0-ce.cli-migrations-v3
+    ports:
+      - "${HGEPORT4}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - "./metadata:/hasura-metadata:ro"
+    environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-  graphql-engine-4:
-    image: hasura/graphql-engine:v2.8.3
-    ports:
-      - "8084:8080"
-    depends_on:
-      - "postgres"
-    restart: always
-    environment:
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       PG_DATABASE_URL: postgres://hasurauser_4:hasurauser_4@postgres:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+  graphql-engine-5:
+    image: hasura/graphql-engine:v2.35.0-ce.cli-migrations-v3
+    ports:
+      - "${HGEPORT5}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - "./metadata:/hasura-metadata:ro"
+    environment:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-  graphql-engine-5:
-    image: hasura/graphql-engine:v2.8.3
-    ports:
-      - "8085:8080"
-    depends_on:
-      - "postgres"
-    restart: always
-    environment:
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       PG_DATABASE_URL: postgres://hasurauser_5:hasurauser_5@postgres:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
   proxy:
     image: nginx
     restart: always
     ports:
-      - "8080:80"
+      - "${NGINXPORT}:80"
     depends_on:
       - "graphql-engine-1"
       - "graphql-engine-2"
       - "graphql-engine-3"
       - "graphql-engine-4"
+      - "graphql-engine-5"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
     environment:
-      - NGINX_HOST=foobar.com
+      - NGINX_HOST=localhost
       - NGINX_PORT=80
-volumes:
-  db_data:
