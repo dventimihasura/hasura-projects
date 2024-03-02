@@ -1,0 +1,30 @@
+# -*- mode: graphql; -*-
+
+type Query {
+  accounts: [Account]
+}
+
+type Account {
+  id: String
+  name: String
+  orders: [Order]
+}
+
+type Order {
+  id: String
+  status: String
+  region: String
+  order_details: [OrderDetail]
+}
+
+type OrderDetail {
+  id: String
+  units: Int
+  product: Product
+}
+
+type Product {
+  id: String
+  name: String
+  price: Int
+}
