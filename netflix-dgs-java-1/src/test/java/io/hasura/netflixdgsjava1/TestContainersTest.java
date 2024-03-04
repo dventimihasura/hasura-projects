@@ -1,6 +1,7 @@
 package io.hasura.netflixdgsjava1;
 
 import io.hasura.netflixdgsjava1.model.*;
+import io.hasura.netflixdgsjava1.model.Order;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -43,7 +44,10 @@ class TestContainersTest {
 	    .setProperty("hibernate.connection.url", postgres.getJdbcUrl())
 	    .setProperty("hibernate.connection.username", postgres.getUsername())
 	    .setProperty("hibernate.connection.password", postgres.getPassword())
-	    .addAnnotatedClass(Account.class);
+	    .addAnnotatedClass(Account.class)
+	    .addAnnotatedClass(Order.class)
+	    .addAnnotatedClass(OrderDetail.class)
+	    .addAnnotatedClass(Product.class);
 
 	final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
 	    .build();
