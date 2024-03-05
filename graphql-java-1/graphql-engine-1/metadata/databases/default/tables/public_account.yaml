@@ -1,0 +1,47 @@
+table:
+  name: account
+  schema: public
+array_relationships:
+  - name: orders
+    using:
+      foreign_key_constraint_on:
+        column: account_id
+        table:
+          name: order
+          schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+        - name
+        - created_at
+        - updated_at
+        - id
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      check: {}
+    comment: ""
+delete_permissions:
+  - role: user
+    permission:
+      filter: {}
+    comment: ""
