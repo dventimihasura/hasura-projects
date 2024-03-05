@@ -11,10 +11,10 @@
   </parent>
 
   <groupId>io.hasura</groupId>
-  <artifactId>netflix-dgs-java-1</artifactId>
+  <artifactId>graphql-java-1</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>netflix-dgs-java-1</name>
-  <description>Netflix DGS Java Demo Project</description>
+  <name>graphql-java-1</name>
+  <description>GraphQL Java Demo Project</description>
 
   <properties>
     <start-class>org.baeldung.boot.Application</start-class>
