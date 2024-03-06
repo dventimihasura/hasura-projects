@@ -26,11 +26,10 @@ import org.springframework.stereotype.Controller;
 
     @Autowired JdbcClient jdbcClient;
 
-    RowMapper<OrderController.order>
-	orderMapper = new RowMapper<OrderController.order>() {
-		public OrderController.order mapRow (ResultSet rs, int rowNum) throws SQLException {
-		    return
-		    new OrderController.order
+    RowMapper<order>
+	orderMapper = new RowMapper<order>() {
+		public order mapRow (ResultSet rs, int rowNum) throws SQLException {
+		    return new order
 		    (UUID.fromString(rs.getString("id")),
 		     UUID.fromString(rs.getString("account_id")),
 		     rs.getString("status"),
@@ -47,7 +46,7 @@ import org.springframework.stereotype.Controller;
 	    .optional()
 	    .get();}
 
-    @SchemaMapping List<OrderController.order>
+    @SchemaMapping List<order>
 	orders (AccountController.account account, ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
@@ -58,7 +57,7 @@ import org.springframework.stereotype.Controller;
 	    .query(orderMapper)
 	    .list();}
 
-    @QueryMapping List<OrderController.order>
+    @QueryMapping List<order>
 	orders (ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
@@ -69,7 +68,7 @@ import org.springframework.stereotype.Controller;
 	    .query(orderMapper)
 	    .list();}
 
-    @QueryMapping OrderController.order
+    @QueryMapping order
 	order_by_pk (@Argument String id) {
 	return
 	    jdbcClient

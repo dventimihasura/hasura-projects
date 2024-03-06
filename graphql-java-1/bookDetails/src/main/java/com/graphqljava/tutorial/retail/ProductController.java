@@ -26,18 +26,17 @@ import org.springframework.stereotype.Controller;
 
     @Autowired JdbcClient jdbcClient;
 
-    RowMapper<ProductController.product>
-	productMapper = new RowMapper<ProductController.product>() {
-		public ProductController.product mapRow (ResultSet rs, int rowNum) throws SQLException {
-		    return
-		    new ProductController.product
+    RowMapper<product>
+	productMapper = new RowMapper<product>() {
+		public product mapRow (ResultSet rs, int rowNum) throws SQLException {
+		    return new product
 		    (UUID.fromString(rs.getString("id")),
 		     rs.getString("name"),
 		     rs.getInt("price"),
 		     rs.getString("created_at"),
 		     rs.getString("updated_at"));}};
 
-    @SchemaMapping ProductController.product
+    @SchemaMapping product
 	product (OrderDetailController.order_detail order_detail) {
 	return
 	    jdbcClient
@@ -47,7 +46,7 @@ import org.springframework.stereotype.Controller;
 	    .optional()
 	    .get();}
 
-    @QueryMapping List<ProductController.product>
+    @QueryMapping List<product>
 	products (ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
@@ -58,7 +57,7 @@ import org.springframework.stereotype.Controller;
 	    .query(productMapper)
 	    .list();}
 
-    @QueryMapping ProductController.product
+    @QueryMapping product
 	product_by_pk (@Argument String id) {
 	return
 	    jdbcClient

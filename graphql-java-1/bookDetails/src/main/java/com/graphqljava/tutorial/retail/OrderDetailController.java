@@ -27,11 +27,10 @@ import org.springframework.stereotype.Controller;
 
     @Autowired JdbcClient jdbcClient;
 
-    RowMapper<OrderDetailController.order_detail>
-	orderDetailMapper = new RowMapper<OrderDetailController.order_detail>() {
-		public OrderDetailController.order_detail mapRow (ResultSet rs, int rowNum) throws SQLException {
-		    return
-		    new OrderDetailController.order_detail
+    RowMapper<order_detail>
+	orderDetailMapper = new RowMapper<order_detail>() {
+		public order_detail mapRow (ResultSet rs, int rowNum) throws SQLException {
+		    return new order_detail
 		    (UUID.fromString(rs.getString("id")),
 		     UUID.fromString(rs.getString("order_id")),
 		     UUID.fromString(rs.getString("product_id")),
@@ -39,7 +38,7 @@ import org.springframework.stereotype.Controller;
 		     rs.getString("created_at"),
 		     rs.getString("updated_at"));}};
 
-    @SchemaMapping List<OrderDetailController.order_detail>
+    @SchemaMapping List<order_detail>
 	order_details (OrderController.order order, ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
@@ -50,7 +49,7 @@ import org.springframework.stereotype.Controller;
 	    .query(orderDetailMapper)
 	    .list();}
 
-    @SchemaMapping List<OrderDetailController.order_detail>
+    @SchemaMapping List<order_detail>
 	order_details (ProductController.product product, ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
@@ -61,7 +60,7 @@ import org.springframework.stereotype.Controller;
 	    .query(orderDetailMapper)
 	    .list();}
 
-    @QueryMapping List<OrderDetailController.order_detail>
+    @QueryMapping List<order_detail>
 	order_details (ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
@@ -72,7 +71,7 @@ import org.springframework.stereotype.Controller;
 	    .query(orderDetailMapper)
 	    .list();}
 
-    @QueryMapping OrderDetailController.order_detail
+    @QueryMapping order_detail
 	order_detail_by_pk (@Argument String id) {
 	return
 	    jdbcClient
