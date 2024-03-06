@@ -4,9 +4,11 @@ import java.sql.*;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.graphql.data.ArgumentValue;
 import org.springframework.graphql.data.method.annotation.*;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.core.simple.*;
+import org.springframework.jdbc.core.simple.JdbcClient.StatementSpec;
 import org.springframework.stereotype.*;
 
 @Controller class RetailController {
@@ -19,10 +21,13 @@ import org.springframework.stereotype.*;
     @Autowired JdbcClient jdbcClient;
 
     @QueryMapping List<RetailController.account>
-	accounts () {
+	accounts (ArgumentValue<Integer> limit) {
+	StatementSpec
+	    spec = limit.isOmitted() ?
+	    jdbcClient.sql("select * from account") :
+	    jdbcClient.sql("select * from account limit ?").param(limit.value());
 	return
-	    jdbcClient
-	    .sql("select * from account limit 5")
+	    spec
 	    .query(new RowMapper<RetailController.account>() {
 		    public RetailController.account mapRow (ResultSet rs, int rowNum) throws SQLException {
 			return

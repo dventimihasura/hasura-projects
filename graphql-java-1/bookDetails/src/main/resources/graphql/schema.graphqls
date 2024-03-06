@@ -3,7 +3,7 @@
 type Query {
   bookById(id: ID): Book
   books: [Book]!
-  accounts: [account]!
+  accounts(limit: Int): [account]!
   account_by_pk(id: ID): account
 }
 
