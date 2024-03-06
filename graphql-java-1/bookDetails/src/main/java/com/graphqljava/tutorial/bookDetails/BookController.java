@@ -12,19 +12,15 @@ import org.springframework.stereotype.*;
 class BookController {
 
     static
-	record Author(String id,
-		      String firstName,
-		      String lastName) {}
+	record Author (String id,
+		       String firstName,
+		       String lastName) {}
 
     static
-	record Book(String id,
-		    String name,
-		    int pageCount,
-		    String authorId) {}
-
-    @SuppressWarnings("unused")
-    private
-	JdbcTemplate jdbcTemplate;
+	record Book (String id,
+		     String name,
+		     int pageCount,
+		     String authorId) {}
 
     @Autowired
     private
@@ -38,7 +34,7 @@ class BookController {
 	    jdbcClient
 	    .sql("select * from book")
 	    .query(new RowMapper<BookController.Book>() {
-		    public BookController.Book mapRow(ResultSet rs, int rowNum) throws SQLException {
+		    public BookController.Book mapRow (ResultSet rs, int rowNum) throws SQLException {
 			return
 			    new BookController.Book(rs.getString("ID"),
 						    rs.getString("NAME"),
@@ -55,7 +51,7 @@ class BookController {
 	    .sql("select * from book where id = ? limit 1")
 	    .param(id)
 	    .query(new RowMapper<BookController.Book>() {
-		    public BookController.Book mapRow(ResultSet rs, int rowNum) throws SQLException {
+		    public BookController.Book mapRow (ResultSet rs, int rowNum) throws SQLException {
 			return
 			    new BookController.Book(rs.getString("ID"),
 						    rs.getString("NAME"),
@@ -73,7 +69,7 @@ class BookController {
 	    .sql("select * from author where id = ? limit 1")
 	    .param(book.authorId)
 	    .query(new RowMapper<BookController.Author>() {
-		    public BookController.Author mapRow(ResultSet rs, int rowNum) throws SQLException {
+		    public BookController.Author mapRow (ResultSet rs, int rowNum) throws SQLException {
 			return
 			    new BookController.Author(rs.getString("ID"),
 						      rs.getString("FIRSTNAME"),
