@@ -5,6 +5,12 @@ type Query {
   books: [Book]!
   accounts(limit: Int): [account]!
   account_by_pk(id: ID): account
+  orders(limit: Int): [order]!
+  order_by_pk(id: ID): order
+  order_details(limit: Int): [order_detail]!
+  order_detail_by_pk(id: ID): order_detail
+  products(limit: Int): [product]!
+  product_by_pk(id: ID): product
 }
 
 type Book {
@@ -21,6 +27,27 @@ type Author {
 }
 
 type account {
+  id: ID
+  name: String
+  created_at: String
+  updated_at: String
+}
+
+type order {
+  id: ID
+  status: String
+  created_at: String
+  updated_at: String
+}
+
+type order_detail {
+  id: ID
+  units: Int
+  created_at: String
+  updated_at: String
+}
+
+type product {
   id: ID
   name: String
   created_at: String
