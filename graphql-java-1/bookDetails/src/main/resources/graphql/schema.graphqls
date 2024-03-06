@@ -39,6 +39,7 @@ type order {
   status: String
   created_at: String
   updated_at: String
+  order_details(limit: Int): [order_detail]!
 }
 
 type order_detail {
@@ -46,6 +47,7 @@ type order_detail {
   units: Int
   created_at: String
   updated_at: String
+  product: product!
 }
 
 type product {
@@ -53,4 +55,5 @@ type product {
   name: String
   created_at: String
   updated_at: String
+  order_details(limit: Int): [order_detail]!
 }

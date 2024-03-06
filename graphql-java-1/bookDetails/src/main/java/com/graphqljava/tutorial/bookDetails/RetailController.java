@@ -1,38 +1,41 @@
 package com.graphqljava.tutorial.bookDetails;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.ArgumentValue;
-import org.springframework.graphql.data.method.annotation.*;
-import org.springframework.jdbc.core.*;
-import org.springframework.jdbc.core.simple.*;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.core.simple.JdbcClient.StatementSpec;
-import org.springframework.stereotype.*;
 
-@Controller class RetailController {
-    static
+// @Controller
+class RetailController {
+    public static
 	record account
 	(UUID id,
 	 String name,
 	 String created_at,
 	 String updated_at) {}
 
-    static
+    public static
 	record order
 	(UUID id,
 	 String status,
 	 String created_at,
 	 String updated_at) {}
-    static
+
+    public static
 	record order_detail
 	(UUID id,
 	 Integer units,
 	 String created_at,
 	 String updated_at) {}
 
-    static
+    public static
 	record product
 	(UUID id,
 	 String name,
@@ -81,7 +84,8 @@ import org.springframework.stereotype.*;
 		     rs.getString("created_at"),
 		     rs.getString("updated_at"));}};
 
-    @QueryMapping List<RetailController.account>
+    // @QueryMapping
+    List<RetailController.account>
 	accounts (ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
@@ -92,7 +96,8 @@ import org.springframework.stereotype.*;
 	    .query(accountMapper)
 	    .list();}
 
-    @QueryMapping RetailController.account
+    // @QueryMapping
+    RetailController.account
 	account_by_pk (@Argument String id) {
 	return
 	    jdbcClient
@@ -102,7 +107,8 @@ import org.springframework.stereotype.*;
 	    .optional()
 	    .get();}
 
-    @SchemaMapping List<RetailController.order>
+    // @SchemaMapping
+    List<RetailController.order>
 	orders (RetailController.account account, ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
@@ -113,7 +119,8 @@ import org.springframework.stereotype.*;
 	    .query(orderMapper)
 	    .list();}
 
-    @QueryMapping List<RetailController.order>
+    // @QueryMapping
+    List<RetailController.order>
 	orders (ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
@@ -124,7 +131,8 @@ import org.springframework.stereotype.*;
 	    .query(orderMapper)
 	    .list();}
 
-    @QueryMapping RetailController.order
+    // @QueryMapping
+    RetailController.order
 	order_by_pk (@Argument String id) {
 	return
 	    jdbcClient
@@ -141,7 +149,8 @@ import org.springframework.stereotype.*;
 	    .optional()
 	    .get();}
 
-    @QueryMapping List<RetailController.order_detail>
+    // @QueryMapping
+    List<RetailController.order_detail>
 	order_details (ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
@@ -152,7 +161,8 @@ import org.springframework.stereotype.*;
 	    .query(orderDetailMapper)
 	    .list();}
 
-    @QueryMapping RetailController.order_detail
+    // @QueryMapping
+    RetailController.order_detail
 	order_detail_by_pk (@Argument String id) {
 	return
 	    jdbcClient
@@ -162,7 +172,8 @@ import org.springframework.stereotype.*;
 	    .optional()
 	    .get();}
 
-    @QueryMapping List<RetailController.product>
+    // @QueryMapping
+    List<RetailController.product>
 	products (ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
@@ -173,7 +184,8 @@ import org.springframework.stereotype.*;
 	    .query(productMapper)
 	    .list();}
 
-    @QueryMapping RetailController.product
+    // @QueryMapping
+    RetailController.product
 	product_by_pk (@Argument String id) {
 	return
 	    jdbcClient
