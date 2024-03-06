@@ -11,23 +11,29 @@ import org.springframework.stereotype.*;
 @Controller
 class BookController {
 
-    static record Author(String id,
-		  String firstName,
-		  String lastName) {}
+    static
+	record Author(String id,
+		      String firstName,
+		      String lastName) {}
 
-    static record Book(String id,
-		String name,
-		int pageCount,
-		String authorId) {}
+    static
+	record Book(String id,
+		    String name,
+		    int pageCount,
+		    String authorId) {}
 
     @SuppressWarnings("unused")
-    private JdbcTemplate jdbcTemplate;
+    private
+	JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private JdbcClient jdbcClient;
+    private
+	JdbcClient jdbcClient;
 
     @QueryMapping
-    public List<BookController.Book> books () {
+    public
+	List<BookController.Book>
+	books () {
 	return
 	    jdbcClient
 	    .sql("select * from book")
@@ -41,7 +47,9 @@ class BookController {
 	    .list();}
 
     @QueryMapping
-    public BookController.Book bookById (@Argument String id) {
+    public
+	BookController.Book
+	bookById (@Argument String id) {
 	return
 	    jdbcClient
 	    .sql("select * from book where id = ? limit 1")
@@ -57,7 +65,9 @@ class BookController {
 	    .get();}
 
     @SchemaMapping
-    public BookController.Author author (BookController.Book book) {
+    public
+	BookController.Author
+	author (BookController.Book book) {
 	return
 	    jdbcClient
 	    .sql("select * from author where id = ? limit 1")
