@@ -8,9 +8,7 @@ import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.core.simple.*;
 import org.springframework.stereotype.*;
 
-@Controller
-class BookController {
-
+@Controller class BookController {
     static
 	record Author (String id,
 		       String firstName,
@@ -22,13 +20,9 @@ class BookController {
 		     int pageCount,
 		     String authorId) {}
 
-    @Autowired
-    private
-	JdbcClient jdbcClient;
+    @Autowired JdbcClient jdbcClient;
 
-    @QueryMapping
-    public
-	List<BookController.Book>
+    @QueryMapping List<BookController.Book>
 	books () {
 	return
 	    jdbcClient
@@ -42,9 +36,7 @@ class BookController {
 						    rs.getString("AUTHORID"));}})
 	    .list();}
 
-    @QueryMapping
-    public
-	BookController.Book
+    @QueryMapping BookController.Book
 	bookById (@Argument String id) {
 	return
 	    jdbcClient
@@ -60,9 +52,7 @@ class BookController {
 	    .optional()
 	    .get();}
 
-    @SchemaMapping
-    public
-	BookController.Author
+    @SchemaMapping BookController.Author
 	author (BookController.Book book) {
 	return
 	    jdbcClient
