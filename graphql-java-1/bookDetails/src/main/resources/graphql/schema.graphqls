@@ -2,6 +2,7 @@
 
 type Query {
   bookById(id: ID): Book
+  books: [Book]!
 }
 
 type Book {
