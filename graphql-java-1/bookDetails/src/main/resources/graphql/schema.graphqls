@@ -1,8 +1,6 @@
 # -*- mode: graphql; -*-
 
 type Query {
-  bookById(id: ID): Book
-  books: [Book]!
   accounts(limit: Int): [account]!
   account_by_pk(id: ID): account
   orders(limit: Int): [order]!
@@ -11,19 +9,6 @@ type Query {
   order_detail_by_pk(id: ID): order_detail
   products(limit: Int): [product]!
   product_by_pk(id: ID): product
-}
-
-type Book {
-  id: ID
-  name: String
-  pageCount: Int
-  author: Author
-}
-
-type Author {
-  id: ID
-  firstName: String
-  lastName: String
 }
 
 type account {
