@@ -3,6 +3,8 @@
 type Query {
   bookById(id: ID): Book
   books: [Book]!
+  accounts: [account]!
+  account_by_pk(id: ID): account
 }
 
 type Book {
@@ -16,4 +18,11 @@ type Author {
   id: ID
   firstName: String
   lastName: String
+}
+
+type account {
+  id: ID
+  name: String
+  created_at: String
+  updated_at: String
 }
