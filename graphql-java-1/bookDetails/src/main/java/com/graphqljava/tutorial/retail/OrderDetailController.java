@@ -1,4 +1,4 @@
-package com.graphqljava.tutorial.bookDetails;
+package com.graphqljava.tutorial.retail;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.ArgumentValue;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.core.simple.JdbcClient.StatementSpec;
@@ -33,6 +34,28 @@ import org.springframework.stereotype.Controller;
 		     rs.getInt("units"),
 		     rs.getString("created_at"),
 		     rs.getString("updated_at"));}};
+
+    @SchemaMapping List<OrderDetailController.order_detail>
+	order_details (OrderController.order order, ArgumentValue<Integer> limit) {
+	StatementSpec
+	    spec = limit.isOmitted() ?
+	    jdbcClient.sql("select * from order_detail where order_id = ?").param(order.id()) :
+	    jdbcClient.sql("select * from order_detail where order_id = ? limit ?").param(order.id()).param(limit.value());
+	return
+	    spec
+	    .query(orderDetailMapper)
+	    .list();}
+
+    @SchemaMapping List<OrderDetailController.order_detail>
+	order_details (ProductController.product product, ArgumentValue<Integer> limit) {
+	StatementSpec
+	    spec = limit.isOmitted() ?
+	    jdbcClient.sql("select * from order_detail where product_id = ?").param(product.id()) :
+	    jdbcClient.sql("select * from order_detail where product_id = ? limit ?").param(product.id()).param(limit.value());
+	return
+	    spec
+	    .query(orderDetailMapper)
+	    .list();}
 
     @QueryMapping List<OrderDetailController.order_detail>
 	order_details (ArgumentValue<Integer> limit) {
