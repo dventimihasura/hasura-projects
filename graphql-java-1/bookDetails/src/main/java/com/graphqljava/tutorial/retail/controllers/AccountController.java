@@ -15,8 +15,8 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.core.simple.JdbcClient.StatementSpec;
 import org.springframework.stereotype.Controller;
 
-import com.graphqljava.tutorial.retail.models.account;
-import com.graphqljava.tutorial.retail.models.order;
+import com.graphqljava.tutorial.retail.models.Schema.account;
+import com.graphqljava.tutorial.retail.models.Schema.order;
 
 @Controller class AccountController {
 
