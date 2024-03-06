@@ -1,4 +1,4 @@
-package com.graphqljava.tutorial.retail;
+package com.graphqljava.tutorial.retail.controllers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,54 +15,54 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.core.simple.JdbcClient.StatementSpec;
 import org.springframework.stereotype.Controller;
 
-@Controller class AccountController {
+@Controller class ProductController {
     public static
-	record account
+	record product
 	(UUID id,
 	 String name,
+	 Integer price,
 	 String created_at,
 	 String updated_at) {}
 
     @Autowired JdbcClient jdbcClient;
 
-    RowMapper<account>
-	accountMapper = new RowMapper<>() {
-	    public account mapRow (ResultSet rs, int rowNum) throws SQLException {
-		return
-		    new account
-		    (UUID.fromString(rs.getString("ID")),
+    RowMapper<product>
+	productMapper = new RowMapper<product>() {
+		public product mapRow (ResultSet rs, int rowNum) throws SQLException {
+		    return new product
+		    (UUID.fromString(rs.getString("id")),
 		     rs.getString("name"),
+		     rs.getInt("price"),
 		     rs.getString("created_at"),
 		     rs.getString("updated_at"));}};
 
-    @SchemaMapping account
-	account (OrderController.order order) {
+    @SchemaMapping product
+	product (OrderDetailController.order_detail order_detail) {
 	return
 	    jdbcClient
-	    .sql("select * from account where id = ? limit 1")
-	    .param(order.account_id())
-	    .query(accountMapper)
+	    .sql("select * from product where id = ? limit 1")
+	    .param(order_detail.product_id())
+	    .query(productMapper)
 	    .optional()
 	    .get();}
 
-    @QueryMapping List<account>
-	accounts (ArgumentValue<Integer> limit) {
+    @QueryMapping List<product>
+	products (ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
-	    jdbcClient.sql("select * from account") :
-	    jdbcClient.sql("select * from account limit ?").param(limit.value());
+	    jdbcClient.sql("select * from product") :
+	    jdbcClient.sql("select * from product limit ?").param(limit.value());
 	return
 	    spec
-	    .query(accountMapper)
+	    .query(productMapper)
 	    .list();}
 
-    @QueryMapping account
-	account_by_pk (@Argument String id) {
+    @QueryMapping product
+	product_by_pk (@Argument String id) {
 	return
 	    jdbcClient
-	    .sql("select * from account where id = ? limit 1")
+	    .sql("select * from product where id = ? limit 1")
 	    .param(UUID.fromString(id))
-	    .query(accountMapper)
+	    .query(productMapper)
 	    .optional()
 	    .get();}}
-

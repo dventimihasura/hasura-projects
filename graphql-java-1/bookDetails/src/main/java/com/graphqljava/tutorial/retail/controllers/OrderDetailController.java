@@ -1,4 +1,4 @@
-package com.graphqljava.tutorial.retail;
+package com.graphqljava.tutorial.retail.controllers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
