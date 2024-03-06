@@ -31,6 +31,7 @@ type account {
   name: String
   created_at: String
   updated_at: String
+  orders(limit: Int): [order]!
 }
 
 type order {

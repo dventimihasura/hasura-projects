@@ -41,6 +41,46 @@ import org.springframework.stereotype.*;
 
     @Autowired JdbcClient jdbcClient;
 
+    RowMapper<RetailController.account>
+	accountMapper = new RowMapper<>() {
+	    public RetailController.account mapRow (ResultSet rs, int rowNum) throws SQLException {
+		return
+		    new RetailController.account
+		    (UUID.fromString(rs.getString("ID")),
+		     rs.getString("name"),
+		     rs.getString("created_at"),
+		     rs.getString("updated_at"));}};
+
+    RowMapper<RetailController.order>
+	orderMapper = new RowMapper<RetailController.order>() {
+		public RetailController.order mapRow (ResultSet rs, int rowNum) throws SQLException {
+		    return
+		    new RetailController.order
+		    (UUID.fromString(rs.getString("id")),
+		     rs.getString("status"),
+		     rs.getString("created_at"),
+		     rs.getString("updated_at"));}};
+
+    RowMapper<RetailController.order_detail>
+	orderDetailMapper = new RowMapper<RetailController.order_detail>() {
+		public RetailController.order_detail mapRow (ResultSet rs, int rowNum) throws SQLException {
+		    return
+		    new RetailController.order_detail
+		    (UUID.fromString(rs.getString("id")),
+		     rs.getInt("units"),
+		     rs.getString("created_at"),
+		     rs.getString("updated_at"));}};
+
+    RowMapper<RetailController.product>
+	productMapper = new RowMapper<RetailController.product>() {
+		public RetailController.product mapRow (ResultSet rs, int rowNum) throws SQLException {
+		    return
+		    new RetailController.product
+		    (UUID.fromString(rs.getString("id")),
+		     rs.getString("name"),
+		     rs.getString("created_at"),
+		     rs.getString("updated_at"));}};
+
     @QueryMapping List<RetailController.account>
 	accounts (ArgumentValue<Integer> limit) {
 	StatementSpec
@@ -49,14 +89,7 @@ import org.springframework.stereotype.*;
 	    jdbcClient.sql("select * from account limit ?").param(limit.value());
 	return
 	    spec
-	    .query(new RowMapper<RetailController.account>() {
-		    public RetailController.account mapRow (ResultSet rs, int rowNum) throws SQLException {
-			return
-			    new RetailController.account
-			    (UUID.fromString(rs.getString("id")),
-			     rs.getString("name"),
-			     rs.getString("created_at"),
-			     rs.getString("updated_at"));}})
+	    .query(accountMapper)
 	    .list();}
 
     @QueryMapping RetailController.account
@@ -65,16 +98,20 @@ import org.springframework.stereotype.*;
 	    jdbcClient
 	    .sql("select * from account where id = ? limit 1")
 	    .param(UUID.fromString(id))
-	    .query(new RowMapper<RetailController.account>() {
-		    public RetailController.account mapRow (ResultSet rs, int rowNum) throws SQLException {
-			return
-			    new RetailController.account
-			    (UUID.fromString(rs.getString("ID")),
-			     rs.getString("name"),
-			     rs.getString("created_at"),
-			     rs.getString("updated_at"));}})
+	    .query(accountMapper)
 	    .optional()
 	    .get();}
+
+    @SchemaMapping List<RetailController.order>
+	orders (RetailController.account account, ArgumentValue<Integer> limit) {
+	StatementSpec
+	    spec = limit.isOmitted() ?
+	    jdbcClient.sql("select * from \"order\" where account_id = ?").param(account.id) :
+	    jdbcClient.sql("select * from \"order\" where account_id = ? limit ?").param(account.id).param(limit.value());
+	return
+	    spec
+	    .query(orderMapper)
+	    .list();}
 
     @QueryMapping List<RetailController.order>
 	orders (ArgumentValue<Integer> limit) {
@@ -84,14 +121,7 @@ import org.springframework.stereotype.*;
 	    jdbcClient.sql("select * from \"order\" limit ?").param(limit.value());
 	return
 	    spec
-	    .query(new RowMapper<RetailController.order>() {
-		    public RetailController.order mapRow (ResultSet rs, int rowNum) throws SQLException {
-			return
-			    new RetailController.order
-			    (UUID.fromString(rs.getString("id")),
-			     rs.getString("status"),
-			     rs.getString("created_at"),
-			     rs.getString("updated_at"));}})
+	    .query(orderMapper)
 	    .list();}
 
     @QueryMapping RetailController.order
@@ -119,14 +149,7 @@ import org.springframework.stereotype.*;
 	    jdbcClient.sql("select * from order_detail limit ?").param(limit.value());
 	return
 	    spec
-	    .query(new RowMapper<RetailController.order_detail>() {
-		    public RetailController.order_detail mapRow (ResultSet rs, int rowNum) throws SQLException {
-			return
-			    new RetailController.order_detail
-			    (UUID.fromString(rs.getString("id")),
-			     rs.getInt("units"),
-			     rs.getString("created_at"),
-			     rs.getString("updated_at"));}})
+	    .query(orderDetailMapper)
 	    .list();}
 
     @QueryMapping RetailController.order_detail
@@ -135,14 +158,7 @@ import org.springframework.stereotype.*;
 	    jdbcClient
 	    .sql("select * from order_detail where id = ? limit 1")
 	    .param(UUID.fromString(id))
-	    .query(new RowMapper<RetailController.order_detail>() {
-		    public RetailController.order_detail mapRow (ResultSet rs, int rowNum) throws SQLException {
-			return
-			    new RetailController.order_detail
-			    (UUID.fromString(rs.getString("ID")),
-			     rs.getInt("units"),
-			     rs.getString("created_at"),
-			     rs.getString("updated_at"));}})
+	    .query(orderDetailMapper)
 	    .optional()
 	    .get();}
 
@@ -154,14 +170,7 @@ import org.springframework.stereotype.*;
 	    jdbcClient.sql("select * from product limit ?").param(limit.value());
 	return
 	    spec
-	    .query(new RowMapper<RetailController.product>() {
-		    public RetailController.product mapRow (ResultSet rs, int rowNum) throws SQLException {
-			return
-			    new RetailController.product
-			    (UUID.fromString(rs.getString("id")),
-			     rs.getString("name"),
-			     rs.getString("created_at"),
-			     rs.getString("updated_at"));}})
+	    .query(productMapper)
 	    .list();}
 
     @QueryMapping RetailController.product
@@ -170,13 +179,6 @@ import org.springframework.stereotype.*;
 	    jdbcClient
 	    .sql("select * from product where id = ? limit 1")
 	    .param(UUID.fromString(id))
-	    .query(new RowMapper<RetailController.product>() {
-		    public RetailController.product mapRow (ResultSet rs, int rowNum) throws SQLException {
-			return
-			    new RetailController.product
-			    (UUID.fromString(rs.getString("ID")),
-			     rs.getString("name"),
-			     rs.getString("created_at"),
-			     rs.getString("updated_at"));}})
+	    .query(productMapper)
 	    .optional()
 	    .get();}}
