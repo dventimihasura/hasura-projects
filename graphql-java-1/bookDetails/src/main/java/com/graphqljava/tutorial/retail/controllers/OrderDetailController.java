@@ -15,15 +15,11 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.core.simple.JdbcClient.StatementSpec;
 import org.springframework.stereotype.Controller;
 
+import com.graphqljava.tutorial.retail.models.order;
+import com.graphqljava.tutorial.retail.models.order_detail;
+import com.graphqljava.tutorial.retail.models.product;
+
 @Controller class OrderDetailController {
-    static
-	record order_detail
-	(UUID id,
-	 UUID order_id,
-	 UUID product_id,
-	 Integer units,
-	 String created_at,
-	 String updated_at) {}
 
     @Autowired JdbcClient jdbcClient;
 
@@ -39,7 +35,7 @@ import org.springframework.stereotype.Controller;
 		     rs.getString("updated_at"));}};
 
     @SchemaMapping List<order_detail>
-	order_details (OrderController.order order, ArgumentValue<Integer> limit) {
+	order_details (order order, ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
 	    jdbcClient.sql("select * from order_detail where order_id = ?").param(order.id()) :
@@ -50,7 +46,7 @@ import org.springframework.stereotype.Controller;
 	    .list();}
 
     @SchemaMapping List<order_detail>
-	order_details (ProductController.product product, ArgumentValue<Integer> limit) {
+	order_details (product product, ArgumentValue<Integer> limit) {
 	StatementSpec
 	    spec = limit.isOmitted() ?
 	    jdbcClient.sql("select * from order_detail where product_id = ?").param(product.id()) :

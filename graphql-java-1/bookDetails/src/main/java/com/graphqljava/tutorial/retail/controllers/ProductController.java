@@ -15,14 +15,10 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.core.simple.JdbcClient.StatementSpec;
 import org.springframework.stereotype.Controller;
 
+import com.graphqljava.tutorial.retail.models.order_detail;
+import com.graphqljava.tutorial.retail.models.product;
+
 @Controller class ProductController {
-    public static
-	record product
-	(UUID id,
-	 String name,
-	 Integer price,
-	 String created_at,
-	 String updated_at) {}
 
     @Autowired JdbcClient jdbcClient;
 
@@ -37,7 +33,7 @@ import org.springframework.stereotype.Controller;
 		     rs.getString("updated_at"));}};
 
     @SchemaMapping product
-	product (OrderDetailController.order_detail order_detail) {
+	product (order_detail order_detail) {
 	return
 	    jdbcClient
 	    .sql("select * from product where id = ? limit 1")

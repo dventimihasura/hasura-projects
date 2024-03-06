@@ -15,13 +15,10 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.core.simple.JdbcClient.StatementSpec;
 import org.springframework.stereotype.Controller;
 
+import com.graphqljava.tutorial.retail.models.account;
+import com.graphqljava.tutorial.retail.models.order;
+
 @Controller class AccountController {
-    public static
-	record account
-	(UUID id,
-	 String name,
-	 String created_at,
-	 String updated_at) {}
 
     @Autowired JdbcClient jdbcClient;
 
@@ -36,7 +33,7 @@ import org.springframework.stereotype.Controller;
 		     rs.getString("updated_at"));}};
 
     @SchemaMapping account
-	account (OrderController.order order) {
+	account (order order) {
 	return
 	    jdbcClient
 	    .sql("select * from account where id = ? limit 1")
