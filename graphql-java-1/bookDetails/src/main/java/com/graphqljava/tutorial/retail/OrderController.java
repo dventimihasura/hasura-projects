@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
     public static
 	record order
 	(UUID id,
+	 UUID account_id,
 	 String status,
 	 String created_at,
 	 String updated_at) {}
@@ -31,9 +32,20 @@ import org.springframework.stereotype.Controller;
 		    return
 		    new OrderController.order
 		    (UUID.fromString(rs.getString("id")),
+		     UUID.fromString(rs.getString("account_id")),
 		     rs.getString("status"),
 		     rs.getString("created_at"),
 		     rs.getString("updated_at"));}};
+
+    @SchemaMapping order
+	order (OrderDetailController.order_detail order_detail) {
+	return
+	    jdbcClient
+	    .sql("select * from \"order\" where id = ? limit 1")
+	    .param(order_detail.order_id())
+	    .query(orderMapper)
+	    .optional()
+	    .get();}
 
     @SchemaMapping List<OrderController.order>
 	orders (AccountController.account account, ArgumentValue<Integer> limit) {
@@ -63,13 +75,6 @@ import org.springframework.stereotype.Controller;
 	    jdbcClient
 	    .sql("select * from \"order\" where id = ? limit 1")
 	    .param(UUID.fromString(id))
-	    .query(new RowMapper<OrderController.order>() {
-		    public OrderController.order mapRow (ResultSet rs, int rowNum) throws SQLException {
-			return
-			    new OrderController.order
-			    (UUID.fromString(rs.getString("ID")),
-			     rs.getString("name"),
-			     rs.getString("created_at"),
-			     rs.getString("updated_at"));}})
+	    .query(orderMapper)
 	    .optional()
 	    .get();}}

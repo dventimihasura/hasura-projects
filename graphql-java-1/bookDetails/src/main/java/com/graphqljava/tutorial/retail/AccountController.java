@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.ArgumentValue;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.core.simple.JdbcClient.StatementSpec;
@@ -33,6 +34,16 @@ import org.springframework.stereotype.Controller;
 		     rs.getString("name"),
 		     rs.getString("created_at"),
 		     rs.getString("updated_at"));}};
+
+    @SchemaMapping account
+	account (OrderController.order order) {
+	return
+	    jdbcClient
+	    .sql("select * from account where id = ? limit 1")
+	    .param(order.account_id())
+	    .query(accountMapper)
+	    .optional()
+	    .get();}
 
     @QueryMapping List<account>
 	accounts (ArgumentValue<Integer> limit) {

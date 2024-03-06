@@ -21,18 +21,23 @@ type account {
 
 type order {
   id: ID
+  account_id: ID
   status: String
   created_at: String
   updated_at: String
   order_details(limit: Int): [order_detail]!
+  account: account!
 }
 
 type order_detail {
   id: ID
+  order_id: ID
+  product_id: ID
   units: Int
   created_at: String
   updated_at: String
   product: product!
+  order: order!
 }
 
 type product {
