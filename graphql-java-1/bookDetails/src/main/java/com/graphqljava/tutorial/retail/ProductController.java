@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 	record product
 	(UUID id,
 	 String name,
+	 Integer price,
 	 String created_at,
 	 String updated_at) {}
 
@@ -32,15 +33,16 @@ import org.springframework.stereotype.Controller;
 		    new ProductController.product
 		    (UUID.fromString(rs.getString("id")),
 		     rs.getString("name"),
+		     rs.getInt("price"),
 		     rs.getString("created_at"),
 		     rs.getString("updated_at"));}};
 
     @SchemaMapping ProductController.product
-	product (OrderDetailController.order_detail order_detail, @Argument String id) {
+	product (OrderDetailController.order_detail order_detail) {
 	return
 	    jdbcClient
 	    .sql("select * from product where id = ? limit 1")
-	    .param(UUID.fromString(id))
+	    .param(order_detail.product_id())
 	    .query(productMapper)
 	    .optional()
 	    .get();}

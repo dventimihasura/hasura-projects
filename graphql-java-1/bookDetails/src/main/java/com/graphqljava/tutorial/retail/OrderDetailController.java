@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 	record order_detail
 	(UUID id,
 	 Integer units,
+	 UUID product_id,
 	 String created_at,
 	 String updated_at) {}
 
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Controller;
 		    new OrderDetailController.order_detail
 		    (UUID.fromString(rs.getString("id")),
 		     rs.getInt("units"),
+		     UUID.fromString(rs.getString("product_id")),
 		     rs.getString("created_at"),
 		     rs.getString("updated_at"));}};
 

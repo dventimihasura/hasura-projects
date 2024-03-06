@@ -38,6 +38,7 @@ type order_detail {
 type product {
   id: ID
   name: String
+  price: Int
   created_at: String
   updated_at: String
   order_details(limit: Int): [order_detail]!
