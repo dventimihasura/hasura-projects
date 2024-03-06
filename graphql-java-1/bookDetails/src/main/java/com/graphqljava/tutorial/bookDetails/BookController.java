@@ -1,41 +1,54 @@
 package com.graphqljava.tutorial.bookDetails;
 
-import java.util.Optional;
-
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.graphql.data.method.annotation.SchemaMapping;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.stereotype.Controller;
+import java.sql.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.graphql.data.method.annotation.*;
+import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.core.simple.*;
+import org.springframework.stereotype.*;
 
 @Controller
 class BookController {
-    @Autowired
-    private DataSource dataSource;
+
+    static record Author(String id,
+		  String firstName,
+		  String lastName) {}
+
+    static record Book(String id,
+		String name,
+		int pageCount,
+		String authorId) {}
+
+    @SuppressWarnings("unused")
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private JdbcClient jdbcClient;
 
     @QueryMapping
-    public Book bookById(@Argument String id) {
-	Optional<Book> bookOptional = jdbcClient.sql("select * from book limit 1")
-	    .query(new BookRowMapper())
-	    .optional();
-	return bookOptional.get();
-        // return Book.getById(id);
-    }
+    public BookController.Book bookById(@Argument String id) {
+	return
+	    jdbcClient
+	    .sql("select * from book limit 1")
+	    .query(new RowMapper<BookController.Book>() {
+		    public BookController.Book mapRow(ResultSet rs, int rowNum) throws SQLException {
+			return
+			    new BookController.Book(rs.getString("ID"),
+						    rs.getString("NAME"),
+						    rs.getInt("PAGECOUNT"),
+						    rs.getString("AUTHORID"));}})
+	    .optional()
+	    .get();}
 
     @SchemaMapping
-    public Author author(Book book) {
-	Optional<Author> authorOptional = jdbcClient.sql("select * from author limit 1")
-	    .query(new AuthorRowMapper())
-	    .optional();
-	return authorOptional.get();
-        // return Author.getById(book.authorId());
-    }
-
-}
+    public BookController.Author author(BookController.Book book) {
+	return
+	    jdbcClient
+	    .sql("select * from author limit 1")
+	    .query(new RowMapper<BookController.Author>() {
+		    public BookController.Author mapRow(ResultSet rs, int rowNum) throws SQLException {
+			return
+			    new BookController.Author(rs.getString("ID"),
+						      rs.getString("FIRSTNAME"),
+						      rs.getString("LASTNAME"));}})
+	    .optional()
+	    .get();}}
