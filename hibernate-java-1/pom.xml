@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.hasura</groupId>
-  <artifactId>netflix-dgs-java-1</artifactId>
+  <artifactId>hibernate-java-1</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>netflix-dgs-java-1</name>
   <description>Netflix DGS Java Demo Project</description>

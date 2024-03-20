@@ -1,6 +1,6 @@
-package io.hasura.netflixdgsjava1;
+package io.hasura.hibernatejava1;
 
-import io.hasura.netflixdgsjava1.model.*;
+import io.hasura.hibernatejava1.model.*;
 import org.hibernate.*;
 import org.hibernate.boot.*;
 import org.hibernate.boot.registry.*;

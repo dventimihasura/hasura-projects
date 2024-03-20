@@ -1,7 +1,7 @@
-package io.hasura.netflixdgsjava1;
+package io.hasura.hibernatejava1;
 
-import io.hasura.netflixdgsjava1.model.*;
-import io.hasura.netflixdgsjava1.model.Order;
+import io.hasura.hibernatejava1.model.*;
+import io.hasura.hibernatejava1.model.Order;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -35,9 +35,15 @@ class HibernateTests {
     }
 
     @Test
-    public void hql_fetch_users() {
+    public void hql_fetch_accounts() {
 	EntityManager session = sessionFactory.createEntityManager();
 	session.createQuery("select u from Account u", Account.class).setMaxResults(5).getResultList().forEach(System.out::println);
+    }
+
+    @Test
+    @Disabled
+    public void hql_fetch_orders() {
+	EntityManager session = sessionFactory.createEntityManager();
 	session.createQuery("select u from Order u", Order.class).setMaxResults(5).getResultList().forEach(System.out::println);
     }
 }

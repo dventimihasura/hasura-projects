@@ -1,7 +1,6 @@
-package io.hasura.netflixdgsjava1.model;
+package io.hasura.hibernatejava1.model;
 
 import jakarta.persistence.*;
-import java.util.*;
 
 @Entity
 public class Region {
