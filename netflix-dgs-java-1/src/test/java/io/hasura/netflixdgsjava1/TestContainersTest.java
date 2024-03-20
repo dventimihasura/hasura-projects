@@ -102,8 +102,8 @@ class TestContainersTest {
 	em.getTransaction().commit();
 	CriteriaBuilder cb = em.getCriteriaBuilder();
 	CriteriaQuery<Account> criteriaQuery = cb.createQuery(Account.class);
-	Root<Account> root = criteriaQuery.from(Account.class);
-	criteriaQuery.select(root).where(cb.like(root.get(Account_.name), "James %"));
+	// Root<Account> root = criteriaQuery.from(Account.class);
+	// criteriaQuery.select(root).where(cb.like(root.get(Account_.name), "James %"));
 	TypedQuery<Account> query = em.createQuery(criteriaQuery);
 	List<Account> accounts = query.getResultList();
 	accounts.forEach(System.out::println);
