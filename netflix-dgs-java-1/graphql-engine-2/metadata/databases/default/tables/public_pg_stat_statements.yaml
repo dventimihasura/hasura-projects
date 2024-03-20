@@ -1,3 +1,0 @@
-table:
-  name: pg_stat_statements
-  schema: public
