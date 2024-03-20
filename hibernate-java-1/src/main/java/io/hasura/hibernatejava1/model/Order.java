@@ -18,6 +18,9 @@ public class Order extends AbstractModel {
     @Column(name = "updated_at") @UpdateTimestamp @Expose
     public Date updatedAt;
 
-    @OneToMany(fetch = FetchType.EAGER) @JoinColumn(name = "order_id") @Expose
+    @Expose
+    public String status;
+
+    @OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "order_id") @Expose
     public Set<OrderDetail> orderDetails = new HashSet<>();
 }

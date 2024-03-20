@@ -21,6 +21,6 @@ public class OrderDetail extends AbstractModel {
     @Expose
     public int units;
 
-    @ManyToOne(fetch=FetchType.EAGER) @Expose
+    @ManyToOne(fetch=FetchType.LAZY) @Expose
     public Product product;
 }

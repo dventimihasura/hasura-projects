@@ -22,6 +22,6 @@ public class Account extends AbstractModel {
     @Expose
     public String name;
 
-    @OneToMany(fetch = FetchType.EAGER) @JoinColumn(name = "account_id") @Expose
+    @OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "account_id") @Expose
     public Set<Order> orders = new HashSet<>();
 }
