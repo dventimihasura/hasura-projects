@@ -1,0 +1,14 @@
+version: "3.6"
+services:
+  postgres:
+    image: postgres:16
+    ports:
+      - ${PGPORT:-5432}:5432
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./initdb.d-postgres:/docker-entrypoint-initdb.d:ro
+    command: postgres -c 'shared_preload_libraries=pg_stat_statements'
+    healthcheck:
+      test: psql -d graphql_engine_2 -U postgres -c 'select 1' || exit 1

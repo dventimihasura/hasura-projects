@@ -46,3 +46,8 @@ netflix-dgs-java-1/README.odt
 *.html
 *.odt
 netflix-dgs-java-1/README.md
+netflix-dgs-java-1/.settings/
+netflix-dgs-java-1/bin/.settings/
+netflix-dgs-java-1/bin/
+.settings/*
+bin/*
