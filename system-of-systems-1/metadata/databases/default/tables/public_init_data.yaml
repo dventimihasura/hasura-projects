@@ -1,0 +1,3 @@
+table:
+  name: init_data
+  schema: public
