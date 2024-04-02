@@ -4,18 +4,34 @@
 
 #+begin_src mongo :db sample_db :host localhost :port 27018 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.sample_collection.findOne({_id: ObjectId("660b382c5b93c131c9e1b3c7")});
+  db.sample_collection.find();
 #+end_src
 
 #+RESULTS:
-: test> switched to db sample_db
-: sample_db> {
-:   _id: ObjectId('660b382c5b93c131c9e1b3c7'),
-:   org: 'foobarbaz',
-:   filter: 'EVENT_A',
-:   addrs: 'http://rest_client_1:8080/wh'
-: }
-: sample_db> 
+#+begin_example
+test> switched to db sample_db
+sample_db> [
+  {
+    _id: ObjectId('660b539fc7441df646bcbad7'),
+    org: 'helpdev',
+    filter: 'EVENT_A',
+    addrs: 'http://rest_client_1:8080/wh'
+  },
+  {
+    _id: ObjectId('660b539fc7441df646bcbad8'),
+    org: 'helpdev',
+    filter: 'EVENT_B',
+    addrs: 'http://rest_client_2:8081/wh'
+  },
+  {
+    _id: ObjectId('660b539fc7441df646bcbad9'),
+    org: 'github',
+    filter: 'EVENT_C',
+    addrs: 'http://rest_client_3:8082/wh'
+  }
+]
+sample_db> 
+#+end_example
 
 #+begin_src mongo :db sample_db :host localhost :port 27018 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
