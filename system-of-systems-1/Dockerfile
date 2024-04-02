@@ -1,4 +1,4 @@
-FROM postgres:16.2
+FROM postgres:16
 
 RUN apt-get update -y
 RUN apt-get upgrade -y
