@@ -7,7 +7,7 @@ drop schema if exists api cascade;
 drop extension if exists ltree cascade;
 drop aggregate if exists mul (int);
 
--- Create foundational components: schema, extensions, aggregates;
+-- Create foundational components: schema, extensions, aggregates.
 
 create schema core;
 comment on schema core is 'private physical data model';
@@ -21,7 +21,7 @@ comment on extension ltree is 'maintains DAG';
 create aggregate mul (int) (sfunc = int4mul, stype=int);
 comment on aggregate mul (int) is 'logic to resolve acceptance tests';
 
--- node
+-- Create private physical data model.
 
 create table core.node (
   id serial primary key,
@@ -98,17 +98,31 @@ create trigger tgr_node_detect_cycle
   for each row execute procedure core.node_detect_cycle();
 comment on trigger tgr_node_detect_cycle on core.node is 'detect cycles';
 
-create view api.node as
-  select * from core.node;
-comment on view api.node is 'DAG node';
-
--- design
-
 create table core.design (
   id integer not null unique references core.node on delete cascade,
   name text not null default ''
 );
 comment on table core.design is 'logical design for a part';
+
+create table core.part (
+  id serial primary key,
+  design_id int not null references core.node on delete cascade,
+  serial_id uuid not null default gen_random_uuid()
+);
+comment on table core.part is 'physical instance for a design';
+
+create table core.test (
+  id serial primary key,
+  part_id int not null references core.part on delete cascade,
+  accepted boolean not null default false
+);
+comment on table core.test is 'occurrence of a test of a part';
+
+-- Create public logical data model.
+
+create view api.node as
+  select * from core.node;
+comment on view api.node is 'DAG node';
 
 create view api.design as
   select
@@ -119,6 +133,7 @@ create view api.design as
     from
       core.design
       join core.node on design.id = node.id;
+comment on view api.design is 'logical design for a part';
 
 create function api.tgr_design_delete () returns trigger language plpgsql as $$
   begin
@@ -148,15 +163,6 @@ create trigger tgr_design_insert
   for each row
   execute function api.tgr_design_insert();
 comment on trigger tgr_design_insert on api.design is 'make api.design view support insert';
-
--- part
-
-create table core.part (
-  id serial primary key,
-  design_id int not null references core.node on delete cascade,
-  serial_id uuid not null default gen_random_uuid()
-);
-comment on table core.part is 'physical instance for a design';
 
 create view api.part as
   select
@@ -201,15 +207,6 @@ create trigger tgr_part_insert
   for each row
   execute function api.tgr_part_insert();
 comment on trigger tgr_part_insert on api.part is 'make api.part view support insert';
-
--- test
-
-create table core.test (
-  id serial primary key,
-  part_id int not null references core.part,
-  accepted boolean not null default false
-);
-comment on table core.test is 'occurrence of a test of a part';
 
 create view api.test as
   select
