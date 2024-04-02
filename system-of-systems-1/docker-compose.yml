@@ -1,6 +1,7 @@
 version: "3.7"
 services:
   postgres:
+    # image: postgres:16
     build: .
     ports:
       - ${PGPORT}:5432
