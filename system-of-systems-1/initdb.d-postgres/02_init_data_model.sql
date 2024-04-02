@@ -124,46 +124,6 @@ create view api.node as
   select * from core.node;
 comment on view api.node is 'DAG node';
 
-create view api.design as
-  select
-    node.id,
-    node.parent_id,
-    node.parent_path,
-    design.name
-    from
-      core.design
-      join core.node on design.id = node.id;
-comment on view api.design is 'logical design for a part';
-
-create function api.tgr_design_delete () returns trigger language plpgsql as $$
-  begin
-    delete from core.node where core.node.id = old.id;
-    return old;
-  end;
-$$;
-comment on function api.tgr_design_delete () is 'make api.design view support delete';
-
-create trigger tgr_design_delete
-  instead of delete on api.design
-  for each row
-  execute function api.tgr_design_delete();
-comment on trigger tgr_design_delete on api.design is 'make api.design view support delete';
-
-create function api.tgr_design_insert () returns trigger language plpgsql as $$
-  begin
-    insert into core.node (id, parent_id) values (new.id, new.parent_id);
-    insert into core.design (id, name) values (new.id, new.name);
-    return new;
-  end;
-$$;
-comment on function api.tgr_design_insert () is 'make api.design view support insert';
-
-create trigger tgr_design_insert
-  instead of insert on api.design
-  for each row
-  execute function api.tgr_design_insert();
-comment on trigger tgr_design_insert on api.design is 'make api.design view support insert';
-
 create view api.part as
   select
     part.id,
@@ -208,6 +168,49 @@ create trigger tgr_part_insert
   execute function api.tgr_part_insert();
 comment on trigger tgr_part_insert on api.part is 'make api.part view support insert';
 
+create view api.design as
+  select
+    node.id,
+    node.parent_id,
+    node.parent_path,
+    design.name,
+    coalesce(mul(part.accepted::int)::boolean, false) accepted
+    from
+      core.design
+      join core.node on design.id = node.id
+      left join api.part on part.design_id = design.id
+   group by node.id, node.parent_id, node.parent_path, design.name;
+comment on view api.design is 'logical design for a part';
+
+create function api.tgr_design_delete () returns trigger language plpgsql as $$
+  begin
+    delete from core.node where core.node.id = old.id;
+    return old;
+  end;
+$$;
+comment on function api.tgr_design_delete () is 'make api.design view support delete';
+
+create trigger tgr_design_delete
+  instead of delete on api.design
+  for each row
+  execute function api.tgr_design_delete();
+comment on trigger tgr_design_delete on api.design is 'make api.design view support delete';
+
+create function api.tgr_design_insert () returns trigger language plpgsql as $$
+  begin
+    insert into core.node (id, parent_id) values (new.id, new.parent_id);
+    insert into core.design (id, name) values (new.id, new.name);
+    return new;
+  end;
+$$;
+comment on function api.tgr_design_insert () is 'make api.design view support insert';
+
+create trigger tgr_design_insert
+  instead of insert on api.design
+  for each row
+  execute function api.tgr_design_insert();
+comment on trigger tgr_design_insert on api.design is 'make api.design view support insert';
+
 create view api.test as
   select
     id,
@@ -217,32 +220,35 @@ create view api.test as
       core.test;
 comment on view api.test is 'occurrence of a test of a part';
 
--- ------------------------------------------------------
+------------------------------------------------------
 
--- files
+create schema procure;
 
-create extension if not exists file_fdw;
+create extension file_fdw;
 
-create server if not exists init_data foreign data wrapper file_fdw;
+create server bom_files foreign data wrapper file_fdw;
 
-create foreign table if not exists init_data (data jsonb) server init_data options (filename '/opt/01_init_data.jsonl', format 'text');
+create foreign table if not exists procure.bom (data jsonb) server bom_files options (
+  filename '/opt/01_init_data.jsonl',
+  format 'text'
+);
 
--- mongodb
+create schema lab;
 
 create extension mongo_fdw;
 
-create server mongodb foreign data wrapper mongo_fdw options (
+create server lab_results foreign data wrapper mongo_fdw options (
   address 'mongodb',
   port '27017',
   authentication_database 'admin'
 );
 
-create user mapping for postgres server mongodb options (
+create user mapping for postgres server lab_results options (
   username 'mongo',
   password 'mongo'
 );
 
-create foreign table sample_collection (
+create foreign table test_report (
   _id name,
   org text,
   filter text,
