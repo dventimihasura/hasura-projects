@@ -24,3 +24,5 @@ services:
       HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
       HASURA_GRAPHQL_ENABLE_CONSOLE: true
       HASURA_GRAPHQL_MAX_CACHE_SIZE: 200
+    volumes:
+      - ./metadata:/hasura-metadata:ro

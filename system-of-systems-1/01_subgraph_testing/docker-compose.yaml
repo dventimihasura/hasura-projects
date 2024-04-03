@@ -42,3 +42,5 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: true
       HASURA_GRAPHQL_MAX_CACHE_SIZE: 200
       HASURA_GRAPHQL_METADATA_DEFAULTS: '{"backend_configs":{"dataconnector":{"Mongo":{"uri":"http://mongo-data-connector:3000"}}}}'
+    volumes:
+      - ./metadata:/hasura-metadata:ro
