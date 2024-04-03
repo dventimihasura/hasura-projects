@@ -1,7 +1,16 @@
 table:
   name: design
   schema: api
-array_relationships:
+object_relationships:
+  - name: composes
+    using:
+      manual_configuration:
+        column_mapping:
+          parent_id: id
+        insertion_order: null
+        remote_table:
+          name: design
+          schema: api
   - name: parts
     using:
       manual_configuration:
@@ -10,4 +19,14 @@ array_relationships:
         insertion_order: null
         remote_table:
           name: part
+          schema: api
+array_relationships:
+  - name: comprises
+    using:
+      manual_configuration:
+        column_mapping:
+          id: parent_id
+        insertion_order: null
+        remote_table:
+          name: design
           schema: api
