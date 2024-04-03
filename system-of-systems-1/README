@@ -4,7 +4,7 @@
 
 #+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.sample_collection.find();
+  db.approvals.find();
 #+end_src
 
 #+RESULTS:
@@ -12,22 +12,34 @@
 test> switched to db sample_db
 sample_db> [
   {
-    _id: ObjectId('660b539fc7441df646bcbad7'),
-    org: 'helpdev',
-    filter: 'EVENT_A',
-    addrs: 'http://rest_client_1:8080/wh'
+    _id: ObjectId('660dd496fd7ec80224bef344'),
+    design_id: 1,
+    approved: true
   },
   {
-    _id: ObjectId('660b539fc7441df646bcbad8'),
-    org: 'helpdev',
-    filter: 'EVENT_B',
-    addrs: 'http://rest_client_2:8081/wh'
+    _id: ObjectId('660dd496fd7ec80224bef345'),
+    design_id: 2,
+    approved: true
   },
   {
-    _id: ObjectId('660b539fc7441df646bcbad9'),
-    org: 'github',
-    filter: 'EVENT_C',
-    addrs: 'http://rest_client_3:8082/wh'
+    _id: ObjectId('660dd496fd7ec80224bef346'),
+    design_id: 3,
+    approved: true
+  },
+  {
+    _id: ObjectId('660dd496fd7ec80224bef347'),
+    design_id: 4,
+    approved: true
+  },
+  {
+    _id: ObjectId('660dd496fd7ec80224bef348'),
+    design_id: 5,
+    approved: true
+  },
+  {
+    _id: ObjectId('660dd496fd7ec80224bef349'),
+    design_id: 6,
+    approved: true
   }
 ]
 sample_db> 
@@ -35,7 +47,7 @@ sample_db>
 
 #+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.approvals.updateOne({_id: ObjectId("660dc42b7879bb7cbdf442a4")}, {$set: {"approved": true}}, {upsert: true})
+  db.approvals.updateOne({_id: ObjectId("660dd496fd7ec80224bef349")}, {$set: {"approved": false}}, {upsert: true})
 #+end_src
 
 #+RESULTS:
@@ -44,14 +56,14 @@ sample_db>
 :   acknowledged: true,
 :   insertedId: null,
 :   matchedCount: 1,
-:   modifiedCount: 0,
+:   modifiedCount: 1,
 :   upsertedCount: 0
 : }
 : sample_db> 
 
 #+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.sample_collection.findOne({_id: ObjectId("660b382c5b93c131c9e1b3c7")});
+  db.approvals.findOne({_id: ObjectId("660b382c5b93c131c9e1b3c7")});
 #+end_src
 
 #+RESULTS:
