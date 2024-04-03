@@ -1,0 +1,13 @@
+table:
+  name: design
+  schema: api
+array_relationships:
+  - name: parts
+    using:
+      manual_configuration:
+        column_mapping:
+          id: design_id
+        insertion_order: null
+        remote_table:
+          name: part
+          schema: api

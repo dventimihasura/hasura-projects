@@ -1,0 +1,13 @@
+table:
+  name: test
+  schema: api
+object_relationships:
+  - name: part
+    using:
+      manual_configuration:
+        column_mapping:
+          part_id: id
+        insertion_order: null
+        remote_table:
+          name: part
+          schema: api
