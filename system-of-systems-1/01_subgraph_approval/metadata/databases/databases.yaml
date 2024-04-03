@@ -12,3 +12,27 @@
         retries: 1
       use_prepared_statements: true
   tables: "!include default/tables/tables.yaml"
+- name: approvals
+  kind: Mongo
+  configuration:
+    template: null
+    timeout: null
+    value:
+      connection: mongodb://mongo:mongo@subgraph_approval_mongodb:27017
+      db: sample_db
+  logical_models:
+    - fields:
+        - name: _id
+          type:
+            nullable: false
+            scalar: objectId
+        - name: design_id
+          type:
+            nullable: false
+            scalar: int
+        - name: approved
+          type:
+            nullable: false
+            scalar: bool
+      name: approvals
+  tables: "!include approvals/tables/tables.yaml"
