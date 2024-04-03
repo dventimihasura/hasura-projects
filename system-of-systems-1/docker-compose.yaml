@@ -1,6 +1,6 @@
 include:
-  - docker-compose-subgraph-design.yaml
-  - docker-compose-subgraph-logic.yaml
-  - docker-compose-subgraph-supply.yaml
-  - docker-compose-subgraph-testing.yaml
-  - docker-compose-supergraph-gateway.yaml
+  - ./subgraph_testing/docker-compose.yaml
+  - ./subgraph_supply/docker-compose.yaml
+  - ./subgraph_design/docker-compose.yaml
+  - ./supergraph_logic/docker-compose.yaml
+  - ./supergraph_gateway/docker-compose.yaml
