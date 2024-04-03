@@ -9,7 +9,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: mongo
       MONGO_INITDB_ROOT_USERNAME: mongo
     volumes:
-      - ./subgraph_testing/initdb.d_mongodb:/docker-entrypoint-initdb.d:ro
+      - ./initdb.d_mongodb:/docker-entrypoint-initdb.d:ro
   subgraph_testing_postgres:
     build: .
     depends_on:
@@ -20,7 +20,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./subgraph_testing/initdb.d_postgres:/docker-entrypoint-initdb.d:ro
+      - ./initdb.d_postgres:/docker-entrypoint-initdb.d:ro
   subgraph_testing_mongodb_data_connector:
     image: hasura/mongo-data-connector:v2.38.0
     depends_on:

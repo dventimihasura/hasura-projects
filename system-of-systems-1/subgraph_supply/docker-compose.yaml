@@ -8,8 +8,8 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./subgraph_supply/initdb.d_postgres:/docker-entrypoint-initdb.d:ro
-      - ./subgraph_supply/initdb.d_files:/opt
+      - ./initdb.d_postgres:/docker-entrypoint-initdb.d:ro
+      - ./initdb.d_files:/opt
   subgraph_supply_hasura:
     image: hasura/graphql-engine:v2.38.0.cli-migrations-v3
     depends_on:
