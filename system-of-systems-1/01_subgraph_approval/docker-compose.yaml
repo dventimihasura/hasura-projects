@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-  subgraph_testing_mongodb:
+  subgraph_approval_mongodb:
     image: mongo:6
     restart: always
     ports:
@@ -10,10 +10,10 @@ services:
       MONGO_INITDB_ROOT_USERNAME: mongo
     volumes:
       - ./initdb.d_mongodb:/docker-entrypoint-initdb.d:ro
-  subgraph_testing_postgres:
+  subgraph_approval_postgres:
     build: .
     depends_on:
-      - subgraph_testing_mongodb
+      - subgraph_approval_mongodb
     ports:
       - 5431:5432
     restart: always
@@ -21,22 +21,22 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - ./initdb.d_postgres:/docker-entrypoint-initdb.d:ro
-  subgraph_testing_mongodb_data_connector:
+  subgraph_approval_mongodb_data_connector:
     image: hasura/mongo-data-connector:v2.38.0
     depends_on:
-      - subgraph_testing_mongodb
+      - subgraph_approval_mongodb
     restart: always
-  subgraph_testing_hasura:
+  subgraph_approval_hasura:
     image: hasura/graphql-engine:v2.38.0.cli-migrations-v3
     depends_on:
-      - subgraph_testing_postgres
-      - subgraph_testing_mongodb_data_connector
+      - subgraph_approval_postgres
+      - subgraph_approval_mongodb_data_connector
     restart: always
     ports:
       - 8081:8080
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@subgraph_testing_postgres/postgres
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@subgraph_approval_postgres/postgres
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
       HASURA_GRAPHQL_ENABLE_CONSOLE: true

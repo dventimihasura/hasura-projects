@@ -3,7 +3,7 @@
 create extension mongo_fdw;
 
 create server mongodb foreign data wrapper mongo_fdw options (
-  address 'subgraph_testing_mongodb',
+  address 'subgraph_approval_mongodb',
   port '27017',
   authentication_database 'admin'
 );

@@ -22,15 +22,15 @@
         value: myadminsecretkey
     forward_client_headers: true
   comment: ""
-- name: testing
+- name: approval
   definition:
-    url: http://subgraph_testing_hasura:8080/v1/graphql
+    url: http://subgraph_approval_hasura:8080/v1/graphql
     timeout_seconds: 60
     customization:
-      root_fields_namespace: testing
+      root_fields_namespace: approval
       type_names:
         mapping: {}
-        prefix: testing_
+        prefix: approval_
     headers:
       - name: x-hasura-admin-secret
         value: myadminsecretkey
