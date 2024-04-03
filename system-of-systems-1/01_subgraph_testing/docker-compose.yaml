@@ -4,7 +4,7 @@ services:
     image: mongo:6
     restart: always
     ports:
-      - 27018:27017
+      - 27011:27017
     environment:
       MONGO_INITDB_ROOT_PASSWORD: mongo
       MONGO_INITDB_ROOT_USERNAME: mongo
@@ -15,7 +15,7 @@ services:
     depends_on:
       - subgraph_testing_mongodb
     ports:
-      - 5433:5432
+      - 5431:5432
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres

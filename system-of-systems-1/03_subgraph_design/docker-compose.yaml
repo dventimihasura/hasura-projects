@@ -1,24 +1,24 @@
 version: "3.7"
 services:
-  supergraph_gateway_postgres:
+  subgraph_design_postgres:
     image: postgres:16
     ports:
-      - 5437:5432
+      - 5433:5432
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:
       - ./initdb.d_postgres:/docker-entrypoint-initdb.d:ro
-  supergraph_gateway_hasura:
+  subgraph_design_hasura:
     image: hasura/graphql-engine:v2.38.0.cli-migrations-v3
     depends_on:
-      - supergraph_gateway_postgres
+      - subgraph_design_postgres
     restart: always
     ports:
-      - 8084:8080
+      - 8083:8080
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@supergraph_gateway_postgres/postgres
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@subgraph_design_postgres/postgres
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
       HASURA_GRAPHQL_ENABLE_CONSOLE: true
