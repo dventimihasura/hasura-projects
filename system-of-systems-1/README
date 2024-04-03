@@ -2,7 +2,7 @@
 
 #+STARTUP: indent
 
-#+begin_src mongo :db sample_db :host localhost :port 27018 :user mongo :password "mongo" :mongoexec mongosh
+#+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
   db.sample_collection.find();
 #+end_src
@@ -33,9 +33,9 @@ sample_db> [
 sample_db> 
 #+end_example
 
-#+begin_src mongo :db sample_db :host localhost :port 27018 :user mongo :password "mongo" :mongoexec mongosh
+#+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.sample_collection.updateOne({_id: ObjectId("660b382c5b93c131c9e1b3c7")}, {$set: {"org": "FOOBLITZKY"}}, {upsert: true})
+  db.approvals.updateOne({_id: ObjectId("660dc42b7879bb7cbdf442a4")}, {$set: {"approved": true}}, {upsert: true})
 #+end_src
 
 #+RESULTS:
@@ -44,12 +44,12 @@ sample_db>
 :   acknowledged: true,
 :   insertedId: null,
 :   matchedCount: 1,
-:   modifiedCount: 1,
+:   modifiedCount: 0,
 :   upsertedCount: 0
 : }
 : sample_db> 
 
-#+begin_src mongo :db sample_db :host localhost :port 27018 :user mongo :password "mongo" :mongoexec mongosh
+#+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
   db.sample_collection.findOne({_id: ObjectId("660b382c5b93c131c9e1b3c7")});
 #+end_src
