@@ -1,3 +1,17 @@
+- name: approval
+  definition:
+    url: http://subgraph_approval_hasura:8080/v1/graphql
+    timeout_seconds: 60
+    customization:
+      root_fields_namespace: approval
+      type_names:
+        mapping: {}
+        prefix: approval_
+    headers:
+      - name: x-hasura-admin-secret
+        value: myadminsecretkey
+    forward_client_headers: true
+  comment: ""
 - name: design
   definition:
     url: http://subgraph_design_hasura:8080/v1/graphql
@@ -8,6 +22,21 @@
         value: myadminsecretkey
     forward_client_headers: true
   comment: ""
+  remote_relationships:
+    - relationships:
+        - definition:
+            to_remote_schema:
+              lhs_fields:
+                - id
+              remote_field:
+                approvals:
+                  arguments:
+                    where:
+                      design_id:
+                        _eq: $id
+              remote_schema: approval
+          name: approvals
+      type_name: api_design
 - name: supply
   definition:
     url: http://subgraph_supply_hasura:8080/v1/graphql
@@ -17,20 +46,6 @@
       type_names:
         mapping: {}
         prefix: supply_
-    headers:
-      - name: x-hasura-admin-secret
-        value: myadminsecretkey
-    forward_client_headers: true
-  comment: ""
-- name: approval
-  definition:
-    url: http://subgraph_approval_hasura:8080/v1/graphql
-    timeout_seconds: 60
-    customization:
-      root_fields_namespace: approval
-      type_names:
-        mapping: {}
-        prefix: approval_
     headers:
       - name: x-hasura-admin-secret
         value: myadminsecretkey
