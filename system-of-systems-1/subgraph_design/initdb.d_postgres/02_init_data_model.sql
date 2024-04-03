@@ -237,38 +237,38 @@ comment on view api.test is 'occurrence of a test of a part';
 
 ------------------------------------------------------
 
-create schema procure;
+-- create schema procure;
 
-create extension file_fdw;
+-- create extension file_fdw;
 
-create server bom_files foreign data wrapper file_fdw;
+-- create server bom_files foreign data wrapper file_fdw;
 
-create foreign table if not exists procure.bom (data jsonb) server bom_files options (
-  filename '/opt/01_init_data.jsonl',
-  format 'text'
-);
+-- create foreign table if not exists procure.bom (data jsonb) server bom_files options (
+--   filename '/opt/01_init_data.jsonl',
+--   format 'text'
+-- );
 
-create schema lab;
+-- create schema lab;
 
-create extension mongo_fdw;
+-- create extension mongo_fdw;
 
-create server lab_results foreign data wrapper mongo_fdw options (
-  address 'mongodb',
-  port '27017',
-  authentication_database 'admin'
-);
+-- create server lab_results foreign data wrapper mongo_fdw options (
+--   address 'mongodb',
+--   port '27017',
+--   authentication_database 'admin'
+-- );
 
-create user mapping for postgres server lab_results options (
-  username 'mongo',
-  password 'mongo'
-);
+-- create user mapping for postgres server lab_results options (
+--   username 'mongo',
+--   password 'mongo'
+-- );
 
-create foreign table test_report (
-  _id name,
-  org text,
-  filter text,
-  addrs text
-) server mongodb options (
-  database 'sample_db',
-  collection 'sample_collection'
-);
+-- create foreign table test_report (
+--   _id name,
+--   org text,
+--   filter text,
+--   addrs text
+-- ) server mongodb options (
+--   database 'sample_db',
+--   collection 'sample_collection'
+-- );

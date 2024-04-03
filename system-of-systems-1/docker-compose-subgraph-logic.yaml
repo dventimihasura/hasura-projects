@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  supergraph_logic_postgres:
+    image: postgres:16
+    ports:
+      - 5436:5432
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+  supergraph_logic_postgrest:
+    image: postgrest/postgrest
+    depends_on:
+      - supergraph_logic_postgres
+    environment:
+      PGRST_DB_URI: postgres://postgres:postgres@supergraph_logic_postgres:5432/postgres
