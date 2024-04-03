@@ -1,5 +1,40 @@
 version: "3.7"
 services:
+  postgres_design:
+    build: .
+    ports:
+      - 5434:5432
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+  postgres_testing:
+    build: .
+    ports:
+      - 5435:5432
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+  postgres_supply:
+    build: .
+    ports:
+      - 5436:5432
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+  postgres_logic:
+    build: .
+    ports:
+      - 5437:5432
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+  postgres_hasura:
+    build: .
+    ports:
+      - 5437:5432
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
   postgres:
     build: .
     ports:
