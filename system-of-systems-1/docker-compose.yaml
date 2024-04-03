@@ -1,5 +1,5 @@
 include:
-  - ./01_subgraph_testing/docker-compose.yaml
+  - ./01_subgraph_approval/docker-compose.yaml
   - ./02_subgraph_supply/docker-compose.yaml
   - ./03_subgraph_design/docker-compose.yaml
   - ./04_supergraph_logic/docker-compose.yaml

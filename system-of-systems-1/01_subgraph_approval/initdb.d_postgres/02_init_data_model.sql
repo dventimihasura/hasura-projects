@@ -22,3 +22,12 @@ create foreign table test_report (
   database 'sample_db',
   collection 'sample_collection'
 );
+
+create foreign table approval (
+  _id name,
+  design_id int,
+  approved boolean
+) server mongodb options (
+  database 'sample_db',
+  collection 'approvals'
+);
