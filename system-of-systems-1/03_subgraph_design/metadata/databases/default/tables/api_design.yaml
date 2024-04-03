@@ -1,6 +1,11 @@
 table:
   name: design
   schema: api
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_name: design
+  custom_root_fields: {}
 object_relationships:
   - name: composes
     using:

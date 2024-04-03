@@ -1,6 +1,11 @@
 table:
   name: test
   schema: api
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_name: test
+  custom_root_fields: {}
 object_relationships:
   - name: part
     using:
