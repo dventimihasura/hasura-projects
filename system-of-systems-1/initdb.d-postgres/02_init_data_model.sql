@@ -26,50 +26,50 @@ comment on aggregate mul (int) is 'logic to resolve acceptance tests';
 create table core.node (
   id serial primary key,
   parent_id integer references core.node on delete cascade on update set null,
-  parent_path ltree not null
+  path ltree not null
 );
 comment on table core.node is 'DAG node';
 
 create index on core.node (parent_id);
-create index on core.node using gist (parent_path);
+create index on core.node using gist (path);
 
-create function core.node_update_parent_path () returns trigger as $$
+create function core.node_update_path () returns trigger as $$
   declare
-    new_parent_path ltree;
-    parent_path ltree;
+    new_path ltree;
+    path ltree;
   begin
     if new.parent_id is null then
-      new.parent_path = new.id::text::ltree;
+      new.path = new.id::text::ltree;
     elsif lower(tg_op) = lower('insert') or old.parent_id is null or old.parent_id != new.parent_id then
-      select node.parent_path from core.node where id = new.parent_id into new_parent_path;
-      if new_parent_path is null then
+      select node.path from core.node where id = new.parent_id into new_path;
+      if new_path is null then
 	raise exception 'invalid parent_id %', new.parent_id;
       end if;
-      new.parent_path = new_parent_path || new.id::text::ltree;
+      new.path = new_path || new.id::text::ltree;
     end if;
     return new;
   end;
 $$ language plpgsql;
-comment on function core.node_update_parent_path () is 'make sure that parent_path always is set to the correct value when a new node is inserted or updated';
+comment on function core.node_update_path () is 'make sure that path always is set to the correct value when a new node is inserted or updated';
 
-create function core.node_update_parent_path_of_child () returns trigger as $$
+create function core.node_update_path_of_child () returns trigger as $$
   begin
-    update node set parent_path = new.parent_path || id::text::ltree where parent_id = new.id;
+    update node set path = new.path || id::text::ltree where parent_id = new.id;
     return new;
   end;
 $$ language plpgsql;
-comment on function core.node_update_parent_path_of_child () is 'handles the scenario when a group of children is reassigned to a different parent';
+comment on function core.node_update_path_of_child () is 'handles the scenario when a group of children is reassigned to a different parent';
 
-create trigger tgr_node_update_parent_path
+create trigger tgr_node_update_path
   before insert or update on core.node
-  for each row execute procedure core.node_update_parent_path();
-comment on trigger tgr_node_update_parent_path on core.node is 'make sure that parent_path always is set to the correct value when a new node is inserted or updated';
+  for each row execute procedure core.node_update_path();
+comment on trigger tgr_node_update_path on core.node is 'make sure that path always is set to the correct value when a new node is inserted or updated';
 
-create trigger tgr_node_update_parent_path_of_child
+create trigger tgr_node_update_path_of_child
   after update on core.node
-  for each row when (new.parent_path is distinct from old.parent_path)
-  execute procedure core.node_update_parent_path_of_child();
-comment on trigger tgr_node_update_parent_path_of_child on core.node is 'handles the scenario when a group of children is reassigned to a different parent';
+  for each row when (new.path is distinct from old.path)
+  execute procedure core.node_update_path_of_child();
+comment on trigger tgr_node_update_path_of_child on core.node is 'handles the scenario when a group of children is reassigned to a different parent';
 
 create function core.node_detect_cycle () returns trigger as $$
   begin
@@ -168,18 +168,33 @@ create trigger tgr_part_insert
   execute function api.tgr_part_insert();
 comment on trigger tgr_part_insert on api.part is 'make api.part view support insert';
 
-create view api.design as
+create or replace view api.design as
+  with
+  api_design as (
+    select
+      node.id,
+      node.parent_id,
+      node.path,
+      design.name
+      from
+	core.design
+	join core.node on design.id = node.id
+	left join api.part on part.design_id = design.id
+     group by node.id, node.parent_id, node.path, design.name)
   select
-    node.id,
-    node.parent_id,
-    node.parent_path,
-    design.name,
-    coalesce(mul(part.accepted::int)::boolean, false) accepted
+    *,
+    (
+      select
+	coalesce(mul(accepted::int)::boolean, false)
+	from
+	  api_design f2
+	  join api.part on api.part.design_id = f2.id
+       where (
+	 false
+	 or f2.path ~ (f1.path::text || '.*{1}')::lquery
+	 or f2.path = f1.path)) as accepted
     from
-      core.design
-      join core.node on design.id = node.id
-      left join api.part on part.design_id = design.id
-   group by node.id, node.parent_id, node.parent_path, design.name;
+      api_design f1;
 comment on view api.design is 'logical design for a part';
 
 create function api.tgr_design_delete () returns trigger language plpgsql as $$
