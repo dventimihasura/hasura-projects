@@ -13,6 +13,10 @@ services:
     image: hasura/graphql-engine:v2.38.0.cli-migrations-v3
     depends_on:
       - supergraph_gateway_postgres
+      - supergraph_approval_hasura
+      - supergraph_supply_hasura
+      - supergraph_design_hasura
+      - supergraph_logic_hasura
     restart: always
     ports:
       - 8085:8080
