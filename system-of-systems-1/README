@@ -25,7 +25,7 @@ The business units are:
   technical acceptance criteria
 - ~procurement~ :: builds relationships with suppliers, sources
   components for ~parts~ from those suppliers, and write
-  Bills-Of-Materials (BOM) which establish that a ~design~ can be
+  Bills-Of-Materials (~BOM~) which establish that a ~design~ can be
   manufactured
 - ~product~ :: maintains the ~product~ road-map and chooses the ~designs~ to
   take to market
@@ -33,26 +33,26 @@ The business units are:
 Additional terms are:
 
 - ~design~ :: a set of documents from ~engineering~ that provide the
-  technical specifications for a ~part~, where a ~design~ is accepted if
-  and only if its constituent desings are accepted and it has its own
-  associated ~part~ which is also accepted
+  technical specifications for a ~part~, where a ~design~ is ~accepted~ if
+  and only if its constituent desings are ~accepted~ and it has its own
+  associated ~part~ which is also ~accepted~
 - ~part~ :: a physical artifact from ~engineering~ that is a realization
   of a ~design~ and that is exposed to ~tests~ to determine if it is
-  accepted
-- bom :: Bill-Of-Materials (BOM) from ~procurement~ listing the
+  ~accepted~
+- ~bom~ :: Bill-Of-Materials (~BOM~) from ~procurement~ listing the
   components that must be sourced in order to manufacture a ~design~
 - ~test~ :: a set of observations made by ~engineering~ over a ~part~ for a
   ~design~ subjected to typical and atypical operations in a laboratory
   setting, and evaluated against acceptance criteria to determine if
-  it is accepted
-- accepted :: The concept accepted applies to ~tests~, to ~parts~, and to
-  ~designs~.  A ~test~ is either accepted or not accepted as a consequence
+  it is ~accepted~
+- ~accepted~ :: The concept ~accepted~ applies to ~tests~, to ~parts~, and to
+  ~designs~.  A ~test~ is either ~accepted~ or not ~accepted~ as a consequence
   of events outside of this data model (laboratory testing).  A ~part~
-  is accepted if and only if it has one or more ~tests~ that are
-  accepted, and has no ~tests~ that are not accepted.  A ~design~ is
-  accepted if and only if it has an associated ~part~ that is accepted
-  /and/ all of its constituent ~designs~ are accepted.
-- approval :: a document from ~product~ indicating that a ~design~ has
+  is ~accepted~ if and only if it has one or more ~tests~ that are
+  ~accepted~, and has no ~tests~ that are not ~accepted~.  A ~design~ is
+  ~accepted~ if and only if it has an associated ~part~ that is ~accepted~
+  /and/ all of its constituent ~designs~ are ~accepted~.
+- ~approval~ :: a document from ~product~ indicating that a ~design~ has
   been chosen to be taken to market by having its ~parts~ manufactured
 
 There is a hierarchical relationship for ~designs~.  A ~design~ MAY have a
@@ -68,10 +68,10 @@ There is a non-hierarchical one-to-many relationship between ~parts~ and
 relate to each other.
 
 There is a non-hierarchical one-to-one relationship between ~design~
-and bom.
+and ~bom~.
 
 There is a non-hierarchical one-to-many relationship between ~design~
-and approval.
+and ~approval~.
 
 At a high-level, this outline is a schematic for how these things are
 organized.
@@ -86,9 +86,9 @@ organized.
     - ...
   - ~design~
 - ~procurement~
-  - bom
+  - ~bom~
 - ~product~
-  - approval
+  - ~approval~
 
 Moreover, again ~design~ itself participates in the aforementioned
 hierarchical relationship.
@@ -116,8 +116,8 @@ non-intrusively.
 At a technical level, this project has these data systems:
 
 - PostgreSQL :: ~engineering~ (~design~, ~part~, ~test~)
-- Filesystem :: ~procurement~ (bom documents)
-- MongoDB :: ~product~ (approval documents)
+- Filesystem :: ~procurement~ (~bom~ documents)
+- MongoDB :: ~product~ (~approval~ documents)
 
 A subgraph is created for each of these data systems using Hasura:
 
@@ -180,7 +180,7 @@ or
 
 #+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.approvals.find();
+  db.~approval~s.find();
 #+end_src
 
 #+RESULTS:
@@ -223,7 +223,7 @@ sample_db>
 
 #+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.approvals.updateOne(
+  db.~approval~s.updateOne(
       {
           _id: ObjectId("660f069a52a6563e6ff4c570")
       },
@@ -249,7 +249,7 @@ sample_db>
 
 #+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.approvals.findOne({_id: ObjectId("660dd496fd7ec80224bef349")});
+  db.~approval~s.findOne({_id: ObjectId("660dd496fd7ec80224bef349")});
 #+end_src
 
 #+RESULTS:
