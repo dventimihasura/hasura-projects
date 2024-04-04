@@ -1,6 +1,27 @@
-actions: []
+actions:
+  - name: approvals
+    definition:
+      kind: ""
+      handler: http://localhost:3000/rpc/is_approved
+      forward_client_headers: true
+      headers:
+        - name: hasura-graphql-endpoint
+          value: http://supergraph_gateway_hasura:8080/v1/graphql
+        - name: x-hasura-admin-secret
+          value: myadminsecretkey
+      request_transform:
+        method: GET
+        query_params:
+          design_id: "1"
+        request_headers:
+          add_headers: {}
+          remove_headers:
+            - content-type
+        template_engine: Kriti
+        version: 2
 custom_types:
   enums: []
   input_objects: []
-  objects: []
+  objects:
+    - name: ApprovalOutput
   scalars: []
