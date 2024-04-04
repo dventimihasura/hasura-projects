@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   subgraph_design_postgres:
-    image: postgres:16
+    build: .
     ports:
       - 5433:5432
     restart: always

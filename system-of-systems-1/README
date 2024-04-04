@@ -47,7 +47,17 @@ sample_db>
 
 #+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.approvals.updateOne({_id: ObjectId("660dd496fd7ec80224bef349")}, {$set: {"approved": false}}, {upsert: true})
+  db.approvals.updateOne(
+      {
+          _id: ObjectId("660dd496fd7ec80224bef349")
+      },
+      {
+          $set: {
+              "approved":
+              false
+          }
+      }
+  )
 #+end_src
 
 #+RESULTS:
@@ -56,22 +66,21 @@ sample_db>
 :   acknowledged: true,
 :   insertedId: null,
 :   matchedCount: 1,
-:   modifiedCount: 1,
+:   modifiedCount: 0,
 :   upsertedCount: 0
 : }
 : sample_db> 
 
 #+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.approvals.findOne({_id: ObjectId("660b382c5b93c131c9e1b3c7")});
+  db.approvals.findOne({_id: ObjectId("660dd496fd7ec80224bef349")});
 #+end_src
 
 #+RESULTS:
 : test> switched to db sample_db
 : sample_db> {
-:   _id: ObjectId('660b382c5b93c131c9e1b3c7'),
-:   org: 'FOOBLITZKY',
-:   filter: 'EVENT_A',
-:   addrs: 'http://rest_client_1:8080/wh'
+:   _id: ObjectId('660dd496fd7ec80224bef349'),
+:   design_id: 6,
+:   approved: false
 : }
 : sample_db> 

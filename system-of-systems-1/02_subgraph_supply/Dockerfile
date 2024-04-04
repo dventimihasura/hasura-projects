@@ -16,3 +16,11 @@ RUN wget https://github.com/EnterpriseDB/mongo_fdw/archive/refs/tags/REL-5_5_1.t
     ./autogen.sh --with-master && \
     make USE_PGXS=1 && \
     make USE_PGXS=1 install
+
+RUN wget https://github.com/pramsey/pgsql-http/archive/refs/tags/v1.6.0.tar.gz && \
+    tar -xzvf v1.6.0.tar.gz && \
+    rm -rf pgsql-http && \
+    mv pgsql-http-1.6.0 pgsql-http && \
+    cd pgsql-http && \
+    make USE_PGXS=1 && \
+    make USE_PGXS=1 install

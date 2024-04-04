@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   supergraph_gateway_postgres:
-    image: postgres:16
+    build: .
     ports:
       - 5435:5432
     restart: always
