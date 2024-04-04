@@ -14,9 +14,9 @@ services:
     depends_on:
       - subgraph_approval_hasura
       - subgraph_design_hasura
+      - subgraph_logic_hasura
       - subgraph_supply_hasura
       - supergraph_gateway_postgres
-      - supergraph_logic_hasura
     restart: always
     ports:
       - 8085:8080
