@@ -1,9 +1,3 @@
-type Query {
-  approvals(
-    design_id: Int!
-  ): ApprovalOutput
-}
-
 type ApprovalOutput {
   design_id: Int!
   is_approved: Boolean!

@@ -14,7 +14,7 @@ sample_db> [
   {
     _id: ObjectId('660f069a52a6563e6ff4c570'),
     design_id: 1,
-    approved: true
+    approved: false
   },
   {
     _id: ObjectId('660f069a52a6563e6ff4c571'),
