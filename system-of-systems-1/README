@@ -2,6 +2,182 @@
 
 #+STARTUP: indent
 
+* What
+
+This system-of-systems-1 project is a Proof-Of-Concept (POC) for
+integrating heterogeneous data sources with disparate data models into
+a single data source sith a unified data model.  This idea is
+expressed in the GraphQL community as a [[https://supergraph.io/][supergraph]], though the
+principles do not depend on GraphQL.
+
+This POC takes as its example a system-of-systems for automobile
+manufacturing.  The sub-systems in the system-of-systems correspond to
+business units.  Each business unit has its own data systems.  Those
+data systems typically support workflows within their business units.
+Integrating those data systems, their data models, and their data
+sources into a single data source with a unified data model will
+support new enterprise-wide workflows that span sub-systems.
+
+The business units are:
+
+- engineering :: creates, realizes those designs as parts,
+  subjects those parts to tests, and determines if a part passes its
+  technical acceptance criteria
+- procurement :: builds relationships with suppliers, sources
+  components for parts from those suppliers, and write
+  Bills-Of-Materials (BOM) which establish that a design can be
+  manufactured
+- product :: maintains the product road-map and chooses the designs to
+  take to market
+
+Additional terms are:
+
+- design :: a set of documents from engineering that provide the
+  technical specifications for a part, where a design is accepted if
+  and only if its constituent desings are accepted and it has its own
+  associated part which is also accepted
+- part :: a physical artifact from engineering that is a realization
+  of a design and that is exposed to tests to determine if it is
+  accepted
+- bom :: Bill-Of-Materials (BOM) from procurement listing the
+  components that must be sourced in order to manufacture a design
+- test :: a set of observations made by engineering over a part for a
+  design subjected to typical and atypical operations in a laboratory
+  setting, and evaluated against acceptance criteria to determine if
+  it is accepted
+- accepted :: The concept accepted applies to tests, to parts, and to
+  designs.  A test is either accepted or not accepted as a consequence
+  of events outside of this data model (laboratory testing).  A part
+  is accepted if and only if it has one or more tests that are
+  accepted, and has no tests that are not accepted.  A design is
+  accepted if and only if it has an associated part that is accepted
+  /and/ all of its constituent designs are accepted.
+- approval :: a document from product indicating that a design has
+  been chosen to be taken to market by having its parts manufactured
+
+There is a hierarchical relationship for designs.  A design MAY have a
+single "parent" design.  A design MAY have one or more "child"
+designs.
+
+There is a non-hierarchical one-to-many relationship between design
+and part.  One design may correspond to one or more parts.  Parts do
+not relate to each other.
+
+There is a non-hierarchical one-to-many relationship between parts and
+tests.  One part may correspond to one or more tests.  Tests do not
+relate to each other.
+
+There is a non-hierarchical one-to-one relationship between design
+and bom.
+
+There is a non-hierarchical one-to-many relationship between design
+and approval.
+
+At a high-level, this outline is a schematic for how these things are
+organized.
+
+- engineering
+  - design
+    - part
+      - test
+      - test
+      - ...
+    - part
+    - ...
+  - design
+- procurement
+  - bom
+- product
+  - approval
+
+Moreover, again design itself participates in the aforementioned
+hierarchical relationship.
+
+- design (CAR)
+  - design (ENGINE)
+    - design (EXHAUST)
+    - design (FUEL)
+    - ...
+  - design (TRANSMISSION)
+    - ...
+  - ...
+
+* Why
+
+An enterprise organization may have business units (and partners) that
+offer data systems, where the enterprise would benefit from unifying
+those disparate systems into a single system, but may have
+/constraints/ which prohibit changing those data systems.  Therefore,
+it might be worthwhile to integrate those data systems
+non-intrusively.  
+
+* How
+
+At a technical level, this project has these data systems:
+
+- PostgreSQL :: engineering (design, part, test)
+- Filesystem :: procurement (bom documents)
+- MongoDB :: product (approval documents)
+
+A subgraph is created for each of these data systems using Hasura:
+
+- engineering :: PostgreSQL -> Hasura -> GraphQL API
+- procurement :: Filesystem -> Hasura > GraphQL API
+- product :: MongoDB -> Hasura -> GraphQL API
+
+A supergraph is also created to join these GraphQL API systems
+together:
+
+- enterprise :: engineering (GraphQL) + procurement (GraphQL) +
+  product (GraphQL) -> Hasura (GraphQL)
+
+These systems are implemented using Docker Compose, which brings up
+all of the necessary services (PostgreSQL, MongoDB, Hasura, etc.).
+
+* Steps
+
+These are the steps to use this POC in a local testing environment.
+
+** Step 1:  Check out this repository.
+
+#+begin_src bash
+  git clone https://github.com/dventimihasura/hasura-projects.git
+#+end_src
+
+** Step 2:  Navigate to the system-of-systems-1 sub-directory.
+
+#+begin_src bash
+  cd system-of-systems-1
+#+end_src
+
+** Step 3:  Create a ~.env~ file with the necessary envirnoment variables.
+
+#+begin_src bash
+  cat <<EOF > .env
+  PGPORT=<PostgreSQL exposed port>
+  HGEPORT=<Hasura exposed port>
+  MONGODBPORT=<MongoDB exposed port>
+  HASURA_GRAPHQL_ADMIN_SECRET=<admin secrete>
+  HASURA_GRAPHQL_EE_LICENSE_KEY=<Hasura Enterprise key>
+  EOF
+#+end_src
+
+** Step 4:  Launch the services with Docker Compose.
+
+#+begin_src bash
+  docker-compose up -d
+#+end_src
+
+or
+
+#+begin_src bash
+  docker compose up -d
+#+end_src
+
+* Test queries
+
+** MongoDB
+
 #+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
   db.approvals.find();
@@ -84,3 +260,4 @@ sample_db>
 :   approved: false
 : }
 : sample_db> 
+
