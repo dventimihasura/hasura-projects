@@ -12,32 +12,32 @@
 test> switched to db sample_db
 sample_db> [
   {
-    _id: ObjectId('660dd496fd7ec80224bef344'),
+    _id: ObjectId('660f069a52a6563e6ff4c570'),
     design_id: 1,
     approved: true
   },
   {
-    _id: ObjectId('660dd496fd7ec80224bef345'),
+    _id: ObjectId('660f069a52a6563e6ff4c571'),
     design_id: 2,
     approved: true
   },
   {
-    _id: ObjectId('660dd496fd7ec80224bef346'),
+    _id: ObjectId('660f069a52a6563e6ff4c572'),
     design_id: 3,
     approved: true
   },
   {
-    _id: ObjectId('660dd496fd7ec80224bef347'),
+    _id: ObjectId('660f069a52a6563e6ff4c573'),
     design_id: 4,
     approved: true
   },
   {
-    _id: ObjectId('660dd496fd7ec80224bef348'),
+    _id: ObjectId('660f069a52a6563e6ff4c574'),
     design_id: 5,
     approved: true
   },
   {
-    _id: ObjectId('660dd496fd7ec80224bef349'),
+    _id: ObjectId('660f069a52a6563e6ff4c575'),
     design_id: 6,
     approved: true
   }
@@ -49,7 +49,7 @@ sample_db>
   use sample_db;
   db.approvals.updateOne(
       {
-          _id: ObjectId("660dd496fd7ec80224bef349")
+          _id: ObjectId("660f069a52a6563e6ff4c570")
       },
       {
           $set: {
@@ -62,11 +62,11 @@ sample_db>
 
 #+RESULTS:
 : test> switched to db sample_db
-: sample_db> {
+: sample_db> ... ... ... ... ... ... ... ... ... ... {
 :   acknowledged: true,
 :   insertedId: null,
 :   matchedCount: 1,
-:   modifiedCount: 0,
+:   modifiedCount: 1,
 :   upsertedCount: 0
 : }
 : sample_db> 
