@@ -235,3 +235,12 @@ create view api.test as
       core.test;
 comment on view api.test is 'occurrence of a test of a part';
 
+-- indexes
+
+create index on core.design (name, id);
+
+create index on core.node (id, parent_id);
+
+create index on core.part (design_id);
+
+create index on core.test (part_id);
