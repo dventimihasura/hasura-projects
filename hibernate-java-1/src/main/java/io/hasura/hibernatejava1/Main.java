@@ -1,11 +1,11 @@
 package io.hasura.hibernatejava1;
 
-import io.hasura.hibernatejava1.model.*;
-import org.hibernate.*;
-import org.hibernate.boot.*;
-import org.hibernate.boot.registry.*;
-import org.hibernate.cfg.*;
-import static org.hibernate.cfg.AvailableSettings.*;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+import io.hasura.hibernatejava1.model.Account;
 
 public class Main {
     public static void main(String[] args) {
