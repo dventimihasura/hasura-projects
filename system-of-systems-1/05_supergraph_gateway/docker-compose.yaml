@@ -12,19 +12,16 @@ services:
   supergraph_gateway_hasura:
     image: hasura/graphql-engine:v2.38.0.cli-migrations-v3
     depends_on:
-      subgraph_approval_hasura:
-        condition: service_healthy
-      subgraph_design_hasura:
-        condition: service_healthy
-      subgraph_logic_hasura:
-        condition: service_healthy
-      subgraph_supply_hasura:
-        condition: service_healthy
+      - subgraph_approval_hasura
+      - subgraph_design_hasura
+      - subgraph_logic_hasura
+      - subgraph_supply_hasura
     restart: always
     ports:
       - ${HGPORT5}:8080
     healthcheck:
       test: ["CMD-SHELL", "curl -s http://localhost:8080/healthz"]
+      start_period: 60s
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@supergraph_gateway_postgres/postgres
