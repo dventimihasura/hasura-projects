@@ -154,13 +154,39 @@ These are the steps to use this POC in a local testing environment.
 
 #+begin_src bash
   cat <<EOF > .env
-  PGPORT=<PostgreSQL exposed port>
-  HGEPORT=<Hasura exposed port>
-  MONGODBPORT=<MongoDB exposed port>
-  HASURA_GRAPHQL_ADMIN_SECRET=<admin secrete>
-  HASURA_GRAPHQL_EE_LICENSE_KEY=<Hasura Enterprise key>
+  PGPORT1=<your exposed postgres port for the approval sub-graph>
+  PGPORT2=<your exposed postgres port for the supply sub-graph>
+  PGPORT3=<your exposed postgres port for the design sub-graph>
+  PGPORT4=<your exposed postgres port for the logic sub-graph>
+  PGPORT5=<your exposed postgres port for the supergraph gateway>
+  HGPORT1=<your exposed Hasura port for the approval sub-graph>
+  HGPORT2=<your exposed Hasura port for the supply sub-graph>
+  HGPORT3=<your exposed Hasura port for the design sub-graph>
+  HGPORT4=<your exposed Hasura port for the logic sub-graph>
+  HGPORT5=<your exposed Hasura port for the supergraph gateway>
+  MONGODBPORT=<your exposed Mongo DB port for the approval sub-graph>
+  HASURA_GRAPHQL_ADMIN_SECRET=myadminsecretkey
+  HASURA_GRAPHQL_EE_LICENSE_KEY=<your Hasura EE license key>
   EOF
 #+end_src
+
+#+RESULTS:
+
+There are several important points to node in this step:
+
+1. Every Hasura instance has a corresponding PostgreSQL database
+   instance, even if no data will be surfaced from PostgreSQL for that
+   particular sub-graph.  This is because Hasura uses a PostgreSQL
+   database to manage its own metadata.
+2. This uses certain Enterprise features, specifically its MongoDB
+   connectivity.  Consequently, it needs an EE license key to be
+   specified.  Speak to a Hasura rep to obtain a trial EE license key.
+3. With an EE license key specified, Hasura runs in Enterprise mode.
+   In Enterprise mode, the admin secret is no longer option.
+   Consequently, an admin secret must be specified.  It can be
+   anything, though whatever it is in general it should be treated as
+   a secret.  However, to keep this POC simple it has been hardcoded
+   as 'myadminsecretkey'.  **NOTE** do not change this value.
 
 ** Step 4:  Launch the services with Docker Compose.
 
@@ -180,7 +206,7 @@ or
 
 #+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.~approval~s.find();
+  db.approvals.find();
 #+end_src
 
 #+RESULTS:
@@ -188,32 +214,32 @@ or
 test> switched to db sample_db
 sample_db> [
   {
-    _id: ObjectId('660f069a52a6563e6ff4c570'),
+    _id: ObjectId('6622ac2773b22cd7cec934e0'),
     design_id: 1,
     approved: false
   },
   {
-    _id: ObjectId('660f069a52a6563e6ff4c571'),
+    _id: ObjectId('6622ac2773b22cd7cec934e1'),
     design_id: 2,
     approved: true
   },
   {
-    _id: ObjectId('660f069a52a6563e6ff4c572'),
+    _id: ObjectId('6622ac2773b22cd7cec934e2'),
     design_id: 3,
     approved: true
   },
   {
-    _id: ObjectId('660f069a52a6563e6ff4c573'),
+    _id: ObjectId('6622ac2773b22cd7cec934e3'),
     design_id: 4,
     approved: true
   },
   {
-    _id: ObjectId('660f069a52a6563e6ff4c574'),
+    _id: ObjectId('6622ac2773b22cd7cec934e4'),
     design_id: 5,
     approved: true
   },
   {
-    _id: ObjectId('660f069a52a6563e6ff4c575'),
+    _id: ObjectId('6622ac2773b22cd7cec934e5'),
     design_id: 6,
     approved: true
   }
@@ -223,9 +249,9 @@ sample_db>
 
 #+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.~approval~s.updateOne(
+  db.approvals.updateOne(
       {
-          _id: ObjectId("660f069a52a6563e6ff4c570")
+          _id: ObjectId("6622ac2773b22cd7cec934e0")
       },
       {
           $set: {
@@ -249,14 +275,14 @@ sample_db>
 
 #+begin_src mongo :db sample_db :host localhost :port 27011 :user mongo :password "mongo" :mongoexec mongosh
   use sample_db;
-  db.~approval~s.findOne({_id: ObjectId("660dd496fd7ec80224bef349")});
+  db.approvals.findOne({_id: ObjectId("6622ac2773b22cd7cec934e0")});
 #+end_src
 
 #+RESULTS:
 : test> switched to db sample_db
 : sample_db> {
-:   _id: ObjectId('660dd496fd7ec80224bef349'),
-:   design_id: 6,
+:   _id: ObjectId('6622ac2773b22cd7cec934e0'),
+:   design_id: 1,
 :   approved: false
 : }
 : sample_db> 

@@ -3,7 +3,7 @@ services:
   subgraph_supply_postgres:
     build: .
     ports:
-      - 5432:5432
+      - ${PGPORT2}:5432
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres
@@ -16,9 +16,11 @@ services:
       - subgraph_supply_postgres
     restart: always
     ports:
-      - 8082:8080
+      - ${HGPORT2}:8080
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:8080/healthz"]
     environment:
-      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@subgraph_supply_postgres/postgres
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_EE_LICENSE_KEY: ${HASURA_GRAPHQL_EE_LICENSE_KEY}
