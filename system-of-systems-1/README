@@ -2,6 +2,8 @@
 
 #+STARTUP: indent
 
+#+reveal_root: https://cdn.jsdelivr.net/npm/reveal.js
+
 * What
 
 This system-of-systems-1 project is a Proof-Of-Concept (POC) for
