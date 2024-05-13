@@ -10,7 +10,7 @@ services:
     volumes:
       - ./initdb.d-postgres:/docker-entrypoint-initdb.d:ro
   hasura:
-    image: hasura/graphql-engine:v2.38.0
+    image: hasura/graphql-engine:v2.38.0.cli-migrations-v3
     ports:
       - ${HGEPORT:-8080}:8080
     restart: always
@@ -19,6 +19,10 @@ services:
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: true
+    volumes:
+      - ./metadata:/hasura-metadata:ro
+    depends_on:
+      - postgres
   postgrest:
     image: postgrest/postgrest
     ports:
