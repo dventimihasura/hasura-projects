@@ -1,0 +1,8 @@
+type Query {
+  getRpcAuthorizationAccountsV3: [Auth]
+}
+
+type Auth {
+  id: String
+}
+

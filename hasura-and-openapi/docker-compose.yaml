@@ -1,0 +1,31 @@
+version: "3.6"
+services:
+  postgres:
+    image: postgres:16
+    ports:
+      - ${PGPORT:-5432}:5432
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./initdb.d-postgres:/docker-entrypoint-initdb.d:ro
+  hasura:
+    image: hasura/graphql-engine:v2.38.0
+    ports:
+      - ${HGEPORT:-8080}:8080
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+      HASURA_GRAPHQL_DEV_MODE: true
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_CONSOLE: true
+  postgrest:
+    image: postgrest/postgrest
+    ports:
+      - ${PGRESTPORT:-3000}:3000
+    environment:
+      PGRST_DB_ANON_ROLE: postgres
+      PGRST_DB_URI: postgres://postgres:postgres@postgres/postgres
+      PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:${PGRESTPORT:-3000}/
+    depends_on:
+      - postgres

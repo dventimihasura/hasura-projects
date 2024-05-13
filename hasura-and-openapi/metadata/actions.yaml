@@ -1,0 +1,37 @@
+actions:
+  - name: getRpcAuthorizationAccountsV3
+    definition:
+      kind: ""
+      handler: http://postgrest:3000
+      forward_client_headers: true
+      request_transform:
+        method: GET
+        query_params: {}
+        request_headers:
+          add_headers: {}
+          remove_headers:
+            - content-type
+        template_engine: Kriti
+        url: '{{$base_url}}/rpc/authorization_accounts_v3'
+        version: 2
+      response_transform:
+        body:
+          action: transform
+          template: '{{$body}}'
+        template_engine: Kriti
+        version: 2
+custom_types:
+  enums: []
+  input_objects: []
+  objects:
+    - name: Auth
+      relationships:
+        - field_mapping:
+            id: id
+          name: account
+          remote_table:
+            name: account
+            schema: public
+          source: default
+          type: object
+  scalars: []
