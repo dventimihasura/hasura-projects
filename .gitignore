@@ -52,3 +52,4 @@ netflix-dgs-java-1/bin/
 .settings/*
 bin/*
 system-of-systems-1/scratch2.sql
+snowflake-test-2/.env
