@@ -93,9 +93,9 @@ I.e. the configuration will look like this.
   configuration:
     template: |
       {{if (empty($session?['x-hasura-user-id']))}}
-        {"jdbc_url": "jdbc:snowflake://{{getEnvironmentVariable("DEFAULT_HOST")}}/?user={{getEnvironmentVariable("DEFAULT_USER")}}&password={{getEnvironmentVariable("DEFAULT_PASS")}}"}
+        {"fully_qualify_all_names": false, "jdbc_url": "jdbc:snowflake://{{getEnvironmentVariable("DEFAULT_HOST")}}/?user={{getEnvironmentVariable("DEFAULT_USER")}}&password={{getEnvironmentVariable("DEFAULT_PASS")}}"}
       {{else}}
-        {"jdbc_url": "jdbc:snowflake://{{getEnvironmentVariable("DEFAULT_HOST")}}/?user={{getEnvironmentVariable("DEFAULT_USER")}}&password={{$session['x-hasura-user-id']}}"}
+        {"fully_qualify_all_names": false, "jdbc_url": "jdbc:snowflake://{{getEnvironmentVariable("DEFAULT_HOST")}}/?user={{getEnvironmentVariable("DEFAULT_USER")}}&password={{$session['x-hasura-user-id']}}"}
       {{end}}
     timeout: null
     value: {}
