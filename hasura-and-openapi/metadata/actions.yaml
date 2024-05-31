@@ -6,7 +6,8 @@ actions:
       forward_client_headers: true
       request_transform:
         method: GET
-        query_params: {}
+        query_params:
+          shard: '{{$body.input?.shard}}'
         request_headers:
           add_headers: {}
           remove_headers:
@@ -18,6 +19,33 @@ actions:
         body:
           action: transform
           template: '{{$body}}'
+        template_engine: Kriti
+        version: 2
+  - name: getRpcAuthorizationAccountsV3Scalar
+    definition:
+      kind: ""
+      handler: http://postgrest:3000
+      forward_client_headers: true
+      request_transform:
+        method: GET
+        query_params:
+          shard: '{{$body.input?.shard}}'
+        request_headers:
+          add_headers: {}
+          remove_headers:
+            - content-type
+        template_engine: Kriti
+        url: '{{$base_url}}/rpc/authorization_accounts_v3_scalar'
+        version: 2
+      response_transform:
+        body:
+          action: transform
+          template: |-
+            {{ range i, x := $body }}
+              {
+                "id": {{x}}
+              }
+            {{ end }}
         template_engine: Kriti
         version: 2
 custom_types:

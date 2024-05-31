@@ -1,5 +1,13 @@
 type Query {
-  getRpcAuthorizationAccountsV3: [Auth]
+  getRpcAuthorizationAccountsV3(
+    shard: Int!
+  ): [Auth]
+}
+
+type Query {
+  getRpcAuthorizationAccountsV3Scalar(
+    shard: Int!
+  ): [Auth]!
 }
 
 type Auth {
