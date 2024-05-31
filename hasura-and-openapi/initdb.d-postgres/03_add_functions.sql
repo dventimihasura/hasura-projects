@@ -1,6 +1,6 @@
 -- -*- sql-product: postgres; -*-
 
-create function authorization_accounts_v3 ()
+create or replace function authorization_accounts_v3 ()
   returns table (
     id uuid)
   language sql
@@ -8,5 +8,5 @@ create function authorization_accounts_v3 ()
   leakproof
   parallel safe
 as $$
-  select id from account limit 10;
+  select id from account limit 3;
 $$;
