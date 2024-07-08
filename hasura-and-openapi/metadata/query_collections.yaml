@@ -1,1 +1,11 @@
-[]
+- name: allowed-queries
+  definition:
+    queries:
+      - name: region
+        query: |
+          query MyQuery ($region: [String!]) {
+            region(where: {value:{_in:$region}}) {
+              description
+              value
+            }
+          }
