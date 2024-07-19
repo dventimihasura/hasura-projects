@@ -1,0 +1,1341 @@
+# -*- mode: org; -*-
+
+#+STARTUP: indent
+
+#+begin_src graphql :url http://localhost:8081/v1/graphql
+{
+  postgres_air_boarding_pass_aggregate(order_by: {update_ts: asc, pass_id: desc}, where: {_and: {precheck: {_is_null: false}, passenger: {account: {account_id: {_eq: 212507}}}}}) {
+    aggregate {
+      count
+    }
+  }
+  postgres_air_boarding_pass(limit: 100, order_by: {update_ts: desc, pass_id: desc}, where: {_and: {precheck: {_is_null: false}, passenger: {account: {account_id: {_eq: 212507}}}}}) {
+    passenger {
+      account {
+        account_id
+      }
+    }
+    pass_id
+    passenger_id
+    precheck
+    seat
+    booking_leg_id
+    boarding_time
+  }
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+{
+  "data": {
+    "postgres_air_boarding_pass_aggregate": {
+      "aggregate": {
+        "count": 184
+      }
+    },
+    "postgres_air_boarding_pass": [
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 25293489,
+        "passenger_id": 7987478,
+        "precheck": true,
+        "seat": "0B",
+        "booking_leg_id": 7531225,
+        "boarding_time": "2020-08-17T20:20:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 25292948,
+        "passenger_id": 7987478,
+        "precheck": false,
+        "seat": "0B",
+        "booking_leg_id": 7531224,
+        "boarding_time": "2020-08-16T16:20:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 25287765,
+        "passenger_id": 7987478,
+        "precheck": false,
+        "seat": "0B",
+        "booking_leg_id": 7531223,
+        "boarding_time": "2020-08-15T08:35:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 25218200,
+        "passenger_id": 8017812,
+        "precheck": false,
+        "seat": "3F",
+        "booking_leg_id": 7576613,
+        "boarding_time": "2020-08-12T12:55:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 25157241,
+        "passenger_id": 8017812,
+        "precheck": false,
+        "seat": "17G",
+        "booking_leg_id": 7576612,
+        "boarding_time": "2020-08-11T12:25:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 25139866,
+        "passenger_id": 7984072,
+        "precheck": true,
+        "seat": "0B",
+        "booking_leg_id": 7524163,
+        "boarding_time": "2020-08-11T04:30:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 25124843,
+        "passenger_id": 7984072,
+        "precheck": false,
+        "seat": "1A",
+        "booking_leg_id": 7524162,
+        "boarding_time": "2020-08-10T22:00:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 25099044,
+        "passenger_id": 7959966,
+        "precheck": false,
+        "seat": "3B",
+        "booking_leg_id": 7495299,
+        "boarding_time": "2020-08-10T16:05:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 25082318,
+        "passenger_id": 7984072,
+        "precheck": false,
+        "seat": "0B",
+        "booking_leg_id": 7524161,
+        "boarding_time": "2020-08-10T12:20:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 24507454,
+        "passenger_id": 7189669,
+        "precheck": false,
+        "seat": "2B",
+        "booking_leg_id": 6648045,
+        "boarding_time": "2020-08-06T04:15:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 24479981,
+        "passenger_id": 7793279,
+        "precheck": false,
+        "seat": "7D",
+        "booking_leg_id": 7321257,
+        "boarding_time": "2020-08-05T23:05:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 24227155,
+        "passenger_id": 7669198,
+        "precheck": false,
+        "seat": "1A",
+        "booking_leg_id": 7185729,
+        "boarding_time": "2020-08-04T18:25:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23917075,
+        "passenger_id": 7987478,
+        "precheck": true,
+        "seat": "22E",
+        "booking_leg_id": 7531222,
+        "boarding_time": "2020-08-03T03:25:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23863129,
+        "passenger_id": 6956667,
+        "precheck": false,
+        "seat": "9E",
+        "booking_leg_id": 6419419,
+        "boarding_time": "2020-08-02T20:15:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23838508,
+        "passenger_id": 7268320,
+        "precheck": true,
+        "seat": "16A",
+        "booking_leg_id": 6753059,
+        "boarding_time": "2020-08-02T18:10:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23783325,
+        "passenger_id": 7984072,
+        "precheck": false,
+        "seat": "28D",
+        "booking_leg_id": 7524160,
+        "boarding_time": "2020-08-02T13:40:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23706921,
+        "passenger_id": 8017812,
+        "precheck": false,
+        "seat": "37F",
+        "booking_leg_id": 7576611,
+        "boarding_time": "2020-08-02T05:10:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23664105,
+        "passenger_id": 6956667,
+        "precheck": false,
+        "seat": "11C",
+        "booking_leg_id": 6419418,
+        "boarding_time": "2020-08-01T23:50:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23663601,
+        "passenger_id": 7987478,
+        "precheck": false,
+        "seat": "22A",
+        "booking_leg_id": 7531221,
+        "boarding_time": "2020-08-01T23:45:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23552263,
+        "passenger_id": 8017812,
+        "precheck": false,
+        "seat": "15C",
+        "booking_leg_id": 7576610,
+        "boarding_time": "2020-08-01T15:35:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23512804,
+        "passenger_id": 6821876,
+        "precheck": true,
+        "seat": "2B",
+        "booking_leg_id": 6272253,
+        "boarding_time": "2020-08-01T13:20:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23469233,
+        "passenger_id": 7984072,
+        "precheck": true,
+        "seat": "20C",
+        "booking_leg_id": 7524159,
+        "boarding_time": "2020-08-01T10:25:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23438799,
+        "passenger_id": 7984072,
+        "precheck": false,
+        "seat": "13C",
+        "booking_leg_id": 7524158,
+        "boarding_time": "2020-08-01T07:30:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23422251,
+        "passenger_id": 7546120,
+        "precheck": false,
+        "seat": "27D",
+        "booking_leg_id": 7039341,
+        "boarding_time": "2020-08-01T05:45:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23328884,
+        "passenger_id": 7987478,
+        "precheck": false,
+        "seat": "29D",
+        "booking_leg_id": 7531220,
+        "boarding_time": "2020-07-31T21:15:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23169989,
+        "passenger_id": 6821876,
+        "precheck": false,
+        "seat": "3F",
+        "booking_leg_id": 6272252,
+        "boarding_time": "2020-07-31T14:30:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 23122337,
+        "passenger_id": 7959966,
+        "precheck": true,
+        "seat": "13B",
+        "booking_leg_id": 7495298,
+        "boarding_time": "2020-07-31T12:30:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 22693192,
+        "passenger_id": 6560594,
+        "precheck": true,
+        "seat": "3A",
+        "booking_leg_id": 5986953,
+        "boarding_time": "2020-07-30T11:55:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 22521521,
+        "passenger_id": 6560594,
+        "precheck": false,
+        "seat": "3E",
+        "booking_leg_id": 5986952,
+        "boarding_time": "2020-07-29T23:05:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 22346212,
+        "passenger_id": 7793279,
+        "precheck": false,
+        "seat": "19A",
+        "booking_leg_id": 7321256,
+        "boarding_time": "2020-07-29T15:25:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 21798930,
+        "passenger_id": 7669198,
+        "precheck": false,
+        "seat": "10B",
+        "booking_leg_id": 7185728,
+        "boarding_time": "2020-07-28T09:10:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 21713727,
+        "passenger_id": 7546120,
+        "precheck": false,
+        "seat": "18C",
+        "booking_leg_id": 7039340,
+        "boarding_time": "2020-07-28T01:30:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 21636637,
+        "passenger_id": 6476015,
+        "precheck": false,
+        "seat": "1E",
+        "booking_leg_id": 5907779,
+        "boarding_time": "2020-07-27T20:20:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 20817100,
+        "passenger_id": 6956667,
+        "precheck": true,
+        "seat": "11A",
+        "booking_leg_id": 6419417,
+        "boarding_time": "2020-07-25T18:00:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 20688313,
+        "passenger_id": 7268320,
+        "precheck": false,
+        "seat": "26A",
+        "booking_leg_id": 6753058,
+        "boarding_time": "2020-07-25T11:50:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 20682185,
+        "passenger_id": 5428316,
+        "precheck": true,
+        "seat": "2I",
+        "booking_leg_id": 4761179,
+        "boarding_time": "2020-07-25T11:30:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 20634922,
+        "passenger_id": 7189669,
+        "precheck": false,
+        "seat": "21D",
+        "booking_leg_id": 6648044,
+        "boarding_time": "2020-07-25T08:25:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 20486820,
+        "passenger_id": 5428316,
+        "precheck": false,
+        "seat": "0G",
+        "booking_leg_id": 4761178,
+        "boarding_time": "2020-07-24T21:10:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 20296661,
+        "passenger_id": 6956667,
+        "precheck": false,
+        "seat": "10B",
+        "booking_leg_id": 6419416,
+        "boarding_time": "2020-07-24T13:15:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 19895187,
+        "passenger_id": 6362820,
+        "precheck": false,
+        "seat": "1F",
+        "booking_leg_id": 5781207,
+        "boarding_time": "2020-07-23T14:15:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 19848293,
+        "passenger_id": 6821876,
+        "precheck": true,
+        "seat": "27B",
+        "booking_leg_id": 6272251,
+        "boarding_time": "2020-07-23T12:00:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 19663675,
+        "passenger_id": 4850643,
+        "precheck": true,
+        "seat": "0E",
+        "booking_leg_id": 4115969,
+        "boarding_time": "2020-07-22T22:15:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 19633126,
+        "passenger_id": 5270689,
+        "precheck": false,
+        "seat": "15B",
+        "booking_leg_id": 4584157,
+        "boarding_time": "2020-07-22T20:45:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 19579155,
+        "passenger_id": 6821876,
+        "precheck": false,
+        "seat": "31C",
+        "booking_leg_id": 6272250,
+        "boarding_time": "2020-07-22T18:25:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 19457608,
+        "passenger_id": 6536102,
+        "precheck": false,
+        "seat": "3A",
+        "booking_leg_id": 5948551,
+        "boarding_time": "2020-07-22T13:40:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 19421683,
+        "passenger_id": 4850643,
+        "precheck": true,
+        "seat": "1F",
+        "booking_leg_id": 4115968,
+        "boarding_time": "2020-07-22T12:10:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 19186924,
+        "passenger_id": 5270689,
+        "precheck": false,
+        "seat": "18C",
+        "booking_leg_id": 4584156,
+        "boarding_time": "2020-07-21T20:55:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 19088364,
+        "passenger_id": 6560594,
+        "precheck": false,
+        "seat": "5B",
+        "booking_leg_id": 5986951,
+        "boarding_time": "2020-07-21T16:10:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 19038458,
+        "passenger_id": 6560594,
+        "precheck": true,
+        "seat": "19B",
+        "booking_leg_id": 5986950,
+        "boarding_time": "2020-07-21T13:40:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 18999135,
+        "passenger_id": 4850643,
+        "precheck": true,
+        "seat": "0G",
+        "booking_leg_id": 4115967,
+        "boarding_time": "2020-07-21T11:45:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 18750134,
+        "passenger_id": 6476015,
+        "precheck": false,
+        "seat": "1E",
+        "booking_leg_id": 5907778,
+        "boarding_time": "2020-07-20T18:15:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 18627806,
+        "passenger_id": 5341970,
+        "precheck": false,
+        "seat": "5B",
+        "booking_leg_id": 4653991,
+        "boarding_time": "2020-07-20T12:40:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 18148622,
+        "passenger_id": 4751888,
+        "precheck": false,
+        "seat": "0F",
+        "booking_leg_id": 4016263,
+        "boarding_time": "2020-07-19T06:05:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 18087067,
+        "passenger_id": 6536102,
+        "precheck": false,
+        "seat": "25F",
+        "booking_leg_id": 5948550,
+        "boarding_time": "2020-07-19T00:55:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 17782676,
+        "passenger_id": 4751888,
+        "precheck": false,
+        "seat": "0F",
+        "booking_leg_id": 4016262,
+        "boarding_time": "2020-07-18T08:20:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 17745159,
+        "passenger_id": 6362820,
+        "precheck": false,
+        "seat": "10F",
+        "booking_leg_id": 5781206,
+        "boarding_time": "2020-07-18T05:20:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 17384571,
+        "passenger_id": 4704862,
+        "precheck": true,
+        "seat": "1B",
+        "booking_leg_id": 3948599,
+        "boarding_time": "2020-07-17T10:35:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 17333532,
+        "passenger_id": 5976191,
+        "precheck": true,
+        "seat": "29C",
+        "booking_leg_id": 5354419,
+        "boarding_time": "2020-07-17T07:20:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 17311860,
+        "passenger_id": 5494592,
+        "precheck": false,
+        "seat": "24E",
+        "booking_leg_id": 4810105,
+        "boarding_time": "2020-07-17T05:55:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 17154460,
+        "passenger_id": 5122965,
+        "precheck": false,
+        "seat": "17I",
+        "booking_leg_id": 4416475,
+        "boarding_time": "2020-07-16T19:10:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 16782560,
+        "passenger_id": 5145616,
+        "precheck": true,
+        "seat": "10B",
+        "booking_leg_id": 4450397,
+        "boarding_time": "2020-07-15T20:35:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 16528452,
+        "passenger_id": 5122965,
+        "precheck": false,
+        "seat": "9C",
+        "booking_leg_id": 4416474,
+        "boarding_time": "2020-07-15T09:45:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 16473129,
+        "passenger_id": 5976191,
+        "precheck": false,
+        "seat": "29C",
+        "booking_leg_id": 5354418,
+        "boarding_time": "2020-07-15T06:00:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 16437074,
+        "passenger_id": 5145616,
+        "precheck": false,
+        "seat": "20B",
+        "booking_leg_id": 4450396,
+        "boarding_time": "2020-07-15T03:10:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 16302257,
+        "passenger_id": 4138043,
+        "precheck": false,
+        "seat": "3B",
+        "booking_leg_id": 3357947,
+        "boarding_time": "2020-07-14T18:45:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 16136389,
+        "passenger_id": 5122965,
+        "precheck": false,
+        "seat": "21A",
+        "booking_leg_id": 4416473,
+        "boarding_time": "2020-07-14T10:20:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 16013278,
+        "passenger_id": 4138043,
+        "precheck": false,
+        "seat": "0D",
+        "booking_leg_id": 3357946,
+        "boarding_time": "2020-07-13T23:55:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 15994202,
+        "passenger_id": 4797289,
+        "precheck": false,
+        "seat": "20F",
+        "booking_leg_id": 4060035,
+        "boarding_time": "2020-07-13T22:30:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 15573874,
+        "passenger_id": 5428316,
+        "precheck": false,
+        "seat": "10G",
+        "booking_leg_id": 4761177,
+        "boarding_time": "2020-07-12T20:30:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 15481899,
+        "passenger_id": 5270689,
+        "precheck": true,
+        "seat": "20E",
+        "booking_leg_id": 4584155,
+        "boarding_time": "2020-07-12T15:55:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 15456859,
+        "passenger_id": 5428316,
+        "precheck": false,
+        "seat": "29B",
+        "booking_leg_id": 4761176,
+        "boarding_time": "2020-07-12T14:45:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 15165401,
+        "passenger_id": 5122965,
+        "precheck": true,
+        "seat": "24A",
+        "booking_leg_id": 4416472,
+        "boarding_time": "2020-07-11T18:50:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 15130981,
+        "passenger_id": 5270689,
+        "precheck": false,
+        "seat": "33E",
+        "booking_leg_id": 4584154,
+        "boarding_time": "2020-07-11T17:15:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 15124323,
+        "passenger_id": 3810443,
+        "precheck": true,
+        "seat": "6F",
+        "booking_leg_id": 3020613,
+        "boarding_time": "2020-07-11T16:50:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 15114132,
+        "passenger_id": 5193610,
+        "precheck": false,
+        "seat": "0C",
+        "booking_leg_id": 4502373,
+        "boarding_time": "2020-07-11T16:25:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 15016616,
+        "passenger_id": 5071078,
+        "precheck": false,
+        "seat": "17F",
+        "booking_leg_id": 4355757,
+        "boarding_time": "2020-07-11T11:30:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 15004818,
+        "passenger_id": 5145616,
+        "precheck": false,
+        "seat": "37F",
+        "booking_leg_id": 4450395,
+        "boarding_time": "2020-07-11T11:00:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14971592,
+        "passenger_id": 5494592,
+        "precheck": true,
+        "seat": "4E",
+        "booking_leg_id": 4810104,
+        "boarding_time": "2020-07-11T08:40:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14829207,
+        "passenger_id": 5122965,
+        "precheck": false,
+        "seat": "21F",
+        "booking_leg_id": 4416471,
+        "boarding_time": "2020-07-10T21:25:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14773600,
+        "passenger_id": 5341970,
+        "precheck": true,
+        "seat": "18D",
+        "booking_leg_id": 4653990,
+        "boarding_time": "2020-07-10T18:50:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14750471,
+        "passenger_id": 5145616,
+        "precheck": true,
+        "seat": "2B",
+        "booking_leg_id": 4450394,
+        "boarding_time": "2020-07-10T17:50:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14741069,
+        "passenger_id": 3810443,
+        "precheck": false,
+        "seat": "6F",
+        "booking_leg_id": 3020612,
+        "boarding_time": "2020-07-10T17:25:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14675400,
+        "passenger_id": 3954261,
+        "precheck": true,
+        "seat": "4C",
+        "booking_leg_id": 3163377,
+        "boarding_time": "2020-07-10T14:45:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14567423,
+        "passenger_id": 4525620,
+        "precheck": false,
+        "seat": "8B",
+        "booking_leg_id": 3775593,
+        "boarding_time": "2020-07-10T09:50:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14526537,
+        "passenger_id": 4669508,
+        "precheck": true,
+        "seat": "28E",
+        "booking_leg_id": 3923931,
+        "boarding_time": "2020-07-10T07:05:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14475878,
+        "passenger_id": 5122965,
+        "precheck": false,
+        "seat": "17A",
+        "booking_leg_id": 4416470,
+        "boarding_time": "2020-07-10T03:10:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14461119,
+        "passenger_id": 4850643,
+        "precheck": false,
+        "seat": "14H",
+        "booking_leg_id": 4115966,
+        "boarding_time": "2020-07-10T01:50:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14417042,
+        "passenger_id": 4647757,
+        "precheck": false,
+        "seat": "1D",
+        "booking_leg_id": 3909307,
+        "boarding_time": "2020-07-09T22:25:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14195985,
+        "passenger_id": 5193610,
+        "precheck": false,
+        "seat": "3E",
+        "booking_leg_id": 4502372,
+        "boarding_time": "2020-07-09T11:00:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14135712,
+        "passenger_id": 4525620,
+        "precheck": true,
+        "seat": "9F",
+        "booking_leg_id": 3775592,
+        "boarding_time": "2020-07-09T06:15:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14113446,
+        "passenger_id": 4647757,
+        "precheck": true,
+        "seat": "1D",
+        "booking_leg_id": 3909306,
+        "boarding_time": "2020-07-09T04:15:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 14034686,
+        "passenger_id": 4850643,
+        "precheck": false,
+        "seat": "36H",
+        "booking_leg_id": 4115965,
+        "boarding_time": "2020-07-08T22:05:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 13985266,
+        "passenger_id": 4042462,
+        "precheck": false,
+        "seat": "1B",
+        "booking_leg_id": 3267453,
+        "boarding_time": "2020-07-08T19:30:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 13847068,
+        "passenger_id": 3464052,
+        "precheck": false,
+        "seat": "6D",
+        "booking_leg_id": 2657767,
+        "boarding_time": "2020-07-08T13:45:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 13834417,
+        "passenger_id": 5071078,
+        "precheck": false,
+        "seat": "9D",
+        "booking_leg_id": 4355756,
+        "boarding_time": "2020-07-08T13:15:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 13792718,
+        "passenger_id": 4042462,
+        "precheck": false,
+        "seat": "0H",
+        "booking_leg_id": 3267452,
+        "boarding_time": "2020-07-08T11:20:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 13594799,
+        "passenger_id": 4850643,
+        "precheck": false,
+        "seat": "26C",
+        "booking_leg_id": 4115964,
+        "boarding_time": "2020-07-07T21:10:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 13363126,
+        "passenger_id": 3464052,
+        "precheck": false,
+        "seat": "1B",
+        "booking_leg_id": 2657766,
+        "boarding_time": "2020-07-07T08:05:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 13207482,
+        "passenger_id": 4797289,
+        "precheck": true,
+        "seat": "22A",
+        "booking_leg_id": 4060034,
+        "boarding_time": "2020-07-06T19:40:00+00:00"
+      },
+      {
+        "passenger": {
+          "account": {
+            "account_id": 212507
+          }
+        },
+        "pass_id": 13128838,
+        "passenger_id": 3540675,
+        "precheck": false,
+        "seat": "9A",
+        "booking_leg_id": 2717731,
+        "boarding_time": "2020-07-06T15:55:00+00:00"
+      }
+    ]
+  }
+}
+#+end_example
