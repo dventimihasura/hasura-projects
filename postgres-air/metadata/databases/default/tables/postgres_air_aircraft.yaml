@@ -1,0 +1,11 @@
+table:
+  name: aircraft
+  schema: postgres_air
+array_relationships:
+  - name: flights
+    using:
+      foreign_key_constraint_on:
+        column: aircraft_code
+        table:
+          name: flight
+          schema: postgres_air

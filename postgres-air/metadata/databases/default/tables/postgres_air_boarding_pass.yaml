@@ -1,0 +1,10 @@
+table:
+  name: boarding_pass
+  schema: postgres_air
+object_relationships:
+  - name: booking_leg
+    using:
+      foreign_key_constraint_on: booking_leg_id
+  - name: passenger
+    using:
+      foreign_key_constraint_on: passenger_id

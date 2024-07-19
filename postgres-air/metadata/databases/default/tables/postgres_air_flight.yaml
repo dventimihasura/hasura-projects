@@ -1,0 +1,21 @@
+table:
+  name: flight
+  schema: postgres_air
+object_relationships:
+  - name: aircraft
+    using:
+      foreign_key_constraint_on: aircraft_code
+  - name: airport
+    using:
+      foreign_key_constraint_on: departure_airport
+  - name: airportByArrivalAirport
+    using:
+      foreign_key_constraint_on: arrival_airport
+array_relationships:
+  - name: booking_legs
+    using:
+      foreign_key_constraint_on:
+        column: flight_id
+        table:
+          name: booking_leg
+          schema: postgres_air

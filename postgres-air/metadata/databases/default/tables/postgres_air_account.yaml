@@ -1,0 +1,29 @@
+table:
+  name: account
+  schema: postgres_air
+object_relationships:
+  - name: frequent_flyer
+    using:
+      foreign_key_constraint_on: frequent_flyer_id
+array_relationships:
+  - name: bookings
+    using:
+      foreign_key_constraint_on:
+        column: account_id
+        table:
+          name: booking
+          schema: postgres_air
+  - name: passengers
+    using:
+      foreign_key_constraint_on:
+        column: account_id
+        table:
+          name: passenger
+          schema: postgres_air
+  - name: phones
+    using:
+      foreign_key_constraint_on:
+        column: account_id
+        table:
+          name: phone
+          schema: postgres_air
