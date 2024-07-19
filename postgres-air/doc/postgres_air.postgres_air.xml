@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?><database name="postgres_air" schema="postgres_air" type="PostgreSQL - 16.3 (Debian 16.3-1.pgdg120+1)">
+   <sequences>
+      <sequence increment="1" name="account_account_id_seq" startValue="1"/>
+      <sequence increment="1" name="boarding_pass_pass_id_seq" startValue="1"/>
+      <sequence increment="1" name="booking_leg_booking_leg_id_seq" startValue="1"/>
+      <sequence increment="1" name="booking_number" startValue="1"/>
+      <sequence increment="1" name="flight_flight_id_seq" startValue="1"/>
+      <sequence increment="1" name="frequent_flyer_frequent_flyer_id_seq" startValue="1"/>
+      <sequence increment="1" name="passenger_passenger_id_seq" startValue="1"/>
+      <sequence increment="1" name="phone_phone_id_seq" startValue="1"/>
+   </sequences>
+   <tables>
+      <table name="account" numRows="257333" remarks="" schema="postgres_air" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('postgres_air.account_account_id_seq'::regclass)" digits="0" id="0" name="account_id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="account_id" foreignKey="booking_account_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="booking"/>
+            <child column="account_id" foreignKey="pass_account_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="passenger"/>
+            <child column="account_id" foreignKey="phone_account_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="phone"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="login" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="first_name" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="last_name" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="frequent_flyer_id" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="frequent_flyer_id" foreignKey="frequent_flyer_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="frequent_flyer"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="update_ts" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <primaryKey column="account_id" sequenceNumberInPK="1"/>
+         <index name="account_pkey" unique="true">
+            <column ascending="true" name="account_id"/>
+         </index>
+      </table>
+      <table name="aircraft" numRows="12" remarks="" schema="postgres_air" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="model" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="range" nullable="false" remarks="" size="0" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="class" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="velocity" nullable="false" remarks="" size="0" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="code" nullable="false" remarks="" size="2147483647" type="text" typeCode="12">
+            <child column="aircraft_code" foreignKey="aircraft_code_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="flight"/>
+         </column>
+         <primaryKey column="code" sequenceNumberInPK="1"/>
+         <index name="aircraft_pkey" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+      </table>
+      <table name="airport" numRows="666" remarks="" schema="postgres_air" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="airport_code" nullable="false" remarks="" size="3" type="bpchar" typeCode="1">
+            <child column="arrival_airport" foreignKey="flight_arrival_airport_fkey" implied="false" onDeleteCascade="false" schema="postgres_air" table="flight"/>
+            <child column="departure_airport" foreignKey="departure_airport_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="flight"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="airport_name" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="city" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="airport_tz" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="continent" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="iso_country" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="iso_region" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="intnl" nullable="false" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="8" name="update_ts" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <primaryKey column="airport_code" sequenceNumberInPK="1"/>
+         <index name="airport_pkey" unique="true">
+            <column ascending="true" name="airport_code"/>
+         </index>
+      </table>
+      <table name="boarding_pass" numRows="25292472" remarks="" schema="postgres_air" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('postgres_air.boarding_pass_pass_id_seq'::regclass)" digits="0" id="0" name="pass_id" nullable="false" remarks="" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="passenger_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
+            <parent column="passenger_id" foreignKey="passenger_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="passenger"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="booking_leg_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
+            <parent column="booking_leg_id" foreignKey="booking_leg_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="booking_leg"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="seat" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="4" name="boarding_time" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="precheck" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="update_ts" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <primaryKey column="pass_id" sequenceNumberInPK="1"/>
+         <index name="boarding_pass_pkey" unique="true">
+            <column ascending="true" name="pass_id"/>
+         </index>
+      </table>
+      <table name="booking" numRows="5643687" remarks="" schema="postgres_air" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="booking_id" nullable="false" remarks="" size="19" type="int8" typeCode="-5">
+            <child column="booking_id" foreignKey="booking_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="booking_leg"/>
+            <child column="booking_id" foreignKey="pass_booking_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="passenger"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="booking_ref" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="booking_name" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="account_id" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="account_id" foreignKey="booking_account_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="account"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="email" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="phone" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="update_ts" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="2" id="7" name="price" nullable="true" remarks="" size="7" type="numeric" typeCode="2"/>
+         <primaryKey column="booking_id" sequenceNumberInPK="1"/>
+         <index name="booking_pkey" unique="true">
+            <column ascending="true" name="booking_id"/>
+         </index>
+         <index name="booking_booking_ref_key" unique="true">
+            <column ascending="true" name="booking_ref"/>
+         </index>
+      </table>
+      <table name="booking_leg" numRows="17894232" remarks="" schema="postgres_air" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('postgres_air.booking_leg_booking_leg_id_seq'::regclass)" digits="0" id="0" name="booking_leg_id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="booking_leg_id" foreignKey="booking_leg_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="boarding_pass"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="booking_id" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="booking_id" foreignKey="booking_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="booking"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="flight_id" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="flight_id" foreignKey="flight_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="flight"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="leg_num" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="is_returning" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="update_ts" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <primaryKey column="booking_leg_id" sequenceNumberInPK="1"/>
+         <index name="booking_leg_pkey" unique="true">
+            <column ascending="true" name="booking_leg_id"/>
+         </index>
+      </table>
+      <table name="flight" numRows="683176" remarks="" schema="postgres_air" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('postgres_air.flight_flight_id_seq'::regclass)" digits="0" id="0" name="flight_id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="flight_id" foreignKey="flight_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="booking_leg"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="flight_no" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="scheduled_departure" nullable="false" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="3" name="scheduled_arrival" nullable="false" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="departure_airport" nullable="false" remarks="" size="3" type="bpchar" typeCode="1">
+            <parent column="airport_code" foreignKey="departure_airport_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="airport"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="arrival_airport" nullable="false" remarks="" size="3" type="bpchar" typeCode="1">
+            <parent column="airport_code" foreignKey="flight_arrival_airport_fkey" implied="false" onDeleteCascade="false" schema="postgres_air" table="airport"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="status" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="aircraft_code" nullable="false" remarks="" size="3" type="bpchar" typeCode="1">
+            <parent column="code" foreignKey="aircraft_code_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="aircraft"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="8" name="actual_departure" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="9" name="actual_arrival" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="10" name="update_ts" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <primaryKey column="flight_id" sequenceNumberInPK="1"/>
+         <index name="flight_pkey" unique="true">
+            <column ascending="true" name="flight_id"/>
+         </index>
+      </table>
+      <table name="frequent_flyer" numRows="128346" remarks="" schema="postgres_air" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('postgres_air.frequent_flyer_frequent_flyer_id_seq'::regclass)" digits="0" id="0" name="frequent_flyer_id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="frequent_flyer_id" foreignKey="frequent_flyer_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="account"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="first_name" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="last_name" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="title" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="card_num" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="level" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="award_points" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="email" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="phone" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="9" name="update_ts" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <primaryKey column="frequent_flyer_id" sequenceNumberInPK="1"/>
+         <index name="frequent_flyer_pkey" unique="true">
+            <column ascending="true" name="frequent_flyer_id"/>
+         </index>
+      </table>
+      <table name="marker" remarks="" schema="postgres_air" type="TABLE"/>
+      <table name="passenger" numRows="16312143" remarks="" schema="postgres_air" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('postgres_air.passenger_passenger_id_seq'::regclass)" digits="0" id="0" name="passenger_id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="passenger_id" foreignKey="passenger_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="boarding_pass"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="booking_id" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="booking_id" foreignKey="pass_booking_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="booking"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="booking_ref" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="passenger_no" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="first_name" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="last_name" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="account_id" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="account_id" foreignKey="pass_account_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="account"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="7" name="update_ts" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="age" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <primaryKey column="passenger_id" sequenceNumberInPK="1"/>
+         <index name="passenger_pkey" unique="true">
+            <column ascending="true" name="passenger_id"/>
+         </index>
+      </table>
+      <table name="phone" numRows="407444" remarks="" schema="postgres_air" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('postgres_air.phone_phone_id_seq'::regclass)" digits="0" id="0" name="phone_id" nullable="false" remarks="" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="account_id" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="account_id" foreignKey="phone_account_id_fk" implied="false" onDeleteCascade="false" schema="postgres_air" table="account"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="phone" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="phone_type" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="primary_phone" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="update_ts" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <primaryKey column="phone_id" sequenceNumberInPK="1"/>
+         <index name="phone_pkey" unique="true">
+            <column ascending="true" name="phone_id"/>
+         </index>
+      </table>
+   </tables>
+</database>
