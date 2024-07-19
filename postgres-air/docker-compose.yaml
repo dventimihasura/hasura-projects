@@ -29,6 +29,7 @@ services:
         condition: service_healthy
   schemaspy:
     image: schemaspy/schemaspy:latest
+    profiles: [dev]
     volumes:
       - ./doc:/output
       - ./schemaspy.properties:/schemaspy.properties:ro
