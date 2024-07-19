@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title></title>
+<meta name="author" content="Hasura"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/moon.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h2 class="author">Hasura</h2><p class="date">Created: 2024-04-24 Wed 13:21</p>
+</section>
+<section id="sec-table-of-contents"><div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#/slide-orgd28a0dc">1. What</a></li>
+<li><a href="#/slide-org5c5be13">2. Why</a></li>
+<li><a href="#/slide-org1ba88c7">3. How</a></li>
+<li><a href="#/slide-org0b281b0">4. Steps</a>
+<ul>
+<li><a href="#/slide-org69ea143">4.1. Step 1:  Check out this repository.</a></li>
+<li><a href="#/slide-org340739a">4.2. Step 2:  Navigate to the system-of-systems-1 sub-directory.</a></li>
+<li><a href="#/slide-orgda253db">4.3. Step 3:  Create a <code>.env</code> file with the necessary envirnoment variables.</a></li>
+<li><a href="#/slide-orgf1f5ec0">4.4. Step 4:  Launch the services with Docker Compose.</a></li>
+</ul>
+</li>
+<li><a href="#/slide-org39dfc2c">5. Test queries</a>
+<ul>
+<li><a href="#/slide-org2a7fa8a">5.1. MongoDB</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section>
+<section id="slide-orgd28a0dc">
+<h2 id="orgd28a0dc"><span class="section-number-2">1.</span> What</h2>
+<p>
+This system-of-systems-1 project is a Proof-Of-Concept (POC) for
+integrating heterogeneous data sources with disparate data models into
+a single data source sith a unified data model.  This idea is
+expressed in the GraphQL community as a <a href="https://supergraph.io/">supergraph</a>, though the
+principles do not depend on GraphQL.
+</p>
+
+<p>
+This POC takes as its example a system-of-systems for automobile
+manufacturing.  The sub-systems in the system-of-systems correspond to
+business units.  Each business unit has its own data systems.  Those
+data systems typically support workflows within their business units.
+Integrating those data systems, their data models, and their data
+sources into a single data source with a unified data model will
+support new enterprise-wide workflows that span sub-systems.
+</p>
+
+<p>
+The business units are:
+</p>
+
+<dl>
+<dt><code>engineering</code></dt><dd>creates <code>designs</code>, realizes those <code>designs</code> as <code>parts</code>,
+subjects those <code>parts</code> to <code>tests</code>, and determines if a <code>part</code> passes its
+technical acceptance criteria</dd>
+<dt><code>procurement</code></dt><dd>builds relationships with suppliers, sources
+components for <code>parts</code> from those suppliers, and write
+Bills-Of-Materials (<code>BOM</code>) which establish that a <code>design</code> can be
+manufactured</dd>
+<dt><code>product</code></dt><dd>maintains the <code>product</code> road-map and chooses the <code>designs</code> to
+take to market</dd>
+
+</dl>
+
+<p>
+Additional terms are:
+</p>
+
+<dl>
+<dt><code>design</code></dt><dd>a set of documents from <code>engineering</code> that provide the
+technical specifications for a <code>part</code>, where a <code>design</code> is <code>accepted</code> if
+and only if its constituent desings are <code>accepted</code> and it has its own
+associated <code>part</code> which is also <code>accepted</code></dd>
+<dt><code>part</code></dt><dd>a physical artifact from <code>engineering</code> that is a realization
+of a <code>design</code> and that is exposed to <code>tests</code> to determine if it is
+<code>accepted</code></dd>
+<dt><code>bom</code></dt><dd>Bill-Of-Materials (<code>BOM</code>) from <code>procurement</code> listing the
+components that must be sourced in order to manufacture a <code>design</code></dd>
+<dt><code>test</code></dt><dd>a set of observations made by <code>engineering</code> over a <code>part</code> for a
+<code>design</code> subjected to typical and atypical operations in a laboratory
+setting, and evaluated against acceptance criteria to determine if
+it is <code>accepted</code></dd>
+<dt><code>accepted</code></dt><dd>The concept <code>accepted</code> applies to <code>tests</code>, to <code>parts</code>, and to
+<code>designs</code>.  A <code>test</code> is either <code>accepted</code> or not <code>accepted</code> as a consequence
+of events outside of this data model (laboratory testing).  A <code>part</code>
+is <code>accepted</code> if and only if it has one or more <code>tests</code> that are
+<code>accepted</code>, and has no <code>tests</code> that are not <code>accepted</code>.  A <code>design</code> is
+<code>accepted</code> if and only if it has an associated <code>part</code> that is <code>accepted</code>
+<i>and</i> all of its constituent <code>designs</code> are <code>accepted</code>.</dd>
+<dt><code>approval</code></dt><dd>a document from <code>product</code> indicating that a <code>design</code> has
+been chosen to be taken to market by having its <code>parts</code> manufactured</dd>
+
+</dl>
+
+<p>
+There is a hierarchical relationship for <code>designs</code>.  A <code>design</code> MAY have a
+single "parent" <code>design</code>.  A <code>design</code> MAY have one or more "child"
+<code>designs</code>.
+</p>
+
+<p>
+There is a non-hierarchical one-to-many relationship between <code>design</code>
+and <code>part</code>.  One <code>design</code> may correspond to one or more <code>parts</code>.  A
+set of <code>parts</code> does not relate to each other.
+</p>
+
+<p>
+There is a non-hierarchical one-to-many relationship between <code>parts</code> and
+<code>tests</code>.  One <code>part</code> may correspond to one or more <code>tests</code>.  <code>Tests</code> do not
+relate to each other.
+</p>
+
+<p>
+There is a non-hierarchical one-to-one relationship between <code>design</code>
+and <code>bom</code>.
+</p>
+
+<p>
+There is a non-hierarchical one-to-many relationship between <code>design</code>
+and <code>approval</code>.
+</p>
+
+<p>
+At a high-level, this outline is a schematic for how these things are
+organized.
+</p>
+
+<ul>
+<li><code>engineering</code>
+<ul>
+<li><code>design</code>
+<ul>
+<li><code>part</code>
+<ul>
+<li><code>test</code></li>
+<li><code>test</code></li>
+<li>&#x2026;</li>
+
+</ul></li>
+<li><code>part</code></li>
+<li>&#x2026;</li>
+
+</ul></li>
+<li><code>design</code></li>
+
+</ul></li>
+<li><code>procurement</code>
+<ul>
+<li><code>bom</code></li>
+
+</ul></li>
+<li><code>product</code>
+<ul>
+<li><code>approval</code></li>
+
+</ul></li>
+
+</ul>
+
+<p>
+Moreover, again <code>design</code> itself participates in the aforementioned
+hierarchical relationship.
+</p>
+
+<ul>
+<li><code>design</code> (CAR)
+<ul>
+<li><code>design</code> (ENGINE)
+<ul>
+<li><code>design</code> (EXHAUST)</li>
+<li><code>design</code> (FUEL)</li>
+<li>&#x2026;</li>
+
+</ul></li>
+<li><code>design</code> (TRANSMISSION)
+<ul>
+<li>&#x2026;</li>
+
+</ul></li>
+<li>&#x2026;</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org5c5be13">
+<h2 id="org5c5be13"><span class="section-number-2">2.</span> Why</h2>
+<p>
+An enterprise organization may have business units (and partners) that
+offer data systems, where the enterprise would benefit from unifying
+those disparate systems into a single system, but may have
+<i>constraints</i> which prohibit changing those data systems.  Therefore,
+it might be worthwhile to integrate those data systems
+non-intrusively.  
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org1ba88c7">
+<h2 id="org1ba88c7"><span class="section-number-2">3.</span> How</h2>
+<p>
+At a technical level, this project has these data systems:
+</p>
+
+<dl>
+<dt>PostgreSQL</dt><dd><code>engineering</code> (<code>design</code>, <code>part</code>, <code>test</code>)</dd>
+<dt>Filesystem</dt><dd><code>procurement</code> (<code>bom</code> documents)</dd>
+<dt>MongoDB</dt><dd><code>product</code> (<code>approval</code> documents)</dd>
+
+</dl>
+
+<p>
+A subgraph is created for each of these data systems using Hasura:
+</p>
+
+<dl>
+<dt><code>engineering</code></dt><dd>PostgreSQL -&gt; Hasura -&gt; GraphQL API</dd>
+<dt><code>procurement</code></dt><dd>Filesystem -&gt; Hasura &gt; GraphQL API</dd>
+<dt><code>product</code></dt><dd>MongoDB -&gt; Hasura -&gt; GraphQL API</dd>
+
+</dl>
+
+<p>
+A supergraph is also created to join these GraphQL API systems
+together:
+</p>
+
+<dl>
+<dt>enterprise</dt><dd><code>engineering</code> (GraphQL) + <code>procurement</code> (GraphQL) +
+<code>product</code> (GraphQL) -&gt; Hasura (GraphQL)</dd>
+
+</dl>
+
+<p>
+These systems are implemented using Docker Compose, which brings up
+all of the necessary services (PostgreSQL, MongoDB, Hasura, etc.).
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org0b281b0">
+<h2 id="org0b281b0"><span class="section-number-2">4.</span> Steps</h2>
+<p>
+These are the steps to use this POC in a local testing environment.
+</p>
+
+</section>
+<section id="slide-org69ea143">
+<h3 id="org69ea143"><span class="section-number-3">4.1.</span> Step 1:  Check out this repository.</h3>
+<div class="org-src-container">
+
+<pre  class="src src-bash"   ><code trim>git clone https://github.com/dventimihasura/hasura-projects.git
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org340739a">
+<h3 id="org340739a"><span class="section-number-3">4.2.</span> Step 2:  Navigate to the system-of-systems-1 sub-directory.</h3>
+<div class="org-src-container">
+
+<pre  class="src src-bash"   ><code trim><span style="color: #b0c4de;">cd</span> system-of-systems-1
+</code></pre>
+</div>
+
+</section>
+<section id="slide-orgda253db">
+<h3 id="orgda253db"><span class="section-number-3">4.3.</span> Step 3:  Create a <code>.env</code> file with the necessary envirnoment variables.</h3>
+<div class="org-src-container">
+
+<pre  class="src src-bash"   ><code trim>cat &lt;&lt;EOF &gt; .env
+<span style="color: #ffff00; font-weight: bold;">PGPORT1=&lt;your exposed postgres port for the approval sub-graph&gt;</span>
+<span style="color: #ffff00; font-weight: bold;">PGPORT2=&lt;your exposed postgres port for the supply sub-graph&gt;</span>
+<span style="color: #ffff00; font-weight: bold;">PGPORT3=&lt;your exposed postgres port for the design sub-graph&gt;</span>
+<span style="color: #ffff00; font-weight: bold;">PGPORT4=&lt;your exposed postgres port for the logic sub-graph&gt;</span>
+<span style="color: #ffff00; font-weight: bold;">PGPORT5=&lt;your exposed postgres port for the supergraph gateway&gt;</span>
+<span style="color: #ffff00; font-weight: bold;">HGPORT1=&lt;your exposed Hasura port for the approval sub-graph&gt;</span>
+<span style="color: #ffff00; font-weight: bold;">HGPORT2=&lt;your exposed Hasura port for the supply sub-graph&gt;</span>
+<span style="color: #ffff00; font-weight: bold;">HGPORT3=&lt;your exposed Hasura port for the design sub-graph&gt;</span>
+<span style="color: #ffff00; font-weight: bold;">HGPORT4=&lt;your exposed Hasura port for the logic sub-graph&gt;</span>
+<span style="color: #ffff00; font-weight: bold;">HGPORT5=&lt;your exposed Hasura port for the supergraph gateway&gt;</span>
+<span style="color: #ffff00; font-weight: bold;">MONGODBPORT=&lt;your exposed Mongo DB port for the approval sub-graph&gt;</span>
+<span style="color: #ffff00; font-weight: bold;">HASURA_GRAPHQL_ADMIN_SECRET=myadminsecretkey</span>
+<span style="color: #ffff00; font-weight: bold;">HASURA_GRAPHQL_EE_LICENSE_KEY=&lt;your Hasura EE license key&gt;</span>
+<span style="color: #ffff00; font-weight: bold;">EOF</span>
+</code></pre>
+</div>
+
+<p>
+There are several important points to node in this step:
+</p>
+
+<ol>
+<li>Every Hasura instance has a corresponding PostgreSQL database
+instance, even if no data will be surfaced from PostgreSQL for that
+particular sub-graph.  This is because Hasura uses a PostgreSQL
+database to manage its own metadata.</li>
+<li>This uses certain Enterprise features, specifically its MongoDB
+connectivity.  Consequently, it needs an EE license key to be
+specified.  Speak to a Hasura rep to obtain a trial EE license key.</li>
+<li>With an EE license key specified, Hasura runs in Enterprise mode.
+In Enterprise mode, the admin secret is no longer option.
+Consequently, an admin secret must be specified.  It can be
+anything, though whatever it is in general it should be treated as
+a secret.  However, to keep this POC simple it has been hardcoded
+as 'myadminsecretkey'.  <b><b>NOTE</b></b> do not change this value.</li>
+
+</ol>
+
+</section>
+<section id="slide-orgf1f5ec0">
+<h3 id="orgf1f5ec0"><span class="section-number-3">4.4.</span> Step 4:  Launch the services with Docker Compose.</h3>
+<div class="org-src-container">
+
+<pre  class="src src-bash"   ><code trim>docker-compose up -d
+</code></pre>
+</div>
+
+<p>
+or
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-bash"   ><code trim>docker compose up -d
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org39dfc2c">
+<h2 id="org39dfc2c"><span class="section-number-2">5.</span> Test queries</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+</section>
+<section id="slide-org2a7fa8a">
+<h3 id="org2a7fa8a"><span class="section-number-3">5.1.</span> MongoDB</h3>
+<div class="org-src-container">
+
+<pre  class="src src-mongo"   ><code trim>use sample_db;
+db.approvals.find();
+</code></pre>
+</div>
+
+<div class="org-src-container">
+
+<pre  class="src src-mongo"   ><code trim>use sample_db;
+db.approvals.updateOne(
+    {
+        _id: ObjectId(<span style="color: #ffc1c1;">"6622ac2773b22cd7cec934e0"</span>)
+    },
+    {
+        $set: {
+            <span style="color: #ffc1c1;">"approved"</span>:
+            <span style="color: #8470ff; font-weight: bold;">false</span>
+        }
+    }
+)
+</code></pre>
+</div>
+
+<div class="org-src-container">
+
+<pre  class="src src-mongo"   ><code trim>use sample_db;
+db.approvals.findOne({_id: ObjectId(<span style="color: #ffc1c1;">"6622ac2773b22cd7cec934e0"</span>)});
+</code></pre>
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>
