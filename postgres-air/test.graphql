@@ -1,0 +1,73 @@
+query test_1 {
+  postgres_air_boarding_pass_aggregate(
+    where: {
+      _and: [
+	{passenger: {account: {account_id: {_eq: 212507}}}},
+	{precheck: {_is_null: false}}
+      ]
+    },
+    order_by: [{update_ts: desc}, {pass_id: desc}]
+  ) {
+    aggregate {
+      count
+    }
+  }
+  postgres_air_boarding_pass(
+    where: {
+      _and: [
+	{passenger: {account: {account_id: {_eq: 212507}}}},
+	{precheck: {_is_null: false}}
+      ]
+    },
+    order_by: [{update_ts: desc}, {pass_id: desc}]
+  ) {
+    passenger {
+      account {
+        account_id
+      }
+    }
+    pass_id
+    passenger_id
+    precheck
+    seat
+    booking_leg_id
+    boarding_time
+  }
+}
+
+query test_2 {
+  postgres_air_boarding_pass_aggregate(
+    where: {
+      _and: [
+	{booking_leg_id: {_eq: 7531225}},
+	{precheck: {_is_null: false}}
+      ]
+    },
+    order_by: [{update_ts: desc}, {pass_id: desc}]
+  ) {
+    aggregate {
+      count
+    }
+  }
+  postgres_air_boarding_pass(
+    where: {
+      _and: [
+	{booking_leg_id: {_eq: 7531225}},
+	{precheck: {_is_null: false}}
+      ]
+    },
+    order_by: [{update_ts: desc}, {pass_id: desc}]
+  ) {
+    passenger {
+      account {
+        account_id
+      }
+    }
+    pass_id
+    passenger_id
+    precheck
+    seat
+    booking_leg_id
+    boarding_time
+  }
+}
