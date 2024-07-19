@@ -43,7 +43,6 @@ netflix-dgs-java-1/target/classes/io/hasura/App.class
 *.lst
 netflix-dgs-java-1/README.html
 netflix-dgs-java-1/README.odt
-*.html
 *.odt
 netflix-dgs-java-1/README.md
 netflix-dgs-java-1/.settings/
