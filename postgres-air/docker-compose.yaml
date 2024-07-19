@@ -3,24 +3,26 @@ services:
   postgres:
     build: .
     ports:
-      - ${PGPORT:-5433}:5432
+      - $PGPORT:5432
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:
       - ./initdb.d-postgres:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: "pg_isready -U postgres"
+      test: psql -d postgres_air -U postgres -c "select count(*) from postgres_air.marker"
   graphql-engine:
-    image: hasura/graphql-engine:v2.40.0
+    image: hasura/graphql-engine:v2.40.0.cli-migrations-v3
     ports:
-      - ${HGEPORT:-8081}:8080
+      - $HGEPORT:8080
     restart: always
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres_air
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ENABLE_CONSOLE: true
+    volumes:
+      - ./metadata:/hasura-metadata:ro
     depends_on:
       postgres:
         condition: service_healthy
