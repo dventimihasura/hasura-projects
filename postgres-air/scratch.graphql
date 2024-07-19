@@ -1,0 +1,215 @@
+query Claim {
+  claim_aggregate(
+    where: {
+      _and: [
+        {
+          _or: [
+            { plan: { account: { account_id: { _eq: "0019200000VDGI6AAP" } } } }
+            { plan_id: { _eq: "a4C92000000mdofEAA" } }
+          ]
+        }
+        { parent_claim_id: { _is_null: true } }
+      ]
+    }
+    order_by: [{ source_system_created_at: desc }, { claim_number: desc }]
+  ) {
+    aggregate {
+      count
+    }
+  }
+  claim(
+    limit: 100
+    where: {
+      _and: [
+        {
+          _or: [
+            { plan: { account: { account_id: { _eq: "0019200000VDGI6AAP" } } } }
+            { plan_id: { _eq: "a4C92000000mdofEAA" } }
+          ]
+        }
+        { parent_claim_id: { _is_null: true } }
+      ]
+    }
+    order_by: [{ source_system_created_at: desc }, { claim_number: desc }]
+  ) {
+    claim_id
+    payee_account_id
+    payee_account {
+      account_name
+    }
+    source_system_created_at
+    line_item_number
+    payee_account_id
+    support_item_code
+    support_start_date
+    support_end_date
+    fund_management_type
+    support_item {
+      support_category {
+        support_category_name
+      }
+    }
+    total_amount
+    claim_status
+    validation_error_code
+    participant_id
+  }
+}
+
+
+
+query Claim {
+  claim_aggregate(
+    where: {
+      _and: [
+        {
+          _or: [
+            { plan: { account: { account_id: { _eq: "0019200000VDGI6AAP" } } } }
+            { plan_id: { _eq: "a4C92000000mdofEAA" } }
+          ]
+        }
+        { parent_claim_id: { _is_null: true } }
+      ]
+    }
+    order_by: [{ source_system_created_at: desc }, { claim_number: desc }]
+  ) {
+    aggregate {
+      count
+    }
+  }
+  claim(
+    limit: 100
+    where: {
+      _and: [
+        {
+          _or: [
+            { plan: { account: { account_id: { _eq: "0019200000VDGI6AAP" } } } }
+            { plan_id: { _eq: "a4C92000000mdofEAA" } }
+          ]
+        }
+        { parent_claim_id: { _is_null: true } }
+      ]
+    }
+    order_by: [{ source_system_created_at: desc }, { claim_number: desc }]
+  ) {
+    claim_id
+    payee_account_id
+    payee_account {
+      account_name
+    }
+    source_system_created_at
+    line_item_number
+    payee_account_id
+    support_item_code
+    support_start_date
+    support_end_date
+    fund_management_type
+    support_item {
+      support_category {
+        support_category_name
+      }
+    }
+    total_amount
+    claim_status
+    validation_error_code
+    participant_id
+  }
+}
+
+query Claim {
+  claim_aggregate(
+    where: {
+      _and: [
+        { plan: { account: { account_id: { _eq: "0019200000VDGI6AAP" } } } }
+        { parent_claim_id: { _is_null: true } }
+      ]
+    }
+    order_by: [{ source_system_created_at: desc }, { claim_number: desc }]
+  ) {
+    aggregate {
+      count
+    }
+  }
+  claim(
+    limit: 100
+    where: {
+      _and: [
+        { plan: { account: { account_id: { _eq: "0019200000VDGI6AAP" } } } }
+        { parent_claim_id: { _is_null: true } }
+      ]
+    }
+    order_by: [{ source_system_created_at: desc }, { claim_number: desc }]
+  ) {
+    claim_id
+    payee_account_id
+    payee_account {
+      account_name
+    }
+    source_system_created_at
+    line_item_number
+    payee_account_id
+    support_item_code
+    support_start_date
+    support_end_date
+    fund_management_type
+    support_item {
+      support_category {
+        support_category_name
+      }
+    }
+    total_amount
+    claim_status
+    validation_error_code
+    participant_id
+  }
+}
+
+query Claim {
+  claim_aggregate(
+    where: {
+      _and: [
+        { plan_id: { _eq: "a4C92000000mdofEAA" } }
+        { parent_claim_id: { _is_null: true } }
+      ]
+    }
+    order_by: [{ source_system_created_at: desc }, { claim_number: desc }]
+  ) {
+    aggregate {
+      count
+    }
+  }
+  claim(
+    limit: 100
+    where: {
+      _and: [
+        { plan_id: { _eq: "a4C92000000mdofEAA" } }
+        { parent_claim_id: { _is_null: true } }
+      ]
+    }
+    order_by: [{ source_system_created_at: desc }, { claim_number: desc }]
+  ) {
+    budget_id
+    recurring_claim_template_id
+    claim_id
+    payee_account_id
+    payee_account {
+      account_name
+    }
+    source_system_created_at
+    line_item_number
+    payee_account_id
+    support_item_code
+    support_start_date
+    support_end_date
+    fund_management_type
+    support_item {
+      support_category {
+        support_category_name
+      }
+    }
+    total_amount
+    claim_status
+    validation_error_code
+    participant_id
+  }
+}
