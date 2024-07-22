@@ -18,6 +18,7 @@ query BoardingPass_A_or_B {
     }
   }
   postgres_air_boarding_pass(
+    limit: 100
     where: {
       _and: [
 	{passenger: {account: {account_id: {_eq: 212507}}}},
@@ -55,6 +56,7 @@ query BoardingPass_A {
     }
   }
   postgres_air_boarding_pass(
+    limit: 100
     where: {
       _and: [
 	{passenger: {account: {account_id: {_eq: 212507}}}},
@@ -92,6 +94,7 @@ query BoardingPass_B {
     }
   }
   postgres_air_boarding_pass(
+    limit: 100
     where: {
       _and: [
 	{booking_leg_id: {_eq: 7531225}},
