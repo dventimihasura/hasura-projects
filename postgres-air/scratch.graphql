@@ -56,8 +56,6 @@ query Claim {
   }
 }
 
-
-
 query Claim {
   claim_aggregate(
     where: {
