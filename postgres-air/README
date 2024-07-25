@@ -3,6 +3,70 @@
 #+STARTUP: indent
 
 #+begin_src graphql :url http://localhost:8081/v1/graphql
+query Claim {
+  postgres_air_boarding_pass_aggregate(
+    where: {
+      _and: [
+        {
+          _or: [
+            {booking_leg: {flight: {aircraft_code: {_eq: "330"}}}}
+            {seat: {_eq: "0B"}}
+          ]
+        }
+        {precheck: {_is_null: false}}
+      ]
+    }
+  ) {
+    aggregate {
+      count
+    }
+  }
+}
+#+end_src
+
+#+RESULTS:
+: {
+:   "data": {
+:     "postgres_air_boarding_pass_aggregate": {
+:       "aggregate": {
+:         "count": 4568723
+:       }
+:     }
+:   }
+: }
+
+#+begin_src graphql :url http://localhost:8081/v1/graphql
+query Claim {
+  postgres_air_boarding_pass_aggregate(
+    where: {
+      _and: {
+        _or: {
+          booking_leg: {flight: {aircraft_code: {_eq: "330"}}}
+          seat: {_eq: "0B"}
+        }
+        precheck: {_is_null: false}
+      }
+    }
+  ) {
+    aggregate {
+      count
+    }
+  }
+}
+#+end_src
+
+#+RESULTS:
+: {
+:   "data": {
+:     "postgres_air_boarding_pass_aggregate": {
+:       "aggregate": {
+:         "count": 25700
+:       }
+:     }
+:   }
+: }
+
+#+begin_src graphql :url http://localhost:8081/v1/graphql
 {
   postgres_air_boarding_pass_aggregate(order_by: {update_ts: asc, pass_id: desc}, where: {_and: {precheck: {_is_null: false}, passenger: {account: {account_id: {_eq: 212507}}}}}) {
     aggregate {

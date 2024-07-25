@@ -1,118 +1,19 @@
-query BoardingPass_A_or_B {
+query Claim {
   postgres_air_boarding_pass_aggregate(
     where: {
       _and: [
-	{
-	  _or: [
-	    {passenger: {account: {account_id: {_eq: 212507}}}},
-	    {booking_leg_id: {_eq: 7531225}}
-	  ],
-	}
-	{precheck: {_is_null: false}}
+        {
+          _or: [
+            {booking_leg: {flight: {aircraft_code: {_eq: "330"}}}}
+            {seat: {_eq: "0B"}}
+          ]
+        }
+        {precheck: {_is_null: false}}
       ]
-    },
-    order_by: [{update_ts: desc}, {pass_id: desc}]
+    }
   ) {
     aggregate {
       count
     }
-  }
-  postgres_air_boarding_pass(
-    limit: 100
-    where: {
-      _and: [
-	{passenger: {account: {account_id: {_eq: 212507}}}},
-	{precheck: {_is_null: false}}
-      ]
-    },
-    order_by: [{update_ts: desc}, {pass_id: desc}]
-  ) {
-    passenger {
-      account {
-        account_id
-      }
-    }
-    pass_id
-    passenger_id
-    precheck
-    seat
-    booking_leg_id
-    boarding_time
-  }
-}
-
-query BoardingPass_A {
-  postgres_air_boarding_pass_aggregate(
-    where: {
-      _and: [
-	{passenger: {account: {account_id: {_eq: 212507}}}},
-	{precheck: {_is_null: false}}
-      ]
-    },
-    order_by: [{update_ts: desc}, {pass_id: desc}]
-  ) {
-    aggregate {
-      count
-    }
-  }
-  postgres_air_boarding_pass(
-    limit: 100
-    where: {
-      _and: [
-	{passenger: {account: {account_id: {_eq: 212507}}}},
-	{precheck: {_is_null: false}}
-      ]
-    },
-    order_by: [{update_ts: desc}, {pass_id: desc}]
-  ) {
-    passenger {
-      account {
-        account_id
-      }
-    }
-    pass_id
-    passenger_id
-    precheck
-    seat
-    booking_leg_id
-    boarding_time
-  }
-}
-
-query BoardingPass_B {
-  postgres_air_boarding_pass_aggregate(
-    where: {
-      _and: [
-	{booking_leg_id: {_eq: 7531225}},
-	{precheck: {_is_null: false}}
-      ]
-    },
-    order_by: [{update_ts: desc}, {pass_id: desc}]
-  ) {
-    aggregate {
-      count
-    }
-  }
-  postgres_air_boarding_pass(
-    limit: 100
-    where: {
-      _and: [
-	{booking_leg_id: {_eq: 7531225}},
-	{precheck: {_is_null: false}}
-      ]
-    },
-    order_by: [{update_ts: desc}, {pass_id: desc}]
-  ) {
-    passenger {
-      account {
-        account_id
-      }
-    }
-    pass_id
-    passenger_id
-    precheck
-    seat
-    booking_leg_id
-    boarding_time
   }
 }
