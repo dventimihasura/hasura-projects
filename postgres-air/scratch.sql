@@ -6,7 +6,7 @@ set max_parallel_workers_per_gather = 0;
 
 set max_parallel_workers_per_gather = 2;
 
-explain
+explain analyze
 select
   count(*)
   from
@@ -18,7 +18,7 @@ select
    and (
      seat = '0B' or aircraft_code = '330');
 
-explain
+explain analyze
 select
   count(*)
   from
