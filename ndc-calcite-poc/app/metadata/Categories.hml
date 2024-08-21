@@ -1,0 +1,101 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: Categories
+  fields:
+    - name: id
+      type: Uuid!
+    - name: name
+      type: Text!
+  graphql:
+    typeName: App_Categories
+    inputTypeName: App_CategoriesInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: my_connector
+      dataConnectorObjectType: categories
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: Categories
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - id
+          - name
+
+---
+kind: ObjectBooleanExpressionType
+version: v1
+definition:
+  name: CategoriesBoolExp
+  objectType: Categories
+  dataConnectorName: my_connector
+  dataConnectorObjectType: categories
+  comparableFields:
+    - fieldName: id
+      operators:
+        enableAll: true
+    - fieldName: name
+      operators:
+        enableAll: true
+  graphql:
+    typeName: App_CategoriesBoolExp
+
+---
+kind: Model
+version: v1
+definition:
+  name: Categories
+  objectType: Categories
+  source:
+    dataConnectorName: my_connector
+    collection: categories
+  filterExpressionType: CategoriesBoolExp
+  orderableFields:
+    - fieldName: id
+      orderByDirections:
+        enableAll: true
+    - fieldName: name
+      orderByDirections:
+        enableAll: true
+  graphql:
+    selectMany:
+      queryRootField: app_categories
+    selectUniques:
+      - queryRootField: app_categoriesById
+        uniqueIdentifier:
+          - id
+    orderByExpressionType: App_CategoriesOrderBy
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: Categories
+  permissions:
+    - role: admin
+      select:
+        filter: null
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: products
+  sourceType: Categories
+  target:
+    model:
+      name: Products
+      relationshipType: Array
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: categoryId
+

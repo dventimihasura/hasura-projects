@@ -1,0 +1,9 @@
+kind: Context
+version: v2
+definition:
+  current: default
+  contexts:
+    default:
+      supergraph: ../supergraph.yaml
+      subgraph: ../app/subgraph.yaml
+      localEnvFile: ../.env
