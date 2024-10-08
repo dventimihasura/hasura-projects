@@ -3,7 +3,7 @@ services:
     image: postgres:16
     restart: always
     ports:
-      - 5433:5432
+      - ${PGPORT:-5433}:5432
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:
@@ -11,7 +11,7 @@ services:
   graphql-engine:
     image: hasura/graphql-engine:v2.42.0
     ports:
-      - 8081:8080
+      - ${HGEPORT:-8081}:8080
     restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
