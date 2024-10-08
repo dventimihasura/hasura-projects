@@ -2,12 +2,16 @@ services:
   postgres:
     image: postgres:17
     restart: always
+    ports:
+      - 5433:5432
     environment:
       POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./initdb.d-postgres:/docker-entrypoint-initdb.d:ro
   graphql-engine:
     image: hasura/graphql-engine:v2.42.0
     ports:
-      - 8080:8080
+      - 8081:8080
     restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
