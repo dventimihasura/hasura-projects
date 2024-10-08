@@ -26,3 +26,4 @@ services:
       - ./initdb.d-solr:/docker-entrypoint-initdb.d:ro
     command: /docker-entrypoint-initdb.d/init.bash
 
+
