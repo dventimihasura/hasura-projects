@@ -9,3 +9,29 @@ array_relationships:
         table:
           name: Album
           schema: public
+event_triggers:
+  - name: insert_update_artist
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: http://solr:8983/solr
+    request_transform:
+      body:
+        action: transform
+        template: |-
+          {
+            "id": {{$body.event.data.new.ArtistId}},
+            "name": {{$body.event.data.new.Name}}
+          }
+      method: POST
+      query_params: commitWithin=1000&overwrite=true&wt=json
+      template_engine: Kriti
+      url: '{{$base_url}}/artist/update'
+      version: 2
