@@ -6,8 +6,8 @@ services:
       - ${PGPORT:-5433}:5432
     environment:
       POSTGRES_PASSWORD: postgres
-    volumes:
-      - ./initdb.d-postgres:/docker-entrypoint-initdb.d:ro
+    # volumes:
+    #   - ./initdb.d-postgres:/docker-entrypoint-initdb.d:ro
   graphql-engine:
     image: hasura/graphql-engine:v2.42.0.cli-migrations-v3
     ports:
@@ -20,6 +20,7 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: true
     volumes:
       - ./metadata:/hasura-metadata:ro
+      - ./migrations:/hasura-migrations:ro
   solr:
     image: solr
     ports:
