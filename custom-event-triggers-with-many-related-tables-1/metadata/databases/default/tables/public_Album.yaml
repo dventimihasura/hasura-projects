@@ -2,6 +2,13 @@ table:
   name: Album
   schema: public
 object_relationships:
+  - name: AlbumSummary
+    using:
+      foreign_key_constraint_on:
+        column: AlbumId
+        table:
+          name: AlbumSummary
+          schema: public
   - name: Artist
     using:
       foreign_key_constraint_on: ArtistId
