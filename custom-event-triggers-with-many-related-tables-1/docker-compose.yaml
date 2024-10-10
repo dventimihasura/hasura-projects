@@ -8,6 +8,7 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - ./initdb.d-postgres:/docker-entrypoint-initdb.d:ro
+    command: postgres -c 'wal_level=logical'
   graphql-engine:
     image: hasura/graphql-engine:v2.42.0.cli-migrations-v3
     ports:
