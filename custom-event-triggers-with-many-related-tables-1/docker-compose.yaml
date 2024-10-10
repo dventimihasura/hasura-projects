@@ -27,5 +27,22 @@ services:
     volumes:
       - ./initdb.d-solr:/docker-entrypoint-initdb.d:ro
     command: /docker-entrypoint-initdb.d/init.bash
-
-
+  webhook-postgres:
+    build: .
+    restart: always
+    ports:
+      - ${PGPORT2:-5434}:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+  webhook-postgrest:
+    image: postgrest/postgrest
+    ports:
+      - ${PGRST_SERVER_PORT:-3001}:3000
+      - ${PGRST_ADMIN_SERVER_PORT:-4001}:4000
+    environment:
+      PGRST_DB_URI: postgres://postgres:postgres@webhook-postgres:5432/postgres
+      PGRST_DB_ANON_ROLE: postgres
+      PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3000
+      PGRST_ADMIN_SERVER_PORT: 4000
+    depends_on:
+      - webhook-postgres
