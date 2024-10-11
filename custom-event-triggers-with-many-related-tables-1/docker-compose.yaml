@@ -34,6 +34,8 @@ services:
       - ${PGPORT2:-5434}:5432
     environment:
       POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./initdb.d-webhook-postgres:/docker-entrypoint-initdb.d:ro
   webhook-postgrest:
     image: postgrest/postgrest
     ports:
