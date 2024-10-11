@@ -26,6 +26,11 @@ event_triggers:
       enable_manual: false
       insert:
         columns: '*'
+      update:
+        columns:
+          - AlbumId
+          - ArtistId
+          - Title
     retry_conf:
       interval_sec: 10
       num_retries: 0

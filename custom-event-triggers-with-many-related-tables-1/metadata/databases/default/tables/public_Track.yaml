@@ -27,6 +27,38 @@ array_relationships:
           name: PlaylistTrack
           schema: public
 event_triggers:
+  - name: insert_album_summary_from_track
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - AlbumId
+          - TrackId
+          - MediaTypeId
+          - GenreId
+          - Milliseconds
+          - Bytes
+          - UnitPrice
+          - Composer
+          - Name
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: http://webhook-postgrest:3000/rpc/insert_albumsummary_one
+    request_transform:
+      body:
+        action: transform
+        template: |-
+          {
+            "albumId": {{$body.event.data.new.AlbumId}}
+          }
+      method: POST
+      query_params: {}
+      template_engine: Kriti
+      version: 2
   - name: insert_update_track
     definition:
       enable_manual: true
