@@ -10,7 +10,7 @@ create or replace function insert_albumsummary_one ("albumId" int, "payload" jso
     'http://graphql-engine:8080/v1/graphql',
     format(
 	$$
-	{"query":"mutation MyMutation($albumId:Int,$payload:jsonb){insert_AlbumSummary_one(object:{AlbumId:$albumId,Payload:$payload}){AlbumId Payload}}","variables":{"albumId":%s,"payload":%s}}
+	{"query":"mutation MyMutation($albumId:Int,$payload:jsonb){insert_AlbumSummary_one(object:{AlbumId:$albumId,Payload:$payload}on_conflict:{constraint:AlbumSummary_pkey,update_columns:[Payload]}){AlbumId Payload}}","variables":{"albumId":%s,"payload":%s}}
 	$$,
 	$1,
 	$2),
