@@ -21,6 +21,27 @@ array_relationships:
           name: Track
           schema: public
 event_triggers:
+  - name: insert_album_summary
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: http://webhook-postgrest:3000/rpc/insert_albumsummary_one
+    request_transform:
+      body:
+        action: transform
+        template: |-
+          {
+            "albumId": {{$body.event.data.new.AlbumId}}
+          }
+      method: POST
+      query_params: {}
+      template_engine: Kriti
+      version: 2
   - name: insert_update_album
     definition:
       enable_manual: true
