@@ -21,7 +21,7 @@ array_relationships:
           name: Track
           schema: public
 event_triggers:
-  - name: insert_album_summary
+  - name: insert_update_album_summary_from_album
     definition:
       enable_manual: false
       insert:

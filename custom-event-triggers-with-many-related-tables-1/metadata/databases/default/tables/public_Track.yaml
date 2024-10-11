@@ -27,7 +27,7 @@ array_relationships:
           name: PlaylistTrack
           schema: public
 event_triggers:
-  - name: insert_album_summary_from_track
+  - name: insert_update_album_summary_from_track
     definition:
       enable_manual: false
       insert:
