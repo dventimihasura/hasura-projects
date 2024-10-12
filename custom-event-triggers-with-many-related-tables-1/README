@@ -66,7 +66,7 @@ The handler can be created as a web-based micro-service in any
 framework or language, from Java to Python to Go.  In this POC, the
 handler is actually implemented using a combination of PostgreSQL and
 [[https://docs.postgrest.org/en/stable/index.html][PostgREST]].  PostgreSQL is chiefly used for its data-processing
-capabilities via functions writtin in SQL and [[https://www.postgresql.org/docs/current/plpgsql.html][PL/pgSQL]].  PostgREST is
+capabilities via functions written in SQL and [[https://www.postgresql.org/docs/current/plpgsql.html][PL/pgSQL]].  PostgREST is
 chiefly used for its ability to graft a web-based API onto PostgreSQL.
 Finally, the [[https://github.com/pramsey/pgsql-http][pgsql-http]] extension is added into PostgreSQL to give it
 the ability to make HTTP calls from SQL and PL/pgSQL functions (back
@@ -90,12 +90,12 @@ launch the services:
 
 The two database instances ~postgres~ and ~webhook-postgres~ are
 initialized automatically via SQL scripts in the respective
-[[file:README][initdb.d-postgres]] and [[file:README][initdb.d-webook-postgres]] directories.  Likewise,
+[[file:README][initdb.d-postgres]] and [[file:README][initdb.d-webhook-postgres]] directories.  Likewise,
 the ~solr~ instance is initialized by a Bash script in the
 [[file:README][initdb.d-solr]] directory, though again that is largely immaterial.
 Note that the ~webhook-postgres~ service does not use the stock
 ~postgres~ image from DockerHub, but rather uses a custom image built
-from [[file:Dockerfile][Dockerfile]].  This is just to that the ~pgsql-http~ extension can
+from [[file:Dockerfile][Dockerfile]].  This is just so that the ~pgsql-http~ extension can
 be added in.
 
 The Hasura metadata is automatically applied from files in the
@@ -160,14 +160,14 @@ This could (and should) be extended in several obvious ways.
    Rather than fetch the JSON document and write it back to the
    ~postgres~ data directly, it should simply record the event in a
    table of its own.  An independent process, perhaps running on a
-   schedule maintained by the [[https://github.com/citusdata/pg_cron][pg_cron]] extension, would periodocally
+   schedule maintained by the [[https://github.com/citusdata/pg_cron][pg_cron]] extension, would periodically
    process all un-processed events by de-duplicating across ~AlbumId~
    and performing the calls to Hasura only once per ~AlbumId~.
 3. It it likely that in a production setting, the event handler
    would not simply write the JSON summary documents back to a
    database (be it PostgreSQL or MongoDB or Solr or whatever).  More
    likely, the event handler should notify some third-party service.
-4. When notifiying third-party services, it is likely that they would
+4. When notifying third-party services, it is likely that they would
    be interested in not the /current snapshot/ of the data, but rather
    in the /delta change/ corresponding to the new data.  One easy way
    to accomplish this in this POC system would be the following.
@@ -445,3 +445,8 @@ query MyQuery {
   }
 }
 #+end_example
+
+#  LocalWords:  AlbumSummary AlbumID albumsummary AccountSummary cron
+#  LocalWords:  webhook DockerHub Dockerfile Hasura's upsert un EOF
+#  LocalWords:  debouncing HGEPORT PGRST SOLRPORT MyQuery Rockin
+#  LocalWords:  Bramhall UnitPrice Layton Ellsworth Wynans Darlin
