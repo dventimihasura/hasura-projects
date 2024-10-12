@@ -191,6 +191,8 @@ This could (and should) be extended in several obvious ways.
   EOF
 #+end_src
 
+#+RESULTS:
+
 ** Step 4:  Launch the services using Docker Compose.
 
 #+begin_src bash
