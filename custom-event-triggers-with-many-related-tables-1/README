@@ -163,6 +163,20 @@ This could (and should) be extended in several obvious ways.
    schedule maintained by the [[https://github.com/citusdata/pg_cron][pg_cron]] extension, would periodocally
    process all un-processed events by de-duplicating across ~AlbumId~
    and performing the calls to Hasura only once per ~AlbumId~.
+3. It it likely that in a production setting, the event handler
+   would not simply write the JSON summary documents back to a
+   database (be it PostgreSQL or MongoDB or Solr or whatever).  More
+   likely, the event handler should notify some third-party service.
+4. When notifiying third-party services, it is likely that they would
+   be interested in not the /current snapshot/ of the data, but rather
+   in the /delta change/ corresponding to the new data.  One easy way
+   to accomplish this in this POC system would be the following.
+   1. Remove the "upsert" functionality on the ~AlbumSummary~ table,
+      and allow it always to insert new records.
+   2. Adapt the ~AlbumSummary~ table to include an "insert timestamp".
+   3. Create a SQL view or table-valued function to compute the JSON
+      difference between snapshots (e.g.:
+      https://stackoverflow.com/questions/36041784/postgresql-compare-two-jsonb-objects) 
 
 * Steps
 
