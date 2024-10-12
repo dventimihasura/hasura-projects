@@ -1,0 +1,431 @@
+# -*- mode: org; -*-
+
+#+STARTUP: indent
+
+* What
+
+[[https://hasura.io/docs/2.0/index/][Hasura]] Proof-Of-Concept (POC) with [[https://hasura.io/docs/2.0/event-triggers/overview/][Event Triggers]] on multiple related tables.
+
+* Why
+
+Sometimes, it is necessary to integrate with a third-party system via
+event triggers in such a way that events are generated and handled
+whenever /any/ of the related tables change.
+
+* How
+
+Event triggers are added to the related tables in Hasura, but all such
+event triggers use the /same/ handler.  This one handler is generic,
+at least across a set of related tables, insofar as it takes a JSON
+snapshot of the related rows in the related tables and stores that
+snapshot into a summary table.  
+
+* Details
+
+The data model for this POC is the [[https://neon.tech/docs/import/import-sample-data#chinook-database][Chinook]] database.  Among the tables
+in Chinook are these.
+
+- Artist :: individual recording artists identified by ~ArtistId~
+- Album :: individual albums identified by ~AlbumId~ and belonging to ~Artist~
+- Track :: individual music tracks identified by ~TrackId~ and belonging to ~Album~
+
+The goal is the following.
+
+#+begin_quote
+Whenever an album or track is inserted or updated, take a JSON snapshot of
+the album and its tracks identified by ~AlbumId~ and write it to a
+~AlbumSummary~ table with columns ~(AlbumID int, AlbumSummary json)~.
+Whether it is for an insert or an update, if an entry for a given
+~AlbumId~ exists in the ~AlbumSummary~ table, take care to update that
+record rather than insert a new record.
+#+end_quote
+
+This goal is met in the following way.
+
+1. Hasura event triggers on the ~Album~ and ~Track~ tables capture
+   changes to those tables.
+2. Those event triggers use a single handler that is generic across
+   these two tables, ~insert_albumsummary_one (AlbumId int)~.
+3. The ~insert_albumsummary_one (AlbumId int)~ event handler does the
+   following.
+   1. Discard any payload as it only needs the ~AlbumId~ parameter.
+   2. Get a JSON snapshot of the data for the Album row and Track rows
+      identified by the given ~AlbumId~ parameter.  This can be
+      accomplished in a number of ways.  One easy way is simply to
+      make an HTTP call from the handler back to Hasura to execute a
+      GraphQL query tailored to get the data for the snapshot.
+   3. Store that snapshot data.  This can be accomplished in a number
+      of ways, such as storing it in another PostgreSQL database,
+      storing it in a document database like MongoDB, or indexing it
+      in a search engine like Solr or ElasticSearch.  One easy way is
+      simply to make an HTTP call from the handler back to Hasura to
+      execute a GraphQL /mutation/ to write the data back to a
+      ~AlbumSummary~ table.
+
+The handler can be created as a web-based micro-service in any
+framework or language, from Java to Python to Go.  In this POC, the
+handler is actually implemented using a combination of PostgreSQL and
+[[https://docs.postgrest.org/en/stable/index.html][PostgREST]].  PostgreSQL is chiefly used for its data-processing
+capabilities via functions writtin in SQL and [[https://www.postgresql.org/docs/current/plpgsql.html][PL/pgSQL]].  PostgREST is
+chiefly used for its ability to graft a web-based API onto PostgreSQL.
+Finally, the [[https://github.com/pramsey/pgsql-http][pgsql-http]] extension is added into PostgreSQL to give it
+the ability to make HTTP calls from SQL and PL/pgSQL functions (back
+to Hasura).
+
+As additional details, the POC uses a [[file:docker-compose.yaml][docker-compose.yaml]] file to
+launch the services:
+
+- postgres :: PostgreSQL data source /and/ metadata-database for
+  Hasura, housing the Chinook database along with the newly-created
+  ~AccountSummary~ table.
+- graphql-engine :: Hasura v2 instance using ~postgres~ both as a data
+  source /and/ as a metadata-database
+- solr :: Solr search index with [[https://solr.apache.org/guide/6_6/solr-cores-and-solr-xml.html][cores]] for ~Artist~, ~Album~, and
+  ~Track~.  /Note:  This is largely irrelevant to this POC.  It exists
+  as a vestige of an earlier, defunct approach/.
+- webhook-postgres :: PostgreSQL instance whose SQL or PL/pgSQL
+  functions supply the event handler code
+- webhook-postgrest :: PostgREST instance serving a web-based API over
+  ~webhook-postgres~
+
+The two database instances ~postgres~ and ~webhook-postgres~ are
+initialized automatically via SQL scripts in the respective
+[[file:README][initdb.d-postgres]] and [[file:README][initdb.d-webook-postgres]] directories.  Likewise,
+the ~solr~ instance is initialized by a Bash script in the
+[[file:README][initdb.d-solr]] directory, though again that is largely immaterial.
+Note that the ~webhook-postgres~ service does not use the stock
+~postgres~ image from DockerHub, but rather uses a custom image built
+from [[file:Dockerfile][Dockerfile]].  This is just to that the ~pgsql-http~ extension can
+be added in.
+
+The Hasura metadata is automatically applied from files in the
+[[file:README][metadata]] directory using the
+~hasura/graphql-engine:v2.42.0.cli-migrations-v3~ image.  However, the
+data for the Chinook data model cannot be loaded automatically by the
+scripts in [[file:README][initdb.d-postgres]] as that would occur /before/ the Hasura
+metadata has been applied (which crucially contains the needed event
+trigger definitions).  And, the data cannot also be loaded
+automatically by the ~hasura/graphql-engine:v2.42.0.cli-migrations-v3~
+image as a database migration, because database migrations temporarily
+disable event triggers.  Consequently, the data have to be loaded from
+files in the [[file:README][seeds]] directory using the Hasura CLI command ~hasura seed
+apply~.  When that command is run, as data are inserted into the
+~Album~ and ~Track~ tables, events are generated.  Events are handled
+by the event handler ~insert_albumsummary_one~ (in ~webhook-postgres~
+via ~webhook-postgrest~).  Processing those events writes data back to
+the ~AlbumSummary~ table.
+
+Note that the goal of updating ~AlbumSummary~ data rather than
+inserting duplicate ~AlbumSummary~ is met simply by using Hasura's
+[[https://hasura.io/docs/2.0/mutations/postgres/upsert/][upsert]] capability for PostgreSQL.
+
+* Discussion
+
+The /main/ idea illustrated in this POC is not the use of
+PostgreSQL and PostgREST as an event handler.  That is immaterial, as
+event handlers can be written in any language, from Java to Python to
+Go.  The /main/ idea illustrated in this POC is this.
+
+#+begin_quote
+Use one generic event handler across /all/ related tables.  Discard
+the payload, but use identifiers in the parameters in order to
+identify a set of related rows across the related tables.  Use Hasura
+itself to fetch the (updated) data for /all/ of the related tables as
+a single JSON object.  Write that JSON object to the desired location. 
+#+end_quote
+
+** PROS
+
+1. one event handler across /all/ related tables
+2. easy to use Hasura and GraphQL to define the JSON document
+
+** CONS
+
+1. still have to create event triggers across all related tables in
+   Hasura Console, though this task is not arduous
+2. overly-chatty as it creates and processes many superfluous events
+   in many circumstances (e.g. adding an Album and all of its Tracks)
+
+* Extension
+
+This could (and should) be extended in several obvious ways.
+
+1. Currently, the event handlers (in SQL functions) have no error
+   handling.  This obviously should be addressed in a production
+   system.
+2. A batch-process / debouncing system should be added, probably via
+   an event queue, within the event handler.  For example, were
+   PostgreSQL to be continued to be used to host the event handler
+   then the event handler could be changed in the following way.
+   Rather than fetch the JSON document and write it back to the
+   ~postgres~ data directly, it should simply record the event in a
+   table of its own.  An independent process, perhaps running on a
+   schedule maintained by the [[https://github.com/citusdata/pg_cron][pg_cron]] extension, would periodocally
+   process all un-processed events by de-duplicating across ~AlbumId~
+   and performing the calls to Hasura only once per ~AlbumId~.
+
+* Steps
+
+** Step 1:  Clone this repository.
+
+#+begin_src bash
+  git clone https://github.com/dventimihasura/hasura-projects.git
+#+end_src
+
+** Step 2:  Change to the ~custom-event-triggers-with-many-related-tables-1~ project sub-directory.
+
+#+begin_src bash
+  cd custom-event-triggers-with-many-related-tables-1
+#+end_src
+
+** Step 3:  Create a ~.env~ file.
+
+#+begin_src bash
+  cat > .env << EOF
+  HASURA_GRAPHQL_ENDPOINT=HTTP://localhost:8081
+  HGEPORT=8081
+  PGPORT1=5433
+  PGRST_ADMIN_SERVER_PORT=4001
+  PGRST_SERVER_PORT=3001
+  SOLRPORT=8984
+  EOF
+#+end_src
+
+** Step 4:  Launch the services using Docker Compose.
+
+#+begin_src bash
+  docker compose up
+#+end_src
+
+or
+
+#+begin_src bash
+  docker-compose up
+#+end_src
+
+** Step 5:  Apply the seed data.
+
+#+begin_src bash
+  hasura seed apply
+#+end_src
+
+** Step 6:  Open Hasura Console
+
+#+begin_src bash
+  hasura console
+#+end_src
+
+** Step 7:  Query the ~AlbumSummary~ table.
+
+#+begin_src graphql :url http://localhost:8081/v1/graphql
+query MyQuery {
+  AlbumSummary(limit: 1) {
+    AlbumId
+    Payload
+  }
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+{
+  "data": {
+    "AlbumSummary": [
+      {
+        "AlbumId": 205,
+        "Payload": {
+          "data": {
+            "Album_by_pk": {
+              "Title": "In Step",
+              "Tracks": [
+                {
+                  "Name": "The House Is Rockin'",
+                  "Bytes": 4706253,
+                  "Genre": {
+                    "Name": "Blues",
+                    "GenreId": 6
+                  },
+                  "AlbumId": 205,
+                  "GenreId": 6,
+                  "Composer": "Doyle Bramhall/Stevie Ray Vaughan",
+                  "MediaType": {
+                    "Name": "MPEG audio file",
+                    "MediaTypeId": 1
+                  },
+                  "UnitPrice": 0.99,
+                  "MediaTypeId": 1,
+                  "Milliseconds": 144352
+                },
+                {
+                  "Name": "Crossfire",
+                  "Bytes": 8238033,
+                  "Genre": {
+                    "Name": "Blues",
+                    "GenreId": 6
+                  },
+                  "AlbumId": 205,
+                  "GenreId": 6,
+                  "Composer": "B. Carter/C. Layton/R. Ellsworth/R. Wynans/T. Shannon",
+                  "MediaType": {
+                    "Name": "MPEG audio file",
+                    "MediaTypeId": 1
+                  },
+                  "UnitPrice": 0.99,
+                  "MediaTypeId": 1,
+                  "Milliseconds": 251219
+                },
+                {
+                  "Name": "Tightrope",
+                  "Bytes": 9254906,
+                  "Genre": {
+                    "Name": "Blues",
+                    "GenreId": 6
+                  },
+                  "AlbumId": 205,
+                  "GenreId": 6,
+                  "Composer": "Doyle Bramhall/Stevie Ray Vaughan",
+                  "MediaType": {
+                    "Name": "MPEG audio file",
+                    "MediaTypeId": 1
+                  },
+                  "UnitPrice": 0.99,
+                  "MediaTypeId": 1,
+                  "Milliseconds": 281155
+                },
+                {
+                  "Name": "Let Me Love You Baby",
+                  "Bytes": 5378455,
+                  "Genre": {
+                    "Name": "Blues",
+                    "GenreId": 6
+                  },
+                  "AlbumId": 205,
+                  "GenreId": 6,
+                  "Composer": "Willie Dixon",
+                  "MediaType": {
+                    "Name": "MPEG audio file",
+                    "MediaTypeId": 1
+                  },
+                  "UnitPrice": 0.99,
+                  "MediaTypeId": 1,
+                  "Milliseconds": 164127
+                },
+                {
+                  "Name": "Leave My Girl Alone",
+                  "Bytes": 8438021,
+                  "Genre": {
+                    "Name": "Blues",
+                    "GenreId": 6
+                  },
+                  "AlbumId": 205,
+                  "GenreId": 6,
+                  "Composer": "B. Guy",
+                  "MediaType": {
+                    "Name": "MPEG audio file",
+                    "MediaTypeId": 1
+                  },
+                  "UnitPrice": 0.99,
+                  "MediaTypeId": 1,
+                  "Milliseconds": 256365
+                },
+                {
+                  "Name": "Travis Walk",
+                  "Bytes": 4650979,
+                  "Genre": {
+                    "Name": "Blues",
+                    "GenreId": 6
+                  },
+                  "AlbumId": 205,
+                  "GenreId": 6,
+                  "Composer": "Stevie Ray Vaughan",
+                  "MediaType": {
+                    "Name": "MPEG audio file",
+                    "MediaTypeId": 1
+                  },
+                  "UnitPrice": 0.99,
+                  "MediaTypeId": 1,
+                  "Milliseconds": 140826
+                },
+                {
+                  "Name": "Wall Of Denial",
+                  "Bytes": 11085915,
+                  "Genre": {
+                    "Name": "Blues",
+                    "GenreId": 6
+                  },
+                  "AlbumId": 205,
+                  "GenreId": 6,
+                  "Composer": "Doyle Bramhall/Stevie Ray Vaughan",
+                  "MediaType": {
+                    "Name": "MPEG audio file",
+                    "MediaTypeId": 1
+                  },
+                  "UnitPrice": 0.99,
+                  "MediaTypeId": 1,
+                  "Milliseconds": 336927
+                },
+                {
+                  "Name": "Scratch-N-Sniff",
+                  "Bytes": 5353627,
+                  "Genre": {
+                    "Name": "Blues",
+                    "GenreId": 6
+                  },
+                  "AlbumId": 205,
+                  "GenreId": 6,
+                  "Composer": "Doyle Bramhall/Stevie Ray Vaughan",
+                  "MediaType": {
+                    "Name": "MPEG audio file",
+                    "MediaTypeId": 1
+                  },
+                  "UnitPrice": 0.99,
+                  "MediaTypeId": 1,
+                  "Milliseconds": 163422
+                },
+                {
+                  "Name": "Love Me Darlin'",
+                  "Bytes": 6650869,
+                  "Genre": {
+                    "Name": "Blues",
+                    "GenreId": 6
+                  },
+                  "AlbumId": 205,
+                  "GenreId": 6,
+                  "Composer": "C. Burnett",
+                  "MediaType": {
+                    "Name": "MPEG audio file",
+                    "MediaTypeId": 1
+                  },
+                  "UnitPrice": 0.99,
+                  "MediaTypeId": 1,
+                  "Milliseconds": 201586
+                },
+                {
+                  "Name": "Riviera Paradise",
+                  "Bytes": 17232776,
+                  "Genre": {
+                    "Name": "Blues",
+                    "GenreId": 6
+                  },
+                  "AlbumId": 205,
+                  "GenreId": 6,
+                  "Composer": "Stevie Ray Vaughan",
+                  "MediaType": {
+                    "Name": "MPEG audio file",
+                    "MediaTypeId": 1
+                  },
+                  "UnitPrice": 0.99,
+                  "MediaTypeId": 1,
+                  "Milliseconds": 528692
+                }
+              ],
+              "AlbumId": 205,
+              "ArtistId": 133
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+#+end_example
