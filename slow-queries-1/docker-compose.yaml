@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: always
+    ports:
+      - ${HGPORT:-5433}:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./init.db-postgres:/docker-entrypoint-initdb.d:ro
+  graphql-engine:
+    image: hasura/graphql-engine:v2.42.0
+    ports:
+      - ${HGPORT:-8081}:8080
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/swan
+      HASURA_GRAPHQL_DEV_MODE: true
+      HASURA_GRAPHQL_ENABLE_CONSOLE: true
