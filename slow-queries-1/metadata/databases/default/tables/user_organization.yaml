@@ -1,0 +1,18 @@
+table:
+  name: organization
+  schema: user
+object_relationships:
+  - name: project
+    using:
+      foreign_key_constraint_on: project_id
+  - name: site
+    using:
+      foreign_key_constraint_on: site_id
+array_relationships:
+  - name: user_permissions
+    using:
+      foreign_key_constraint_on:
+        column: scope_id
+        table:
+          name: user_permission
+          schema: user

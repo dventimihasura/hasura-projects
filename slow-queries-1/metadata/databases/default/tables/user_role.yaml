@@ -1,0 +1,25 @@
+table:
+  name: role
+  schema: user
+object_relationships:
+  - name: application
+    using:
+      foreign_key_constraint_on: application_id
+  - name: policy
+    using:
+      foreign_key_constraint_on: policy_id
+array_relationships:
+  - name: role_policies
+    using:
+      foreign_key_constraint_on:
+        column: role_id
+        table:
+          name: role_policy
+          schema: user
+  - name: user_roles
+    using:
+      foreign_key_constraint_on:
+        column: role_id
+        table:
+          name: user_role
+          schema: user

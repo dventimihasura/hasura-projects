@@ -1,0 +1,39 @@
+table:
+  name: policy
+  schema: user
+array_relationships:
+  - name: policyPoliciesByPolicyId
+    using:
+      foreign_key_constraint_on:
+        column: policy_id
+        table:
+          name: policy_policy
+          schema: user
+  - name: policy_permissions
+    using:
+      foreign_key_constraint_on:
+        column: policy_id
+        table:
+          name: policy_permission
+          schema: user
+  - name: policy_policies
+    using:
+      foreign_key_constraint_on:
+        column: parent_policy_id
+        table:
+          name: policy_policy
+          schema: user
+  - name: role_policies
+    using:
+      foreign_key_constraint_on:
+        column: policy_id
+        table:
+          name: role_policy
+          schema: user
+  - name: roles
+    using:
+      foreign_key_constraint_on:
+        column: policy_id
+        table:
+          name: role
+          schema: user

@@ -1,0 +1,10 @@
+table:
+  name: policy_policy
+  schema: user
+object_relationships:
+  - name: policy
+    using:
+      foreign_key_constraint_on: parent_policy_id
+  - name: policyByPolicyId
+    using:
+      foreign_key_constraint_on: policy_id

@@ -1,0 +1,10 @@
+table:
+  name: policy_permission
+  schema: user
+object_relationships:
+  - name: permission
+    using:
+      foreign_key_constraint_on: permission_id
+  - name: policy
+    using:
+      foreign_key_constraint_on: policy_id

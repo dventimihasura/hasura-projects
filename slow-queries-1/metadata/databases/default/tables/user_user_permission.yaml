@@ -1,0 +1,13 @@
+table:
+  name: user_permission
+  schema: user
+object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: scope_id
+  - name: permission
+    using:
+      foreign_key_constraint_on: permission_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id

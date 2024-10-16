@@ -1,0 +1,39 @@
+table:
+  name: user
+  schema: user
+array_relationships:
+  - name: user_departments
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: user_department
+          schema: user
+  - name: user_permissions
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: user_permission
+          schema: user
+  - name: user_projects
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: user_project
+          schema: user
+  - name: user_roles
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: user_role
+          schema: user
+  - name: user_sites
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: user_site
+          schema: user

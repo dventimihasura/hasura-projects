@@ -1,0 +1,3 @@
+table:
+  name: pg_stat_statements_info
+  schema: public

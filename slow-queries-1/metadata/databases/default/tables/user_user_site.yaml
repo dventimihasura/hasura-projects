@@ -1,0 +1,10 @@
+table:
+  name: user_site
+  schema: user
+object_relationships:
+  - name: site
+    using:
+      foreign_key_constraint_on: site_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
