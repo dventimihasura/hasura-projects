@@ -1,0 +1,11 @@
+table:
+  name: site
+  schema: fmd
+array_relationships:
+  - name: project_sites
+    using:
+      foreign_key_constraint_on:
+        column: site_id
+        table:
+          name: project_site
+          schema: fmd

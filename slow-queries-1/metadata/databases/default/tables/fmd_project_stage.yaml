@@ -1,0 +1,11 @@
+table:
+  name: project_stage
+  schema: fmd
+array_relationships:
+  - name: projects
+    using:
+      foreign_key_constraint_on:
+        column: project_stage_id
+        table:
+          name: project
+          schema: fmd

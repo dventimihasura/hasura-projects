@@ -1,0 +1,3 @@
+table:
+  name: build_item_current_request
+  schema: mp

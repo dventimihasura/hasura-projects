@@ -1,0 +1,25 @@
+table:
+  name: build_item
+  schema: mp
+object_relationships:
+  - name: build
+    using:
+      foreign_key_constraint_on: build_id
+  - name: build_item
+    using:
+      foreign_key_constraint_on: surplus_build_item_id
+array_relationships:
+  - name: build_item_requests
+    using:
+      foreign_key_constraint_on:
+        column: build_item_id
+        table:
+          name: build_item_request
+          schema: mp
+  - name: build_items
+    using:
+      foreign_key_constraint_on:
+        column: surplus_build_item_id
+        table:
+          name: build_item
+          schema: mp

@@ -1,0 +1,10 @@
+table:
+  name: project_site
+  schema: fmd
+object_relationships:
+  - name: project
+    using:
+      foreign_key_constraint_on: project_id
+  - name: site
+    using:
+      foreign_key_constraint_on: site_id

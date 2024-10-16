@@ -1,0 +1,18 @@
+table:
+  name: project_category
+  schema: fmd
+array_relationships:
+  - name: projects
+    using:
+      foreign_key_constraint_on:
+        column: display_project_category_id
+        table:
+          name: project
+          schema: fmd
+  - name: projectsByProjectCategoryId
+    using:
+      foreign_key_constraint_on:
+        column: project_category_id
+        table:
+          name: project
+          schema: fmd

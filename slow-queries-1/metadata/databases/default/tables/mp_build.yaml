@@ -1,0 +1,11 @@
+table:
+  name: build
+  schema: mp
+array_relationships:
+  - name: build_items
+    using:
+      foreign_key_constraint_on:
+        column: build_id
+        table:
+          name: build_item
+          schema: mp
