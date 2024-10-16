@@ -1,0 +1,132 @@
+table:
+  name: bom_item
+  schema: mp
+configuration:
+  column_config:
+    bom_id:
+      custom_name: mp_bom_id
+    bom_item_id:
+      custom_name: mp_bom_item_id
+    bom_quantity_scope:
+      custom_name: bom_quantity_scope
+    build_item_id:
+      custom_name: mp_build_item_id
+    common_bom_item_id:
+      custom_name: bom_item_id
+    parent_bom_item_id:
+      custom_name: parent_mp_bom_item_id
+  custom_column_names:
+    bom_id: mp_bom_id
+    bom_item_id: mp_bom_item_id
+    bom_quantity_scope: bom_quantity_scope
+    build_item_id: mp_build_item_id
+    common_bom_item_id: bom_item_id
+    parent_bom_item_id: parent_mp_bom_item_id
+  custom_name: mp_bom_item
+  custom_root_fields:
+    delete: delete_mp_bom_items
+    delete_by_pk: delete_mp_bom_item
+    insert: insert_mp_bom_items
+    insert_one: insert_mp_bom_item
+    select: mp_bom_items
+    select_aggregate: mp_bom_items_aggregate
+    select_by_pk: mp_bom_item
+    update: update_mp_bom_items
+    update_by_pk: update_mp_bom_item
+object_relationships:
+  - name: created_by_user
+    using:
+      manual_configuration:
+        column_mapping:
+          created_by: id
+        insertion_order: null
+        remote_table:
+          name: user
+          schema: user
+  - name: group_spare
+    using:
+      manual_configuration:
+        column_mapping:
+          group_spare_id: build_bom_group_spare_id
+        insertion_order: null
+        remote_table:
+          name: build_bom_group_spare
+          schema: mp
+  - name: item
+    using:
+      manual_configuration:
+        column_mapping:
+          item_id: item_id
+        insertion_order: null
+        remote_table:
+          name: item
+          schema: item
+  - name: mp_bom
+    using:
+      foreign_key_constraint_on: bom_id
+  - name: mp_build_item
+    using:
+      foreign_key_constraint_on: build_item_id
+  - name: parent_mp_bom_item
+    using:
+      foreign_key_constraint_on: parent_bom_item_id
+  - name: station_item_demand
+    using:
+      manual_configuration:
+        column_mapping:
+          bom_item_id: bom_item_id
+        insertion_order: null
+        remote_table:
+          name: build_station_item_demand
+          schema: mp
+  - name: updated_by_user
+    using:
+      manual_configuration:
+        column_mapping:
+          updated_by: id
+        insertion_order: null
+        remote_table:
+          name: user
+          schema: user
+array_relationships:
+  - name: station_item_demands
+    using:
+      foreign_key_constraint_on:
+        column: bom_item_id
+        table:
+          name: build_station_item_demand
+          schema: mp
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - bom_equipment_type
+        - bom_group
+        - bom_id
+        - bom_item_id
+        - bom_priority
+        - bom_quantity_scope
+        - created_at
+        - created_by
+        - group_spare_id
+        - hierarchy_level
+        - item_id
+        - line_config
+        - mp_bom_priority
+        - mp_intent_quantity
+        - mp_usage_percentage
+        - organization_id
+        - parent_bom_item_id
+        - purchase_stage
+        - quantity
+        - risk_comment
+        - risk_rating_value
+        - updated_at
+        - updated_by
+        - usage_percentage
+      filter:
+        _and:
+          - is_active:
+              _eq: true
+          - organization_id:
+              _in: x-hasura-mp-build-read-orgs

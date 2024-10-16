@@ -1,11 +1,76 @@
 table:
   name: build
   schema: mp
+configuration:
+  column_config:
+    build_id:
+      custom_name: mp_build_id
+    demand_calculation_updated:
+      custom_name: demand_calculation_updated_at
+  custom_column_names:
+    build_id: mp_build_id
+    demand_calculation_updated: demand_calculation_updated_at
+  custom_name: mp_build
+  custom_root_fields:
+    delete: delete_mp_builds
+    delete_by_pk: delete_mp_build
+    insert: insert_mp_builds
+    insert_one: insert_mp_build
+    select: mp_builds
+    select_aggregate: mp_builds_aggregate
+    select_by_pk: mp_build
+    update: update_mp_builds
+    update_by_pk: update_mp_build
+object_relationships:
+  - name: project
+    using:
+      manual_configuration:
+        column_mapping:
+          project_id: id
+        insertion_order: null
+        remote_table:
+          name: project
+          schema: fmd
+  - name: site
+    using:
+      manual_configuration:
+        column_mapping:
+          site_id: id
+        insertion_order: null
+        remote_table:
+          name: site
+          schema: fmd
 array_relationships:
-  - name: build_items
+  - name: mp_build_items
     using:
       foreign_key_constraint_on:
         column: build_id
         table:
           name: build_item
           schema: mp
+  # - name: mp_build_stations
+  #   using:
+  #     foreign_key_constraint_on:
+  #       column: build_id
+  #       table:
+  #         name: build_station
+  #         schema: mp
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - build_id
+        - created_at
+        - created_by
+        - demand_calculation_updated
+        - organization_id
+        - project_id
+        - site_id
+        - updated_at
+        - updated_by
+      filter:
+        _and:
+          - is_active:
+              _eq: true
+          - organization_id:
+              _in: x-hasura-mp-build-read-orgs

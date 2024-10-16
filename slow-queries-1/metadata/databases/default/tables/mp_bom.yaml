@@ -1,0 +1,98 @@
+table:
+  name: bom
+  schema: mp
+configuration:
+  column_config:
+    bom_id:
+      custom_name: mp_bom_id
+    common_bom_id:
+      custom_name: bom_id
+  custom_column_names:
+    bom_id: mp_bom_id
+    common_bom_id: bom_id
+  custom_name: mp_bom
+  custom_root_fields:
+    delete: delete_mp_boms
+    delete_by_pk: delete_mp_bom
+    insert: insert_mp_boms
+    insert_one: insert_mp_bom
+    select: mp_boms
+    select_aggregate: mp_boms_aggregate
+    select_by_pk: mp_bom
+    update: update_mp_boms
+    update_by_pk: update_mp_bom
+object_relationships:
+  - name: bom
+    using:
+      manual_configuration:
+        column_mapping:
+          common_bom_id: bom_id
+        insertion_order: null
+        remote_table:
+          name: bom
+          schema: bom
+  - name: created_by_user
+    using:
+      manual_configuration:
+        column_mapping:
+          created_by: id
+        insertion_order: null
+        remote_table:
+          name: user
+          schema: user
+  - name: mp_bom_count_items
+    using:
+      manual_configuration:
+        column_mapping:
+          bom_id: bom_id
+        insertion_order: null
+        remote_table:
+          name: bom_count_items_view
+          schema: mp
+  - name: mp_build_station
+    using:
+      manual_configuration:
+        column_mapping:
+          bom_id: bom_id
+        insertion_order: null
+        remote_table:
+          name: build_station
+          schema: mp
+  - name: updated_by_user
+    using:
+      manual_configuration:
+        column_mapping:
+          updated_by: id
+        insertion_order: null
+        remote_table:
+          name: user
+          schema: user
+array_relationships:
+  - name: mp_bom_items
+    using:
+      foreign_key_constraint_on:
+        column: bom_id
+        table:
+          name: bom_item
+          schema: mp
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - bom_id
+        - common_bom_id
+        - created_at
+        - created_by
+        - description
+        - eng_created_at
+        - eng_updated_at
+        - name
+        - organization_id
+        - updated_at
+        - updated_by
+      filter:
+        _and:
+          - is_active:
+              _eq: true
+          - organization_id:
+              _in: x-hasura-mp-build-read-orgs
