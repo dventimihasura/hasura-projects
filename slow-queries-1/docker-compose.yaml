@@ -9,7 +9,7 @@ services:
     volumes:
       - ./init.db-postgres:/docker-entrypoint-initdb.d:ro
   graphql-engine:
-    image: hasura/graphql-engine:v2.42.0
+    image: hasura/graphql-engine:v2.42.0.cli-migrations-v3
     ports:
       - ${HGPORT:-8081}:8080
     restart: always
@@ -17,3 +17,5 @@ services:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/swan
       HASURA_GRAPHQL_DEV_MODE: true
       HASURA_GRAPHQL_ENABLE_CONSOLE: true
+    volumes:
+      - ./metadata:/hasura-metadata:ro
