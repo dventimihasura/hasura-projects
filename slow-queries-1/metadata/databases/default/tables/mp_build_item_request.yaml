@@ -1,7 +1,181 @@
 table:
   name: build_item_request
   schema: mp
+configuration:
+  column_config:
+    approved_date:
+      custom_name: approved_at
+    build_item_id:
+      custom_name: mp_build_item_id
+    build_item_request_id:
+      custom_name: mp_build_item_request_id
+    rejected_date:
+      custom_name: rejected_at
+    review_date:
+      custom_name: reviewed_at
+  custom_column_names:
+    approved_date: approved_at
+    build_item_id: mp_build_item_id
+    build_item_request_id: mp_build_item_request_id
+    rejected_date: rejected_at
+    review_date: reviewed_at
+  custom_name: mp_build_item_request
+  custom_root_fields:
+    delete: delete_mp_build_item_requests
+    delete_by_pk: delete_mp_build_item_request
+    insert: insert_mp_build_item_requests
+    insert_one: insert_mp_build_item_request
+    select: mp_build_item_requests
+    select_aggregate: mp_build_item_requests_aggregate
+    select_by_pk: mp_build_item_request
+    update: update_mp_build_item_requests
+    update_by_pk: update_mp_build_item_request
 object_relationships:
-  - name: build_item
+  - name: approved_by_user
+    using:
+      manual_configuration:
+        column_mapping:
+          approved_by: id
+        insertion_order: null
+        remote_table:
+          name: user
+          schema: user
+  - name: created_by_user
+    using:
+      manual_configuration:
+        column_mapping:
+          created_by: id
+        insertion_order: null
+        remote_table:
+          name: user
+          schema: user
+  # - name: extended_cost
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         build_item_id: build_item_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: kpr_extended_cost_view
+  #         schema: mp
+  - name: mp_build_item
     using:
       foreign_key_constraint_on: build_item_id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - approved_by
+        - approved_date
+        - approver_name
+        - build_item_id
+        - build_item_request_id
+        - capex_note
+        - cm_note
+        - cm_notes
+        - created_at
+        - created_by
+        - quantity
+        - rejected_by
+        - rejected_date
+        - release_type
+        - request_type
+        - review_date
+        - risk_rating_value
+        - state
+        - status
+        - updated_at
+        - updated_by
+      filter:
+        _and:
+          - is_active:
+              _eq: true
+          - _or:
+              - _and:
+                  - state:
+                      _eq: CM_REVIEW
+                  - _exists:
+                      _table:
+                        name: user_permission
+                        schema: user
+                      _where:
+                        _and:
+                          - user_id:
+                              _eq: x-hasura-user-id
+                          - permission_name:
+                              _eq: KPR_REQUEST_CM_REVIEW_READ
+                          - scope_id:
+                              _ceq:
+                                - $
+                                - organization_id
+              - _and:
+                  - _or:
+                      - state:
+                          _eq: REVIEW
+                      - state:
+                          _eq: LOCK
+                  - _exists:
+                      _table:
+                        name: user_permission
+                        schema: user
+                      _where:
+                        _and:
+                          - user_id:
+                              _eq: x-hasura-user-id
+                          - permission_name:
+                              _eq: KPR_REQUEST_REVIEW_READ
+                          - scope_id:
+                              _ceq:
+                                - $
+                                - organization_id
+              - _and:
+                  - state:
+                      _eq: REJECTED
+                  - _exists:
+                      _table:
+                        name: user_permission
+                        schema: user
+                      _where:
+                        _and:
+                          - user_id:
+                              _eq: x-hasura-user-id
+                          - permission_name:
+                              _eq: KPR_REQUEST_REJECTED_READ
+                          - scope_id:
+                              _ceq:
+                                - $
+                                - organization_id
+              - _and:
+                  - state:
+                      _eq: APPROVED
+                  - _exists:
+                      _table:
+                        name: user_permission
+                        schema: user
+                      _where:
+                        _and:
+                          - user_id:
+                              _eq: x-hasura-user-id
+                          - permission_name:
+                              _eq: KPR_REQUEST_APPROVED_READ
+                          - scope_id:
+                              _ceq:
+                                - $
+                                - organization_id
+              - _and:
+                  - state:
+                      _eq: RELEASED
+                  - _exists:
+                      _table:
+                        name: user_permission
+                        schema: user
+                      _where:
+                        _and:
+                          - user_id:
+                              _eq: x-hasura-user-id
+                          - permission_name:
+                              _eq: KPR_REQUEST_RELEASED_READ
+                          - scope_id:
+                              _ceq:
+                                - $
+                                - organization_id
