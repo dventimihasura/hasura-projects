@@ -1,25 +1,279 @@
 table:
   name: build_item
   schema: mp
+configuration:
+  column_config:
+    aq_id:
+      custom_name: aqid
+    build_id:
+      custom_name: mp_build_id
+    build_item_id:
+      custom_name: mp_build_item_id
+    has_barcode:
+      custom_name: has_barcode
+    has_rfid:
+      custom_name: has_rfid
+    item_station_departments:
+      custom_name: departments_data
+    item_station_names:
+      custom_name: station_names_data
+    locked_net_demand_flag:
+      custom_name: net_demand_locked
+    used_in_bom:
+      custom_name: used_in_mp_bom
+  custom_column_names:
+    aq_id: aqid
+    build_id: mp_build_id
+    build_item_id: mp_build_item_id
+    has_barcode: has_barcode
+    has_rfid: has_rfid
+    item_station_departments: departments_data
+    item_station_names: station_names_data
+    locked_net_demand_flag: net_demand_locked
+    used_in_bom: used_in_mp_bom
+  custom_name: mp_build_item
+  custom_root_fields:
+    delete: delete_mp_build_items
+    delete_by_pk: delete_mp_build_item
+    insert: insert_mp_build_items
+    insert_one: insert_mp_build_item
+    select: mp_build_items
+    select_aggregate: mp_build_items_aggregate
+    select_by_pk: mp_build_item
+    update: update_mp_build_items
+    update_by_pk: update_mp_build_item
 object_relationships:
-  - name: build
+  - name: capex_dri
+    using:
+      manual_configuration:
+        column_mapping:
+          capex_dri_user_id: id
+        insertion_order: null
+        remote_table:
+          name: user
+          schema: user
+  # - name: corrected_release
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         build_item_id: build_item_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: corrected_kpr_release
+  #         schema: mp
+  - name: created_by_user
+    using:
+      manual_configuration:
+        column_mapping:
+          created_by: id
+        insertion_order: null
+        remote_table:
+          name: user
+          schema: user
+  - name: current_request
+    using:
+      manual_configuration:
+        column_mapping:
+          build_item_id: build_item_id
+        insertion_order: null
+        remote_table:
+          name: build_item_current_request
+          schema: mp
+  # - name: demand
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         build_item_id: build_item_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: build_item_demand
+  #         schema: mp
+  # - name: demand_2
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         build_item_id: build_item_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: demand_view
+  #         schema: mp
+  # - name: ebd_price
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         item_id: item_id
+  #         project_id: project_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: ebd_price
+  #         schema: gsm
+  # - name: extended_cost
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         build_item_id: build_item_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: extended_cost_view
+  #         schema: mp
+  # - name: idle_carryover
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         item_id: item_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: item_idle_co_qty_view
+  #         schema: mp
+  - name: item
+    using:
+      manual_configuration:
+        column_mapping:
+          item_id: item_id
+        insertion_order: null
+        remote_table:
+          name: item
+          schema: item
+  - name: mp_build
     using:
       foreign_key_constraint_on: build_id
-  - name: build_item
+  # - name: mp_build_item_addition
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         build_item_id: build_item_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: build_item_addition
+  #         schema: gsm
+  # - name: prpo_purchase_summary
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         item_id: item_id
+  #         project_id: project_id
+  #         site_id: site_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: purchase_summary
+  #         schema: prpo
+  # - name: release_quantity
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         build_item_id: build_item_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: build_item_total_released_qty
+  #         schema: mp
+  # - name: remaining_release
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         build_item_id: build_item_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: remaining_release_quantity_view
+  #         schema: mp
+  # - name: shipment_quantity
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         build_item_id: build_item_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: build_item_total_shipped_qty
+  #         schema: mp
+  - name: surplus_item
     using:
       foreign_key_constraint_on: surplus_build_item_id
+  - name: updated_by_user
+    using:
+      manual_configuration:
+        column_mapping:
+          updated_by: id
+        insertion_order: null
+        remote_table:
+          name: user
+          schema: user
 array_relationships:
-  - name: build_item_requests
+  # - name: build_station_item_demands
+  #   using:
+  #     foreign_key_constraint_on:
+  #       column: build_item_id
+  #       table:
+  #         name: build_station_item_demand
+  #         schema: mp
+  # - name: purchase_summaries
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         build_id: build_id
+  #         item_id: item_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: purchase_summary
+  #         schema: prpo
+  # - name: releases
+  #   using:
+  #     foreign_key_constraint_on:
+  #       column: build_item_id
+  #       table:
+  #         name: build_item_release
+  #         schema: mp
+  - name: requests
     using:
       foreign_key_constraint_on:
         column: build_item_id
         table:
           name: build_item_request
           schema: mp
-  - name: build_items
-    using:
-      foreign_key_constraint_on:
-        column: surplus_build_item_id
-        table:
-          name: build_item
-          schema: mp
+  # - name: shipments
+  #   using:
+  #     manual_configuration:
+  #       column_mapping:
+  #         build_item_id: build_item_id
+  #       insertion_order: null
+  #       remote_table:
+  #         name: snc_shipping
+  #         schema: snc
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - bom_min_bom_equipment_type
+        - bom_min_purchase_stage
+        - build_id
+        - build_item_id
+        - capex_dri_user_id
+        - carryover_quantity
+        - created_at
+        - created_by
+        - demand_quantity_adjustment
+        - has_barcode
+        - has_rfid
+        - item_id
+        - item_station_departments
+        - item_station_names
+        - locked_net_demand_flag
+        - locked_net_demand_quantity
+        - note
+        - organization_id
+        - project_id
+        - purchase_planned
+        - purchase_stage_names
+        - risk_rating_value
+        - site_id
+        - spare_percent
+        - spare_quantity
+        - station_display_names
+        - surplus_aqid
+        - updated_at
+        - updated_by
+        - used_in_bom
+      filter:
+        _and:
+          - is_active:
+              _eq: true
+          - organization_id:
+              _in: x-hasura-mp-build-read-orgs
