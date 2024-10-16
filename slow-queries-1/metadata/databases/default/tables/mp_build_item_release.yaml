@@ -1,0 +1,64 @@
+table:
+  name: build_item_release
+  schema: mp
+configuration:
+  column_config:
+    build_item_id:
+      custom_name: mp_build_item_id
+    build_item_release_id:
+      custom_name: mp_build_item_release_id
+    created:
+      custom_name: created_at
+    price:
+      custom_name: price
+  custom_column_names:
+    build_item_id: mp_build_item_id
+    build_item_release_id: mp_build_item_release_id
+    created: created_at
+    price: price
+  custom_name: mp_build_item_release
+  custom_root_fields:
+    delete: delete_mp_build_item_releases
+    delete_by_pk: delete_mp_build_item_release
+    insert: insert_mp_build_item_releases
+    insert_one: insert_mp_build_item_release
+    select: mp_build_item_releases
+    select_aggregate: mp_build_item_releases_aggregate
+    select_by_pk: mp_build_item_release
+    update: update_mp_build_item_releases
+    update_by_pk: update_mp_build_item_release
+object_relationships:
+  - name: created_by_user
+    using:
+      manual_configuration:
+        column_mapping:
+          created_by: id
+        insertion_order: null
+        remote_table:
+          name: user
+          schema: user
+  - name: mp_build_item
+    using:
+      foreign_key_constraint_on: build_item_id
+  - name: request
+    using:
+      foreign_key_constraint_on: request_id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - build_item_id
+        - build_item_release_id
+        - created
+        - created_by
+        - note
+        - po_type
+        - price
+        - quantity
+        - release_type
+        - risk_rating_value
+      filter:
+        mp_build_item:
+          organization_id:
+            _in: x-hasura-mp-build-read-orgs
+      allow_aggregations: true
