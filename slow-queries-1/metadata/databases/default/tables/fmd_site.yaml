@@ -2,6 +2,13 @@ table:
   name: site
   schema: fmd
 array_relationships:
+  - name: organizations
+    using:
+      foreign_key_constraint_on:
+        column: site_id
+        table:
+          name: organization
+          schema: user
   - name: project_sites
     using:
       foreign_key_constraint_on:
@@ -9,3 +16,10 @@ array_relationships:
         table:
           name: project_site
           schema: fmd
+  - name: user_sites
+    using:
+      foreign_key_constraint_on:
+        column: site_id
+        table:
+          name: user_site
+          schema: user
